@@ -45,10 +45,6 @@ class UserSerializersSimpleRegister(ModelSerializer):
 class UserChangePassword(ModelSerializer):
     password = CharField()
 
-    def validate(self, data):
-        print(self.instance.password)
-        return super().validate(data)
-
     class Meta:
         model = User
         fields = ('password',)

@@ -33,7 +33,7 @@ class AuthRegister(APIView):
         registerUser = RegisterSerializers(data=request.data)
         if registerUser.is_valid():
             password = make_password(
-                registerUser.validated_data['password'])
+                registerUser.validated_data['password']) 
             registerUser.save(password=password)
             return Response(registerUser.data)
         return Response(registerUser.errors)

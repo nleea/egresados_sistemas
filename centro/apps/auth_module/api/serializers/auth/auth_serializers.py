@@ -15,13 +15,12 @@ class RegisterSerializers(serializers.ModelSerializer):
 
 
 class LoginSerializers(serializers.ModelSerializer):
-    username = serializers.CharField()
+    username = serializers.CharField(label='Email/username')
     password = serializers.CharField()
-    email = serializers.EmailField()
 
     class Meta:
         model = get_user_model()
-        fields = ('username', 'password', 'email')
+        fields = ('password', 'username')
 
     def validate(self, attrs):
         user = authenticate(**attrs)

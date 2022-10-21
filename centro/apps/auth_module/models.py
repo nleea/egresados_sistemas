@@ -44,6 +44,7 @@ class User(AbstractUser, BaseModel):
     avatar = models.CharField(max_length=256, blank=True, null=True)
     roles = models.ManyToManyField(
         'Roles', through='User_roles', related_name='user_roles')
+    
 
     class Meta:
         #unique_together = (('username', 'email'))

@@ -93,11 +93,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bf1othn2mwjt3cdubzt3',
-        'HOST': 'bf1othn2mwjt3cdubzt3-mysql.services.clever-cloud.com',
+        'NAME': 'DB_egresados',
+        'HOST': 'localhost',
         'PORT': '3306',
-        'USER': 'ubzd7ako0qxfmft7',
-        'PASSWORD': 'o6vZZUsejdS2XJpXaLa1',
+        'USER': 'root',
+        'PASSWORD': '3602}',
     }
 }
 
@@ -121,6 +121,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'auth_module.User'
+AUTHENTICATION_BACKENDS = ['apps.backends.EmailBackend.EmailBackend']
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
