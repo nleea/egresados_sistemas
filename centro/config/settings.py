@@ -28,6 +28,9 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://*",
+]
 
 # Application definition
 
@@ -93,11 +96,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DB_egresados',
-        'HOST': 'localhost',
+        'NAME': 'bf1othn2mwjt3cdubzt3',
+        'HOST': 'bf1othn2mwjt3cdubzt3-mysql.services.clever-cloud.com',
         'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': '3602}',
+        'USER': 'ubzd7ako0qxfmft7',
+        'PASSWORD': 'o6vZZUsejdS2XJpXaLa1',
     }
 }
 
