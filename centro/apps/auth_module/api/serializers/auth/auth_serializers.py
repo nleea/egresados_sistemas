@@ -1,17 +1,24 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
+from rest_framework.validators import UniqueValidator
+from ..customValidators.usersValidators import UserValidatorBefore
 User = get_user_model()
 
 
 class RegisterSerializers(serializers.ModelSerializer):
-    username = serializers.CharField()
+
+    username = serializers.SlugField(
+        max_length=100,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
     email = serializers.EmailField()
     password = serializers.CharField()
 
     class Meta:
-        model = get_user_model()
+        model = User
         fields = ('username', 'email', 'password')
+        validators = [UserValidatorBefore()]
 
 
 class LoginSerializers(serializers.ModelSerializer):
@@ -19,8 +26,8 @@ class LoginSerializers(serializers.ModelSerializer):
     password = serializers.CharField()
 
     class Meta:
-        model = get_user_model()
-        fields = ('password', 'username')
+        model = User
+        fields = ('id', 'password', 'username')
 
     def validate(self, attrs):
         user = authenticate(**attrs)

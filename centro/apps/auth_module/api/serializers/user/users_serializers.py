@@ -1,6 +1,8 @@
 from ..roles.roles_serializers import RolesSerializers
-from rest_framework.serializers import CharField, ModelSerializer
+from rest_framework.serializers import CharField, ModelSerializer, SlugField
 from django.contrib.auth import get_user_model
+from rest_framework.validators import UniqueValidator
+from ..customValidators.usersValidators import UserValidatorBefore
 User = get_user_model()
 
 #from drf_queryfields import QueryFieldsMixin
@@ -31,15 +33,28 @@ class UserSerializers(ModelSerializer):
 
 
 class CreateUserSerializers(ModelSerializer):
+
+    username = SlugField(
+        max_length=100,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+
     class Meta:
         model = User
         fields = ('username', 'password', 'email')
+        validators = [UserValidatorBefore()]
 
 
 class UserSerializersSimpleRegister(ModelSerializer):
+    username = SlugField(
+        max_length=100,
+        validators=[UniqueValidator(queryset=User.objects.all())]
+    )
+
     class Meta:
         model = User
         fields = ('username', 'password', 'email', 'first_name', 'last_name')
+        validators = [UserValidatorBefore()]
 
 
 class UserChangePassword(ModelSerializer):

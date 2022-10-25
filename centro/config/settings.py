@@ -28,10 +28,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
-CORS_ALLOWED_ORIGINS = [
-    "http://*",
-]
-
+#CORS_ALLOWED_ORIGINS = ['http://localhost:*']
+CORS_ALLOW_ALL_ORIGINS = True
 # Application definition
 
 COMMONS_APPS = [
@@ -65,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     "apps.middlewares.auth.CustomMiddleware",
+
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

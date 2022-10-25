@@ -1,4 +1,5 @@
-from ..modules import CreateAPIView, ListAPIView, UpdateAPIView, status, Response
+from gc import get_referents
+from ..modules import CreateAPIView, ListAPIView, UpdateAPIView, status, Response, create_response
 from ....models import Genders
 from ...serializers.gender.gender_Serializers import GenderSerializers
 
@@ -10,7 +11,9 @@ class GenderListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializers = GenderSerializers(data, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        response, code = create_response(
+            status.HTTP_200_OK, serializers.data)
+        return Response(response, status=code)
 
 
 class GenderCreateView(CreateAPIView):
@@ -21,8 +24,12 @@ class GenderCreateView(CreateAPIView):
         genderSerializers = GenderSerializers(data=request.data)
         if genderSerializers.is_valid():
             genderSerializers.save()
-            return Response(genderSerializers.data, status=status.HTTP_200_OK)
-        return Response(genderSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, genderSerializers.data)
+            return Response(response, status=code)
+        response, code = create_response(
+            status.HTTP_400_BAD_REQUEST, genderSerializers.errors)
+        return Response(response, status=code)
 
 
 class GenderUpdateView(UpdateAPIView):
@@ -34,13 +41,19 @@ class GenderUpdateView(UpdateAPIView):
         try:
             return Genders.objects.get(pk=pk)
         except Genders.DoesNotExist:
-            raise Response({'message': 'Not Found'},
-                           status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, 'No Found')
+            raise Response(response,
+                           status=code)
 
     def put(self, request, *args, **kwargs):
         gender = self.get_object()
         genderSerializers = GenderSerializers(gender, data=request.data)
         if genderSerializers.is_valid():
             genderSerializers.save()
-            return Response(genderSerializers.data, status=status.HTTP_200_OK)
-        return Response(genderSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, genderSerializers.data)
+            return Response(response, status=code)
+        response, code = create_response(
+            status.HTTP_400_BAD_REQUEST, genderSerializers.errors)
+        return Response(response, status=code)

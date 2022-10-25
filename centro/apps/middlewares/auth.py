@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 SECRET_KEY = 'secret_or_key'
 
+
 class CustomMiddleware(MiddlewareMixin):
 
     """
@@ -31,8 +32,8 @@ class CustomMiddleware(MiddlewareMixin):
         :return: HTTP Response if authorization fails, else None
         """
 
-        routes_free = ['/auth/login/','/auth/register/']
-        
+        routes_free = ['/auth/login/', '/auth/register/']
+
         if routes_free.__contains__(request.path):
             return None
 
@@ -47,37 +48,37 @@ class CustomMiddleware(MiddlewareMixin):
                 if request.user.is_authenticated:
                     user = User.objects.get(id=token['user_id'])
                     if not user:
-                        response = create_response(
-                            "", 4001, {
+                        response, code = create_response(
+                            401, {
                                 "message": 'User not found'
                             }
                         )
-                        return HttpResponse(json.dumps(response), status=401)
+                        return HttpResponse(json.dumps(response), status=code)
                     if tokenUser.username != user.username:
-                        response = create_response(
-                            "", 4001, {
+                        response, code = create_response(
+                            401, {
                                 "message": 'Access not match'
                             }
                         )
-                        return HttpResponse(json.dumps(response), status=401)
+                        return HttpResponse(json.dumps(response), status=code)
                 return None
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
-                response = create_response(
-                    "", 4001, {"message": "Authorization has failed, Please send valid token."})
+                response, code = create_response(
+                    401, {"message": "Authorization has failed, Please send valid token."})
                 logger.info(f"Response {response}")
-                return HttpResponse(json.dumps(response), status=401)
+                return HttpResponse(json.dumps(response), status=code)
             except Exception as e:
-                response = create_response(
-                    "", 4001, {
+                response, code = create_response(
+                    401, {
                         "message": e}
                 )
             logger.info(f"Response {response}")
-            return HttpResponse(json.dumps(response), status=401)
+            return HttpResponse(json.dumps(response), status=code)
 
         else:
-            response = create_response(
-                "", 4001, {
+            response, code = create_response(
+                401, {
                     "message": "Authorization not found, Please send valid token in headers"}
             )
             logger.info(f"Response {response}")
-            return HttpResponse(json.dumps(response), status=401)
+            return HttpResponse(json.dumps(response), status=code)

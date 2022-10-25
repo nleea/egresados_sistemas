@@ -1,4 +1,4 @@
-from ..modules import ListAPIView, CreateAPIView, Response, status, UpdateAPIView
+from ..modules import ListAPIView, CreateAPIView, Response, status, UpdateAPIView, create_response
 from ....models import Document_types
 from ...serializers.document.document_serializers import DocumentSerializers
 
@@ -10,7 +10,9 @@ class DocumentListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializers = DocumentSerializers(data, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        response, code = create_response(
+            status.HTTP_200_OK, serializers.data)
+        return Response(response, status=code)
 
 
 class DocumentCreateView(CreateAPIView):
@@ -21,8 +23,12 @@ class DocumentCreateView(CreateAPIView):
         documentSerializers = DocumentSerializers(data=request.data)
         if documentSerializers.is_valid():
             documentSerializers.save()
-            return Response(documentSerializers.data, status=status.HTTP_200_OK)
-        return Response(documentSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, documentSerializers.data)
+            return Response(response, status=code)
+        response, code = create_response(
+            status.HTTP_400_BAD_REQUEST, documentSerializers.errors)
+        return Response(response, status=code)
 
 
 class DocumentUpdateView(UpdateAPIView):
@@ -34,13 +40,19 @@ class DocumentUpdateView(UpdateAPIView):
         try:
             return Document_types.objects.get(pk=pk)
         except Document_types.DoesNotExist:
-            raise Response({'message': "Not Found"},
-                           status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not found')
+            raise Response(response,
+                           status=code)
 
     def put(self, request, *args, **kwargs):
         document = self.get_object()
         documentSerializers = DocumentSerializers(document, data=request.data)
         if documentSerializers.is_valid():
             documentSerializers.save()
-            return Response(documentSerializers.data, status=status.HTTP_200_OK)
-        return Response(documentSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, documentSerializers.data)
+            return Response(response, status=code)
+        response, code = create_response(
+            status.HTTP_400_BAD_REQUEST, documentSerializers.errors)
+        return Response(response, status=code)

@@ -10,7 +10,8 @@ class ResourcesListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializers = ResourcesSerializers(data, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        response, code = create_response(status.HTTP_200_OK, serializers.data)
+        return Response(response, status=code)
 
 
 class ResourcesCreateView(CreateAPIView):
@@ -21,8 +22,12 @@ class ResourcesCreateView(CreateAPIView):
         resourcesSerializers = ResourcesSerializers(data=request.data)
         if resourcesSerializers.is_valid():
             resourcesSerializers.save()
-            return Response(resourcesSerializers.data, status=status.HTTP_200_OK)
-        return Response(resourcesSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, resourcesSerializers.data)
+            return Response(response, status=code)
+        response, code = create_response(
+            status.HTTP_400_BAD_REQUEST, resourcesSerializers.errors)
+        return Response(response, status=code)
 
 
 class ResourcesUpdateView(UpdateAPIView):
@@ -35,7 +40,7 @@ class ResourcesUpdateView(UpdateAPIView):
             return Resources.objects.get(pk=pk)
         except Resources.DoesNotExist:
             raise Response(create_response(
-                "", status.HTTP_400_BAD_REQUEST, {'message': 'Not Found'}))
+                status.HTTP_400_BAD_REQUEST, 'Not Found'))
 
     def put(self, request, *args, **kwargs):
         resources = self.get_object()
@@ -43,5 +48,9 @@ class ResourcesUpdateView(UpdateAPIView):
             resources, data=request.data)
         if resourcesSerializers.is_valid():
             resourcesSerializers.save()
-            return Response(resourcesSerializers.data, status=status.HTTP_200_OK)
-        return Response(resourcesSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, resourcesSerializers.data)
+            return Response(response, status=code)
+        response, code = create_response(
+            status.HTTP_400_BAD_REQUEST, resourcesSerializers.errors)
+        return Response(response, status=code)

@@ -10,7 +10,9 @@ class RolesListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializers = RolesSerializers(data, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        response, code = create_response(
+            status.HTTP_200_OK, serializers.data)
+        return Response(response, status=code)
 
 
 class RolescreateView(CreateAPIView):
@@ -21,8 +23,12 @@ class RolescreateView(CreateAPIView):
         roleSerializers = RolesSerializers(data=request.data)
         if roleSerializers.is_valid():
             roleSerializers.save()
-            return Response(roleSerializers.data, status=status.HTTP_200_OK)
-        return Response(roleSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, roleSerializers.data)
+            return Response(response, status=code)
+        response, code = create_response(
+            status.HTTP_200_OK, roleSerializers.error)
+        return Response(response, status=code)
 
 
 class RoleUpdateView(UpdateAPIView):
@@ -36,7 +42,7 @@ class RoleUpdateView(UpdateAPIView):
         except Roles.DoesNotExist:
             raise Response(
                 create_response(
-                    "", status.HTTP_400_BAD_REQUEST, {'message': 'Not Found'})
+                    status.HTTP_400_BAD_REQUEST,  'Not Found')
             )
 
     def put(self, request, *args, **kwargs):
@@ -44,5 +50,9 @@ class RoleUpdateView(UpdateAPIView):
         roleSerializers = RolesSerializers(role, data=request.data)
         if roleSerializers.is_valid():
             roleSerializers.save()
-            return Response(roleSerializers.data, status=status.HTTP_200_OK)
-        return Response(roleSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, roleSerializers.data)
+            return Response(response, status=code)
+        response, code = create_response(
+            status.HTTP_200_OK, roleSerializers.errors)
+        return Response(response, status=code)

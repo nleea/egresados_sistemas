@@ -4,6 +4,7 @@ from rest_framework.generics import CreateAPIView, UpdateAPIView, RetrieveAPIVie
 from rest_framework import status
 from ...serializers.user.users_serializers import UserSerializers, CreateUserSerializers, UserChangePassword
 from ....models import User
+from ..modules import create_response
 
 
 class UsersView(RetrieveAPIView):
@@ -16,20 +17,27 @@ class UsersView(RetrieveAPIView):
             user = User.objects.get(pk=request_user)
             return user
         except User.DoesNotExist:
-            return Response({'message': 'Not Found'},
-                            status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found')
+            return Response(response, status=code)
         except Exception as e:
-            return Response({'message': e})
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, e)
+            return Response(response, status=code)
 
     def get(self, request, *args, **kwargs):
         if request.user.is_staff:
             users = self.get_queryset()
             serializers = UserSerializers(
                 users, context={'request': request}, many=True)
-            return Response(serializers.data, status=status.HTTP_200_OK)
+            response, code = create_response(
+                status.HTTP_200_OK, serializers.data)
+            return Response(response, status=code)
         data = self.get_object()
         serializers = UserSerializers(data)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        response, code = create_response(
+            status.HTTP_200_OK, serializers.data)
+        return Response(response, status=code)
 
 
 class UsersViewPublic(RetrieveAPIView):
@@ -39,7 +47,9 @@ class UsersViewPublic(RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         users = self.get_queryset()
         serializers = UserSerializers(users, many=True)
-        return Response(serializers.data, status=status.HTTP_200_OK)
+        response, code = create_response(
+            status.HTTP_200_OK, serializers.data)
+        return Response(response, status=code)
 
 
 class UserCreateView(CreateAPIView):
@@ -54,8 +64,12 @@ class UserCreateView(CreateAPIView):
         userSerializers = self.get_serializer(data=request.data)
         if userSerializers.is_valid():
             self.perform_create(userSerializers)
-            return Response(userSerializers.data, status=status.HTTP_200_OK)
-        return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_200_OK, userSerializers.data)
+            return Response(userSerializers.data, status=code)
+        response, code = create_response(
+            status.HTTP_200_OK, userSerializers.data)
+        return Response(response, status=code)
 
 
 class UserUpdateView(UpdateAPIView):
@@ -68,10 +82,13 @@ class UserUpdateView(UpdateAPIView):
             user = User.objects.get(pk=request_user)
             return user
         except User.DoesNotExist:
-            raise Response({'message': 'Not Found'},
-                           status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found')
+            raise Response(response, status=code)
         except Exception as e:
-            return Response({'message': e})
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, e)
+            return Response(response, status=code)
 
     def perform_update(self, serializer):
         if 'original-password' in self.request.data:
@@ -84,19 +101,23 @@ class UserUpdateView(UpdateAPIView):
         partial = kwargs.pop('partial', False)
         user = self.get_object()
         if 'original-password' not in self.request.data:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Password not found')
+            return Response(response, status=code)
 
         if not user.check_password(request.data['original-password']):
-            return Response(
-                {'state': False, 'code': 1, 'message': 'Password is not correct.'},
-                status=status.HTTP_200_OK)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Password is not correct.')
+            return Response(response, status=code)
 
         userSerializers = UserChangePassword(
             user, data=request.data, partial=partial)
 
         if userSerializers.is_valid():
             self.perform_update(userSerializers)
-            return Response({'message': 'Ok'}, status=status.HTTP_200_OK)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Password is not correct.')
+            return Response(response, status=code)
         return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, *args, **kwargs):
@@ -107,5 +128,7 @@ class UserUpdateView(UpdateAPIView):
             user, data=request.data, partial=partial)
         if userSerializers.is_valid():
             self.perform_update(userSerializers)
-            return Response(userSerializers.data, status=status.HTTP_200_OK)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Password is not correct.')
+            return Response(response, status=code)
         return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
