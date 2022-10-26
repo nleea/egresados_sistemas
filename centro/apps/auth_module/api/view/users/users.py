@@ -91,34 +91,7 @@ class UserUpdateView(UpdateAPIView):
             return Response(response, status=code)
 
     def perform_update(self, serializer):
-        if 'original-password' in self.request.data:
-            password = make_password(self.request.data['password'])
-            serializer.save(password=password)
-        else:
-            serializer.save()
-
-    def patch(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        user = self.get_object()
-        if 'original-password' not in self.request.data:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Password not found')
-            return Response(response, status=code)
-
-        if not user.check_password(request.data['original-password']):
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Password is not correct.')
-            return Response(response, status=code)
-
-        userSerializers = UserChangePassword(
-            user, data=request.data, partial=partial)
-
-        if userSerializers.is_valid():
-            self.perform_update(userSerializers)
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Password is not correct.')
-            return Response(response, status=code)
-        return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.save()
 
     def put(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
@@ -130,5 +103,55 @@ class UserUpdateView(UpdateAPIView):
             self.perform_update(userSerializers)
             response, code = create_response(
                 status.HTTP_400_BAD_REQUEST, 'Password is not correct.')
+            return Response(response, status=code)
+        return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserChangePasswordView(UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializers
+
+    def get_object(self):
+        try:
+            request_user = self.kwargs['pk']
+            user = User.objects.get(pk=request_user)
+            return user
+        except User.DoesNotExist:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found')
+            raise Response(response, status=code)
+        except Exception as e:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, e)
+            return Response(response, status=code)
+
+    def perform_update(self, serializer):
+        if 'original-password' in self.request.data:
+            password = make_password(self.request.data['password'])
+            serializer.save(password=password)
+        else:
+            serializer.save()
+
+    def patch(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        user = self.get_object()
+
+        if 'original-password' not in self.request.data:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Password not found')
+            return Response(response, status=code)
+
+        if not user.check_password(request.data['original-password']):
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Password is not correct.')
+            return Response(response, status=code)
+
+        userSerializers = UserChangePassword(
+            user, data=request.data, partial=partial, context={'context': request})
+
+        if userSerializers.is_valid():
+            self.perform_update(userSerializers)
+            response, code = create_response(
+                status.HTTP_200_OK, 'Ok.')
             return Response(response, status=code)
         return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)

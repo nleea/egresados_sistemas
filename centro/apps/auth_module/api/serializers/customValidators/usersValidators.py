@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.utils.representation import smart_repr
+from .....helpers.create_response import create_response
 User = get_user_model()
 
 
@@ -20,7 +21,8 @@ class UserValidatorBefore:
             message[self.email] = 'Email already exist'
 
         if message:
-            raise serializers.ValidationError(message, code='before')
+            response, _ = create_response(0, message)
+            raise serializers.ValidationError(response, code='before')
 
         return attrs
 
@@ -30,4 +32,27 @@ class UserValidatorBefore:
             smart_repr(self.email),
             smart_repr(self.password),
             smart_repr(self.username)
+        )
+
+
+class ChangeValidator:
+    def __init__(self, password='password'):
+        self.password = password
+
+    def __call__(self, attrs):
+        message = {}
+
+        if len(attrs[self.password]) < 8 and attrs[self.password].isalnum():
+            message[self.password] = 'The password must be alphanumeric and more than 8 digits'
+
+        if message:
+            response, _ = create_response(0, message)
+            raise serializers.ValidationError(response, code='before')
+
+        return attrs
+
+    def __repr__(self):
+        return '<%s(password=%s)>' % (
+            self.__class__.__name__,
+            smart_repr(self.password),
         )
