@@ -47,6 +47,7 @@ INSTALLS_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     "whitenoise.runserver_nostatic",
+    'drf_yasg'
 ]
 
 THIRDS_APPS = [
@@ -62,8 +63,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    "apps.middlewares.auth.CustomMiddleware",
-
+    #"apps.middlewares.auth.CustomMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

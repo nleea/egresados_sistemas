@@ -19,7 +19,11 @@ class AuthLogin(APIView):
         }
 
     def post(self, request, *args, **kwargs):
-        serializers = LoginSerializers(data=request.data)
+        data = request.data
+        if 'email' in data:
+            data['username'] = request.data['email']
+            del data['email']
+        serializers = LoginSerializers(data=data)
         if not serializers.is_valid():
             response, code = create_response(
                 status.HTTP_400_BAD_REQUEST, serializers.errors)
