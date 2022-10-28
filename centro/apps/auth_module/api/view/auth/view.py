@@ -23,7 +23,8 @@ class AuthLogin(APIView):
         if 'email' in data:
             data['username'] = request.data['email']
             del data['email']
-        serializers = LoginSerializers(data=data)
+        serializers = LoginSerializers(
+            data=data, context={'request': self.request})
         if not serializers.is_valid():
             response, code = create_response(
                 status.HTTP_400_BAD_REQUEST, serializers.errors)
@@ -31,7 +32,7 @@ class AuthLogin(APIView):
 
         token = self.get_tokens_for_user(serializers.validated_data)
         response, code = create_response(
-            status.HTTP_200_OK, {'token': token, 'user': {'email': serializers.validated_data.email, 'id': serializers.validated_data.id}})
+            status.HTTP_200_OK, {'token': token, 'user': {'name': serializers.validated_data.username, 'id': serializers.validated_data.id}})
         return Response(response, status=code)
 
 

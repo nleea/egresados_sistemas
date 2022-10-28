@@ -54,14 +54,21 @@ class CustomMiddleware(MiddlewareMixin):
                             }
                         )
                         return HttpResponse(json.dumps(response), status=code)
-                    if tokenUser.username != user.username:
+                    if tokenUser.email != user.email:
                         response, code = create_response(
                             401, {
                                 "message": 'Access not match'
                             }
                         )
                         return HttpResponse(json.dumps(response), status=code)
-                return None
+                    if request.user.email != user.email:
+                        response, code = create_response(
+                            401, {
+                                "message": 'Access not match'
+                            }
+                        )
+                        return HttpResponse(json.dumps(response), status=code)
+                    return None
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
                 response, code = create_response(
                     401, {"message": "Authorization has failed, Please send valid token."})

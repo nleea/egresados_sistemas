@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
+from django.contrib.auth import login
 User = get_user_model()
 
 
@@ -32,5 +33,6 @@ class LoginSerializers(serializers.ModelSerializer):
     def validate(self, attrs):
         user = authenticate(**attrs)
         if user and user.is_active:
+            login(self.context['request'],user)
             return user
         raise serializers.ValidationError('Incorrect Credentials Passed.')
