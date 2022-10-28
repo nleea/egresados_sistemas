@@ -1,9 +1,8 @@
 from ..roles.roles_serializers import RolesSerializers
-from rest_framework.serializers import CharField, ModelSerializer, SlugField, ValidationError
+from rest_framework.serializers import CharField, ModelSerializer, SlugField
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
-from rest_framework import status
-from ..customValidators.usersValidators import UserValidatorBefore,ChangeValidator
+from ..customValidators.usersValidators import UserValidatorBefore
 User = get_user_model()
 
 #from drf_queryfields import QueryFieldsMixin
@@ -63,5 +62,5 @@ class UserChangePassword(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('password','id')
-        validators = [ChangeValidator()]
+        fields = ('password', 'id')
+        validators = [UserValidatorBefore()]

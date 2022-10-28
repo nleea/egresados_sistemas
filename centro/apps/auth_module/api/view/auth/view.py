@@ -1,8 +1,9 @@
 from rest_framework.views import APIView
 from ...serializers.auth.auth_serializers import LoginSerializers, RegisterSerializers
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth import logout
 from ..modules import create_response
 from rest_framework import status
 
@@ -19,10 +20,12 @@ class AuthLogin(APIView):
         }
 
     def post(self, request, *args, **kwargs):
-        data = request.data
-        if 'email' in data:
+        data = {}
+        if 'email' in request.data:
             data['username'] = request.data['email']
-            del data['email']
+            data['password'] = request.data['password']
+        else:
+            data = request.data
         serializers = LoginSerializers(
             data=data, context={'request': self.request})
         if not serializers.is_valid():
@@ -31,6 +34,7 @@ class AuthLogin(APIView):
             return Response(response, status=code)
 
         token = self.get_tokens_for_user(serializers.validated_data)
+        request.session['refresh-token'] = token['refresh']
         response, code = create_response(
             status.HTTP_200_OK, {'token': token, 'user': {'name': serializers.validated_data.username, 'id': serializers.validated_data.id}})
         return Response(response, status=code)
@@ -52,3 +56,24 @@ class AuthRegister(APIView):
         response, code = create_response(
             status.HTTP_400_BAD_REQUEST, registerUser.errors)
         return Response(response, status=code)
+
+
+class LogoutView(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            jwt_token = request.session.get('refresh-token', None)
+            token = RefreshToken(jwt_token)
+            token.blacklist()
+            logout(request)
+            request.session.flush()
+            response, code = create_response(
+                status.HTTP_200_OK, 'Ok')
+            return Response(response, code)
+        except TokenError as TkError:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, f'{TkError}')
+            return Response(response, code)
+        except Exception as e:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, e)
+            return Response(response, code)

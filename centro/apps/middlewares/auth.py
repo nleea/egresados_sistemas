@@ -9,6 +9,7 @@ from ..helpers.create_response import create_response
 from django.utils.deprecation import MiddlewareMixin
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 
 # Initialize logger
@@ -32,8 +33,8 @@ class CustomMiddleware(MiddlewareMixin):
         :return: HTTP Response if authorization fails, else None
         """
 
-        routes_free = ['/auth/login/', '/auth/register/','/redoc/']
-
+        routes_free = ['/auth/login/', '/auth/register/',
+                       '/redoc/', '/admin/']
         if routes_free.__contains__(request.path):
             return None
 
@@ -68,7 +69,12 @@ class CustomMiddleware(MiddlewareMixin):
                             }
                         )
                         return HttpResponse(json.dumps(response), status=code)
-                    return None
+                else:
+                    response, code = create_response(
+                        401, {
+                            "message": "Authorization not found, Please send valid token in headers"}
+                    )
+                    return HttpResponse(json.dumps(response), status=code)
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
                 response, code = create_response(
                     401, {"message": "Authorization has failed, Please send valid token."})
@@ -79,9 +85,8 @@ class CustomMiddleware(MiddlewareMixin):
                     401, {
                         "message": e}
                 )
-            logger.info(f"Response {response}")
-            return HttpResponse(json.dumps(response), status=code)
-
+                logger.info(f"Response {response}")
+                return HttpResponse(json.dumps(response), status=code)
         else:
             response, code = create_response(
                 401, {
