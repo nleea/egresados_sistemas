@@ -44,7 +44,6 @@ class User(AbstractUser, BaseModel):
     avatar = models.CharField(max_length=256, blank=True, null=True)
     roles = models.ManyToManyField(
         'Roles', through='User_roles', related_name='user_roles')
-    
 
     class Meta:
         #unique_together = (('username', 'email'))
@@ -112,6 +111,8 @@ class User_roles(BaseModel):
 
 class Resources(BaseModel):
     path = models.CharField(max_length=256)
+    id_padre = models.ForeignKey(
+        'Resources', blank=True, null=True, on_delete=models.CASCADE,related_name='padre_id')
     method = models.CharField(max_length=256)
     icono = models.CharField(max_length=256)
     link = models.CharField(max_length=256)
