@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bf1othn2mwjt3cdubzt3',
@@ -102,10 +102,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
         'USER': 'ubzd7ako0qxfmft7',
         'PASSWORD': 'o6vZZUsejdS2XJpXaLa1',
     }
-}"""
+}
 
 
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'DB_egresados',
@@ -114,7 +114,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '3602}',
     }
-}
+}"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
