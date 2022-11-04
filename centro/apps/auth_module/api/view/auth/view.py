@@ -39,6 +39,7 @@ class AuthLogin(APIView):
 
         resourcesRoles = Resources_roles.objects.filter(
             rolesId__in=[x for x in serializers.validated_data.roles.all()])
+
         resources = Resources.objects.filter(
             id__in=[x.resourcesId.pk for x in resourcesRoles])
 

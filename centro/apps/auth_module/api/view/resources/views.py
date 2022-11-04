@@ -1,4 +1,4 @@
-from ..modules import CreateAPIView, ListAPIView, Response, UpdateAPIView, status, create_response
+from ..modules import ListAPIView, Response, UpdateAPIView, status, create_response
 from ....models import Resources
 from ...serializers.resources.resources_serializers import ResourcesSerializers
 
@@ -11,22 +11,6 @@ class ResourcesListView(ListAPIView):
         data = self.get_queryset()
         serializers = ResourcesSerializers(data, many=True)
         response, code = create_response(status.HTTP_200_OK, serializers.data)
-        return Response(response, status=code)
-
-
-class ResourcesCreateView(CreateAPIView):
-    queryset = Resources.objects.all()
-    serializer_class = ResourcesSerializers
-
-    def post(self, request, *args, **kwargs):
-        resourcesSerializers = ResourcesSerializers(data=request.data)
-        if resourcesSerializers.is_valid():
-            resourcesSerializers.save()
-            response, code = create_response(
-                status.HTTP_200_OK, resourcesSerializers.data)
-            return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, resourcesSerializers.errors)
         return Response(response, status=code)
 
 

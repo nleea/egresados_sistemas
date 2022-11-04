@@ -111,17 +111,13 @@ class User_roles(BaseModel):
 
 class Resources(BaseModel):
     path = models.CharField(max_length=256)
-    id_padre = models.ForeignKey(
-        'Resources', blank=True, null=True, on_delete=models.CASCADE,related_name='padre_id')
+    id_padre = models.IntegerField()
     method = models.CharField(max_length=256)
     icono = models.CharField(max_length=256)
     link = models.CharField(max_length=256)
     titulo = models.CharField(max_length=100)
     roles = models.ManyToManyField(
         Roles, through='Resources_roles', related_name='resources_roles')
-
-    def __str__(self) -> str:
-        return self.path
 
     class Meta:
         verbose_name = 'Resources'
