@@ -1,1 +1,1 @@
-web: python /manage.py migrate && gunicorn centro.config.wsgi --log-file -
+web: gunicorn centro.config.wsgi --log-file -
