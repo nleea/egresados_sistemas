@@ -42,7 +42,7 @@ class AuthLogin(APIView):
             rolesId__in=ids)
 
         resources = Resources.objects.filter(
-            id__in=[x.pk for x in resourcesRoles.select_related('resourcesId')])
+            id__in=[x.resourcesId.pk for x in resourcesRoles])
 
         menu = ResourcesSerializers(resources, many=True)
         request.session['refresh-token'] = token['refresh']
