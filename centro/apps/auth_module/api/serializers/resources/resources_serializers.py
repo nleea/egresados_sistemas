@@ -1,10 +1,12 @@
 from ....models import Resources, Resources_roles, Roles
-from rest_framework.serializers import ModelSerializer,Serializer,IntegerField
+from rest_framework.serializers import ModelSerializer, Serializer, IntegerField
+
 
 class ResourcesSerializers(ModelSerializer):
     class Meta:
         model = Resources
         exclude = ('roles',)
+
 
 class ResourcesRolesSerializers(Serializer):
     rolesId = IntegerField()
@@ -16,10 +18,12 @@ class ResourcesRolesSerializers(Serializer):
             list_resources_roles = []
 
             id_last_resources = Resources.objects.last().id
+
             for i in validated_data['resources']:
                 resources.append(Resources(
                     path=i['path'], link=i['link'], icono=i['icono'], method=i['method'], titulo=i['titulo'], id_padre=i['id_padre'], id=id_last_resources+1))
                 id_last_resources += 1
+
             resources = Resources.objects.bulk_create(resources)
 
             roles = Roles.objects.get(pk=validated_data['rolesId'])
@@ -32,4 +36,3 @@ class ResourcesRolesSerializers(Serializer):
             return None
         except Exception as e:
             raise e
-

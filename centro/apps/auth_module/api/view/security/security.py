@@ -1,5 +1,5 @@
-from rest_framework.generics import CreateAPIView
-from ...serializers.resources.resources_serializers import ResourcesRolesSerializers
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
+from ...serializers.resources.resources_serializers import ResourcesRolesSerializers, ResourcesSerializers
 from rest_framework import status
 from ....models import Resources
 from rest_framework.response import Response

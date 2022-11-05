@@ -26,7 +26,7 @@ class ResourcesUpdateView(UpdateAPIView):
             raise Response(create_response(
                 status.HTTP_400_BAD_REQUEST, 'Not Found'))
 
-    def put(self, request, *args, **kwargs):
+    def path(self, request, *args, **kwargs):
         resources = self.get_object()
         resourcesSerializers = ResourcesSerializers(
             resources, data=request.data)
