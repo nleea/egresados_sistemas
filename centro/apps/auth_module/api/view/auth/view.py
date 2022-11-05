@@ -37,11 +37,12 @@ class AuthLogin(APIView):
 
         token = self.get_tokens_for_user(serializers.validated_data)
 
-        resourcesRoles = Resources_roles.objects.filter(
-            rolesId__in=[x for x in serializers.validated_data.roles.all()])
+        ids = serializers.validated_data.roles.only('id')
+        resourcesRoles = Resources_roles.objects.select_related('rolesId').filter(
+            rolesId__in=ids)
 
         resources = Resources.objects.filter(
-            id__in=[x.resourcesId.pk for x in resourcesRoles])
+            id__in=[x.pk for x in resourcesRoles.select_related('resourcesId')])
 
         menu = ResourcesSerializers(resources, many=True)
         request.session['refresh-token'] = token['refresh']

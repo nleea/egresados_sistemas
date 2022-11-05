@@ -1,4 +1,4 @@
-from ....models import Roles, User_roles, Resources_roles
+from ....models import Roles, User_roles, Resources_roles,User
 from rest_framework.serializers import ModelSerializer
 
 
@@ -16,6 +16,13 @@ class ResourcesSerializers(ModelSerializer):
 
 class RolesSimpleSerializers(ModelSerializer):
     resources = ResourcesSerializers(many=True)
+
+    class Meta:
+        model = User_roles
+        fields = '__all__'
+
+
+class RolesUserSerializers(ModelSerializer):
 
     class Meta:
         model = User_roles

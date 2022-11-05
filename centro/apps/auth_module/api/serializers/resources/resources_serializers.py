@@ -1,5 +1,6 @@
 from ....models import Resources, Resources_roles, Roles
 from rest_framework.serializers import ModelSerializer, Serializer, IntegerField
+from .....helpers.menu_resources import menuResources
 
 
 class ResourcesSerializers(ModelSerializer):
@@ -17,12 +18,13 @@ class ResourcesRolesSerializers(Serializer):
             resources = []
             list_resources_roles = []
 
-            id_last_resources = Resources.objects.last().id
+            id_last_resources = 0
+            last = Resources.objects.last()
+            if last:
+                id_last_resources = last.id
 
-            for i in validated_data['resources']:
-                resources.append(Resources(
-                    path=i['path'], link=i['link'], icono=i['icono'], method=i['method'], titulo=i['titulo'], id_padre=i['id_padre'], id=id_last_resources+1))
-                id_last_resources += 1
+            menuResources(validated_data['resources'],
+                          resources, Resources, id_last_resources)
 
             resources = Resources.objects.bulk_create(resources)
 
