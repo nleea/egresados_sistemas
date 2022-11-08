@@ -46,7 +46,7 @@ class CustomMiddleware(MiddlewareMixin):
             try:
                 auth = JWTAuthentication()
                 tokenUser, token = auth.authenticate(request)
-                if not request.user.is_authenticated:
+                if request.user.is_authenticated:
                     user = User.objects.get(id=token['user_id'])
                     if not user:
                         response, code = create_response(

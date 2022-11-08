@@ -93,7 +93,7 @@ WSGI_APPLICATION = 'configuration.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
+"""DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'bf1othn2mwjt3cdubzt3',
@@ -102,8 +102,18 @@ DATABASES = {
         'USER': 'ubzd7ako0qxfmft7',
         'PASSWORD': 'o6vZZUsejdS2XJpXaLa1',
     }
-}
+}"""
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'defaultdb',
+        'HOST': 'db-mysql-ams3-40764-do-user-5083742-0.b.db.ondigitalocean.com',
+        'PORT': '25060',
+        'USER': 'doadmin',
+        'PASSWORD': 'AVNS_e0zhs4MVleMPsPoT0Ra',
+    }
+}
 
 """DATABASES = {
     'default': {
