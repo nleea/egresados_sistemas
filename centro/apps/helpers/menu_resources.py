@@ -13,3 +13,4 @@ def menuResources(data: list, list_data: list, model: any, last_id: int, id_padr
         if 'items' in i:
             menuResources(data=i['items'], list_data=list_data, model=model,
                           last_id=id_last_resources, id_padre=list_data[-1].id)
+    return list_data

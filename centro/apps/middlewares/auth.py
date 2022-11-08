@@ -46,7 +46,7 @@ class CustomMiddleware(MiddlewareMixin):
             try:
                 auth = JWTAuthentication()
                 tokenUser, token = auth.authenticate(request)
-                if request.user.is_authenticated:
+                if not request.user.is_authenticated:
                     user = User.objects.get(id=token['user_id'])
                     if not user:
                         response, code = create_response(
@@ -62,13 +62,13 @@ class CustomMiddleware(MiddlewareMixin):
                             }
                         )
                         return HttpResponse(json.dumps(response), status=code)
-                    if request.user.email != user.email:
+                    """if request.user.email != user.email:
                         response, code = create_response(
                             401, {
                                 "message": 'Access not match'
                             }
                         )
-                        return HttpResponse(json.dumps(response), status=code)
+                        return HttpResponse(json.dumps(response), status=code)"""
                 else:
                     response, code = create_response(
                         401, {
