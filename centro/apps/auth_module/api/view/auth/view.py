@@ -28,6 +28,7 @@ class AuthLogin(APIView):
             data['password'] = request.data['password']
         else:
             data = request.data
+
         serializers = LoginSerializers(
             data=data, context={'request': self.request})
         if not serializers.is_valid():
@@ -38,7 +39,8 @@ class AuthLogin(APIView):
         token = self.get_tokens_for_user(serializers.validated_data)
 
         roles_ids = serializers.validated_data.roles.all()
-        resources = [e.resources.prefetch_related('resources') for e in roles_ids]
+        resources = [e.resources.prefetch_related(
+            'resources') for e in roles_ids]
         resources = flatList(resources)
         menu = ResourcesSerializers(resources, many=True)
 

@@ -13,18 +13,26 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+import environ
+from .db import DBS
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^gd!0cseqa8%mk#rf(lh4+&0n7f853#2ow4rfu8j+2#730w@ih'
+SECRET_KEY = env('SECRET_OR_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ["*"]
 
@@ -64,7 +72,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-#    "apps.middlewares.auth.CustomMiddleware",
+    "apps.middlewares.auth.CustomMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -93,38 +101,10 @@ WSGI_APPLICATION = 'configuration.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-"""DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bf1othn2mwjt3cdubzt3',
-        'HOST': 'bf1othn2mwjt3cdubzt3-mysql.services.clever-cloud.com',
-        'PORT': '3306',
-        'USER': 'ubzd7ako0qxfmft7',
-        'PASSWORD': 'o6vZZUsejdS2XJpXaLa1',
-    }
-}"""
+db='mysql-'
+db += env('MYSQL_DATABASE').strip()
+DATABASES = DBS[db]
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'defaultdb',
-        'HOST': 'db-mysql-ams3-40764-do-user-5083742-0.b.db.ondigitalocean.com',
-        'PORT': '25060',
-        'USER': 'doadmin',
-        'PASSWORD': 'AVNS_e0zhs4MVleMPsPoT0Ra',
-    }
-}
-
-"""DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'DB_egresados',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': '3602}',
-    }
-}"""
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
