@@ -1,14 +1,14 @@
 from ..modules import CreateAPIView, ListAPIView, Response, UpdateAPIView, status, create_response
 from ....models import Roles
 from ...serializers.roles.roles_serializers import RolesSerializers
-
+from rest_framework.permissions import IsAuthenticated
 
 class RolesListView(ListAPIView):
     queryset = Roles.objects.all()
     serializer_class = RolesSerializers
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        print(request.user)
         data = self.get_queryset()
         serializers = RolesSerializers(data, many=True)
         response, code = create_response(

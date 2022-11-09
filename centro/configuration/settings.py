@@ -75,6 +75,7 @@ MIDDLEWARE = [
     "apps.middlewares.auth.CustomMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #"apps.middlewares.view_auth.JWTAuthenticationMiddleware",
 ]
 
 ROOT_URLCONF = 'configuration.urls'
@@ -125,19 +126,19 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'auth_module.User'
-AUTHENTICATION_BACKENDS = ['apps.backends.EmailBackend.EmailBackend','rest_framework.authentication.TokenAuthentication']
+AUTHENTICATION_BACKENDS = ['apps.backends.EmailBackend.EmailBackend']
 ACCOUNT_SESSION_REMEMBER = True
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         #'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework_simplejwt.authentication.JWTStatelessUserAuthentication',
     ),
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
