@@ -8,6 +8,7 @@ class RolesListView(ListAPIView):
     serializer_class = RolesSerializers
 
     def get(self, request, *args, **kwargs):
+        print(request.user)
         data = self.get_queryset()
         serializers = RolesSerializers(data, many=True)
         response, code = create_response(

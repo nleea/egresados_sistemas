@@ -125,16 +125,14 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'auth_module.User'
-AUTHENTICATION_BACKENDS = ['apps.backends.EmailBackend.EmailBackend']
+AUTHENTICATION_BACKENDS = ['apps.backends.EmailBackend.EmailBackend','rest_framework.authentication.TokenAuthentication']
+ACCOUNT_SESSION_REMEMBER = True
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 

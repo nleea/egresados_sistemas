@@ -9,7 +9,8 @@ from ..helpers.create_response import create_response
 from django.utils.deprecation import MiddlewareMixin
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions
 from django.contrib.auth import get_user_model
-
+from django.utils.functional import SimpleLazyObject
+from django.contrib import auth
 User = get_user_model()
 
 # Initialize logger
@@ -25,6 +26,17 @@ class CustomMiddleware(MiddlewareMixin):
     Custom Middleware Class to process a request before it reached the endpoint
     """
 
+    def get_actual_value(self, request):
+        if request.user is None:
+            return None
+
+        return request.user
+
+    def get_user(self, request):
+        if not hasattr(request, '_cached_user'):
+            request._cached_user = auth.get_user(request)
+        return request._cached_user
+
     def process_request(self, request):
         """
         Custom middleware handler to check authentication for a user with JWT authentication
@@ -34,47 +46,48 @@ class CustomMiddleware(MiddlewareMixin):
         """
 
         routes_free = ['/auth/login/', '/auth/register/',
-                       '/redoc/', '/admin/']
+                       '/redoc/', '/admin/','/auth/logout/']
         if routes_free.__contains__(request.path):
             return None
 
         jwt_token = request.headers.get('authorization', None)
         logger.info(f"request received for endpoint {str(request.path)}")
-
         # If token Exists
         if jwt_token:
             try:
                 auth = JWTAuthentication()
                 tokenUser, token = auth.authenticate(request)
-                if request.user.is_authenticated:
-                    user = User.objects.get(id=token['user_id'])
-                    if not user:
-                        response, code = create_response(
-                            401, {
-                                "message": 'User not found'
-                            }
-                        )
-                        return HttpResponse(json.dumps(response), status=code)
-                    if tokenUser.email != user.email:
-                        response, code = create_response(
-                            401, {
-                                "message": 'Access not match'
-                            }
-                        )
-                        return HttpResponse(json.dumps(response), status=code)
-                    """if request.user.email != user.email:
+                print(request.user)
+                if not tokenUser.is_authenticated:
+                    response, code = create_response(
+                        401, {
+                            "message": 'User not in session'
+                        }
+                    )
+                    return HttpResponse(json.dumps(response), status=code)
+                user = User.objects.get(id=token['user_id'])
+                if not user:
+                    response, code = create_response(
+                        401, {
+                            "message": 'User not found'
+                        }
+                    )
+                    return HttpResponse(json.dumps(response), status=code)
+                if tokenUser.email != user.email:
+                    response, code = create_response(
+                        401, {
+                            "message": 'Access not match'
+                        }
+                    )
+                    return HttpResponse(json.dumps(response), status=code)
+                """if request.user.email != user.email:
                         response, code = create_response(
                             401, {
                                 "message": 'Access not match'
                             }
                         )
                         return HttpResponse(json.dumps(response), status=code)"""
-                else:
-                    response, code = create_response(
-                        401, {
-                            "message": "Authorization not found, Please send valid token in headers"}
-                    )
-                    return HttpResponse(json.dumps(response), status=code)
+
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
                 response, code = create_response(
                     401, {"message": "Authorization has failed, Please send valid token."})
@@ -90,7 +103,7 @@ class CustomMiddleware(MiddlewareMixin):
         else:
             response, code = create_response(
                 401, {
-                    "message": "Authorization not found, Please send valid token in headers"}
+                    "message": "Authorization not found, Please send valid token in headers 1111"}
             )
             logger.info(f"Response {response}")
             return HttpResponse(json.dumps(response), status=code)
