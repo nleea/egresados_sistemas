@@ -7,7 +7,7 @@ DBS = {
             'HOST': 'db-mysql-ams3-40764-do-user-5083742-0.b.db.ondigitalocean.com',
             'PORT': '25060',
             'USER': 'doadmin',
-            'PASSWORD': 'AVNS_e0zhs4MVleMPsPoT0Ra',
+            'PASSWORD': 'AVNS_CeUDe8J9to4hlREo-Cy',
         }
     },
     'mysql-local': {
