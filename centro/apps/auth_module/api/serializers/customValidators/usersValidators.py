@@ -21,8 +21,7 @@ class UserValidatorBefore:
             message[self.email] = 'Email already exist'
 
         if message:
-            response, _ = create_response(0, message)
-            raise serializers.ValidationError(response, code='before')
+            raise serializers.ValidationError(message, code='before')
 
         return attrs
 
@@ -46,8 +45,7 @@ class ChangeValidator:
             message[self.password] = 'The password must be alphanumeric and more than 8 digits'
 
         if message:
-            response, _ = create_response(0, message)
-            raise serializers.ValidationError(response, code='before')
+            raise serializers.ValidationError(message, code='before')
 
         return attrs
 

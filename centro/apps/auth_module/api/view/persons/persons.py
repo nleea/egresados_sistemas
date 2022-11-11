@@ -13,7 +13,7 @@ class PersonView(ListAPIView):
         data = self.get_queryset()
         serializers = PersonsSerializers(data, many=True)
         response, code = create_response(
-            status.HTTP_200_OK, serializers.data)
+            status.HTTP_200_OK, 'Person', serializers.data)
         return Response(response, status=code)
 
 
@@ -26,10 +26,10 @@ class PersonCreateView(CreateAPIView):
         if personSerializers.is_valid():
             personSerializers.save()
             response, code = create_response(
-                status.HTTP_200_OK, personSerializers.data)
+                status.HTTP_200_OK, 'Person', personSerializers.data)
             return Response(response, status=code)
         response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, personSerializers.data)
+            status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.data)
         return Response(response, status=code)
 
 
@@ -43,17 +43,19 @@ class PersonUpdateView(UpdateAPIView):
             return Persons.objects.filter(user__id=pk)[0]
         except Persons.DoesNotExist:
             response, code = create_response(
-                status.HTTP_200_OK, 'No Found')
-            raise Response(response, status=code)
+                status.HTTP_200_OK, 'Not Found', 'Person Not Found')
+            return {'response': response, 'code': code}
 
     def put(self, request, *args, **kwargs):
         person = self.get_object()
+        if type(person) is dict:
+            return Response(person['response'], person['code'])
         personSerializers = PersonsSerializers(person, data=request.data)
         if personSerializers.is_valid():
             personSerializers.update()
             response, code = create_response(
-                status.HTTP_200_OK, personSerializers.data)
+                status.HTTP_200_OK, 'Person Update', personSerializers.data)
             return Response(response, status=code)
         response, code = create_response(
-            status.HTTP_200_OK, personSerializers.data)
+            status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.data)
         return Response(response, status=code)

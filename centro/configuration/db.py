@@ -23,10 +23,10 @@ DBS = {
     'mysql-clever': {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'DB_egresados',
-            'HOST': 'localhost',
+            'NAME': 'bf1othn2mwjt3cdubzt3',
+            'HOST': 'bf1othn2mwjt3cdubzt3-mysql.services.clever-cloud.com',
             'PORT': '3306',
-            'USER': 'root',
+            'USER': 'o6vZZUsejdS2XJpXaLa1',
             'PASSWORD': '3602}',
         }
     }

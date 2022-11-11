@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 
 
-def create_response(code, message, request_id='',):
+def create_response(code, message, data, request_id='',):
     """
     Function to create a response to be sent back via the API
     :param request_id:Id fo the request
@@ -12,8 +12,16 @@ def create_response(code, message, request_id='',):
 
     try:
         req = str(request_id)
-        code = code
-        data = {"data": message, "request_id": req}
-        return data, code
+        if code != 200:
+            proccess_data = data
+            if type(data) is not str:
+                proccess_data = [{x: data[x][0]} for x in data][0]
+            data_parse = {'ok': False, "errors": {
+                'message': 'Error', 'error': proccess_data}, "request_id": req}
+            return data_parse, code
+
+        data_parse = {'ok': True, "message": message,
+                      'data': data, "request_id": req}
+        return data_parse, code
     except Exception as creation_error:
         return Response({creation_error}, status=code)

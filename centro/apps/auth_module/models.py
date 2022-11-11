@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import UserManager
 # Create your models here.
 
 
@@ -44,6 +45,8 @@ class User(AbstractUser, BaseModel):
     avatar = models.CharField(max_length=256, blank=True, null=True)
     roles = models.ManyToManyField(
         'Roles', through='User_roles', related_name='user_roles')
+
+    objects = UserManager()
 
     class Meta:
         #unique_together = (('username', 'email'))

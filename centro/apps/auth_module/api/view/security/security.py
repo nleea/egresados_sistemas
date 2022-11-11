@@ -16,10 +16,12 @@ class SecurityResourcesCreate(CreateAPIView):
             resources = ResourcesRolesSerializers(data=request.data)
             resources.is_valid(raise_exception=True)
             resources.create(request.data)
-            return Response({'message': 'Ok'})
+            response, code = create_response(
+                status.HTTP_200_OK, 'Resources', 'Resources Create')
+            return Response(response, code)
         except BaseException as e:
             response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, e.args)
+                status.HTTP_400_BAD_REQUEST, 'Error', e.args[0])
             return Response(response, status=code)
 
 
@@ -30,13 +32,13 @@ class SecurityRolesUser(CreateAPIView):
     def post(self, request, *args, **kwargs):
         user = request.data['username']
         rol = request.data['rol']
-        
+
         rolesUser = RolesUserSerializers(data={'userId': user, 'rolesId': rol})
         if rolesUser.is_valid():
             rolesUser.save()
             response, code = create_response(
-                status.HTTP_200_OK, rolesUser.data)
+                status.HTTP_200_OK, 'User-Rol', rolesUser.data)
             return Response(response, status=code)
         response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, rolesUser.errors)
+            status.HTTP_400_BAD_REQUEST, 'Error', rolesUser.errors)
         return Response(response, status=code)
