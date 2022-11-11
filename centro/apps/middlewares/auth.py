@@ -53,7 +53,7 @@ class CustomMiddleware(MiddlewareMixin):
 
                 if not tokenUser.is_authenticated:
                     response, code = create_response(
-                        401, {
+                        401, 'Unauthorized', {
                             "message": 'User not in session'
                         }
                     )
@@ -61,7 +61,7 @@ class CustomMiddleware(MiddlewareMixin):
 
                 if 'sessionid' in request.COOKIES and len(request.COOKIES['sessionid']) == 0:
                     response, code = create_response(
-                        401, {
+                        401, 'Unauthorized', {
                             "message": 'User not in session'
                         }
                     )
@@ -69,7 +69,7 @@ class CustomMiddleware(MiddlewareMixin):
 
                 if not user:
                     response, code = create_response(
-                        401, {
+                        401, 'Unauthorized', {
                             "message": 'User not found'
                         }
                     )
@@ -94,22 +94,22 @@ class CustomMiddleware(MiddlewareMixin):
                 if ('refresh-token' in request.session):
                     token = RefreshToken(request.session['refresh-token'])
                     response, code = create_response(
-                        200, {"token": f"{token.access_token}"})
+                        200, 'Unauthorized', {"token": f"{token.access_token}"})
                     return HttpResponse(json.dumps(response), status=code)
                 response, code = create_response(
-                    401, {"message": "Authorization has failed, Please send valid token."})
+                    401, 'Unauthorized', {"message": "Authorization has failed, Please send valid token."})
                 logger.info(f"Response {response}")
                 return HttpResponse(json.dumps(response), status=code)
             except Exception as e:
                 response, code = create_response(
-                    401, {
+                    401, 'Unauthorized', {
                         "message": e}
                 )
                 logger.info(f"Response {response}")
                 return HttpResponse(json.dumps(response), status=code)
         else:
             response, code = create_response(
-                401, {
+                401, 'Unauthorized', {
                     "message": "Authorization not found, Please send valid token in headers 1111"}
             )
             logger.info(f"Response {response}")
