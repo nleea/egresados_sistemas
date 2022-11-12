@@ -9,6 +9,7 @@ import django.utils.timezone
 from ...helpers import menu
 from ...helpers.menu_resources import menuResources
 from django.contrib.auth.hashers import make_password
+import re
 
 
 class Migration(migrations.Migration):
@@ -29,11 +30,21 @@ class Migration(migrations.Migration):
 
         Roles = apps.get_model('auth_module', 'Roles')
         Roles.objects.bulk_create(
-            [Roles(name='Admin', status=True), Roles(name='Egresado', status=True)])
+            [Roles(name='Admin', status=True), Roles(name='Egresado', status=True), Roles(name='General', status=True)])
 
         User_roles = apps.get_model('auth_module', 'User_roles')
-        User_roles.objects.bulk_create(
-            [User_roles(userId=User.objects.get(pk=1), rolesId=Roles.objects.get(pk=1)), User_roles(userId=User.objects.get(pk=1), rolesId=Roles.objects.get(pk=2))])
+        user = User.objects.all()
+        roles = Roles.objects.all()
+        list_user_roles = []
+        for u in user:
+            for r in roles:
+                if u.username == 'egresado' and r.name == 'Admin':
+                    continue
+                list_user_roles.append(
+                    User_roles(userId=u,
+                               rolesId=r),
+                )
+        User_roles.objects.bulk_create(list_user_roles)
 
         Resources = apps.get_model('auth_module', 'Resources')
         resources = []
@@ -42,10 +53,16 @@ class Migration(migrations.Migration):
 
         Resources_roles = apps.get_model('auth_module', 'Resources_roles')
         list_resources_roles = []
-        rol = Roles.objects.get(pk=1)
-        for r in resources:
-            list_resources_roles.append(Resources_roles(
-                rolesId=rol, resourcesId=r))
+        rol = Roles.objects.all()
+
+        for rl in rol:
+            for r in resources:
+                if rl.name != 'Admin' and re.search('admin', r.link) is not None:
+                    continue
+                else:
+                    list_resources_roles.append(Resources_roles(
+                        rolesId=rl, resourcesId=r))
+
         Resources_roles.objects.bulk_create(list_resources_roles)
 
     def undo_insert_data(apps, schema_editor):

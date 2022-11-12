@@ -20,7 +20,7 @@ def create_response(code, message, data, request_id='',):
             if type(data) is dict:
                 proccess_data = [{x: data[x][0]} for x in data][0]
             if type(data) is ReturnDict:
-                proccess_data = [{x: data[x][0]} for x in data][0]
+                proccess_data = [{x: data[x]['non_field_errors'][0] if "non_field_errors" in data[x]  else data[x][0]} for x in data][0]
             data_parse = {'ok': False, "errors": {
                 'error': proccess_data}, "request_id": req}
             return data_parse, code

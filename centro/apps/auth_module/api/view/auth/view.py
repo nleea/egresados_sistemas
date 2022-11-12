@@ -34,16 +34,18 @@ class AuthLogin(APIView):
             data=data, context={'request': self.request})
         if not serializers.is_valid():
             response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error',serializers.errors)
+                status.HTTP_400_BAD_REQUEST, 'Error', serializers.errors)
             return Response(response, status=code)
         login(request, serializers.validated_data)
         token = self.get_tokens_for_user(serializers.validated_data)
 
         roles_ids = serializers.validated_data.roles.all()
         resources = [e.resources.prefetch_related(
-            'resources') for e in roles_ids]
+            'resources') for e in roles_ids ]
         resources = flatList(resources)
-        menu = ResourcesSerializers(resources, many=True)
+        resources_unique = []
+        [resources_unique.append(x) for x in resources if x not in resources_unique]
+        menu = ResourcesSerializers(resources_unique, many=True)
         request.session['refresh-token'] = token['refresh']
         response, code = create_response(
             status.HTTP_200_OK, 'Login Success', {'token': token, 'user': {'name': serializers.validated_data.username,
@@ -62,9 +64,8 @@ class AuthRegister(APIView):
                 registerUser.validated_data['password'])
             registerUser.save(password=password)
             response, code = create_response(
-                status.HTTP_200_OK, 'User Register', {'username': registerUser.data['username'], 'email': registerUser.data['email']})
+                status.HTTP_200_OK, 'User Register', 'Registro Exitosos')
             return Response(response, status=code)
-        
         response, code = create_response(
             status.HTTP_400_BAD_REQUEST, 'Error', registerUser.errors)
         return Response(response, status=code)

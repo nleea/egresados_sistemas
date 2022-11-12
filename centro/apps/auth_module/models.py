@@ -76,11 +76,12 @@ class Roles(BaseModel):
 class Persons(BaseModel):
     name = models.CharField(max_length=150)
     surname = models.CharField(max_length=150)
-    identification = models.CharField(max_length=255)
-    address = models.CharField(max_length=50)
-    nationality = models.CharField(max_length=30)
-    date_of_birth = models.CharField(max_length=30)
-    phone = models.CharField(max_length=20)
+    identification = models.CharField(
+        max_length=255, unique=True, blank=True, null=True)
+    address = models.CharField(max_length=50, blank=True, null=True)
+    nationality = models.CharField(max_length=30, blank=True, null=True)
+    date_of_birth = models.CharField(max_length=30, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
     status = models.BooleanField(default=True)
     document_type = models.ForeignKey(
         Document_types, related_name='document_types', on_delete=models.SET_NULL, blank=True, null=True)
@@ -93,6 +94,7 @@ class Persons(BaseModel):
         return self.name
 
     class Meta:
+        unique_together = (('name', 'identification'))
         verbose_name = 'Persons'
         verbose_name_plural = 'Persons'
 
