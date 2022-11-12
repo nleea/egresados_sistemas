@@ -26,8 +26,8 @@ DBS = {
             'NAME': 'bf1othn2mwjt3cdubzt3',
             'HOST': 'bf1othn2mwjt3cdubzt3-mysql.services.clever-cloud.com',
             'PORT': '3306',
-            'USER': 'o6vZZUsejdS2XJpXaLa1',
-            'PASSWORD': '3602}',
+            'USER': 'ubzd7ako0qxfmft7',
+            'PASSWORD': 'o6vZZUsejdS2XJpXaLa1',
         }
     }
 }
