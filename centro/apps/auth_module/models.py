@@ -108,8 +108,10 @@ class User_roles(BaseModel):
         return self.userId.username + '-' + self.rolesId.name
 
     class Meta:
+        unique_together = (('userId', 'rolesId'))
         verbose_name = 'User_roles'
         verbose_name_plural = 'user_roles'
+        
 
 
 class Resources(BaseModel):

@@ -1,8 +1,8 @@
 from rest_framework.generics import CreateAPIView
 from ...serializers.resources.resources_serializers import ResourcesRolesSerializers
-from ...serializers.roles.roles_serializers import RolesUserSerializers
+from ...serializers.roles.roles_serializers import RolesUserSerializers, RolesSerializers
 from rest_framework import status
-from ....models import Resources, User_roles
+from ....models import Resources, User_roles, Roles, User
 from rest_framework.response import Response
 from ..modules import create_response
 
@@ -30,14 +30,17 @@ class SecurityRolesUser(CreateAPIView):
     serializer_class = RolesUserSerializers
 
     def post(self, request, *args, **kwargs):
-        user = request.data['username']
-        rol = request.data['rol']
+        user = request.data['user']
+        rolesId = request.data['roles']
+        roles = Roles.objects.filter(id__in=rolesId)
 
-        rolesUser = RolesUserSerializers(data={'userId': user, 'rolesId': rol})
+        rolesUser = RolesUserSerializers(
+            data={'userId': user})
+
         if rolesUser.is_valid():
-            rolesUser.save()
+            rolesUser.save(roles=roles)
             response, code = create_response(
-                status.HTTP_200_OK, 'User-Rol', rolesUser.data)
+                status.HTTP_200_OK, 'User-Rol', 'successfully assigned roles')
             return Response(response, status=code)
         response, code = create_response(
             status.HTTP_400_BAD_REQUEST, 'Error', rolesUser.errors)

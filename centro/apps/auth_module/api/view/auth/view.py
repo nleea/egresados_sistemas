@@ -64,7 +64,7 @@ class AuthRegister(APIView):
             response, code = create_response(
                 status.HTTP_200_OK, 'User Register', {'username': registerUser.data['username'], 'email': registerUser.data['email']})
             return Response(response, status=code)
-
+        
         response, code = create_response(
             status.HTTP_400_BAD_REQUEST, 'Error', registerUser.errors)
         return Response(response, status=code)
