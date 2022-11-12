@@ -4,7 +4,7 @@ DBS = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'defaultdb',
-            'HOST': 'db-mysql-ams3-40764-do-user-5083742-0.b.db.ondigitalocean.com',
+            'HOST': 'db-mysql-ams3-40764-do-user-5083742-0-bf19.b.db.ondigitalocean.com',
             'PORT': '25060',
             'USER': 'doadmin',
             'PASSWORD': 'AVNS_DvXZ1HJy1nA-oAimPsP',
