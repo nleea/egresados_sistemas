@@ -21,7 +21,7 @@ class ResourcesRolesSerializers(Serializer):
             id_last_resources = 0
             last = Resources.objects.last()
             if last:
-                id_last_resources = last.id
+                id_last_resources = last.id + 1
 
             menuResources(validated_data['resources'],
                           resources, Resources, id_last_resources)
@@ -30,9 +30,8 @@ class ResourcesRolesSerializers(Serializer):
 
             roles = Roles.objects.get(pk=validated_data['rolesId'])
 
-            for r in resources:
-                list_resources_roles.append(Resources_roles(
-                    rolesId=roles, resourcesId=r))
+            list_resources_roles = [Resources_roles(
+                rolesId=roles, resourcesId=r) for r in resources]
 
             Resources_roles.objects.bulk_create(list_resources_roles)
             return None

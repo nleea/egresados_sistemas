@@ -10,6 +10,7 @@ from ...helpers import menu
 from ...helpers.menu_resources import menuResources
 from django.contrib.auth.hashers import make_password
 
+
 class Migration(migrations.Migration):
 
     initial = True
@@ -36,7 +37,7 @@ class Migration(migrations.Migration):
 
         Resources = apps.get_model('auth_module', 'Resources')
         resources = []
-        menuResources(menu.resources, resources, Resources, 0)
+        menuResources(menu.resources, resources, Resources, 1)
         resources = Resources.objects.bulk_create(resources)
 
         Resources_roles = apps.get_model('auth_module', 'Resources_roles')

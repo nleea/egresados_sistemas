@@ -74,6 +74,7 @@ class CustomMiddleware(MiddlewareMixin):
                         }
                     )
                     return HttpResponse(json.dumps(response), status=code)
+
                 if tokenUser.email != user.email:
                     response, code = create_response(
                         401, {
@@ -81,6 +82,7 @@ class CustomMiddleware(MiddlewareMixin):
                         }
                     )
                     return HttpResponse(json.dumps(response), status=code)
+
                 """if request.user.email != user.email:
                         response, code = create_response(
                             401, {
@@ -88,7 +90,7 @@ class CustomMiddleware(MiddlewareMixin):
                             }
                         )
                         return HttpResponse(json.dumps(response), status=code)"""
-                #request.user = user
+                request.user = user
                 return None
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
                 if ('refresh-token' in request.session):
@@ -97,7 +99,7 @@ class CustomMiddleware(MiddlewareMixin):
                         200, 'Unauthorized', {"token": f"{token.access_token}"})
                     return HttpResponse(json.dumps(response), status=code)
                 response, code = create_response(
-                    401, 'Unauthorized', {"message": "Authorization has failed, Please send valid token."})
+                    401, 'Unauthorized', {"message": ["Authorization has failed, Please send valid token."]})
                 logger.info(f"Response {response}")
                 return HttpResponse(json.dumps(response), status=code)
             except Exception as e:
