@@ -1,7 +1,6 @@
 from ...serializers.person.persons_serializers import PersonsSerializers
 from ....models import Persons
 from rest_framework import status
-from django.http import Http404
 from ..modules import ListAPIView, CreateAPIView, UpdateAPIView, Response, create_response
 
 
@@ -42,20 +41,25 @@ class PersonUpdateView(UpdateAPIView):
             pk = self.request.user.id
             return Persons.objects.filter(user__id=pk)[0]
         except Persons.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_200_OK, 'Not Found', 'Person Not Found')
-            return {'response': response, 'code': code}
+            return None
 
     def put(self, request, *args, **kwargs):
         person = self.get_object()
-        if type(person) is dict:
-            return Response(person['response'], person['code'])
-        personSerializers = PersonsSerializers(person, data=request.data)
-        if personSerializers.is_valid():
-            personSerializers.update()
+        if person is None:
             response, code = create_response(
-                status.HTTP_200_OK, 'Person Update', personSerializers.data)
+                status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.data)
             return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.data)
-        return Response(response, status=code)
+        try:
+            personSerializers = PersonsSerializers(person, data=request.data)
+            if personSerializers.is_valid():
+                personSerializers.update()
+                response, code = create_response(
+                    status.HTTP_200_OK, 'Person Update', personSerializers.data)
+                return Response(response, status=code)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.data)
+            return Response(response, status=code)
+        except (AttributeError, Exception) as e:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
+            return Response(response, status=code)

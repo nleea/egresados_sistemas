@@ -36,26 +36,33 @@ class DocumentUpdateView(UpdateAPIView):
     serializer_class = DocumentSerializers
 
     def get_object(self):
-        pk = self.kwargs.get('pk')
+
         try:
+            pk = self.kwargs.get('pk')
             return Document_types.objects.get(pk=pk)
         except Document_types.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found', 'Document Not found')
-            return {'response': response, 'code': code}
+            return None
 
     def put(self, request, *args, **kwargs):
         document = self.get_object()
 
-        if type(document) is dict:
-            return Response(document['response'], document['code'])
-
-        documentSerializers = DocumentSerializers(document, data=request.data)
-        if documentSerializers.is_valid():
-            documentSerializers.save()
+        if document is None:
             response, code = create_response(
-                status.HTTP_200_OK, 'Document Update', documentSerializers.data)
+                status.HTTP_400_BAD_REQUEST, 'Error', documentSerializers.errors)
             return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', documentSerializers.errors)
-        return Response(response, status=code)
+
+        try:
+            documentSerializers = DocumentSerializers(
+                document, data=request.data)
+            if documentSerializers.is_valid():
+                documentSerializers.save()
+                response, code = create_response(
+                    status.HTTP_200_OK, 'Document Update', documentSerializers.data)
+                return Response(response, status=code)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Error', documentSerializers.errors)
+            return Response(response, status=code)
+        except (AttributeError, Exception) as e:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
+            return Response(response, status=code)

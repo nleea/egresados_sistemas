@@ -30,7 +30,7 @@ class RolescreateView(CreateAPIView):
                 status.HTTP_200_OK, 'Role', roleSerializers.data)
             return Response(response, status=code)
         response, code = create_response(
-            status.HTTP_200_OK, 'Error', roleSerializers.error)
+            status.HTTP_400_BAD_REQUEST, 'Error', roleSerializers.errors)
         return Response(response, status=code)
 
 
@@ -43,20 +43,26 @@ class RoleUpdateView(UpdateAPIView):
             pk = self.kwargs.get('pk')
             return Roles.objects.get(pk)
         except Roles.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Role Not Found', 'Not Found')
-            return {'response': response, 'code': code}
+            return None
 
     def put(self, request, *args, **kwargs):
         role = self.get_object()
-        if type(role) is dict:
-            return Response(role['response'], role['code'])
-        roleSerializers = RolesSerializers(role, data=request.data)
-        if roleSerializers.is_valid():
-            roleSerializers.save()
+        if role is None:
             response, code = create_response(
-                status.HTTP_200_OK, 'Role', roleSerializers.data)
+                status.HTTP_200_OK, 'Error', roleSerializers.errors)
             return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_200_OK, 'Error', roleSerializers.errors)
-        return Response(response, status=code)
+
+        try:
+            roleSerializers = RolesSerializers(role, data=request.data)
+            if roleSerializers.is_valid():
+                roleSerializers.save()
+                response, code = create_response(
+                    status.HTTP_200_OK, 'Role', roleSerializers.data)
+                return Response(response, status=code)
+            response, code = create_response(
+                status.HTTP_200_OK, 'Error', roleSerializers.errors)
+            return Response(response, status=code)
+        except (AttributeError, Exception) as e:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
+            return Response(response, status=code)

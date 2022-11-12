@@ -58,7 +58,7 @@ class User(AbstractUser, BaseModel):
 
 
 class Roles(BaseModel):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     status = models.BooleanField(default=True)
     users = models.ManyToManyField(
         User, through='User_roles', related_name='roles_user')
@@ -111,7 +111,6 @@ class User_roles(BaseModel):
         unique_together = (('userId', 'rolesId'))
         verbose_name = 'User_roles'
         verbose_name_plural = 'user_roles'
-        
 
 
 class Resources(BaseModel):

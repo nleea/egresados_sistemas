@@ -37,24 +37,32 @@ class GenderUpdateView(UpdateAPIView):
     serializer_class = GenderSerializers
 
     def get_object(self):
-        pk = self.kwargs.get('pk')
         try:
+            pk = self.kwargs.get('pk')
             return Genders.objects.get(pk=pk)
         except Genders.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_200_OK, 'Not Found', 'Gender Not Found')
-            return {'response': response, 'code': code}
+            return None
 
     def put(self, request, *args, **kwargs):
         gender = self.get_object()
-        if type(gender) is dict:
-            return Response(gender['response'], gender['code'])
-        genderSerializers = GenderSerializers(gender, data=request.data)
-        if genderSerializers.is_valid():
-            genderSerializers.save()
+
+        if gender is None:
             response, code = create_response(
-                status.HTTP_200_OK, 'Gender Update', genderSerializers.data)
+                status.HTTP_400_BAD_REQUEST, 'Not Found', 'Gender Not Found')
             return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', genderSerializers.errors)
-        return Response(response, status=code)
+
+        try:
+            genderSerializers = GenderSerializers(gender, data=request.data)
+            if genderSerializers.is_valid():
+                genderSerializers.update(
+                    gender, genderSerializers.validated_data)
+                response, code = create_response(
+                    status.HTTP_200_OK, 'Gender Update', genderSerializers.data)
+                return Response(response, status=code)
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Error', genderSerializers.errors)
+            return Response(response, status=code)
+        except (AttributeError, Exception) as e:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
+            return Response(response, status=code)

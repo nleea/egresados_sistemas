@@ -6,6 +6,7 @@ from ...serializers.user.users_serializers import UserSerializers, CreateUserSer
 from ....models import User
 from ..modules import create_response
 
+
 class UsersView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializers
@@ -16,13 +17,9 @@ class UsersView(RetrieveAPIView):
             user = User.objects.get(pk=request_user)
             return user
         except User.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found', 'User Not Found')
-            return {'response': response, 'code': code}
+            return None
         except Exception as e:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', e)
-            return {'response': response, 'code': code}
+            return None
 
     def get(self, request, *args, **kwargs):
         if request.user.is_staff:
@@ -34,13 +31,21 @@ class UsersView(RetrieveAPIView):
             return Response(response, status=code)
 
         data = self.get_object()
-        if type(data) is dict:
-            return Response(data['response'], data['code'])
 
-        serializers = UserSerializers(data)
-        response, code = create_response(
-            status.HTTP_200_OK, 'User', serializers.data)
-        return Response(response, status=code)
+        if data is None:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'User', 'User Not found')
+            return Response(response, status=code)
+
+        try:
+            serializers = UserSerializers(data)
+            response, code = create_response(
+                status.HTTP_200_OK, 'User', serializers.data)
+            return Response(response, status=code)
+        except (AttributeError, Exception) as e:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
+            return Response(response, status=code)
 
 
 class UsersViewPublic(RetrieveAPIView):
@@ -85,9 +90,7 @@ class UserUpdateView(UpdateAPIView):
             user = User.objects.get(pk=request_user)
             return user
         except User.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found')
-            raise Response(response, 'Error', status=code)
+            return None
         except Exception as e:
             response, code = create_response(
                 status.HTTP_400_BAD_REQUEST, 'Error', e)
@@ -100,14 +103,24 @@ class UserUpdateView(UpdateAPIView):
         partial = kwargs.pop('partial', False)
         user = self.get_object()
 
-        userSerializers = UserSerializers(
-            user, data=request.data, partial=partial)
-        if userSerializers.is_valid():
-            self.perform_update(userSerializers)
+        if user is None:
             response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Password Error', 'Password is not correct.')
+                status.HTTP_400_BAD_REQUEST, 'Password Error', 'User Not found')
             return Response(response, status=code)
-        return Response(userSerializers.errors, 'Error', status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            userSerializers = UserSerializers(
+                user, data=request.data, partial=partial)
+            if userSerializers.is_valid():
+                self.perform_update(userSerializers)
+                response, code = create_response(
+                    status.HTTP_400_BAD_REQUEST, 'Password Error', 'User Not found')
+                return Response(response, status=code)
+            return Response(userSerializers.errors, 'Error', status=status.HTTP_400_BAD_REQUEST)
+        except (AttributeError, Exception) as e:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
+            return Response(response, status=code)
 
 
 class UserChangePasswordView(UpdateAPIView):
@@ -120,13 +133,9 @@ class UserChangePasswordView(UpdateAPIView):
             user = User.objects.get(pk=request_user)
             return user
         except (User.DoesNotExist, TypeError):
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found', 'User Not Found')
-            return {'response': response, 'code': code}
+            return None
         except (BaseException, TypeError) as e:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', e)
-            return {'response': response, 'code': code}
+            return None
 
     def perform_update(self, serializer):
         if 'original-password' in self.request.data:
@@ -139,8 +148,10 @@ class UserChangePasswordView(UpdateAPIView):
         partial = kwargs.pop('partial', False)
         user = self.get_object()
 
-        if type(user) is dict:
-            return Response(user['response'], user['code'])
+        if user is None:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
+            return Response(response, status=code)
 
         if 'original-password' not in self.request.data:
             response, code = create_response(
@@ -155,9 +166,14 @@ class UserChangePasswordView(UpdateAPIView):
         userSerializers = UserChangePassword(
             user, data=request.data, partial=partial, context={'context': request})
 
-        if userSerializers.is_valid():
-            self.perform_update(userSerializers)
+        try:
+            if userSerializers.is_valid():
+                self.perform_update(userSerializers)
+                response, code = create_response(
+                    status.HTTP_200_OK, 'Password', 'Password Change')
+                return Response(response, status=code)
+            return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        except (AttributeError, Exception) as e:
             response, code = create_response(
-                status.HTTP_200_OK, 'Password', 'Password Change')
+                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
             return Response(response, status=code)
-        return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
