@@ -40,13 +40,14 @@ class RoleUpdateView(UpdateAPIView):
 
     def get_object(self):
         try:
-            pk = self.kwargs.get('pk')
-            return Roles.objects.get(pk)
+            pk = self.kwargs['pk']
+            return Roles.objects.get(id=pk)
         except Roles.DoesNotExist:
             return None
 
     def put(self, request, *args, **kwargs):
         role = self.get_object()
+        print(role)
         if role is None:
             response, code = create_response(
                 status.HTTP_200_OK, 'Error', roleSerializers.errors)
