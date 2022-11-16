@@ -1,5 +1,4 @@
-from gc import get_referents
-from ..modules import CreateAPIView, ListAPIView, UpdateAPIView, status, Response, create_response
+from ..modules import CreateAPIView, ListAPIView, UpdateAPIView, status, Response, create_response,IsAdminRole,DestroyAPIView
 from ....models import Genders
 from ...serializers.gender.gender_Serializers import GenderSerializers
 
@@ -66,3 +65,27 @@ class GenderUpdateView(UpdateAPIView):
             response, code = create_response(
                 status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
             return Response(response, status=code)
+
+class ResourcesDestroyView(DestroyAPIView):
+    queryset = Genders.objects.all()
+    serializer_class = GenderSerializers
+    permission_classes = [IsAdminRole]
+
+    def get_object(self):
+        try:
+            pk = self.kwargs.get('pk')
+            return Genders.objects.get(id=pk)
+        except Genders.DoesNotExist:
+            return None
+
+    def delete(self, request, *args, **kwargs):
+        gender = self.get_object()
+        if gender is None:
+            response, code = create_response(
+                status.HTTP_200_OK, 'Error', 'Gender Not Exist')
+            return Response(response, status=code)
+        gender.delete()
+
+        response, code = create_response(
+            status.HTTP_200_OK, 'Error', 'Ok')
+        return Response(response, status=code)
