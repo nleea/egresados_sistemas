@@ -1,4 +1,4 @@
-from ..modules import ListAPIView, CreateAPIView, Response, status, UpdateAPIView, create_response
+from ..modules import ListAPIView, CreateAPIView, Response, status, UpdateAPIView, create_response,IsAdminRole,DestroyAPIView
 from ....models import Document_types
 from ...serializers.document.document_serializers import DocumentSerializers
 
@@ -66,3 +66,28 @@ class DocumentUpdateView(UpdateAPIView):
             response, code = create_response(
                 status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
             return Response(response, status=code)
+
+
+class ResourcesDestroyView(DestroyAPIView):
+    queryset = Document_types.objects.all()
+    serializer_class = DocumentSerializers
+    permission_classes = [IsAdminRole]
+
+    def get_object(self):
+        try:
+            pk = self.kwargs.get('pk')
+            return Document_types.objects.get(id=pk)
+        except Document_types.DoesNotExist:
+            return None
+
+    def delete(self, request, *args, **kwargs):
+        document = self.get_object()
+        if document is None:
+            response, code = create_response(
+                status.HTTP_200_OK, 'Error', 'Type document Not Exist')
+            return Response(response, status=code)
+        document.delete()
+
+        response, code = create_response(
+            status.HTTP_200_OK, 'Error', 'Ok')
+        return Response(response, status=code)

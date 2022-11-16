@@ -1,9 +1,7 @@
-from rest_framework.authentication import SessionAuthentication, TokenAuthentication
-
 from ....models import Roles
 from ...serializers.roles.roles_serializers import RolesSerializers
 from ..modules import (CreateAPIView, ListAPIView, Response, UpdateAPIView,
-                       create_response, status)
+                       create_response, status, DestroyAPIView, IsAdminRole)
 
 
 class RolesListView(ListAPIView):
@@ -40,17 +38,16 @@ class RoleUpdateView(UpdateAPIView):
 
     def get_object(self):
         try:
-            pk = self.kwargs['pk']
+            pk = self.kwargs.get('pk')
             return Roles.objects.get(id=pk)
         except Roles.DoesNotExist:
             return None
 
     def put(self, request, *args, **kwargs):
         role = self.get_object()
-        print(role)
         if role is None:
             response, code = create_response(
-                status.HTTP_200_OK, 'Error', roleSerializers.errors)
+                status.HTTP_200_OK, 'Error', 'Role Not Exist')
             return Response(response, status=code)
 
         try:
@@ -67,3 +64,28 @@ class RoleUpdateView(UpdateAPIView):
             response, code = create_response(
                 status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
             return Response(response, status=code)
+
+
+class RolesDestroyView(DestroyAPIView):
+    queryset = Roles.objects.all()
+    serializer_class = RolesSerializers
+    permission_classes = [IsAdminRole]
+
+    def get_object(self):
+        try:
+            pk = self.kwargs.get('pk')
+            return Roles.objects.get(id=pk)
+        except Roles.DoesNotExist:
+            return None
+
+    def delete(self, request, *args, **kwargs):
+        role = self.get_object()
+        if role is None:
+            response, code = create_response(
+                status.HTTP_200_OK, 'Error', 'Role Not Exist')
+            return Response(response, status=code)
+        role.delete()
+
+        response, code = create_response(
+            status.HTTP_200_OK, 'Error', 'Ok')
+        return Response(response,status=code)

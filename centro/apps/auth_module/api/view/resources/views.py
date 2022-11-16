@@ -1,4 +1,4 @@
-from ..modules import ListAPIView, Response, UpdateAPIView, status, create_response
+from ..modules import ListAPIView, Response, UpdateAPIView, status, create_response, DestroyAPIView, IsAdminRole
 from ....models import Resources
 from ...serializers.resources.resources_serializers import ResourcesSerializers
 
@@ -41,4 +41,29 @@ class ResourcesUpdateView(UpdateAPIView):
             return Response(response, status=code)
         response, code = create_response(
             status.HTTP_400_BAD_REQUEST, 'Error', resourcesSerializers.errors)
+        return Response(response, status=code)
+
+
+class ResourcesDestroyView(DestroyAPIView):
+    queryset = Resources.objects.all()
+    serializer_class = ResourcesSerializers
+    permission_classes = [IsAdminRole]
+
+    def get_object(self):
+        try:
+            pk = self.kwargs.get('pk')
+            return Resources.objects.get(id=pk)
+        except Resources.DoesNotExist:
+            return None
+
+    def delete(self, request, *args, **kwargs):
+        resources = self.get_object()
+        if resources is None:
+            response, code = create_response(
+                status.HTTP_200_OK, 'Error', 'Resources Not Exist')
+            return Response(response, status=code)
+        resources.delete()
+
+        response, code = create_response(
+            status.HTTP_200_OK, 'Error', 'Ok')
         return Response(response, status=code)
