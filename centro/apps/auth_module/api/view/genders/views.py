@@ -66,7 +66,7 @@ class GenderUpdateView(UpdateAPIView):
                 status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
             return Response(response, status=code)
 
-class ResourcesDestroyView(DestroyAPIView):
+class GendersDestroyView(DestroyAPIView):
     queryset = Genders.objects.all()
     serializer_class = GenderSerializers
     permission_classes = [IsAdminRole]

@@ -68,7 +68,7 @@ class DocumentUpdateView(UpdateAPIView):
             return Response(response, status=code)
 
 
-class ResourcesDestroyView(DestroyAPIView):
+class DocumentDestroyView(DestroyAPIView):
     queryset = Document_types.objects.all()
     serializer_class = DocumentSerializers
     permission_classes = [IsAdminRole]
