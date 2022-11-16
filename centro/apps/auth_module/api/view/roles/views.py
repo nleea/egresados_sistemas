@@ -84,8 +84,12 @@ class RolesDestroyView(DestroyAPIView):
             response, code = create_response(
                 status.HTTP_200_OK, 'Error', 'Role Not Exist')
             return Response(response, status=code)
+        if role.name.lower() == 'admin' or role.name.lower() == 'egresado':
+            response, code = create_response(
+                status.HTTP_200_OK, 'Error', 'No se puede borrar este rol')
+            return Response(response, status=code)
         role.delete()
 
         response, code = create_response(
             status.HTTP_200_OK, 'Error', 'Ok')
-        return Response(response,status=code)
+        return Response(response, status=code)
