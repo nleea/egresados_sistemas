@@ -13,23 +13,33 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+import environ
+from .db import DBS
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^gd!0cseqa8%mk#rf(lh4+&0n7f853#2ow4rfu8j+2#730w@ih'
+SECRET_KEY = env('SECRET_OR_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['*']
 
-#CORS_ALLOWED_ORIGINS = ['http://localhost:*']
+#CORS_ALLOWED_ORIGINS = []
 CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
 # Application definition
 
 COMMONS_APPS = [
@@ -45,6 +55,7 @@ INSTALLS_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     "whitenoise.runserver_nostatic",
     'drf_yasg'
@@ -58,6 +69,7 @@ INSTALLED_APPS = COMMONS_APPS + INSTALLS_APPS + THIRDS_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    # "apps.middlewares.view_auth.SessionMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
@@ -67,8 +79,9 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+SESSION_SAVE_EVERY_REQUEST = True
 
-ROOT_URLCONF = 'config.urls'
+ROOT_URLCONF = 'configuration.urls'
 
 TEMPLATES = [
     {
@@ -86,12 +99,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
+WSGI_APPLICATION = 'configuration.wsgi.application'
 
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+<<<<<<< HEAD:centro/config/settings.py
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -102,6 +116,11 @@ DATABASES = {
         'PASSWORD': '3602}',
     }
 }
+=======
+db = 'mysql-'
+db += env('MYSQL_DATABASE').strip()
+DATABASES = DBS[db]
+>>>>>>> secundaria:centro/configuration/settings.py
 
 
 # Password validation
@@ -124,24 +143,31 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTH_USER_MODEL = 'auth_module.User'
 AUTHENTICATION_BACKENDS = ['apps.backends.EmailBackend.EmailBackend']
+ACCOUNT_SESSION_REMEMBER = True
+
+CSRF_COOKIE_SAMESITE = 'Strict'
+SESSION_COOKIE_SAMESITE = 'Strict'
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
+
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_DOMAIN = None
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        # 'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=10),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': False,
+    'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-    'UPDATE_LAST_LOGIN': True,
+    'UPDATE_LAST_LOGIN': False,
 
     'ALGORITHM': 'HS256',
     'SIGNING_KEY': SECRET_KEY,
@@ -166,6 +192,13 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
     'SLIDING_TOKEN_LIFETIME': timedelta(hours=10),
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
 }
 
 

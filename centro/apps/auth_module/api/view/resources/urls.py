@@ -1,8 +1,8 @@
 from ..modules import path
-from .views import ResourcesCreateView, ResourcesListView, ResourcesUpdateView
+from .views import  ResourcesListView, ResourcesUpdateView,ResourcesDestroyView
 
 urlpatterns = [
-    path('', ResourcesListView.as_view()),
+    path('roles/', ResourcesListView.as_view()),
     path('update/<int:pk>', ResourcesUpdateView.as_view()),
-    path('create/', ResourcesCreateView.as_view())
+    path('delete/<int:pk>', ResourcesDestroyView.as_view()),
 ]

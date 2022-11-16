@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import UserManager
 # Create your models here.
 
 
@@ -44,7 +45,8 @@ class User(AbstractUser, BaseModel):
     avatar = models.CharField(max_length=256, blank=True, null=True)
     roles = models.ManyToManyField(
         'Roles', through='User_roles', related_name='user_roles')
-    
+
+    objects = UserManager()
 
     class Meta:
         #unique_together = (('username', 'email'))
@@ -56,7 +58,7 @@ class User(AbstractUser, BaseModel):
 
 
 class Roles(BaseModel):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, unique=True)
     status = models.BooleanField(default=True)
     users = models.ManyToManyField(
         User, through='User_roles', related_name='roles_user')
@@ -74,11 +76,12 @@ class Roles(BaseModel):
 class Persons(BaseModel):
     name = models.CharField(max_length=150)
     surname = models.CharField(max_length=150)
-    identification = models.CharField(max_length=255)
-    address = models.CharField(max_length=50)
-    nationality = models.CharField(max_length=30)
-    date_of_birth = models.CharField(max_length=30)
-    phone = models.CharField(max_length=20)
+    identification = models.CharField(
+        max_length=255, unique=True, blank=True, null=True)
+    address = models.CharField(max_length=50, blank=True, null=True)
+    nationality = models.CharField(max_length=30, blank=True, null=True)
+    date_of_birth = models.CharField(max_length=30, blank=True, null=True)
+    phone = models.CharField(max_length=20, blank=True, null=True)
     status = models.BooleanField(default=True)
     document_type = models.ForeignKey(
         Document_types, related_name='document_types', on_delete=models.SET_NULL, blank=True, null=True)
@@ -91,6 +94,7 @@ class Persons(BaseModel):
         return self.name
 
     class Meta:
+        unique_together = (('name', 'identification'))
         verbose_name = 'Persons'
         verbose_name_plural = 'Persons'
 
@@ -106,21 +110,20 @@ class User_roles(BaseModel):
         return self.userId.username + '-' + self.rolesId.name
 
     class Meta:
+        unique_together = (('userId', 'rolesId'))
         verbose_name = 'User_roles'
         verbose_name_plural = 'user_roles'
 
 
 class Resources(BaseModel):
     path = models.CharField(max_length=256)
+    id_padre = models.IntegerField()
     method = models.CharField(max_length=256)
     icono = models.CharField(max_length=256)
     link = models.CharField(max_length=256)
     titulo = models.CharField(max_length=100)
     roles = models.ManyToManyField(
         Roles, through='Resources_roles', related_name='resources_roles')
-
-    def __str__(self) -> str:
-        return self.path
 
     class Meta:
         verbose_name = 'Resources'
