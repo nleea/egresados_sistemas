@@ -105,7 +105,7 @@ WSGI_APPLICATION = 'configuration.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-<<<<<<< HEAD:centro/config/settings.py
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -116,11 +116,11 @@ DATABASES = {
         'PASSWORD': '3602}',
     }
 }
-=======
+
 db = 'mysql-'
 db += env('MYSQL_DATABASE').strip()
 DATABASES = DBS[db]
->>>>>>> secundaria:centro/configuration/settings.py
+
 
 
 # Password validation
