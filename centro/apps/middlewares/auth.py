@@ -39,25 +39,22 @@ class CustomMiddleware(MiddlewareMixin):
 
         jwt_token: str = request.headers.get('authorization', None)
         logger.info(f"request received for endpoint {str(request.path)}")
-<<<<<<< HEAD
-        
-=======
->>>>>>> secundaria
+
         # If token Exists
         if jwt_token:
             try:
                 auth = JWTAuthentication()
                 tokenUser, token = auth.authenticate(request)
-<<<<<<< HEAD
+
                 
                 if request.user.is_authenticated:
-=======
-                user = None
+
+                    user = None
 
                 if ('user' in request.session):
                     user = User.objects.get(id=request.session['user'])
                 else:
->>>>>>> secundaria
+
                     user = User.objects.get(id=token['user_id'])
 
                 if not tokenUser.is_authenticated:
