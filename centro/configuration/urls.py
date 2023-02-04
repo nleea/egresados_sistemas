@@ -37,5 +37,6 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.auth_module.api.urls')),
+    path('advertisements', include('apps.classified_advertisements.api.urls')),
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

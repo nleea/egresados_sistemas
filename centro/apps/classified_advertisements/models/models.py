@@ -33,6 +33,7 @@ class SubCategoria(BaseModel):
         verbose_name = 'SubCategoria'
         verbose_name_plural = 'SubCategorias'
 
+
 class Anuncio(BaseModel):
     datos = models.CharField(max_length=256)
     persona_id = models.ForeignKey(User,on_delete=models.CASCADE)
