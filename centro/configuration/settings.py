@@ -62,7 +62,10 @@ INSTALLS_APPS = [
 ]
 
 THIRDS_APPS = [
-    'apps.auth_module'
+    'apps.auth_module',
+    'apps.classified_advertisements',
+    "apps.pqrs",
+    "apps.encuestas"
 ]
 
 INSTALLED_APPS = COMMONS_APPS + INSTALLS_APPS + THIRDS_APPS
@@ -75,10 +78,11 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    "apps.middlewares.auth.CustomMiddleware",
+    "configs.middlewares.auth.CustomMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 SESSION_SAVE_EVERY_REQUEST = True
 
 ROOT_URLCONF = 'configuration.urls'
@@ -142,7 +146,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'auth_module.User'
-AUTHENTICATION_BACKENDS = ['apps.backends.EmailBackend.EmailBackend']
+AUTHENTICATION_BACKENDS = ['configs.backends.EmailBackend.EmailBackend']
 ACCOUNT_SESSION_REMEMBER = True
 
 CSRF_COOKIE_SAMESITE = 'Strict'

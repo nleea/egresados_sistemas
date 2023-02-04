@@ -5,18 +5,29 @@ import json
 import logging
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import HttpResponse
-from ..helpers.create_response import create_response
+from apps.helpers.create_response import create_response
 from django.utils.deprecation import MiddlewareMixin
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
+from pathlib import Path
+import os
+import environ
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 User = get_user_model()
 
 # Initialize logger
 logger = logging.getLogger(__name__)
 # Get JWT secret key
 
-SECRET_KEY = 'secret_or_key'
+SECRET_KEY = env("SECRET_OR_KEY")
 
 
 class CustomMiddleware(MiddlewareMixin):
