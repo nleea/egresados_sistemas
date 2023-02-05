@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from ....models.models import Seccion
-<<<<<<< HEAD
 from ..BaseSerializers import BaseSerializers
 
 class SeccionSerializers(BaseSerializers):
@@ -33,19 +32,3 @@ class SeccionSerializers(BaseSerializers):
         instance.save()
         return instance
     
-=======
-
-class SeccionSerializers(serializers.Serializer):
-    name = serializers.CharField()
-    
-    
-    class Meta:
-        fields = "__all__"
-    
-    def create(self, validated_data):
-        return Seccion(**validated_data)
-
-    def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
-        return instance
->>>>>>> 685e7b097d6b83089baa1a651f6855eae9e73db5

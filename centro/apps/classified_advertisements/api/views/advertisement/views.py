@@ -2,7 +2,6 @@ from rest_framework.views import APIView
 from ...serializers.advertissement.advertisement_serialziers import AdvertisementSerializers
 from ....models.models import Anuncio
 from rest_framework.response import Response
-<<<<<<< HEAD
 from .....helpers.create_response import create_response
 from rest_framework import status
 
@@ -27,12 +26,3 @@ class SaveAdvertisementView(APIView):
 
         response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",data.errors)
         return Response(response,code)
-=======
-
-class AdvertisementView(APIView):
-   
-    
-    def get(self, request, *args, **kwargs):
-        data = AdvertisementSerializers(Anuncio.objects.all(),many=True)
-        return Response(data.data)
->>>>>>> 685e7b097d6b83089baa1a651f6855eae9e73db5
