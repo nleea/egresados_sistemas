@@ -12,7 +12,8 @@ class AdvertisementView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
         data = AdvertisementSerializers(Anuncio.objects.all(),many=True,meta=meta)
-        return Response(data.data)
+        response, code = create_response(status.HTTP_200_OK,"Success",data.data)
+        return Response(response,code)
 
 
 class SaveAdvertisementView(APIView):
