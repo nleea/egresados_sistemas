@@ -29,5 +29,5 @@ def create_response(code, message, data, request_id='',):
                       'message':message,
                       'data': data, "request_id": req}
         return data_parse, code
-    except Exception as creation_error:
+    except (Exception,BaseException) as creation_error:
         return Response({creation_error}, status=code)
