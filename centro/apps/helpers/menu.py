@@ -70,6 +70,20 @@ resources = [
                                 "icono": "icon",
                                 "link": "/dashboard/persona/datos-personales/ver/",
                                 "titulo": "Ver"
+                            },
+                            {
+                                "path": "/dashboard/persona/datos-personales/crear/",
+                                "method": "POST",
+                                "icono": "icon",
+                                "link": "/dashboard/persona/datos-personales/crear/",
+                                "titulo": "Crear"
+                            },
+                            {
+                                "path": "/dashboard/persona/datos-personales/update/",
+                                "method": "PUT",
+                                "icono": "icon",
+                                "link": "/dashboard/persona/datos-personales/update/",
+                                "titulo": "Editar"
                             }
                         ]
                     }
