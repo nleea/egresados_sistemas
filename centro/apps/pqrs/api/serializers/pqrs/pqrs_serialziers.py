@@ -6,16 +6,6 @@ class PqrsSerializers(BaseSerializers):
     description = serializers.CharField()
     persona = serializers.SlugRelatedField("username",read_only=True)
 
-    def __init__(self, instance=None, data=..., **kwargs):
-        meta = bool(kwargs.pop('meta', None))
-        
-        super().__init__(instance, data, **kwargs)
-        
-        if meta != True or meta is None:
-            self.fields.pop("createdAt")
-            self.fields.pop("updateAt")
-            self.fields.pop("userCreate")
-            self.fields.pop("userUpdate")
 
     class Meta:
         fields = "__all__"
