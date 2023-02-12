@@ -1,17 +1,16 @@
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from ...serializers.momento.momento_serializers import MomentSerializers
 from ....models.models import TipoMomento
 from rest_framework.response import Response
 from .....helpers.create_response import create_response
 from rest_framework import status
+from ..BaseView import BaseView
 
-class MomentView(APIView):
-   
+class MomentView(BaseView):
+       
     def get(self, request, *args, **kwargs):
-        meta = None
-        if 'meta' in request.headers:
-            meta = request.headers["meta"]
-        data = MomentSerializers(TipoMomento.objects.all(),many=True,meta=meta)
+        data = MomentSerializers(TipoMomento.objects.all(),many=True,meta=self.get_meta())
         response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":data.data})
         return Response(response,code)
 
