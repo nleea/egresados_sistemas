@@ -29,6 +29,29 @@ class SaveAnexoView(APIView):
         response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",data.errors)
         return Response(response,code)
 
+class DeleteAnexoView(APIView):
+    
+    def get_object(self):
+        try:
+            pk = self.kwargs.get("pk")
+            seccionId = Anexo.objects.get(pk=pk)
+            return seccionId
+        except Anexo.DoesNotExist:
+            return None
+
+    def delete(self,request,*args, **kwargs):
+        instanceOrNone = self.get_object()
+        if instanceOrNone is None:
+            response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Anexo {} not exist".format(self.kwargs.get('pk')))
+            return Response(response,code)
+
+        try:
+            instanceOrNone.delete()
+            response,code = create_response(status.HTTP_200_OK,"Success","Delete" )
+            return Response(response,code)
+        except BaseException as e:
+            response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",e.args )
+            return Response(response,code)
 
 class UpdateAnexoView(APIView):
 

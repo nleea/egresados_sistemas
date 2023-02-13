@@ -12,3 +12,12 @@ class BaseView(APIView):
     @method_decorator(cache_page(60*60*2))
     def get(self,request,*args, **kwargs):
         pass
+    
+    def post(self,request,*args, **kwargs):
+        pass
+    
+    def delete(self,request,*args, **kwargs):
+        pass
+    
+    def put(self,request,*args, **kwargs):
+        pass

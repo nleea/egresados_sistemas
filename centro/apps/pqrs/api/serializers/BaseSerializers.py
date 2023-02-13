@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 class BaseSerializers(serializers.Serializer):
-    
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
     createdAt = serializers.DateField(read_only=True)
     updateAt = serializers.DateField(read_only=True)
     userCreate = serializers.SlugRelatedField("username",read_only=True)

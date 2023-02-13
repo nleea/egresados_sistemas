@@ -65,7 +65,6 @@ class CustomMiddleware(MiddlewareMixin):
                 if ('user' in request.session):
                     user = User.objects.get(id=request.session['user'])
                 else:
-
                     user = User.objects.get(id=token['user_id'])
 
                 if not tokenUser.is_authenticated:
@@ -120,16 +119,11 @@ class CustomMiddleware(MiddlewareMixin):
                 logger.info(f"Response {response}")
                 return HttpResponse(json.dumps(response), status=code)
             except Exception as e:
-                response, code = create_response(
-                    401, 'Unauthorized', {
-                        "message": e}
-                )
-                logger.info(f"Response {response}")
-                return HttpResponse(json.dumps(response), status=code)
+                return HttpResponse(e.args,status=400)
         else:
             response, code = create_response(
                 401, 'Unauthorized', {
-                    "message": "Authorization not found, Please send valid token in headers 1111"}
+                    "message": "Authorization not found, Please send valid token"}
             )
             logger.info(f"Response {response}")
             return HttpResponse(json.dumps(response), status=code)

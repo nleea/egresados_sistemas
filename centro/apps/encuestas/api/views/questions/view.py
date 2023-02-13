@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ...serializers.questions.questions_serializers import QuestionSerializers
+from ...serializers.questions.questions_serializers import QuestionSerializers,QuestionSerializersUpate
 from ....models.models import Question
 from rest_framework.response import Response
 from .....helpers.create_response import create_response
@@ -14,7 +14,7 @@ class QuestionsView(BaseView):
         return Response(response,code)
 
 
-class SaveQuestionsView(APIView):
+class SaveQuestionsView(BaseView):
 
     def post(self, request, *args, **kwargs):
         data = QuestionSerializers(data=request.data)
@@ -28,7 +28,32 @@ class SaveQuestionsView(APIView):
         return Response(response,code)
 
 
-class UpdateQuestionsView(APIView):
+class DeleteQuestionsView(BaseView):
+    
+    def get_object(self):
+        try:
+            pk = self.kwargs.get("pk")
+            seccionId = Question.objects.get(pk=pk)
+            return seccionId
+        except Question.DoesNotExist:
+            return None
+
+    def delete(self,request,*args, **kwargs):
+        instanceOrNone = self.get_object()
+        if instanceOrNone is None:
+            response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Questions {} not exist".format(self.kwargs.get('pk')))
+            return Response(response,code)
+
+        try:
+            instanceOrNone.delete()
+            response,code = create_response(status.HTTP_200_OK,"Success","Delete" )
+            return Response(response,code)
+        except BaseException as e:
+            response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",e.args )
+            return Response(response,code)
+
+
+class UpdateQuestionsView(BaseView):
 
     def _allowed_methods(self):
         self.http_method_names.append("put")
@@ -50,7 +75,7 @@ class UpdateQuestionsView(APIView):
             response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Questions {} not exist".format(self.kwargs.get('pk')))
             return Response(response,code)
 
-        instance = QuestionSerializers(instanceOrNone,data=request.data)
+        instance = QuestionSerializersUpate(instanceOrNone,data=request.data,partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
             response, code = create_response(status.HTTP_200_OK,"Success","Success")

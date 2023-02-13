@@ -11,12 +11,15 @@ class AsignacionSerializers(BaseSerializers):
         fields = "__all__"
 
     def create(self, validated_data):
-        funcionarioId = User.objects.get(pk=validated_data["funcionarioId"])
-        pqrs = Pqrs.objects.get(pk=validated_data["pqrs"])
-        userCreate = None
-        if "userCreate" in validated_data:
-            userCreate = validated_data["userCreate"]
-        return Asignacion.objects.create(funcionarioId=funcionarioId,pqrs=pqrs,userCreate=userCreate)
+        try:
+            funcionarioId = User.objects.get(pk=validated_data["funcionarioId"])
+            pqrs = Pqrs.objects.get(pk=validated_data["pqrs"])
+            userCreate = None
+            if "userCreate" in validated_data:
+                userCreate = validated_data["userCreate"]
+            return Asignacion.objects.create(funcionarioId=funcionarioId,pqrs=pqrs,userCreate=userCreate)
+        except (User.DoesNotExist,Pqrs.DoesNotExist) as e:
+            raise serializers.ValidationError(e.args[0])
 
     def update(self, instance, validated_data):
         try:
@@ -27,4 +30,6 @@ class AsignacionSerializers(BaseSerializers):
             return instance
         except User.DoesNotExist as e:
             raise serializers.ValidationError(e.args[0])
+    
+    
         

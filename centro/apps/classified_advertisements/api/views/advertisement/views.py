@@ -27,3 +27,35 @@ class SaveAdvertisementView(APIView):
 
         response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",data.errors)
         return Response(response,code)
+
+
+class UpdateCategoryView(APIView):
+
+    def _allowed_methods(self):
+        self.http_method_names.append("put")
+        return [m.upper() for m in self.http_method_names if hasattr(self, m)]
+
+    def get_object(self):
+        try:
+            pk = self.kwargs.get("pk")
+            seccionId = Anuncio.objects.get(pk=pk)
+            return seccionId
+        except Anuncio.DoesNotExist:
+            return None
+
+
+    def put(self, request, *args, **kwargs):
+
+        instanceOrNone = self.get_object()
+        if instanceOrNone is None:
+            response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Anuncio {} not exist".format(self.kwargs.get('pk')))
+            return Response(response,code)
+
+        instance = AdvertisementSerializers(instanceOrNone,data=request.data)
+        if instance.is_valid():
+            instance.save(userUpdate=request.user)
+            response, code = create_response(status.HTTP_200_OK,"Success","Success")
+            return Response(response,code)
+
+        response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request", instance.errors)
+        return Response(response,code)
