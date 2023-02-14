@@ -14,18 +14,25 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+class TipoPqrs(BaseModel):
+    tipo = models.CharField(max_length=256)
+
+
 class Pqrs(BaseModel):
+    titulo = models.CharField(max_length=256,blank=True,null=True)
     description = models.CharField(max_length=256)
     persona = models.ForeignKey(User,on_delete=models.CASCADE)
-    
+    tipopqrs = models.ForeignKey(TipoPqrs,blank=True,null=True,on_delete=models.CASCADE)
+
     class Meta:
         verbose_name = 'Pqrs'
+
 
 class Asignacion(BaseModel):
     funcionarioId = models.ForeignKey(User,on_delete=models.CASCADE)
     fecha_asignacion = models.DateField(auto_now=True)
     pqrs = models.ForeignKey(Pqrs,on_delete=models.CASCADE)
-    
+
     class Meta:
         verbose_name = 'Asignacion'
         verbose_name_plural = 'Asignacions'
