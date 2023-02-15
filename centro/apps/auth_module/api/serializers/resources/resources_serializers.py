@@ -25,7 +25,7 @@ class ResourcesRolesSerializers(Serializer):
 
             menuResources(validated_data['resources'],
                           resources, Resources, id_last_resources)
-
+            
             resources = Resources.objects.bulk_create(resources)
 
             roles = Roles.objects.get(pk=validated_data['rolesId'])
