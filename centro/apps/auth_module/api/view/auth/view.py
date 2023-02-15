@@ -39,13 +39,10 @@ class AuthLogin(APIView):
         login(request, serializers.validated_data)
         token = self.get_tokens_for_user(serializers.validated_data)
 
-        resources = [e.resources.prefetch_related(
-            'resources') for e in serializers.validated_data.roles.all()]
-        resources = flatList(resources)
-        resources_unique = []
-
-        [resources_unique.append(x) for x in resources if x not in resources_unique]
-        menu = ResourcesSerializers(resources_unique, many=True)
+        resources = flatList([e.resources.prefetch_related(
+            'resources') for e in serializers.validated_data.roles.all()])
+    
+        menu = ResourcesSerializers(set(resources), many=True)
 
         request.session['refresh-token'] = token['refresh']
         response, code = create_response(
