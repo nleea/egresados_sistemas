@@ -7,7 +7,6 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import logout
 from ..modules import create_response
 from rest_framework import status
-from .....helpers.flat_List import flatList
 from django.http import HttpResponse
 from django.contrib.auth import login
 
@@ -38,11 +37,12 @@ class AuthLogin(APIView):
 
         login(request, serializers.validated_data)
         token = self.get_tokens_for_user(serializers.validated_data)
-        
+
         resources = [e.resources.prefetch_related(
             'resources') for e in serializers.validated_data.roles.all()][0]
+        sorted(resources,key=lambda x: x.id)
         menu = ResourcesSerializers(resources, many=True)
-
+        
         request.session['refresh-token'] = token['refresh']
         response, code = create_response(
             status.HTTP_200_OK, 'Login Success', {'token': token, 'user': {'name': serializers.validated_data.username,
