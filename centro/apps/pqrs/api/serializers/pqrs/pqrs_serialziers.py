@@ -18,7 +18,7 @@ class PqrsSerializers(BaseSerializers):
             userCreate = None
             if validated_data["userCreate"]:
                 userCreate = validated_data["userCreate"]
-            return Pqrs.objects.create(description=validated_data["description"],tipopqrs=tipo,persona=persona,userCreate=userCreate)
+            return Pqrs.objects.create(description=validated_data["description"],titulo=validated_data["titulo"],tipopqrs=tipo,persona=persona,userCreate=userCreate)
         except (User.DoesNotExist,TipoPqrs.DoesNotExist) as e:
             raise serializers.ValidationError(e.args)
 

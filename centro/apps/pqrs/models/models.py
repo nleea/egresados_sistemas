@@ -19,7 +19,7 @@ class TipoPqrs(BaseModel):
 
 
 class Pqrs(BaseModel):
-    titulo = models.CharField(max_length=256,blank=True,null=True)
+    titulo = models.CharField(max_length=256)
     description = models.CharField(max_length=256)
     persona = models.ForeignKey(User,on_delete=models.CASCADE)
     tipopqrs = models.ForeignKey(TipoPqrs,on_delete=models.CASCADE)
