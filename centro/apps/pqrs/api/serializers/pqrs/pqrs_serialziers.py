@@ -23,6 +23,7 @@ class PqrsSerializers(BaseSerializers):
             raise serializers.ValidationError(e.args)
 
     def update(self, instance, validated_data):
+        instance.titulo = validated_data.get('titulo', instance.titulo)
         instance.description = validated_data.get('description', instance.description)
         instance.userUpdate = validated_data.get("userUpdate",instance.userUpdate)
         instance.save()
