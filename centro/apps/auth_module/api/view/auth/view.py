@@ -9,6 +9,7 @@ from ..modules import create_response
 from rest_framework import status
 from django.http import HttpResponse
 from django.contrib.auth import login
+from .....helpers.flat_List import flatList
 
 
 class AuthLogin(APIView):
@@ -39,10 +40,13 @@ class AuthLogin(APIView):
         token = self.get_tokens_for_user(serializers.validated_data)
 
         resources = [e.resources.prefetch_related(
-            'resources') for e in serializers.validated_data.roles.all()][0]
-        sorted(resources,key=lambda x: x.id)
-        menu = ResourcesSerializers(resources, many=True)
-        
+            'resources') for e in serializers.validated_data.roles.all()]
+        resources = flatList(resources)
+        resources_unique = []
+
+        [resources_unique.append(x) for x in resources if x not in resources_unique]
+        menu = ResourcesSerializers(resources_unique, many=True)
+
         request.session['refresh-token'] = token['refresh']
         response, code = create_response(
             status.HTTP_200_OK, 'Login Success', {'token': token, 'user': {'name': serializers.validated_data.username,
