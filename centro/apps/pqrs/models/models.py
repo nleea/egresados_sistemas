@@ -22,7 +22,7 @@ class Pqrs(BaseModel):
     titulo = models.CharField(max_length=256,blank=True,null=True)
     description = models.CharField(max_length=256)
     persona = models.ForeignKey(User,on_delete=models.CASCADE)
-    tipopqrs = models.ForeignKey(TipoPqrs,blank=True,null=True,on_delete=models.CASCADE)
+    tipopqrs = models.ForeignKey(TipoPqrs,on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = 'Pqrs'
