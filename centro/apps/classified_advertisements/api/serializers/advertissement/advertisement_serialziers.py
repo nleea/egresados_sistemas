@@ -5,6 +5,7 @@ from apps.auth_module.api.serializers.user.users_serializers import UserSerializ
 from ..BaseSerializers import BaseSerializers
 
 class AdvertisementSerializers(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
     datos = serializers.CharField()
     categoriId = serializers.SlugRelatedField("name",read_only=True)
     persona_id = serializers.SlugRelatedField("username",read_only=True)

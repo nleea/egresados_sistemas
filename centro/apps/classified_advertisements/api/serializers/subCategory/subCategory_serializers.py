@@ -3,6 +3,7 @@ from ....models.models import SubCategoria,Categoria
 from ..BaseSerializers import BaseSerializers
 
 class SubCategorySerializers(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
     categoriId = serializers.SlugRelatedField('name',read_only=True)
 

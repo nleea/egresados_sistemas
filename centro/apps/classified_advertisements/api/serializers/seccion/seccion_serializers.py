@@ -3,6 +3,7 @@ from ....models.models import Seccion
 from ..BaseSerializers import BaseSerializers
 
 class SeccionSerializers(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
     
     def __init__(self, instance=None, data=..., **kwargs):

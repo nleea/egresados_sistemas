@@ -3,6 +3,7 @@ from ....models.models import Categoria,Seccion
 from ..BaseSerializers import BaseSerializers
 
 class CategorySerializers(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
     seccionId = serializers.SlugRelatedField("name",read_only=True)
     
