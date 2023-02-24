@@ -7,7 +7,7 @@ from ..BaseSerializers import BaseSerializers
 class AdvertisementSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     datos = serializers.CharField()
-    categoriId = serializers.SlugRelatedField("name",read_only=True)
+    subCategori = serializers.SlugRelatedField("name",read_only=True)
     persona_id = serializers.SlugRelatedField("username",read_only=True)
 
     def __init__(self, instance=None, data=..., **kwargs):
@@ -34,5 +34,13 @@ class AdvertisementSerializers(BaseSerializers):
                                       subCategori=subCategory)
 
     def update(self, instance, validated_data):
-        instance.datos = validated_data.get('datos', instance.datos)
-        return instance
+        try:
+            if 'subCategori' in validated_data:
+                subCategori = SubCategoria.objects.get(pk=validated_data["subCategori"])
+                instance.subCategori = subCategori
+            instance.datos = validated_data.get('datos', instance.datos)
+            instance.save()
+            return instance
+        except(SubCategoria.DoesNotExist) as e:
+            raise serializers.ValidationError(e.args[0])
+        

@@ -11,7 +11,7 @@ class AdvertisementView(APIView):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = AdvertisementSerializers(Anuncio.objects.all(),many=True,meta=meta)
+        data = AdvertisementSerializers(Anuncio.objects.all(),many=True)
         response, code = create_response(status.HTTP_200_OK,"Success",data.data)
         return Response(response,code)
 
@@ -29,7 +29,7 @@ class SaveAdvertisementView(APIView):
         return Response(response,code)
 
 
-class UpdateCategoryView(APIView):
+class UpdateAnuncioView(APIView):
 
     def _allowed_methods(self):
         self.http_method_names.append("put")
@@ -53,9 +53,33 @@ class UpdateCategoryView(APIView):
 
         instance = AdvertisementSerializers(instanceOrNone,data=request.data)
         if instance.is_valid():
-            instance.save(userUpdate=request.user)
+            instance.save(userUpdate=request.user,extradata=request.data)
             response, code = create_response(status.HTTP_200_OK,"Success","Success")
             return Response(response,code)
 
         response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request", instance.errors)
         return Response(response,code)
+
+class DeleteAnuncioView(APIView):
+    
+    def get_object(self):
+        try:
+            pk = self.kwargs.get("pk")
+            seccionId = Anuncio.objects.get(pk=pk)
+            return seccionId
+        except Anuncio.DoesNotExist:
+            return None
+
+    def delete(self,request,*args, **kwargs):
+        instanceOrNone = self.get_object()
+        if instanceOrNone is None:
+            response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Anuncio {} not exist".format(self.kwargs.get('pk')))
+            return Response(response,code)
+
+        try:
+            instanceOrNone.delete()
+            response,code = create_response(status.HTTP_200_OK,"Success","Delete" )
+            return Response(response,code)
+        except BaseException as e:
+            response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",e.args )
+            return Response(response,code)
