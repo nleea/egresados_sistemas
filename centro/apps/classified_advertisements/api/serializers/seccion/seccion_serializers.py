@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ....models.models import Seccion
 from ..BaseSerializers import BaseSerializers
+from ..category.category_serializers import CategorySerializers
 
 class SeccionSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -33,3 +34,11 @@ class SeccionSerializers(BaseSerializers):
         instance.save()
         return instance
     
+
+
+class SeccionListSerializers(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    name = serializers.CharField()
+    
+    class Meta:
+        fields = '__all__'

@@ -12,7 +12,7 @@ class SubCategoryView(APIView):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = SubCategorySerializers(SubCategoria.objects.all(),many=True,meta=meta)
+        data = SubCategorySerializers(SubCategoria.objects.all(),many=True)
 
         response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":data.data})
         return Response(response,code)

@@ -1,25 +1,16 @@
 from rest_framework import serializers
 from ....models.models import SubCategoria,Categoria
 from ..BaseSerializers import BaseSerializers
+from ..category.category_serializers import CategorySerializers
 
 class SubCategorySerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
-    categoriId = serializers.SlugRelatedField('name',read_only=True)
-
-    def __init__(self, instance=None, data=..., **kwargs):
-        meta = bool(kwargs.pop('meta', None))
-        
-        super().__init__(instance, data, **kwargs)
-        
-        if meta != True or meta is None:
-            self.fields.pop("createdAt")
-            self.fields.pop("updateAt")
-            self.fields.pop("userCreate")
-            self.fields.pop("userUpdate")
+    categoriId = CategorySerializers(read_only=True)
         
 
     class Meta:
+        model = SubCategoria
         fields = "__all__"
 
     def create(self, validated_data):

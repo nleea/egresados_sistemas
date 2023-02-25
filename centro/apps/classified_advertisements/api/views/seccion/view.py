@@ -1,6 +1,9 @@
 from rest_framework.views import APIView
 from ...serializers.seccion.seccion_serializers import SeccionSerializers
-from ....models.models import Seccion
+from ...serializers.category.category_serializers import CategorySerializers
+from ...serializers.subCategory.subCategory_serializers import SubCategorySerializers
+from ...serializers.advertissement.advertisement_serialziers import AdvertisementSerializers
+from ....models.models import Seccion,Categoria,Anuncio,SubCategoria
 from rest_framework.response import Response
 from .....helpers.create_response import create_response
 from rest_framework import status
@@ -85,3 +88,23 @@ class DeleteSeccionView(APIView):
         except BaseException as e:
             response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",e.args )
             return Response(response,code)
+
+
+class ApiQueryView(APIView):
+    
+    def post(self, request, *args, **kwargs):
+        if request.data['type'] == "categorias":
+            response = CategorySerializers(Categoria.objects.filter(seccionId=request.data["id"]),many=True)
+            response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":response.data})
+            return Response(response,code)
+        if request.data['type'] == "SubCategorias":
+            response = SubCategorySerializers(SubCategoria.objects.filter(categoriId=request.data["id"]),many=True)
+            response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":response.data})
+            return Response(response,code)
+        if request.data['type'] == "anuncios":
+            response = AdvertisementSerializers(Anuncio.objects.filter(subCategori=request.data["id"]),many=True)
+            response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":response.data})
+            return Response(response,code)
+        
+        response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":"Error not match"})
+        return Response(response,code)

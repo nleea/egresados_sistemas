@@ -7,7 +7,7 @@ from ..BaseSerializers import BaseSerializers
 class AdvertisementSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     datos = serializers.CharField()
-    subCategori = serializers.SlugRelatedField("name",read_only=True)
+    subCategori = SubCategorySerializers(read_only=True)
     persona_id = serializers.SlugRelatedField("username",read_only=True)
 
     def __init__(self, instance=None, data=..., **kwargs):

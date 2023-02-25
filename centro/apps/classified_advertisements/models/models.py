@@ -21,7 +21,7 @@ class Seccion(BaseModel):
 
 
 class Categoria(BaseModel):
-    seccionId = models.ForeignKey(Seccion,on_delete=models.CASCADE)
+    seccionId = models.ForeignKey(Seccion,on_delete=models.CASCADE,blank=True, null=True)
 
     class Meta:
         verbose_name = 'Categoria'
@@ -29,7 +29,7 @@ class Categoria(BaseModel):
 
 
 class SubCategoria(BaseModel):
-    categoriId = models.ForeignKey(Categoria,on_delete=models.CASCADE)
+    categoriId = models.ForeignKey(Categoria,on_delete=models.CASCADE,blank=True, null=True)
     
     class Meta:
         verbose_name = 'SubCategoria'

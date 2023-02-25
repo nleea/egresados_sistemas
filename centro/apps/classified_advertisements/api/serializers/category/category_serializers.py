@@ -2,6 +2,7 @@ from rest_framework import serializers
 from ....models.models import Categoria,Seccion
 from ..BaseSerializers import BaseSerializers
 
+
 class CategorySerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()

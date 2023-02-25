@@ -1,6 +1,7 @@
 from rest_framework.views import APIView
 from ...serializers.advertissement.advertisement_serialziers import AdvertisementSerializers
-from ....models.models import Anuncio
+from ...serializers.seccion.seccion_serializers import SeccionListSerializers
+from ....models.models import Anuncio,Seccion
 from rest_framework.response import Response
 from .....helpers.create_response import create_response
 from rest_framework import status
@@ -83,3 +84,13 @@ class DeleteAnuncioView(APIView):
         except BaseException as e:
             response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",e.args )
             return Response(response,code)
+
+
+class ListaAll(APIView):
+    def get(self, request, *args, **kwargs):
+        meta = None
+        if 'meta' in request.headers:
+            meta = request.headers["meta"]
+        data = SeccionListSerializers(Seccion.objects.all(),many=True)
+        response, code = create_response(status.HTTP_200_OK,"Success",data.data)
+        return Response(response,code)
