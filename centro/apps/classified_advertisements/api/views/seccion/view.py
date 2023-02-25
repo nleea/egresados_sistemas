@@ -97,7 +97,7 @@ class ApiQueryView(APIView):
             response = CategorySerializers(Categoria.objects.filter(seccionId=request.data["id"]),many=True)
             response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":response.data})
             return Response(response,code)
-        if request.data['type'] == "SubCategorias":
+        if request.data['type'] == "subCategorias":
             response = SubCategorySerializers(SubCategoria.objects.filter(categoriId=request.data["id"]),many=True)
             response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":response.data})
             return Response(response,code)
