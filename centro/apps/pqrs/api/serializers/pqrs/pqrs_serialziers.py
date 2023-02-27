@@ -28,3 +28,11 @@ class PqrsSerializers(BaseSerializers):
         instance.userUpdate = validated_data.get("userUpdate",instance.userUpdate)
         instance.save()
         return instance
+
+
+class PqrsRespuestaSerializers(BaseSerializers):
+    titulo = serializers.CharField()
+    description = serializers.CharField()
+
+    class Meta:
+        fields = "__all__"

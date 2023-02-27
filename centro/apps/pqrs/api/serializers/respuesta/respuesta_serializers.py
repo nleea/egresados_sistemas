@@ -29,3 +29,10 @@ class RespuestaSerializers(BaseSerializers):
             return instance
         except Anexo.DoesNotExist as e:
             raise serializers.ValidationError(e.args[0])
+
+
+class RespuestaPqrsSerializers(BaseSerializers):
+    anexo = serializers.SlugRelatedField("nombre_ane",read_only=True)
+
+    class Meta:
+        fields = "__all__"
