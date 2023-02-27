@@ -5,7 +5,8 @@ from ..BaseSerializers import BaseSerializers
 class RespuestaSerializers(BaseSerializers):
     pqrs = serializers.SlugRelatedField("description",read_only=True)
     anexo = serializers.SlugRelatedField("nombre_ane",read_only=True)
-
+    descripcion = serializers.CharField()
+    
     class Meta:
         fields = "__all__"
 
@@ -16,7 +17,7 @@ class RespuestaSerializers(BaseSerializers):
             userCreate = None
             if "userCreate" in validated_data:
                 userCreate = validated_data["userCreate"]
-            return Respuesta.objects.create(anexo=anexo,pqrs=pqrs,userCreate=userCreate)
+            return Respuesta.objects.create(descripcion=validated_data["descripcion"],anexo=anexo,pqrs=pqrs,userCreate=userCreate)
         except (Anexo.DoesNotExist,Pqrs.DoesNotExist) as e:
             raise serializers.ValidationError(e.args[0])
 
@@ -33,6 +34,7 @@ class RespuestaSerializers(BaseSerializers):
 
 class RespuestaPqrsSerializers(BaseSerializers):
     anexo = serializers.SlugRelatedField("nombre_ane",read_only=True)
-
+    descripcion = serializers.CharField()
+    
     class Meta:
         fields = "__all__"

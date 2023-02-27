@@ -47,6 +47,7 @@ class Anexo(BaseModel):
 class Respuesta(BaseModel):
     pqrs = models.ForeignKey(Pqrs,on_delete=models.CASCADE,related_name="respuesta_pqrs")
     anexo = models.ForeignKey(Anexo,on_delete=models.CASCADE)
+    descripcion = models.CharField(max_length=256,null=True,blank=True)
     
     class Meta:
         verbose_name = 'Respuesta'
