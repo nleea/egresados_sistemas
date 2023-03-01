@@ -19,6 +19,7 @@ class RespuestaView(APIView):
 class SaveRespuestaView(APIView):
 
     def post(self, request, *args, **kwargs):
+        print(request.data)
         data = RespuestaSerializers(data=request.data)
 
         if data.is_valid():
