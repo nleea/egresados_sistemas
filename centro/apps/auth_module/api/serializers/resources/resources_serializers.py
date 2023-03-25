@@ -21,7 +21,7 @@ class ResourcesRolesSerializers(Serializer):
             id_last_resources = 0
             last = Resources.objects.last()
             if last:
-                id_last_resources = last.id + 1
+                id_last_resources = last.id + 1 # type: ignore
 
             menuResources(validated_data['resources'],
                           resources, Resources, id_last_resources)

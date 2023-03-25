@@ -72,7 +72,6 @@ INSTALLED_APPS = COMMONS_APPS + INSTALLS_APPS + THIRDS_APPS
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    #"apps.middlewares.view_auth.SessionMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',

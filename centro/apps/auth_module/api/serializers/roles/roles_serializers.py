@@ -18,7 +18,7 @@ class RolesSerializers(ModelSerializer):
 class ResourcesSerializers(ModelSerializer):
     class Meta:
         model = Resources_roles
-        fields = '__al__'
+        fields = '__all__'
 
 
 class RolesSimpleSerializers(ModelSerializer):
