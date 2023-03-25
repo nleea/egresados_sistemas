@@ -74,8 +74,8 @@ class Roles(BaseModel):
 
 
 class Persons(BaseModel):
-    name = models.CharField(max_length=150)
-    surname = models.CharField(max_length=150)
+    name = models.CharField(max_length=150,unique=True, blank=True, null=True)
+    surname = models.CharField(max_length=150,unique=True, blank=True, null=True)
     identification = models.CharField(
         max_length=255, unique=True, blank=True, null=True)
     address = models.CharField(max_length=50, blank=True, null=True)

@@ -13,11 +13,11 @@ DBS = {
     'mysql-local': {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'DB_egresados',
+            'NAME': 'egresados',
             'HOST': 'localhost',
             'PORT': '3306',
             'USER': 'root',
-            'PASSWORD': '3602}',
+            'PASSWORD': 'xyz3602',
         }
     },
     'mysql-clever': {

@@ -1,3 +1,6 @@
-from django.urls import path
+from django.urls import path,include
 
-urlpatterns = []
+urlpatterns = [
+    path("questions/",include("apps.encuestas.api.views.questions.urls")),
+    path("momentos/",include("apps.encuestas.api.views.moments.urls")),
+]

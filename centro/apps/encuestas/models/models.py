@@ -3,24 +3,36 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-class TipoMomento(models.Model):
-    tipo = models.CharField(max_length=256)
+class BaseModel(models.Model):
+    createdAt = models.DateField(auto_now_add=True,blank=True, null=True)
+    updateAt = models.DateField(auto_now=True, blank=True, null=True)
+    userCreate = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True,related_name="+")
+    userUpdate = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True,related_name="+")
     
+    class Meta:
+        abstract = True
+
+class TipoMomento(BaseModel):
+    tipo = models.CharField(max_length=256)
+
     class Meta:
         verbose_name = "TipoMomento"
         verbose_name_plural = "TipoMomentos"
-        
-class Pregunta(models.Model):
+
+class Question(BaseModel):
     pregunta_nombre = models.CharField(max_length=500)
-    fecha = models.DateTimeField(auto_created=True)
     momento = models.ForeignKey(TipoMomento,on_delete=models.CASCADE)
     
     class Meta:
-        verbose_name = "Pregunta"
-        verbose_name_plural = "Preguntas"
+        verbose_name = "Question"
+        verbose_name_plural = "Question"
 
 
-class Respuesta(models.Model):
+class Answer(BaseModel):
     respuesta = models.CharField(max_length=256)
     usuario = models.ForeignKey(User,on_delete=models.CASCADE)
-    pregunta = models.ForeignKey(Pregunta,on_delete=models.CASCADE)
+    pregunta = models.ForeignKey(Question,on_delete=models.CASCADE)
+    
+    class Meta:
+        verbose_name = "Answers"
+        verbose_name_plural = "Answers"

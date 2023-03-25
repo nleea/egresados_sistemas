@@ -28,7 +28,7 @@ class PersonCreateView(CreateAPIView):
                 status.HTTP_200_OK, 'Person', personSerializers.data)
             return Response(response, status=code)
         response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.data)
+            status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.errors)
         return Response(response, status=code)
 
 

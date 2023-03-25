@@ -23,13 +23,13 @@ class RegisterSerializers(serializers.ModelSerializer):
         fields = '__all__'
         validators = [UserValidatorBefore()]
 
-    person = PersonsSimpleSerializers()
+    person = PersonsSimpleSerializers(read_only=True)
 
 
     def create(self, validated_data):
-        person = validated_data.pop('person')
+        #person = validated_data.pop('person')
         user = User.objects.create(**validated_data)
-        Persons.objects.create(**person, user=user)
+        #Persons.objects.create(**person, user=user)
         return user
 
 

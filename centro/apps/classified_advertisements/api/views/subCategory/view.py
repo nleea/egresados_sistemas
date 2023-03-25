@@ -48,7 +48,6 @@ class UpdateSubCategoryView(APIView):
 
 
     def put(self, request, *args, **kwargs):
-
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
             response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Sub Categoria {} not exist".format(self.kwargs.get('pk')))
