@@ -29,8 +29,7 @@ class SubCategoria(BaseModel):
         verbose_name = 'SubCategoria'
         verbose_name_plural = 'SubCategorias'
 
-class RedesSociales(BaseModel):
-    link = models.CharField(max_length=500,blank=False,null=False)
+
     
 
 class TiposCapacitaciones(BaseModel):
@@ -69,7 +68,6 @@ class Anuncio(BaseModel):
     direccion = models.CharField(max_length=50,null=False,blank=False)
     persona_id = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True)
     subCategori = models.ForeignKey(SubCategoria,on_delete=models.CASCADE)
-    redes = models.ManyToManyField(RedesSociales,through="AnuncioHasRedes")
     entrega_cuentas = models.CharField(max_length=30,choices=METHOD_ASSETS)
     formas_pago = models.CharField(max_length=30,choices=METHOD_PAYMENTS)
     capacitacion = models.CharField(max_length=20,choices=OPTIONS)
@@ -79,6 +77,9 @@ class Anuncio(BaseModel):
         verbose_name = 'Anuncio'
         verbose_name_plural = 'Anuncios'
 
+class RedesSociales(BaseModel):
+    link = models.CharField(max_length=500,blank=False,null=False)
+    anuncio = models.ForeignKey(Anuncio,on_delete=models.CASCADE)
 
 class AnuncioHasRedes(BaseModel):
     anuncio = models.ForeignKey(Anuncio,on_delete=models.CASCADE)
@@ -86,3 +87,8 @@ class AnuncioHasRedes(BaseModel):
     tipo = models.CharField(max_length=500)
 
 
+
+
+class Producto(BaseModel):
+    precio = models.CharField(max_length=256)
+    cantidad = models.CharField(max_length=256)

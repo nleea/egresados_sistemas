@@ -38,10 +38,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.auth_module.api.urls')),
     path('advertisements/', include('apps.classified_advertisements.api.urls')),
-<<<<<<< HEAD
-=======
-    path('poll/', include('apps.encuestas.api.urls')),
-    path('pqrs/', include('apps.pqrs.api.urls')),
->>>>>>> d88e9d6c7916f48e9ff67d1f9c4c6efd47899345
     re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

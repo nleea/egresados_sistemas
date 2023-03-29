@@ -7,7 +7,6 @@ class BaseSerializers(serializers.Serializer):
     userCreate = serializers.SlugRelatedField("username",read_only=True)
     userUpdate = serializers.SlugRelatedField("username",read_only=True)
     
-<<<<<<< HEAD
     
     def __init__(self, instance=None, data=..., **kwargs):
         meta = bool(kwargs.pop('meta', None))
@@ -20,6 +19,4 @@ class BaseSerializers(serializers.Serializer):
             self.fields.pop("userCreate")
             self.fields.pop("userUpdate")
     
-=======
->>>>>>> d88e9d6c7916f48e9ff67d1f9c4c6efd47899345
 
