@@ -91,7 +91,7 @@ class Persons(BaseModel):
                              on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self) -> str:
-        return self.name
+        return self.name # type: ignore
 
     class Meta:
         unique_together = (('name', 'identification'))

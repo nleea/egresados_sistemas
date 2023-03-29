@@ -38,10 +38,11 @@ class CreateUserSerializers(ModelSerializer):
         max_length=100,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
+    roles = RolesSerializers()
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'email')
+        fields = ('username', 'password', 'email', 'roles')
         validators = [UserValidatorBefore()]
 
 

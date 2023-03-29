@@ -34,12 +34,10 @@ class AdvertisementSerializersView(BaseSerializers):
             "municipio" : instance.municipio,
             "redes" : [{"link":x.link,"name":x.name} for x in redes],
             "direccion" : instance.direccion,
-            "persona" : instance.persona_id.username,
             "subCategoria" : instance.subCategori.name,
-            "entrega_cuentas" : instance.entrega_cuentas,
+            "metodos_entrega" : instance.metodos_entrega,
             "formas_pago" : instance.formas_pago,
-            "capacitacion" : instance.capacitacion,
-            "tipo_capacitacion" : instance.tipo_capacitacion.id,
+            "tipo_capacitacion" : instance.tipo_capacitacion.name,
         }
     
     id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -51,11 +49,9 @@ class AdvertisementSerializersView(BaseSerializers):
     municipio = serializers.CharField()
     redes = RedesSocialesSerializers(many=True,read_only=True)
     direccion = serializers.CharField()
-    persona_id = serializers.PrimaryKeyRelatedField(read_only=True)
     subCategori = serializers.PrimaryKeyRelatedField(read_only=True)
-    entrega_cuentas = serializers.CharField()
+    metodos_entrega = serializers.CharField()
     formas_pago = serializers.CharField()
-    capacitacion = serializers.CharField()
     tipo_capacitacion = serializers.PrimaryKeyRelatedField(read_only=True)
         
     class Meta:
@@ -70,11 +66,9 @@ class AdvertisementSerializers(BaseSerializers):
     ciudad = serializers.CharField()
     municipio = serializers.CharField()
     direccion = serializers.CharField()
-    persona_id = serializers.IntegerField()
     subCategori = serializers.IntegerField()
-    entrega_cuentas = serializers.CharField()
+    metodos_entrega = serializers.CharField()
     formas_pago = serializers.CharField()
-    capacitacion = serializers.CharField()
     tipo_capacitacion = serializers.IntegerField()
 
     class Meta:
@@ -89,13 +83,13 @@ class AdvertisementSerializers(BaseSerializers):
         anuncio = Anuncio.objects.create(nombre_emprendimiento=validated_data["nombre_emprendimiento"],
         descripción=validated_data["descripción"],telefono_emprendimiento=validated_data["telefono_emprendimiento"],
         correo_emprendimiento=validated_data["correo_emprendimiento"],ciudad=validated_data["ciudad"],
-        municipio=validated_data["municipio"],direccion=validated_data["direccion"],persona_id_id=validated_data["persona_id"],
-        subCategori_id=validated_data["subCategori"],entrega_cuentas=validated_data["entrega_cuentas"],
-        formas_pago=validated_data["formas_pago"],capacitacion=validated_data["capacitacion"],
+        municipio=validated_data["municipio"],direccion=validated_data["direccion"],userCreate=validated_data["userCreate"],
+        subCategori_id=validated_data["subCategori"],metodos_entrega=validated_data["metodos_entrega"],
+        formas_pago=validated_data["formas_pago"],
         tipo_capacitacion_id=validated_data["tipo_capacitacion"])
         
         for red in validated_data.pop("redes",None):
-            redes.append(RedesSociales(link=red["link"],anuncio=anuncio.pk))
+            redes.append(RedesSociales(link=red["link"],anuncio_id=anuncio.pk))
         redes = RedesSociales.objects.bulk_create(redes)
         
         return anuncio
@@ -108,10 +102,10 @@ class AdvertisementSerializers(BaseSerializers):
         instance.correo_emprendimiento = validated_data.get('correo_emprendimiento', instance.correo_emprendimiento)
         instance.ciudad = validated_data.get('ciudad', instance.ciudad)
         instance.municipio = validated_data.get('direccion', instance.municipio)
-        instance.direccion = validated_data.get('persona_id', instance.direccion)
-        instance.persona_id_id = validated_data.get('persona_id', instance.persona_id)
+        instance.direccion = validated_data.get('direccion', instance.direccion)
+        instance.userCreate_id = validated_data.get('userCreate', instance.userCreate)
         instance.subCategori_id = validated_data.get('subCategori', instance.subCategori)
-        instance.entrega_cuentas = validated_data.get('entrega_cuentas', instance.entrega_cuentas)
+        instance.metodos_entrega = validated_data.get('metodos_entrega', instance.metodos_entrega)
         instance.formas_pago = validated_data.get('formas_pago', instance.formas_pago)
         instance.capacitacion = validated_data.get('capacitacion', instance.capacitacion)
         instance.tipo_capacitacion_id = validated_data.get('tipo_capacitacion', instance.tipo_capacitacion)

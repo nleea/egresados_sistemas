@@ -13,7 +13,7 @@ class UsersView(RetrieveAPIView):
 
     def get_object(self):
         try:
-            request_user = self.request.user.id
+            request_user = self.request.user.id # type: ignore
             user = User.objects.get(pk=request_user)
             return user
         except User.DoesNotExist:
@@ -65,7 +65,7 @@ class UserCreateView(CreateAPIView):
     serializer_class = CreateUserSerializers
 
     def perform_create(self, serializer):
-        password = make_password(self.request.data['password'])
+        password = make_password(self.request.data['password']) # type: ignore
         serializer.save(password=password)
 
     def post(self, request, *args, **kwargs):
@@ -116,7 +116,7 @@ class UserUpdateView(UpdateAPIView):
                 response, code = create_response(
                     status.HTTP_400_BAD_REQUEST, 'Password Error', 'User Not found')
                 return Response(response, status=code)
-            return Response(userSerializers.errors, 'Error', status=status.HTTP_400_BAD_REQUEST)
+            return Response(userSerializers.errors, 'Error', status=status.HTTP_400_BAD_REQUEST) # type: ignore
         except (AttributeError, Exception) as e:
             response, code = create_response(
                 status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
@@ -138,8 +138,8 @@ class UserChangePasswordView(UpdateAPIView):
             return None
 
     def perform_update(self, serializer):
-        if 'original-password' in self.request.data:
-            password = make_password(self.request.data['password'])
+        if 'original-password' in self.request.data: # type: ignore
+            password = make_password(self.request.data['password']) # type: ignore
             serializer.save(password=password)
         else:
             serializer.save()
@@ -150,10 +150,10 @@ class UserChangePasswordView(UpdateAPIView):
 
         if user is None:
             response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
+                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args) # type: ignore
             return Response(response, status=code)
 
-        if 'original-password' not in self.request.data:
+        if 'original-password' not in self.request.data: # type: ignore
             response, code = create_response(
                 status.HTTP_400_BAD_REQUEST, 'Password Error', 'Password not found')
             return Response(response, status=code)

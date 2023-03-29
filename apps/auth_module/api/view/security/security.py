@@ -35,7 +35,7 @@ class SecurityRolesUser(CreateAPIView):
         roles = Roles.objects.filter(id__in=rolesId)
 
         rolesUser = RolesUserSerializers(
-            data={'userId': user})
+            data={'userId': user}) # type: ignore
 
         if rolesUser.is_valid():
             rolesUser.save(roles=roles)
