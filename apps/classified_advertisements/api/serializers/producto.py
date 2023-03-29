@@ -4,7 +4,7 @@ from .BaseSerializers import BaseSerializers
 
 
 class ProductoSerializers(BaseSerializers):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(read_only=True)
     cantidad = serializers.CharField()
     name = serializers.CharField()
     precio = serializers.CharField()
