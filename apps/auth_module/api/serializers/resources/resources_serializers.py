@@ -1,5 +1,5 @@
 from ....models import Resources, Resources_roles, Roles
-from rest_framework.serializers import ModelSerializer, Serializer, IntegerField
+from rest_framework.serializers import ModelSerializer, Serializer, IntegerField, BooleanField
 from .....helpers.menu_resources import menuResources
 
 
@@ -10,27 +10,31 @@ class ResourcesSerializers(ModelSerializer):
 
 
 class ResourcesRolesSerializers(Serializer):
+    merge = BooleanField()
     rolesId = IntegerField()
     resources = ResourcesSerializers(many=True)
 
     def create(self, validated_data):
         try:
+            new_resources = []
             resources = []
             list_resources_roles = []
 
             id_last_resources = 0
             last = Resources.objects.last()
-            
-            # for i in validated_data["resources"]:
-            #     if "id_padre" in i:
-                    
-            if last:
-                id_last_resources = last.id + 1 # type: ignore
 
-            menuResources(validated_data['resources'],
+            if validated_data["merge"] == True:
+                for i in validated_data["resources"]:
+                    id_padre = Resources.objects.filter(path=i["path"])[0].pk
+                    new_resources = [{**x, "id_padre": id_padre}
+                                     for x in i["items"]]
+
+            if last:
+                id_last_resources = last.id + 1  # type: ignore
+
+            menuResources(new_resources if validated_data["merge"] else validated_data["resources"],
                           resources, Resources, id_last_resources)
-            
-            
+
             resources = Resources.objects.bulk_create(resources)
 
             roles = Roles.objects.get(pk=validated_data['rolesId'])

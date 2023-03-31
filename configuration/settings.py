@@ -65,7 +65,8 @@ THIRDS_APPS = [
     'apps.auth_module',
     'apps.classified_advertisements',
     "apps.pqrs",
-    "apps.encuestas"
+    "apps.encuestas",
+    "apps.eventos"
 ]
 
 INSTALLED_APPS = COMMONS_APPS + INSTALLS_APPS + THIRDS_APPS

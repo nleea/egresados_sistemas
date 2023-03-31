@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include,re_path
+from django.urls import path, include, re_path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -38,5 +38,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.auth_module.api.urls')),
     path('advertisements/', include('apps.classified_advertisements.api.urls')),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc')
+    path("eventos/", include('apps.eventos.api.urls')),
+    path("encuentas/", include('apps.encuestas.api.urls')),
+    re_path(r'^redoc/$', schema_view.with_ui('redoc',
+            cache_timeout=0), name='schema-redoc')
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

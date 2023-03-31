@@ -18,7 +18,6 @@ class CapacitacionesSerializers(BaseSerializers):
         return TiposCapacitaciones.objects.create(name=validated_data["name"],userCreate=userCreate)
 
     def update(self, instance, validated_data):
-        instance.tipo = validated_data.get('tipo', instance.tipo)
         instance.name = validated_data.get('name', instance.name)
         instance.userUpdate = validated_data.get('userUpdate', instance.userUpdate)
         instance.save()

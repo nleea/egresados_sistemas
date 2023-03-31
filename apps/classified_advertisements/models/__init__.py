@@ -1,3 +1,3 @@
 from .models import *
 
-__all__ = ["Seccion","Categoria","SubCategoria","Anuncio"]
+__all__ = ["Categoria","SubCategoria","Anuncio"]
