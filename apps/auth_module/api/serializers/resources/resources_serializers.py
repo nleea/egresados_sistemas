@@ -20,11 +20,16 @@ class ResourcesRolesSerializers(Serializer):
 
             id_last_resources = 0
             last = Resources.objects.last()
+            
+            # for i in validated_data["resources"]:
+            #     if "id_padre" in i:
+                    
             if last:
                 id_last_resources = last.id + 1 # type: ignore
 
             menuResources(validated_data['resources'],
                           resources, Resources, id_last_resources)
+            
             
             resources = Resources.objects.bulk_create(resources)
 

@@ -36,7 +36,9 @@ class SubCategoria(BaseModel):
 
 
 class TiposCapacitaciones(BaseModel):
-    tipo = models.CharField(max_length=50)
+    class Meta:
+        verbose_name = 'Capacitacion'
+        verbose_name_plural = 'Capacitacitaciones'
 
 
 class Anuncio(BaseModel):
@@ -45,7 +47,7 @@ class Anuncio(BaseModel):
         ("1", "Domicilio"),
         ("2", "Recogido en la tienda"),
         ("3", "Envio por correo"),
-        ("4","Contra Entrega"),
+        ("4", "Contra Entrega"),
         ("5", "Domicilio y Recogido en la tienda"),
         ("6", "Recogido en la tienda y Envio por correo")
     ]

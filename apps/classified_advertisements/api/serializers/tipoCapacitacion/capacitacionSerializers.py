@@ -5,7 +5,7 @@ from ...serializers.category.category_serializers import CategorySerializers
 
 
 class CapacitacionesSerializers(BaseSerializers):
-    tipo = serializers.CharField()
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
         
     class Meta:
@@ -15,7 +15,7 @@ class CapacitacionesSerializers(BaseSerializers):
         userCreate = None
         if validated_data["userCreate"]:
             userCreate = validated_data["userCreate"]
-        return TiposCapacitaciones.objects.create(tipo=validated_data["tipo"],userCreate=userCreate)
+        return TiposCapacitaciones.objects.create(name=validated_data["name"],userCreate=userCreate)
 
     def update(self, instance, validated_data):
         instance.tipo = validated_data.get('tipo', instance.tipo)
