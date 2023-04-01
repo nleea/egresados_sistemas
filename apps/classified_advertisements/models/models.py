@@ -55,8 +55,8 @@ class Anuncio(BaseModel):
     subCategori = models.ForeignKey(SubCategoria, on_delete=models.CASCADE)
     metodos_entrega = models.CharField(max_length=300)
     formas_pago = models.CharField(max_length=300)
-    tipo_capacitacion = models.ForeignKey(
-        TiposCapacitaciones, on_delete=models.CASCADE)
+    tipo_capacitacion = models.ManyToManyField(
+        TiposCapacitaciones)
 
     objects = AdvertisementsManagers()
 
