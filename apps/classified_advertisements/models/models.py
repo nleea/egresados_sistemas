@@ -43,23 +43,6 @@ class TiposCapacitaciones(BaseModel):
 
 class Anuncio(BaseModel):
 
-    METHOD_ASSETS = [
-        ("1", "Domicilio"),
-        ("2", "Recogido en la tienda"),
-        ("3", "Envio por correo"),
-        ("4", "Contra Entrega"),
-        ("5", "Domicilio y Recogido en la tienda"),
-        ("6", "Recogido en la tienda y Envio por correo")
-    ]
-
-    METHOD_PAYMENTS = [
-        ("1", "Tranferencia"),
-        ("2", "Efectivo"),
-        ("3", "Contra Entrega"),
-        ("4", "Tranferencia y Efectivo"),
-        ("5", "Tranferencia y Contra Entrega")
-    ]
-
     nombre_emprendimiento = models.CharField(
         max_length=256, null=False, blank=False)
     descripción = models.CharField(max_length=300, blank=False, null=False)
@@ -70,8 +53,8 @@ class Anuncio(BaseModel):
     municipio = models.CharField(max_length=50, null=False, blank=False)
     direccion = models.CharField(max_length=50, null=False, blank=False)
     subCategori = models.ForeignKey(SubCategoria, on_delete=models.CASCADE)
-    metodos_entrega = models.CharField(max_length=30, choices=METHOD_ASSETS)
-    formas_pago = models.CharField(max_length=30, choices=METHOD_PAYMENTS)
+    metodos_entrega = models.CharField(max_length=300)
+    formas_pago = models.CharField(max_length=300)
     tipo_capacitacion = models.ForeignKey(
         TiposCapacitaciones, on_delete=models.CASCADE)
 
