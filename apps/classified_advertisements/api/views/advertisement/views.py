@@ -1,13 +1,15 @@
 from rest_framework.views import APIView
 from ...serializers.advertissement.advertisement_serialziers import AdvertisementSerializers, AdvertisementSerializersView
 from ...serializers.subCategory.subCategory_serializers import SubCategorySerializersView
-from ....models.models import Anuncio, SubCategoria, Categoria
+from ....models.models import Anuncio, SubCategoria
 from rest_framework.response import Response
 from .....helpers.create_response import create_response
 from rest_framework import status
+from ..Base.BaseView import ViewPagination
 
 
 class AdvertisementsQueryView(APIView):
+
     def post(self, request, *args, **kwargs):
         results = []
         if ("categoryId" in request.data):
@@ -20,19 +22,28 @@ class AdvertisementsQueryView(APIView):
         #resulstSeralizer = serializers.serialize('json', results)
         response, code = create_response(
             status.HTTP_200_OK, "Ok", results)
+
         return Response(response, status=code)
 
 
-class AdvertisementView(APIView):
+class AdvertisementView(ViewPagination):
 
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
 
+        results = self.paginate_queryset(
+            Anuncio.objects.all())
         data = AdvertisementSerializersView(
-            Anuncio.objects.all(), many=True, meta=meta)
-        response, code = create_response(status.HTTP_200_OK, "", data.data)
+            results, many=True, meta=meta)
+        paginated_data = self.get_paginated_response(data.data).data
+        if paginated_data is None:
+            response, code = create_response(
+                status.HTTP_400_BAD_REQUEST, "", "error")
+            return Response(response, code)
+        response, code = create_response(
+            status.HTTP_200_OK, "", paginated_data)
         return Response(response, code)
 
 

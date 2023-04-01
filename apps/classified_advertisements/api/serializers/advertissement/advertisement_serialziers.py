@@ -5,6 +5,12 @@ from apps.auth_module.api.serializers.user.users_serializers import UserSerializ
 from ..BaseSerializers import BaseSerializers
 
 
+class TipoCapacitacionSerializers(BaseSerializers):
+
+    class Meta:
+        fields = "__all__"
+
+
 class RedesSocialesSerializers(BaseSerializers):
     link = serializers.CharField()
 
@@ -25,7 +31,6 @@ class AdvertisementSerializersView(BaseSerializers):
 
         redes = RedesSociales.objects.filter(anuncio=instance.id)
 
-        # print(instance.tipo_capacitacion.pre)
         return {
             "id": instance.id,
             "nombre_emprendimiento": instance.nombre_emprendimiento,
@@ -34,12 +39,12 @@ class AdvertisementSerializersView(BaseSerializers):
             "correo_emprendimiento": instance.correo_emprendimiento,
             "ciudad": instance.ciudad,
             "municipio": instance.municipio,
-            "redes": [{"link": x.link, "name": x.name} for x in redes],
+            "redes": [{"link": x.link, "name": x.name} for x in redes.iterator()],
             "direccion": instance.direccion,
             "subCategoria": instance.subCategori.name,
             "metodos_entrega": [x for x in instance.metodos_entrega.split(",")],
             "formas_pago": [x for x in instance.formas_pago.split(",")],
-            "tipo_capacitacion": [x.name for x in instance.tipo_capacitacion.all()]
+            "tipo_capacitacion": [{"name": x.name, "id": x.id}for x in instance.tipo_capacitacion.prefetch_related("anuncio").iterator()]
         }
 
     id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -54,7 +59,7 @@ class AdvertisementSerializersView(BaseSerializers):
     subCategori = serializers.PrimaryKeyRelatedField(read_only=True)
     metodos_entrega = serializers.CharField()
     formas_pago = serializers.CharField()
-    tipo_capacitacion = serializers.ListField()
+    tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
 
     class Meta:
         fields = '__all__'
@@ -96,9 +101,8 @@ class AdvertisementSerializers(BaseSerializers):
 
         if len(validated_data.get("tipo_capacitacion", None)):
             for capacitacion in validated_data.pop("tipo_capacitacion", None):
-                cap = TiposCapacitaciones(name=capacitacion)
-                cap.save()
-                anuncio.tipo_capacitacion.add(cap)
+                anuncio.tipo_capacitacion.add(
+                    TiposCapacitaciones.objects.get(pk=capacitacion))
 
         if len(validated_data.get("redes", None)):
             for red in validated_data.pop("redes", None):
@@ -126,8 +130,6 @@ class AdvertisementSerializers(BaseSerializers):
             'direccion', instance.municipio)
         instance.direccion = validated_data.get(
             'direccion', instance.direccion)
-        instance.userCreate_id = validated_data.get(
-            'userCreate', instance.userCreate)
         instance.subCategori_id = validated_data.get(
             'subCategori', instance.subCategori)
         instance.metodos_entrega = metodos_entrega
