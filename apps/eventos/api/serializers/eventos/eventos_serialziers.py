@@ -5,12 +5,13 @@ from ..BaseSerializers import BaseSerializers
 
 class EventosSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
-    area = serializers.CharField()
-    subArea = serializers.CharField()
+    area = serializers.SlugRelatedField("name", read_only=True)
+    subArea = serializers.SlugRelatedField("name", read_only=True)
     nombre_actividad = serializers.CharField()
     tipo_actividad = serializers.CharField()
     responsable = serializers.SlugRelatedField("username", read_only=True)
     fecha = serializers.DateTimeField(read_only=True)
+    hora = serializers.CharField()
     lugar = serializers.CharField()
     cupos = serializers.IntegerField()
     descripcion = serializers.CharField()
@@ -22,12 +23,13 @@ class EventosSerializersView(BaseSerializers):
 
 class EventosSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
-    area = serializers.CharField()
-    subArea = serializers.CharField()
+    area = serializers.IntegerField()
+    subArea = serializers.IntegerField()
     nombre_actividad = serializers.CharField()
     tipo_actividad = serializers.CharField()
     responsable = serializers.IntegerField()
     fecha = serializers.DateTimeField(read_only=True)
+    hora = serializers.CharField()
     lugar = serializers.CharField()
     cupos = serializers.IntegerField()
     descripcion = serializers.CharField()
@@ -38,22 +40,22 @@ class EventosSerializers(BaseSerializers):
 
     def create(self, validated_data):
 
-        evento = Eventos.objects.create(area=validated_data["area"],
-                                        descripcion=validated_data["descripcion"], subArea=validated_data["subArea"],
+        evento = Eventos.objects.create(area_id=validated_data["area"],
+                                        descripcion=validated_data["descripcion"], subArea_id=validated_data["subArea"],
                                         tipo_actividad=validated_data["tipo_actividad"],
                                         nombre_actividad=validated_data[
                                             "nombre_actividad"], responsable_id=validated_data["responsable"], lugar=validated_data[
-                                            "lugar"], userCreate=validated_data["userCreate"],
+                                            "lugar"], hora=validated_data["hora"], userCreate=validated_data["userCreate"],
                                         cupos=validated_data["cupos"], objectivo=validated_data["objectivo"])
 
         return evento
 
     def update(self, instance, validated_data):
-        instance.area = validated_data.get(
+        instance.area_id = validated_data.get(
             'area', instance.area)
         instance.descripcion = validated_data.get(
             'descripcion', instance.descripcion)
-        instance.subArea = validated_data.get(
+        instance.subArea_id = validated_data.get(
             'subArea', instance.subArea)
         instance.nombre_actividad = validated_data.get(
             'nombre_actividad', instance.nombre_actividad)

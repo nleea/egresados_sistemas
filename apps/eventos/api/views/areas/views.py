@@ -1,28 +1,28 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from ...serializers.eventos.eventos_serialziers import EventosSerializers, EventosSerializersView
-from ....models.models import Eventos
+from ...serializers.eventos.eventos_cate_serializers import EventosCategorySerializers
+from ....models.models import EventosArea
 from .....helpers.create_response import create_response
 from rest_framework import status
 
 
-class EventosView(APIView):
+class EventosAreaView(APIView):
 
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
 
-        data = EventosSerializersView(
-            Eventos.objects.all(), many=True, meta=meta)
+        data = EventosCategorySerializers(
+            EventosArea.objects.all(), many=True, meta=meta)
         response, code = create_response(status.HTTP_200_OK, "", data.data)
         return Response(response, code)
 
 
-class SaveEventosView(APIView):
+class SaveEventosAreaView(APIView):
 
     def post(self, request, *args, **kwargs):
-        data = EventosSerializers(data=request.data)
+        data = EventosCategorySerializers(data=request.data)
         if data.is_valid():
             data.save(userCreate=request.user)
             response, code = create_response(
@@ -34,7 +34,7 @@ class SaveEventosView(APIView):
         return Response(response, code)
 
 
-class UpdateEventosView(APIView):
+class UpdateEventosAreaView(APIView):
 
     def _allowed_methods(self):
         self.http_method_names.append("put")
@@ -43,9 +43,9 @@ class UpdateEventosView(APIView):
     def get_object(self):
         try:
             pk = self.kwargs.get("pk")
-            seccionId = Eventos.objects.get(pk=pk)
+            seccionId = EventosArea.objects.get(pk=pk)
             return seccionId
-        except Eventos.DoesNotExist:
+        except EventosArea.DoesNotExist:
             return None
 
     def put(self, request, *args, **kwargs):
@@ -56,7 +56,7 @@ class UpdateEventosView(APIView):
                 status.HTTP_400_BAD_REQUEST, "Bad Request", "Evento {} not exist".format(self.kwargs.get('pk')))
             return Response(response, code)
 
-        instance = EventosSerializers(
+        instance = EventosCategorySerializers(
             instanceOrNone, data=request.data, partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
@@ -69,7 +69,7 @@ class UpdateEventosView(APIView):
         return Response(response, code)
 
 
-class DeleteEventosView(APIView):
+class DeleteEventosAreaView(APIView):
 
     def _allowed_methods(self):
         self.http_method_names.append("delete")
@@ -78,9 +78,9 @@ class DeleteEventosView(APIView):
     def get_object(self):
         try:
             pk = self.kwargs.get("pk")
-            eventos = Eventos.objects.get(pk=pk)
+            eventos = EventosArea.objects.get(pk=pk)
             return eventos
-        except Eventos.DoesNotExist:
+        except EventosArea.DoesNotExist:
             return None
 
     def delete(self, request, *args, **kwargs):

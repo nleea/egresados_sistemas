@@ -17,13 +17,31 @@ class BaseModel(models.Model):
         abstract = True
 
 
+class EventosArea(BaseModel):
+    class Meta:
+        verbose_name = "Area Evento"
+        verbose_name_plural = "Areas Eventos"
+
+
+class SubAreaEventos(BaseModel):
+    area = models.ForeignKey(
+        EventosArea, on_delete=models.CASCADE, related_name="areas")
+
+    class Meta:
+        verbose_name = "Sub Area Evento"
+        verbose_name_plural = "Sub Areas Eventos"
+
+
 class Eventos(BaseModel):
-    area = models.CharField(max_length=256)
-    subArea = models.CharField(max_length=256)
+    area = models.ForeignKey(
+        EventosArea, on_delete=models.CASCADE, related_name="+")
+    subArea = models.ForeignKey(
+        SubAreaEventos, on_delete=models.CASCADE, related_name="+")
     nombre_actividad = models.CharField(max_length=256)
     tipo_actividad = models.CharField(max_length=256)
     responsable = models.ForeignKey(User, on_delete=models.CASCADE)
     fecha = models.DateTimeField(auto_now=True, blank=True, null=True)
+    hora = models.CharField(max_length=10)
     lugar = models.CharField(max_length=256)
     cupos = models.IntegerField()
     descripcion = models.CharField(max_length=600)
