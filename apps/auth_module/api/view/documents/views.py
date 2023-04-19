@@ -1,4 +1,4 @@
-from ..modules import ListAPIView, CreateAPIView, Response, status, UpdateAPIView, create_response,IsAdminRole,DestroyAPIView
+from ..modules import ListAPIView, CreateAPIView, Response, status, UpdateAPIView, IsAdminRole, DestroyAPIView
 from ....models import Document_types
 from ...serializers.document.document_serializers import DocumentSerializers
 
@@ -10,9 +10,7 @@ class DocumentListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializers = DocumentSerializers(data, many=True)
-        response, code = create_response(
-            status.HTTP_200_OK, 'Document', serializers.data)
-        return Response(response, status=code)
+        return Response(serializers.data, status.HTTP_200_OK)
 
 
 class DocumentCreateView(CreateAPIView):
@@ -23,12 +21,8 @@ class DocumentCreateView(CreateAPIView):
         documentSerializers = DocumentSerializers(data=request.data)
         if documentSerializers.is_valid():
             documentSerializers.save()
-            response, code = create_response(
-                status.HTTP_200_OK, 'Document', documentSerializers.data)
-            return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', documentSerializers.errors)
-        return Response(response, status=code)
+            return Response(documentSerializers.data,  status.HTTP_200_OK)
+        return Response(documentSerializers.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class DocumentUpdateView(UpdateAPIView):
@@ -47,25 +41,17 @@ class DocumentUpdateView(UpdateAPIView):
         document = self.get_object()
 
         if document is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', documentSerializers.errors)
-            return Response(response, status=code)
+            return Response(documentSerializers.errors, status.HTTP_400_BAD_REQUEST) #type: ignore
 
         try:
             documentSerializers = DocumentSerializers(
                 document, data=request.data)
             if documentSerializers.is_valid():
                 documentSerializers.save()
-                response, code = create_response(
-                    status.HTTP_200_OK, 'Document Update', documentSerializers.data)
-                return Response(response, status=code)
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', documentSerializers.errors)
-            return Response(response, status=code)
+                return Response(documentSerializers.data, status.HTTP_200_OK)
+            return Response(documentSerializers.errors, status.HTTP_400_BAD_REQUEST)
         except (AttributeError, Exception) as e:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
-            return Response(response, status=code)
+            return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
 class DocumentDestroyView(DestroyAPIView):
@@ -83,11 +69,7 @@ class DocumentDestroyView(DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         document = self.get_object()
         if document is None:
-            response, code = create_response(
-                status.HTTP_200_OK, 'Error', 'Type document Not Exist')
-            return Response(response, status=code)
+            return Response('Type document Not Exist', status.HTTP_200_OK)
         document.delete()
 
-        response, code = create_response(
-            status.HTTP_200_OK, 'Error', 'Ok')
-        return Response(response, status=code)
+        return Response('Ok', status.HTTP_200_OK)

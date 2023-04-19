@@ -1,9 +1,7 @@
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView
 from ...serializers.category.category_serializers import CategorySerializers
 from ....models.models import Categoria
 from rest_framework.response import Response
-from .....helpers.create_response import create_response
 from rest_framework import status
 
 class CategoryView(APIView):
@@ -13,8 +11,7 @@ class CategoryView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
         data = CategorySerializers(Categoria.objects.all(),many=True,meta=meta)
-        response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":data.data})
-        return Response(response,code)
+        return Response(data.data,status.HTTP_200_OK)
 
 
 class SaveCategoryView(APIView):
@@ -24,11 +21,8 @@ class SaveCategoryView(APIView):
 
         if data.is_valid():
             data.save(userCreate=request.user)
-            response,code=create_response(status.HTTP_200_OK,"Success","Sucess")
-            return Response(response,code)
-
-        response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",data.errors)
-        return Response(response,code)
+            return Response("Sucess",status.HTTP_200_OK)
+        return Response(data.errors,status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateCategoryView(APIView):
@@ -50,17 +44,13 @@ class UpdateCategoryView(APIView):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Categoria {} not exist".format(self.kwargs.get('pk')))
-            return Response(response,code)
+            return Response("Bad Request","Categoria {} not exist".format(self.kwargs.get('pk')),status.HTTP_400_BAD_REQUEST)
 
         instance = CategorySerializers(instanceOrNone,data=request.data)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
-            response, code = create_response(status.HTTP_200_OK,"Success","Success")
-            return Response(response,code)
-
-        response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request", instance.errors)
-        return Response(response,code)
+            return Response("Success",status.HTTP_200_OK)
+        return Response(instance.errors,status.HTTP_400_BAD_REQUEST)
 
 class DeleteCategoryView(APIView):
 
@@ -81,13 +71,11 @@ class DeleteCategoryView(APIView):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Categoria {} not exist".format(self.kwargs.get('pk')))
-            return Response(response,code)
+            return Response("Categoria {} not exist".format(self.kwargs.get('pk')),status.HTTP_400_BAD_REQUEST)
 
         try:
             instanceOrNone.delete()
         except instanceOrNone.DoesNotExist:
-            response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request", "Error")
-
-        response,code = create_response(status.HTTP_200_OK,"Sucess", "Delete Success")
-        return Response(response,code)
+            return Response("Error",status.HTTP_400_BAD_REQUEST)
+        
+        return Response("Delete Success",status.HTTP_200_OK)

@@ -1,20 +1,21 @@
 from rest_framework.views import APIView
-from ...serializers.respuesta.respuesta_serializers import RespuestaSerializers,RespuestaPqrsSerializers
-from ....models.models import Respuesta,Pqrs
+from ...serializers.respuesta.respuesta_serializers import RespuestaSerializers, RespuestaPqrsSerializers
+from ....models.models import Respuesta, Pqrs
 from rest_framework.response import Response
-from .....helpers.create_response import create_response
 from rest_framework import status
 from ...serializers.pqrs.pqrs_serialziers import PqrsRespuestaSerializers
 
+
 class RespuestaView(APIView):
-   
+
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = RespuestaSerializers(Respuesta.objects.all(),many=True,meta=meta)
-        response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":data.data})
-        return Response(response,code)
+        data = RespuestaSerializers(
+            Respuesta.objects.all(), many=True, meta=meta)
+        return Response(data.data, status.HTTP_200_OK,)
+
 
 class SaveRespuestaView(APIView):
 
@@ -23,15 +24,15 @@ class SaveRespuestaView(APIView):
         data = RespuestaSerializers(data=request.data)
 
         if data.is_valid():
-            data.save(anexo=request.data["anexo"],pqrs=request.data["pqrs"], userCreate=request.user)
-            response,code=create_response(status.HTTP_200_OK,"Success","Sucess")
-            return Response(response,code)
+            data.save(
+                anexo=request.data["anexo"], pqrs=request.data["pqrs"], userCreate=request.user)
+            return Response("Sucess", status.HTTP_200_OK)
 
-        response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",data.errors)
-        return Response(response,code)
+        return Response(data.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class DeleteRespuestaView(APIView):
-    
+
     def get_object(self):
         try:
             pk = self.kwargs.get("pk")
@@ -40,19 +41,17 @@ class DeleteRespuestaView(APIView):
         except Respuesta.DoesNotExist:
             return None
 
-    def delete(self,request,*args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Respuesta {} not exist".format(self.kwargs.get('pk')))
-            return Response(response,code)
+            return Response("Respuesta {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
             instanceOrNone.delete()
-            response,code = create_response(status.HTTP_200_OK,"Success","Delete" )
-            return Response(response,code)
+            return Response("Delete", status.HTTP_200_OK)
         except BaseException as e:
-            response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request",e.args )
-            return Response(response,code)
+            return Response(e.args, status.HTTP_400_BAD_REQUEST)
+
 
 class UpdateRespuestaView(APIView):
 
@@ -68,46 +67,41 @@ class UpdateRespuestaView(APIView):
         except Respuesta.DoesNotExist:
             return None
 
-
     def put(self, request, *args, **kwargs):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","Respuesta {} not exist".format(self.kwargs.get('pk')))
-            return Response(response,code)
+            return Response("Respuesta {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
-        instance = RespuestaSerializers(instanceOrNone,data=request.data)
+        instance = RespuestaSerializers(instanceOrNone, data=request.data) # type: ignore
         if instance.is_valid():
-            instance.save(anexo=request.data["anexo"],userUpdate=request.user)
-            response, code = create_response(status.HTTP_200_OK,"Success","Success")
-            return Response(response,code)
+            instance.save(anexo=request.data["anexo"], userUpdate=request.user)
+            return Response("Success", status.HTTP_200_OK)
 
-        response,code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request", instance.errors)
-        return Response(response,code)
+        return Response(instance.errors, status.HTTP_400_BAD_REQUEST)
+
 
 class RespuestasQuery(APIView):
-        
+
     def get_object(self):
         try:
             pk = self.kwargs.get("pk")
             pqrs = Pqrs.objects.filter(pk=pk)
             seccionId = Respuesta.objects.filter(pqrs=pqrs[0].pk)
-            return seccionId,pqrs
-        except (Pqrs.DoesNotExist ,Respuesta.DoesNotExist):
-            return None
-    
+            return seccionId, pqrs
+        except (Pqrs.DoesNotExist, Respuesta.DoesNotExist):
+            return None, None
+
     def get(self, request, *args, **kwargs):
-        
-        respuesta,pqrs = self.get_object()
+
+        respuesta, pqrs = self.get_object()
         if respuesta is None or pqrs is None:
-            response, code = create_response(status.HTTP_400_BAD_REQUEST,"Bad Request","not exist".format(self.kwargs.get('pk')))
-            return Response(response,code)
-        
-        data = RespuestaPqrsSerializers(respuesta,many=True)
-        pqrsRespuesta = PqrsRespuestaSerializers(pqrs,many=True)
+            return Response("not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+
+        data = RespuestaPqrsSerializers(respuesta, many=True)
+        pqrsRespuesta = PqrsRespuestaSerializers(pqrs, many=True)
         resp = {
             "pqrs": pqrsRespuesta.data[0],
-            "respuestas":data.data
+            "respuestas": data.data
         }
-        response ,code = create_response(status.HTTP_200_OK,"sucess",{"results":resp})
-        return Response(response,code)
+        return Response(resp, status.HTTP_200_OK)

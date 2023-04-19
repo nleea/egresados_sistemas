@@ -1,7 +1,7 @@
 from ...serializers.person.persons_serializers import PersonsSerializers
 from ....models import Persons
 from rest_framework import status
-from ..modules import ListAPIView, CreateAPIView, UpdateAPIView, Response, create_response
+from ..modules import ListAPIView, CreateAPIView, UpdateAPIView, Response
 
 
 class PersonView(ListAPIView):
@@ -11,9 +11,7 @@ class PersonView(ListAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializers = PersonsSerializers(data, many=True)
-        response, code = create_response(
-            status.HTTP_200_OK, 'Person', serializers.data)
-        return Response(response, status=code)
+        return Response(serializers.data, status.HTTP_200_OK)
 
 
 class PersonCreateView(CreateAPIView):
@@ -24,12 +22,8 @@ class PersonCreateView(CreateAPIView):
         personSerializers = PersonsSerializers(data=request.data)
         if personSerializers.is_valid():
             personSerializers.save()
-            response, code = create_response(
-                status.HTTP_200_OK, 'Person', personSerializers.data)
-            return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.errors)
-        return Response(response, status=code)
+            return Response(personSerializers.data, status.HTTP_200_OK)
+        return Response(personSerializers.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class PersonUpdateView(UpdateAPIView):
@@ -38,7 +32,7 @@ class PersonUpdateView(UpdateAPIView):
 
     def get_object(self):
         try:
-            pk = self.request.user.id
+            pk = self.request.user.id  # type: ignore
             return Persons.objects.filter(user__id=pk)[0]
         except Persons.DoesNotExist:
             return None
@@ -46,20 +40,12 @@ class PersonUpdateView(UpdateAPIView):
     def put(self, request, *args, **kwargs):
         person = self.get_object()
         if person is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.data)
-            return Response(response, status=code)
+            return Response(personSerializers.data, status.HTTP_400_BAD_REQUEST) #type: ignore
         try:
-            personSerializers = PersonsSerializers(person, data=request.data)
+            personSerializers = PersonsSerializers(instance=person, data=request.data)
             if personSerializers.is_valid():
-                personSerializers.update()
-                response, code = create_response(
-                    status.HTTP_200_OK, 'Person Update', personSerializers.data)
-                return Response(response, status=code)
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', personSerializers.data)
-            return Response(response, status=code)
+                personSerializers.update()  # type: ignore
+                return Response(personSerializers.data, status.HTTP_200_OK)
+            return Response( personSerializers.data, status.HTTP_400_BAD_REQUEST)
         except (AttributeError, Exception) as e:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
-            return Response(response, status=code)
+            return Response(e.args, status.HTTP_400_BAD_REQUEST)

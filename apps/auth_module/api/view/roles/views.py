@@ -1,7 +1,7 @@
 from ....models import Roles
 from ...serializers.roles.roles_serializers import RolesSerializers
-from ..modules import (CreateAPIView, ListAPIView, Response, UpdateAPIView,
-                       create_response, status, DestroyAPIView, IsAdminRole)
+from ..modules import (CreateAPIView, ListAPIView, Response,
+                       UpdateAPIView, status, DestroyAPIView, IsAdminRole)
 
 
 class RolesListView(ListAPIView):
@@ -11,9 +11,7 @@ class RolesListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializers = RolesSerializers(data, many=True)
-        response, code = create_response(
-            status.HTTP_200_OK, 'Roles', serializers.data)
-        return Response(response, status=code)
+        return Response(serializers.data, status.HTTP_200_OK)
 
 
 class RolescreateView(CreateAPIView):
@@ -22,15 +20,11 @@ class RolescreateView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         roleSerializers = RolesSerializers(data=request.data)
-        
+
         if roleSerializers.is_valid():
             roleSerializers.save()
-            response, code = create_response(
-                status.HTTP_200_OK, 'Role', roleSerializers.data)
-            return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', roleSerializers.errors)
-        return Response(response, status=code)
+            return Response(roleSerializers.data, status.HTTP_200_OK)
+        return Response(roleSerializers.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class RoleUpdateView(UpdateAPIView):
@@ -47,24 +41,16 @@ class RoleUpdateView(UpdateAPIView):
     def put(self, request, *args, **kwargs):
         role = self.get_object()
         if role is None:
-            response, code = create_response(
-                status.HTTP_200_OK, 'Error', 'Role Not Exist')
-            return Response(response, status=code)
+            return Response('Role Not Exist', status.HTTP_200_OK)
 
         try:
             roleSerializers = RolesSerializers(role, data=request.data)
             if roleSerializers.is_valid():
                 roleSerializers.save()
-                response, code = create_response(
-                    status.HTTP_200_OK, 'Role', roleSerializers.data)
-                return Response(response, status=code)
-            response, code = create_response(
-                status.HTTP_200_OK, 'Error', roleSerializers.errors)
-            return Response(response, status=code)
+                return Response(roleSerializers.data, status.HTTP_200_OK)
+            return Response(roleSerializers.errors, status.HTTP_200_OK)
         except (AttributeError, Exception) as e:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
-            return Response(response, status=code)
+            return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
 class RolesDestroyView(DestroyAPIView):
@@ -82,15 +68,9 @@ class RolesDestroyView(DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         role = self.get_object()
         if role is None:
-            response, code = create_response(
-                status.HTTP_200_OK, 'Error', 'Role Not Exist')
-            return Response(response, status=code)
+            return Response('Role Not Exist', status.HTTP_200_OK)
         if role.name.lower() == 'admin' or role.name.lower() == 'egresado':
-            response, code = create_response(
-                status.HTTP_200_OK, 'Error', 'No se puede borrar este rol')
-            return Response(response, status=code)
+            return Response('No se puede borrar este rol', status.HTTP_200_OK)
         role.delete()
 
-        response, code = create_response(
-            status.HTTP_200_OK, 'Error', 'Ok')
-        return Response(response, status=code)
+        return Response( 'Ok', status.HTTP_200_OK)

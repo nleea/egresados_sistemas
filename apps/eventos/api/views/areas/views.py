@@ -2,7 +2,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from ...serializers.eventos.eventos_cate_serializers import EventosCategorySerializers
 from ....models.models import EventosArea
-from .....helpers.create_response import create_response
 from rest_framework import status
 
 
@@ -15,8 +14,7 @@ class EventosAreaView(APIView):
 
         data = EventosCategorySerializers(
             EventosArea.objects.all(), many=True, meta=meta)
-        response, code = create_response(status.HTTP_200_OK, "", data.data)
-        return Response(response, code)
+        return Response(data.data, status.HTTP_200_OK)
 
 
 class SaveEventosAreaView(APIView):
@@ -25,13 +23,8 @@ class SaveEventosAreaView(APIView):
         data = EventosCategorySerializers(data=request.data)
         if data.is_valid():
             data.save(userCreate=request.user)
-            response, code = create_response(
-                status.HTTP_200_OK, "Success", "Success")
-            return Response(response, code)
-
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, "Bad Request", data.errors)
-        return Response(response, code)
+            return Response("Success", status.HTTP_200_OK)
+        return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateEventosAreaView(APIView):
@@ -52,21 +45,14 @@ class UpdateEventosAreaView(APIView):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "Bad Request", "Evento {} not exist".format(self.kwargs.get('pk')))
-            return Response(response, code)
+            return Response("Evento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         instance = EventosCategorySerializers(
             instanceOrNone, data=request.data, partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
-            response, code = create_response(
-                status.HTTP_200_OK, "Success", "Success")
-            return Response(response, code)
-
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, "Bad Request", instance.errors)
-        return Response(response, code)
+            return Response("Success", status.HTTP_200_OK)
+        return Response(instance.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteEventosAreaView(APIView):
@@ -87,16 +73,11 @@ class DeleteEventosAreaView(APIView):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "Bad Request", "Evento {} not exist".format(self.kwargs.get('pk')))
-            return Response(response, code)
+            return Response("Evento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
             instanceOrNone.delete()
         except instanceOrNone.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "Bad Request", "Error")
+            return Response("Error", status.HTTP_400_BAD_REQUEST)
 
-        response, code = create_response(
-            status.HTTP_200_OK, "Sucess", "Delete Success")
-        return Response(response, code)
+        return Response("Delete Success", status.HTTP_200_OK)

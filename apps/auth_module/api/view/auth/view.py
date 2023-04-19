@@ -5,11 +5,10 @@ from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework.response import Response
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import logout
-from ..modules import create_response
 from rest_framework import status
 from django.http import HttpResponse
 from django.contrib.auth import login
-from .....helpers.flat_List import flatList
+from configs.helpers.flat_List import flatList
 
 
 class AuthLogin(APIView):
@@ -30,26 +29,22 @@ class AuthLogin(APIView):
             data = request.data
 
         serializers = LoginSerializers(
-            data=data, context={'request': self.request})
+            data=data, context={'request': self.request})  # type: ignore
         if not serializers.is_valid():
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', serializers.errors)
-            return Response(response, status=code)
+            return Response(serializers.errors, status.HTTP_400_BAD_REQUEST)
 
-        login(request, serializers.validated_data)
+        login(request, serializers.validated_data)  # type: ignore
         token = self.get_tokens_for_user(serializers.validated_data)
 
         resources = flatList([e.resources.prefetch_related(
-            'resources') for e in serializers.validated_data.roles.all()])
-    
+            'resources') for e in serializers.validated_data.roles.all()])  # type: ignore
+
         menu = ResourcesSerializers(set(resources), many=True)
 
         request.session['refresh-token'] = token['refresh']
-        response, code = create_response(
-            status.HTTP_200_OK, 'Login Success', {'token': token, 'user': {'name': serializers.validated_data.username,
-                                                                           'id': serializers.validated_data.id},
-                                                  'menu': menu.data})
-        return Response(response, status=code)
+        return Response({'token': token, 'user': {'name': serializers.validated_data.username,  # type:ignore
+                                                  'id': serializers.validated_data.id},  # type:ignore
+                         'menu': menu.data}, status.HTTP_200_OK)
 
 
 class AuthRegister(APIView):
@@ -59,14 +54,10 @@ class AuthRegister(APIView):
         registerUser = RegisterSerializers(data=request.data)
         if registerUser.is_valid():
             password = make_password(
-                registerUser.validated_data['password'])
+                registerUser.validated_data['password'])#type:ignore
             registerUser.save(password=password)
-            response, code = create_response(
-                status.HTTP_200_OK, 'User Register', 'Registro Exitosos')
-            return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', registerUser.errors)
-        return Response(response, status=code)
+            return Response('Registro Exitosos', status.HTTP_200_OK)
+        return Response(registerUser.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class LogoutView(APIView):
@@ -83,14 +74,8 @@ class LogoutView(APIView):
             request.session.clear()
             resp.flush()
             request.session.flush()
-            response, code = create_response(
-                status.HTTP_200_OK, 'Logout Success', 'Ok')
-            return Response(response, code)
+            return Response( 'Ok', status.HTTP_200_OK)
         except TokenError as TkError:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', f'{TkError}')
-            return Response(response, code)
+            return Response(f'{TkError}',  status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', e)
-            return Response(e.args, code)
+            return Response(e, status.HTTP_400_BAD_REQUEST)

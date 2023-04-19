@@ -1,16 +1,17 @@
+from django.http import HttpResponse
+from ..helpers.create_response import create_response
+import json
+from django.db.utils import IntegrityError
 
-class CustomMiddleware:
-    
+class CustomResponseMiddleware(object):
+
     def __init__(self, get_response):
         self.get_response = get_response
-        
+
     def __call__(self, request):
-                
-        response = self.get_response(request)
-        
-        
-        return response
-    
-    def process_response(self, request, response):
-        print(request)
-        pass
+        response = self.get_response(request)        
+        try:
+            parseResponse,code = create_response(response.status_code,"Ok",json.loads(response.getvalue()),request.path)
+            return HttpResponse(json.dumps(parseResponse),content_type="application/json",status=code)
+        except (Exception,IntegrityError) as e:
+            return HttpResponse("Unexpected error",status=400)

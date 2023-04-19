@@ -4,7 +4,6 @@ from ...serializers.roles.roles_serializers import RolesUserSerializers, RolesSe
 from rest_framework import status
 from ....models import Resources, User_roles, Roles
 from rest_framework.response import Response
-from ..modules import create_response
 
 
 class SecurityResourcesCreate(CreateAPIView):
@@ -16,13 +15,9 @@ class SecurityResourcesCreate(CreateAPIView):
             resources = ResourcesRolesSerializers(data=request.data)
             resources.is_valid(raise_exception=True)
             resources.create(request.data)
-            response, code = create_response(
-                status.HTTP_200_OK, 'Resources', 'Resources Create')
-            return Response(response, code)
+            return Response('Resources Create', status.HTTP_200_OK)
         except BaseException as e:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', e.args[0])
-            return Response(response, status=code)
+            return Response(e.args[0], status.HTTP_400_BAD_REQUEST)
 
 
 class SecurityRolesUser(CreateAPIView):
@@ -39,9 +34,5 @@ class SecurityRolesUser(CreateAPIView):
 
         if rolesUser.is_valid():
             rolesUser.save(roles=roles)
-            response, code = create_response(
-                status.HTTP_200_OK, 'User-Rol', 'successfully assigned roles')
-            return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', rolesUser.errors)
-        return Response(response, status=code)
+            return Response('successfully assigned roles', status.HTTP_200_OK)
+        return Response(rolesUser.errors,  status.HTTP_400_BAD_REQUEST)

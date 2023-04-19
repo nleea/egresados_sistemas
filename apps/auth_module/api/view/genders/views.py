@@ -1,4 +1,4 @@
-from ..modules import CreateAPIView, ListAPIView, UpdateAPIView, status, Response, create_response,IsAdminRole,DestroyAPIView
+from ..modules import CreateAPIView, ListAPIView, UpdateAPIView, status, Response,IsAdminRole,DestroyAPIView
 from ....models import Genders
 from ...serializers.gender.gender_Serializers import GenderSerializers
 
@@ -10,9 +10,7 @@ class GenderListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializers = GenderSerializers(data, many=True)
-        response, code = create_response(
-            status.HTTP_200_OK, 'Genders', serializers.data)
-        return Response(response, status=code)
+        return Response(serializers.data, status.HTTP_200_OK)
 
 
 class GenderCreateView(CreateAPIView):
@@ -23,12 +21,8 @@ class GenderCreateView(CreateAPIView):
         genderSerializers = GenderSerializers(data=request.data)
         if genderSerializers.is_valid():
             genderSerializers.save()
-            response, code = create_response(
-                status.HTTP_200_OK, 'Genders', genderSerializers.data)
-            return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', genderSerializers.errors)
-        return Response(response, status=code)
+            return Response(genderSerializers.data, status.HTTP_200_OK)
+        return Response(genderSerializers.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class GenderUpdateView(UpdateAPIView):
@@ -46,25 +40,17 @@ class GenderUpdateView(UpdateAPIView):
         gender = self.get_object()
 
         if gender is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found', 'Gender Not Found')
-            return Response(response, status=code)
+            return Response('Gender Not Found', status.HTTP_400_BAD_REQUEST)
 
         try:
             genderSerializers = GenderSerializers(gender, data=request.data)
             if genderSerializers.is_valid():
                 genderSerializers.update(
                     gender, genderSerializers.validated_data)
-                response, code = create_response(
-                    status.HTTP_200_OK, 'Gender Update', genderSerializers.data)
-                return Response(response, status=code)
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Error', genderSerializers.errors)
-            return Response(response, status=code)
+                return Response(genderSerializers.data, status.HTTP_200_OK)
+            return Response(genderSerializers.errors, status.HTTP_400_BAD_REQUEST)
         except (AttributeError, Exception) as e:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found', e.args)
-            return Response(response, status=code)
+            return Response( e.args, status.HTTP_400_BAD_REQUEST)
 
 class GendersDestroyView(DestroyAPIView):
     queryset = Genders.objects.all()
@@ -81,11 +67,6 @@ class GendersDestroyView(DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         gender = self.get_object()
         if gender is None:
-            response, code = create_response(
-                status.HTTP_200_OK, 'Error', 'Gender Not Exist')
-            return Response(response, status=code)
+            return Response('Gender Not Exist', status.HTTP_200_OK)
         gender.delete()
-
-        response, code = create_response(
-            status.HTTP_200_OK, 'Error', 'Ok')
-        return Response(response, status=code)
+        return Response('Ok', status.HTTP_200_OK)

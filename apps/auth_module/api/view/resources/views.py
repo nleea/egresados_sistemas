@@ -1,4 +1,4 @@
-from ..modules import ListAPIView, Response, UpdateAPIView, status, create_response, DestroyAPIView, IsAdminRole
+from ..modules import ListAPIView, Response, UpdateAPIView, status,  DestroyAPIView, IsAdminRole
 from ....models import Resources
 from ...serializers.resources.resources_serializers import ResourcesSerializers
 
@@ -10,9 +10,7 @@ class ResourcesListView(ListAPIView):
     def get(self, request, *args, **kwargs):
         data = self.get_queryset()
         serializers = ResourcesSerializers(data, many=True)
-        response, code = create_response(
-            status.HTTP_200_OK, 'Resources', serializers.data)
-        return Response(response, status=code)
+        return Response(serializers.data, status.HTTP_200_OK)
 
 
 class ResourcesUpdateView(UpdateAPIView):
@@ -24,9 +22,7 @@ class ResourcesUpdateView(UpdateAPIView):
             pk = self.kwargs.get('pk')
             return Resources.objects.get(pk=pk)
         except Resources.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, 'Not Found')
-            return {'response': response, 'code': code}
+            return {'response': 'Not Found', 'code': status.HTTP_400_BAD_REQUEST}
 
     def path(self, request, *args, **kwargs):
         resources = self.get_object()
@@ -36,12 +32,8 @@ class ResourcesUpdateView(UpdateAPIView):
             resources, data=request.data)
         if resourcesSerializers.is_valid():
             resourcesSerializers.save()
-            response, code = create_response(
-                status.HTTP_200_OK, 'Resources Update', resourcesSerializers.data)
-            return Response(response, status=code)
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, 'Error', resourcesSerializers.errors)
-        return Response(response, status=code)
+            return Response(resourcesSerializers.data, status.HTTP_200_OK)
+        return Response(resourcesSerializers.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class ResourcesDestroyView(DestroyAPIView):
@@ -59,11 +51,7 @@ class ResourcesDestroyView(DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         resources = self.get_object()
         if resources is None:
-            response, code = create_response(
-                status.HTTP_200_OK, 'Error', 'Resources Not Exist')
-            return Response(response, status=code)
+            return Response('Resources Not Exist', status.HTTP_200_OK)
         resources.delete()
 
-        response, code = create_response(
-            status.HTTP_200_OK, 'Error', 'Ok')
-        return Response(response, status=code)
+        return Response('Ok', status.HTTP_200_OK)

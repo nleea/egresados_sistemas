@@ -3,7 +3,6 @@ from ...serializers.advertissement.advertisement_serialziers import Advertisemen
 from ...serializers.subCategory.subCategory_serializers import SubCategorySerializersView
 from ....models.models import Anuncio, SubCategoria
 from rest_framework.response import Response
-from .....helpers.create_response import create_response
 from rest_framework import status
 from ..Base.BaseView import ViewPagination
 
@@ -19,11 +18,8 @@ class AdvertisementsQueryView(APIView):
             anuncio = Anuncio.objects.filter_Advertisement_subCategory(
                 request.data["subCategoryId"])
             results = AdvertisementSerializersView(anuncio, many=True).data
-        #resulstSeralizer = serializers.serialize('json', results)
-        response, code = create_response(
-            status.HTTP_200_OK, "Ok", results)
 
-        return Response(response, status=code)
+        return Response(results, status.HTTP_200_OK,)
 
 
 class AdvertisementView(ViewPagination):
@@ -39,12 +35,8 @@ class AdvertisementView(ViewPagination):
             results, many=True, meta=meta)
         paginated_data = self.get_paginated_response(data.data).data
         if paginated_data is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "", "error")
-            return Response(response, code)
-        response, code = create_response(
-            status.HTTP_200_OK, "", paginated_data)
-        return Response(response, code)
+            return Response("error", status.HTTP_400_BAD_REQUEST)
+        return Response(paginated_data, status.HTTP_200_OK)
 
 
 class SaveAdvertisementView(APIView):
@@ -56,13 +48,9 @@ class SaveAdvertisementView(APIView):
             if 'redes' in request.data:
                 redes = request.data["redes"]
             data.save(userCreate=request.user, redes=redes)
-            response, code = create_response(
-                status.HTTP_200_OK, "Success", "Success")
-            return Response(response, code)
+            return Response("Success", status.HTTP_200_OK)
 
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, "Bad Request", data.errors)
-        return Response(response, code)
+        return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateCategoryView(APIView):
@@ -83,21 +71,15 @@ class UpdateCategoryView(APIView):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "Bad Request", "Anuncio {} not exist".format(self.kwargs.get('pk')))
-            return Response(response, code)
+            return Response("Anuncio {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         instance = AdvertisementSerializers(
             instanceOrNone, data=request.data, partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
-            response, code = create_response(
-                status.HTTP_200_OK, "Success", "Success")
-            return Response(response, code)
+            return Response("Success",  status.HTTP_200_OK)
 
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, "Bad Request", instance.errors)
-        return Response(response, code)
+        return Response(instance.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteCategoryView(APIView):
@@ -118,16 +100,10 @@ class DeleteCategoryView(APIView):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "Bad Request", "Anuncio {} not exist".format(self.kwargs.get('pk')))
-            return Response(response, code)
+            return Response("Anuncio {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
             instanceOrNone.delete()
         except instanceOrNone.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "Bad Request", "Error")
-
-        response, code = create_response(
-            status.HTTP_200_OK, "Sucess", "Delete Success")
-        return Response(response, code)
+            return Response("Error", status.HTTP_400_BAD_REQUEST)
+        return Response("Delete Success", status.HTTP_200_OK)

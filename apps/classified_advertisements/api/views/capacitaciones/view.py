@@ -2,7 +2,6 @@ from rest_framework.views import APIView
 from ...serializers.tipoCapacitacion.capacitacionSerializers import CapacitacionesSerializers
 from ....models.models import TiposCapacitaciones
 from rest_framework.response import Response
-from .....helpers.create_response import create_response
 from rest_framework import status
 from ..Base.BaseView import ViewPagination
 
@@ -21,13 +20,8 @@ class CapacitacionesView(ViewPagination):
         paginated_data = self.get_paginated_response(data.data).data
 
         if paginated_data is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "", "error")
-            return Response(response, code)
-
-        response, code = create_response(
-            status.HTTP_200_OK, "sucess", paginated_data)
-        return Response(response, code)
+            return Response("Error", status.HTTP_400_BAD_REQUEST)
+        return Response(paginated_data, status.HTTP_200_OK)
 
 
 class SaveCapacitacionesView(APIView):
@@ -37,13 +31,9 @@ class SaveCapacitacionesView(APIView):
 
         if data.is_valid():
             data.save(userCreate=request.user)
-            response, code = create_response(
-                status.HTTP_200_OK, "Success", "Sucess")
-            return Response(response, code)
+            return Response("Sucess", status.HTTP_200_OK)
 
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, "Bad Request", data.errors)
-        return Response(response, code)
+        return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateCapacitacionesView(APIView):
@@ -64,21 +54,15 @@ class UpdateCapacitacionesView(APIView):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "Bad Request", "Capacitacion {} not exist".format(self.kwargs.get('pk')))
-            return Response(response, code)
+            return Response("Capacitacion {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         instance = CapacitacionesSerializers(
             instanceOrNone, data=request.data, partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
-            response, code = create_response(
-                status.HTTP_200_OK, "Success", "Success")
-            return Response(response, code)
+            return Response("Success", status.HTTP_200_OK)
 
-        response, code = create_response(
-            status.HTTP_400_BAD_REQUEST, "Bad Request", instance.errors)
-        return Response(response, code)
+        return Response(instance.errors,  status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteCapacitacionesView(APIView):
@@ -99,16 +83,11 @@ class DeleteCapacitacionesView(APIView):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "Bad Request", "Capacitacion {} not exist".format(self.kwargs.get('pk')))
-            return Response(response, code)
+            return Response("Capacitacion {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
             instanceOrNone.delete()
         except instanceOrNone.DoesNotExist:
-            response, code = create_response(
-                status.HTTP_400_BAD_REQUEST, "Bad Request", "Error")
+            return Response("Error", status.HTTP_400_BAD_REQUEST)
 
-        response, code = create_response(
-            status.HTTP_200_OK, "Sucess", "Delete Success")
-        return Response(response, code)
+        return Response("Delete Success", status.HTTP_200_OK)

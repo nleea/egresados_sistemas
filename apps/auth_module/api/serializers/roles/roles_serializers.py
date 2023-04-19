@@ -1,6 +1,5 @@
 from ....models import Roles, User_roles, Resources_roles, User
 from rest_framework.serializers import ModelSerializer, ValidationError
-from .....helpers.create_response import create_response
 
 
 class UserSerilizers(ModelSerializer):
@@ -43,6 +42,4 @@ class RolesUserSerializers(ModelSerializer):
             response = User_roles.objects.bulk_create(rolesForUser)
             return response[0]
         except Exception as e:
-            response, code = create_response(
-                404, '', 'Duplicate Key User - Rol')
-            raise ValidationError(response, code=code)
+            raise ValidationError('Duplicate Key User - Rol', 404)

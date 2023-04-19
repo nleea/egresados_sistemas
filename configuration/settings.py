@@ -81,6 +81,7 @@ MIDDLEWARE = [
     "configs.middlewares.auth.CustomMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "configs.middlewares.view_responses.CustomResponseMiddleware"
 ]
 
 SESSION_SAVE_EVERY_REQUEST = True

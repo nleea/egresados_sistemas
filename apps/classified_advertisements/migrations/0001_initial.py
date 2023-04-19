@@ -6,8 +6,8 @@ import django.contrib.auth.validators
 from django.db import migrations, models
 import django.db.models.deletion
 import django.utils.timezone
-from ...helpers import menu
-from ...helpers.menu_resources import menuResources
+from configs.helpers import menu
+from configs.helpers.menu_resources import menuResources
 from django.contrib.auth.hashers import make_password
 import re
 

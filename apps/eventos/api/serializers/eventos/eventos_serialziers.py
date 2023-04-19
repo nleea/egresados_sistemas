@@ -40,15 +40,19 @@ class EventosSerializers(BaseSerializers):
 
     def create(self, validated_data):
 
-        evento = Eventos.objects.create(area_id=validated_data["area"],
+        try:
+            evento = Eventos.objects.create(area_id=validated_data["area"],
                                         descripcion=validated_data["descripcion"], subArea_id=validated_data["subArea"],
                                         tipo_actividad=validated_data["tipo_actividad"],
                                         nombre_actividad=validated_data[
                                             "nombre_actividad"], responsable_id=validated_data["responsable"], lugar=validated_data[
                                             "lugar"], hora=validated_data["hora"], userCreate=validated_data["userCreate"],
                                         cupos=validated_data["cupos"], objectivo=validated_data["objectivo"])
+            return evento
+        except BaseException as e:
+            raise
 
-        return evento
+        
 
     def update(self, instance, validated_data):
         instance.area_id = validated_data.get(

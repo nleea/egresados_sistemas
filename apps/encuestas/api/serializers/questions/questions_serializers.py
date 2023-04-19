@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from ....models.models import Question,TipoMomento
 from ..BaseSerializers import BaseSerializers
-from ..momento.momento_serializers import MomentSerializers
 
 class QuestionSerializers(BaseSerializers):
     pregunta_nombre = serializers.CharField()

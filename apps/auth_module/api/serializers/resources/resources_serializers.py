@@ -1,6 +1,6 @@
 from ....models import Resources, Resources_roles, Roles
 from rest_framework.serializers import ModelSerializer, Serializer, IntegerField, BooleanField
-from .....helpers.menu_resources import menuResources
+from configs.helpers.menu_resources import menuResources
 
 
 class ResourcesSerializers(ModelSerializer):

@@ -5,7 +5,7 @@ import json
 import logging
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from django.http import HttpResponse
-from apps.helpers.create_response import create_response
+from configs.helpers.create_response import create_response
 from django.utils.deprecation import MiddlewareMixin
 from rest_framework_simplejwt.exceptions import InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions
 from django.contrib.auth import get_user_model
