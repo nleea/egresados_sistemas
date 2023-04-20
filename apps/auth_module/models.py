@@ -74,8 +74,9 @@ class Roles(BaseModel):
 
 
 class Persons(BaseModel):
-    name = models.CharField(max_length=150,unique=True, blank=True, null=True)
-    surname = models.CharField(max_length=150,unique=True, blank=True, null=True)
+    name = models.CharField(max_length=150, unique=True, blank=True, null=True)
+    surname = models.CharField(
+        max_length=150, unique=True, blank=True, null=True)
     identification = models.CharField(
         max_length=255, unique=True, blank=True, null=True)
     address = models.CharField(max_length=50, blank=True, null=True)
@@ -91,7 +92,7 @@ class Persons(BaseModel):
                              on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self) -> str:
-        return self.name # type: ignore
+        return self.name  # type: ignore
 
     class Meta:
         unique_together = (('name', 'identification'))
@@ -142,3 +143,28 @@ class Resources_roles(BaseModel):
     class Meta:
         verbose_name = 'Resources_roles'
         verbose_name_plural = 'Resources_roles'
+
+
+class Headquarters(BaseModel):
+    name = models.CharField(max_length=256)
+    class Meta:
+        verbose_name = "Headquarter"
+        verbose_name_plural = "Headquarters"
+
+
+class Faculties(BaseModel):
+    name = models.CharField(max_length=256)
+    headquarter = models.ForeignKey(Headquarters, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Facultie"
+        verbose_name_plural = "Faculties"
+
+
+class Programs(BaseModel):
+    name = models.CharField(max_length=256)
+    faculty = models.ForeignKey(Faculties, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = "Program"
+        verbose_name_plural = "Programs"

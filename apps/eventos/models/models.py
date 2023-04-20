@@ -37,6 +37,7 @@ class TipoEvento(BaseModel):
         verbose_name = "Tipo Evento"
         verbose_name_plural = "Tipo Eventos"
 
+
 class Eventos(BaseModel):
     area = models.ForeignKey(
         EventosArea, on_delete=models.CASCADE, related_name="+")
@@ -45,7 +46,8 @@ class Eventos(BaseModel):
     nombre_actividad = models.CharField(max_length=256)
     tipo_actividad = models.CharField(max_length=256)
     responsable = models.ForeignKey(User, on_delete=models.CASCADE)
-    tipo = models.ForeignKey(TipoEvento,on_delete=models.CASCADE,blank=True,null=True)
+    tipo = models.ForeignKey(
+        TipoEvento, on_delete=models.CASCADE, blank=True, null=True)
     fecha = models.DateTimeField(auto_now=True, blank=True, null=True)
     hora = models.CharField(max_length=10)
     lugar = models.CharField(max_length=256)
@@ -56,3 +58,4 @@ class Eventos(BaseModel):
     class Meta:
         verbose_name = 'Evento'
         verbose_name_plural = 'Eventos'
+

@@ -8,5 +8,6 @@ urlpatterns = [
     path('persons/', include('apps.auth_module.api.view.persons.urls')),
     path('genders/', include('apps.auth_module.api.view.genders.urls')),
     path('documents/', include('apps.auth_module.api.view.documents.urls')),
-    path('security/',include('apps.auth_module.api.view.security.urls'))
+    path('security/',include('apps.auth_module.api.view.security.urls')),
+    path('university/',include("apps.auth_module.api.view.university.urls"))
 ]

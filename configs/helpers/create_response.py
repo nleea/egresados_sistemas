@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework.utils.serializer_helpers import ReturnDict
 
 
-def create_response(code, message, data, path='',):
+def create_response(code, message, data, path=''):
     """
     Function to create a response to be sent back via the API
     :param request_id:Id fo the request
@@ -27,8 +27,7 @@ def create_response(code, message, data, path='',):
             if type(proccess_data) is dict or type(proccess_data) is list:
                 data_parse = {'ok': False, "message":message,"errors": proccess_data, "path": path}
             else:
-                data_parse = {'ok': False, "message":message,"errors": {
-                    'error': proccess_data}, "path": path}
+                data_parse = {'ok': False, "message":message,"errors": proccess_data, "path": path}
                 
             return data_parse, code
 
