@@ -45,10 +45,10 @@ class Eventos(BaseModel):
         SubAreaEventos, on_delete=models.CASCADE, related_name="+")
     nombre_actividad = models.CharField(max_length=256)
     tipo_actividad = models.CharField(max_length=256)
-    responsable = models.ForeignKey(User, on_delete=models.CASCADE)
+    responsable = models.CharField(max_length=256)
     tipo = models.ForeignKey(
         TipoEvento, on_delete=models.CASCADE, blank=True, null=True)
-    fecha = models.DateTimeField(auto_now=True, blank=True, null=True)
+    fecha = models.DateField(blank=True, null=True)
     hora = models.CharField(max_length=10)
     lugar = models.CharField(max_length=256)
     cupos = models.IntegerField()
@@ -58,4 +58,3 @@ class Eventos(BaseModel):
     class Meta:
         verbose_name = 'Evento'
         verbose_name_plural = 'Eventos'
-
