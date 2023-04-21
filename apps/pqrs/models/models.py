@@ -37,16 +37,10 @@ class Asignacion(BaseModel):
         verbose_name = 'Asignacion'
         verbose_name_plural = 'Asignacions'
 
-class Anexo(BaseModel):
-    nombre_ane =models.CharField(max_length=256)
-    
-    class Meta:
-        verbose_name = 'Anexo'
-        verbose_name_plural = 'Anexos'
 
 class Respuesta(BaseModel):
     pqrs = models.ForeignKey(Pqrs,on_delete=models.CASCADE,related_name="respuesta_pqrs")
-    anexo = models.ForeignKey(Anexo,on_delete=models.CASCADE)
+    anexo = models.FileField(upload_to="static/files/")
     descripcion = models.CharField(max_length=256,null=True,blank=True)
     
     class Meta:

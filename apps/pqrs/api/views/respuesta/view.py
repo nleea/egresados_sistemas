@@ -20,14 +20,11 @@ class RespuestaView(APIView):
 class SaveRespuestaView(APIView):
 
     def post(self, request, *args, **kwargs):
-        print(request.data)
         data = RespuestaSerializers(data=request.data)
-
         if data.is_valid():
             data.save(
-                anexo=request.data["anexo"], pqrs=request.data["pqrs"], userCreate=request.user)
+                pqrs=request.data["pqrs"], userCreate=request.user)
             return Response("Sucess", status.HTTP_200_OK)
-
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
 
