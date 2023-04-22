@@ -15,6 +15,8 @@ from datetime import timedelta
 import os
 import environ
 from .db import DBS
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -232,3 +234,22 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
+
+
+
+
+sentry_sdk.init(
+    dsn="https://933151f4971b4e20a0d864b46a2ee8cc@o4505058180399104.ingest.sentry.io/4505058181840896",
+    integrations=[
+        DjangoIntegration(),
+    ],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
