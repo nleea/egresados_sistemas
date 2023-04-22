@@ -19,10 +19,10 @@ def create_response(code, message, data, path='', method=""):
         if code != 200:
             proccess_data = data
             if type(data) is list and len(data) > 0:
-                proccess_data = [{x: data[x][0]} for x in data][0]
-            if type(data) is dict:
+                proccess_data = [ x for x in data][0]
+            elif type(data) is dict:
                 proccess_data = [{x: data[x][0]} for x in data]
-            if type(data) is ReturnDict:
+            elif type(data) is ReturnDict:
                 proccess_data = [{x: data[x]['non_field_errors'][0]
                                   if "non_field_errors" in data[x] else data[x][0]} for x in data]
 
