@@ -8,16 +8,24 @@ class PqrsSerializers(BaseSerializers):
     description = serializers.CharField()
     persona = serializers.SlugRelatedField("username", read_only=True)
     tipopqrs = serializers.SlugRelatedField("tipo", read_only=True)
+    tipopqrs = serializers.IntegerField(write_only=True)
+    persona = serializers.IntegerField(write_only=True)
+    status = serializers.CharField(write_only=True)
+    status_display = serializers.CharField(
+        source="get_status_display", read_only=True)
+    anexo = serializers.FileField(required=False)
 
     class Meta:
         fields = "__all__"
 
     def create(self, validated_data):
         try:
-            return Pqrs.objects.create(description=validated_data["description"], titulo=validated_data["titulo"], tipopqrs_id=validated_data["tipo"], persona_id=validated_data["persona"], userCreate=validated_data["userCreate"])
-        except (User.DoesNotExist, TipoPqrs.DoesNotExist) as e:
+            anexo = None
+            if 'anexo' in validated_data:
+                anexo = validated_data["anexo"]
+            return Pqrs.objects.create(description=validated_data["description"], titulo=validated_data["titulo"], tipopqrs_id=validated_data["tipopqrs"], persona_id=validated_data["persona"], userCreate=validated_data["userCreate"],anexo=anexo)
+        except Exception as e:
             a = serializers.ValidationError(e.args)
-            print(a.detail)
             raise a
 
     def update(self, instance, validated_data):
@@ -26,6 +34,7 @@ class PqrsSerializers(BaseSerializers):
             'description', instance.description)
         instance.userUpdate = validated_data.get(
             "userUpdate", instance.userUpdate)
+        instance.status = validated_data.get("status", instance.status)
         instance.save()
         return instance
 

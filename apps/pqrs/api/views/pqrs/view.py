@@ -20,8 +20,7 @@ class SavePqrsView(APIView):
     def post(self, request, *args, **kwargs):
         data = PqrsSerializers(data=request.data)
         if data.is_valid():
-            data.save(
-                persona=request.data["persona"], tipo=request.data["tipopqrs"], userCreate=request.user)
+            data.save(userCreate=request.user)
             return Response("Sucess", status.HTTP_200_OK)
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -39,7 +38,7 @@ class DeletePqrsView(APIView):
     def delete(self, request, *args, **kwargs):
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            return Response("Bad Request", "Pqrs {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+            return Response("Pqrs {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
             instanceOrNone.delete()
@@ -66,7 +65,7 @@ class UpdatePqrsView(APIView):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            return Response("Bad Request", "Pqrs {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+            return Response("Pqrs {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         instance = PqrsSerializers(instanceOrNone, data=request.data)
         if instance.is_valid():

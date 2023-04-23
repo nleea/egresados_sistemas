@@ -19,7 +19,7 @@ def create_response(code, message, data, path='', method=""):
         if code != 200:
             proccess_data = data
             if type(data) is list and len(data) > 0:
-                proccess_data = [ x for x in data][0]
+                proccess_data = [ "".join(x) for x in data]
             elif type(data) is dict:
                 proccess_data = [{x: data[x][0]} for x in data]
             elif type(data) is ReturnDict:
