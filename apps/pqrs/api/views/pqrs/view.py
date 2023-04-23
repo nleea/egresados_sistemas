@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ...serializers.pqrs.pqrs_serialziers import PqrsSerializers
+from ...serializers.pqrs.pqrs_serialziers import PqrsSerializers,PqrsSerializersView
 from ....models.models import Pqrs
 from rest_framework.response import Response
 from rest_framework import status
@@ -11,7 +11,7 @@ class PqrsView(APIView):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = PqrsSerializers(Pqrs.objects.all(), many=True, meta=meta)
+        data = PqrsSerializersView(Pqrs.objects.all(), many=True, meta=meta)
         return Response(data.data,status.HTTP_200_OK)
 
 

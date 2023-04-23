@@ -2,12 +2,21 @@ from rest_framework import serializers
 from ....models.models import Pqrs
 from ..BaseSerializers import BaseSerializers
 
+class PqrsSerializersView(BaseSerializers):
+    titulo = serializers.CharField()
+    description = serializers.CharField()
+    persona = serializers.SlugRelatedField("username", read_only=True)
+    tipopqrs = serializers.SlugRelatedField("tipo", read_only=True)
+    status = serializers.CharField(
+        source="get_status_display", read_only=True)
+    anexo = serializers.FileField(required=False)
+
 
 class PqrsSerializers(BaseSerializers):
     titulo = serializers.CharField()
     description = serializers.CharField()
     persona = serializers.SlugRelatedField("username", read_only=True)
-    tipopqrs = serializers.SlugRelatedField("tipo", read_only=True)
+    tipopqrs = serializers.SlugRelatedField("name", read_only=True)
     tipopqrs = serializers.IntegerField(write_only=True)
     persona = serializers.IntegerField(write_only=True)
     status = serializers.CharField(write_only=True,required=False)
