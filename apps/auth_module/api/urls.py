@@ -1,4 +1,5 @@
 from django.urls import path, include
+import debug_toolbar
 
 urlpatterns = [
     path('auth/', include('apps.auth_module.api.view.auth.urls')),
@@ -9,5 +10,6 @@ urlpatterns = [
     path('genders/', include('apps.auth_module.api.view.genders.urls')),
     path('documents/', include('apps.auth_module.api.view.documents.urls')),
     path('security/',include('apps.auth_module.api.view.security.urls')),
-    path('university/',include("apps.auth_module.api.view.university.urls"))
+    path('university/',include("apps.auth_module.api.view.university.urls")),
+    path('a/', include(debug_toolbar.urls)),
 ]

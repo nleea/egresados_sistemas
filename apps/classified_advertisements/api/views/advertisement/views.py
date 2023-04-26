@@ -5,8 +5,10 @@ from ....models.models import Anuncio, SubCategoria
 from rest_framework.response import Response
 from rest_framework import status
 from ..Base.BaseView import ViewPagination
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator 
 
-
+@method_decorator(cache_page(60 * 5), name='dispatch') 
 class AdvertisementsQueryView(APIView):
 
     def post(self, request, *args, **kwargs):

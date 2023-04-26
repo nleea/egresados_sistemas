@@ -5,7 +5,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from ...serializers.pqrs.pqrs_serialziers import PqrsRespuestaSerializers
 
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator 
 
+@method_decorator(cache_page(60 * 5), name='dispatch') 
 class RespuestaView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -78,7 +81,7 @@ class UpdateRespuestaView(APIView):
 
         return Response(instance.errors, status.HTTP_400_BAD_REQUEST)
 
-
+@method_decorator(cache_page(60 * 5), name='dispatch') 
 class RespuestasQuery(APIView):
 
     def get_object(self):

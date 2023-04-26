@@ -3,8 +3,10 @@ from ...serializers.pqrs.pqrs_serialziers import PqrsSerializers,PqrsSerializers
 from ....models.models import Pqrs
 from rest_framework.response import Response
 from rest_framework import status
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator 
 
-
+@method_decorator(cache_page(60 * 5), name='dispatch') 
 class PqrsView(APIView):
 
     def get(self, request, *args, **kwargs):

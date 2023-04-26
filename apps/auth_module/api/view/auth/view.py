@@ -10,7 +10,6 @@ from django.http import HttpResponse
 from django.contrib.auth import login
 from configs.helpers.flat_List import flatList
 
-
 class AuthLogin(APIView):
 
     def get_tokens_for_user(self, user):
@@ -37,7 +36,7 @@ class AuthLogin(APIView):
         token = self.get_tokens_for_user(serializers.validated_data)
 
         resources = flatList([e.resources.prefetch_related(
-            'resources') for e in serializers.validated_data.roles.all()])  # type: ignore
+            'resources').defer("createdAt","updateAt") for e in serializers.validated_data.roles.all()])  # type: ignore
 
         menu = ResourcesSerializers(set(resources), many=True)
 
@@ -54,7 +53,7 @@ class AuthRegister(APIView):
         registerUser = RegisterSerializers(data=request.data)
         if registerUser.is_valid():
             password = make_password(
-                registerUser.validated_data['password'])#type:ignore
+                registerUser.validated_data['password'])  # type:ignore
             registerUser.save(password=password)
             return Response('Registro Exitosos', status.HTTP_200_OK)
         return Response(registerUser.errors, status.HTTP_400_BAD_REQUEST)
@@ -74,7 +73,7 @@ class LogoutView(APIView):
             request.session.clear()
             resp.flush()
             request.session.flush()
-            return Response( 'Ok', status.HTTP_200_OK)
+            return Response('Ok', status.HTTP_200_OK)
         except TokenError as TkError:
             return Response(f'{TkError}',  status.HTTP_400_BAD_REQUEST)
         except Exception as e:
