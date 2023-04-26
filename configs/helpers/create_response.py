@@ -21,7 +21,7 @@ def create_response(code, message, data, path='', method=""):
             if type(data) is list and len(data) > 0:
                 proccess_data = [ "".join(x) for x in data]
             elif type(data) is dict:
-                proccess_data = [{x: data[x][0]} for x in data]
+                proccess_data = [{x: data[x]} for x in data]
             elif type(data) is ReturnDict:
                 proccess_data = [{x: data[x]['non_field_errors'][0]
                                   if "non_field_errors" in data[x] else data[x][0]} for x in data]

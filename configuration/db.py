@@ -29,5 +29,15 @@ DBS = {
             'USER': 'uha9s6r2kw020rda',
             'PASSWORD': 'L7TagO9edlgmFGA1FxrC',
         }
+    },
+    'mysql-aws': {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'db_egresados',
+            'HOST': 'aws-egresado.cgtkjmmfwdhc.us-east-2.rds.amazonaws.com',
+            'PORT': '3306',
+            'USER': 'admin',
+            'PASSWORD': 'xyz3602password',
+        }
     }
 }

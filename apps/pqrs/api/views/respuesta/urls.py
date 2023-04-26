@@ -6,5 +6,5 @@ urlpatterns = [
     path("create/",SaveRespuestaView.as_view()),
     path("update/<int:pk>/",UpdateRespuestaView.as_view()),
     path("delete/<int:pk>/",DeleteRespuestaView.as_view()),
-    path("pqrs/<int:pk>/",RespuestasQuery.as_view())
+    path("query/",RespuestasQuery.as_view())
 ]

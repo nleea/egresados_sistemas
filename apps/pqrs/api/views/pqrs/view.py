@@ -67,7 +67,7 @@ class UpdatePqrsView(APIView):
         if instanceOrNone is None:
             return Response("Pqrs {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
-        instance = PqrsSerializers(instanceOrNone, data=request.data)
+        instance = PqrsSerializers(instanceOrNone, data=request.data,partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
             return Response("Success", status.HTTP_200_OK)

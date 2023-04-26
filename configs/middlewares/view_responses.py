@@ -1,5 +1,4 @@
 from django.http import HttpResponse
-from apps.auth_module.models import Resources
 from ..helpers.create_response import create_response
 import json
 from django.db.utils import IntegrityError
@@ -28,8 +27,3 @@ class CustomResponseMiddleware(object):
     
     def process_exception(self,request,exception):
         return HttpResponse(exception)
-
-
-
-    def process_view(self,request,view_func,*args, **kwargs):
-        return view_func(request)

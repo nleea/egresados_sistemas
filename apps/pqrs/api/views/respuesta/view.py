@@ -70,7 +70,8 @@ class UpdateRespuestaView(APIView):
         if instanceOrNone is None:
             return Response("Respuesta {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
-        instance = RespuestaSerializers(instanceOrNone, data=request.data) # type: ignore
+        instance = RespuestaSerializers(
+            instanceOrNone, data=request.data)  # type: ignore
         if instance.is_valid():
             instance.save(anexo=request.data["anexo"], userUpdate=request.user)
             return Response("Success", status.HTTP_200_OK)
@@ -89,11 +90,23 @@ class RespuestasQuery(APIView):
         except (Pqrs.DoesNotExist, Respuesta.DoesNotExist):
             return None, None
 
-    def get(self, request, *args, **kwargs):
+    def query(self, pk):
+        try:
+            seccionId = None
+            pqrs = Pqrs.objects.filter(pk=pk)
+            if pqrs:
+                seccionId = Respuesta.objects.filter(pqrs=pqrs[0].pk)
+            return seccionId, pqrs
+        except (Pqrs.DoesNotExist, Respuesta.DoesNotExist):
+            return None, None
 
-        respuesta, pqrs = self.get_object()
+    def post(self, request, *args, **kwargs):
+
+        pqrsId = request.data["pqrs"]
+        respuesta, pqrs = self.query(pqrsId)
+        
         if respuesta is None or pqrs is None:
-            return Response("not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+            return Response("PQRS with id {} not exist".format(pqrsId), status.HTTP_400_BAD_REQUEST)
 
         data = RespuestaPqrsSerializers(respuesta, many=True)
         pqrsRespuesta = PqrsRespuestaSerializers(pqrs, many=True)
