@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from ...serializers.advertissement.advertisement_serialziers import AdvertisementSerializers, AdvertisementSerializersView
 from ...serializers.subCategory.subCategory_serializers import SubCategorySerializersView
-from ....models.models import Anuncio, SubCategoria,RedesSociales
+from ....models.models import Anuncio, SubCategoria
 from rest_framework.response import Response
 from rest_framework import status
 from ..Base.BaseView import ViewPagination
