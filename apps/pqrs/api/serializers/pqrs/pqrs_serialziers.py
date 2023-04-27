@@ -3,14 +3,13 @@ from ....models.models import Pqrs
 from ..BaseSerializers import BaseSerializers
 
 class PqrsSerializersView(BaseSerializers):
-    titulo = serializers.CharField()
-    description = serializers.CharField()
-    persona = serializers.SlugRelatedField("username", read_only=True)
-    tipopqrs = serializers.SlugRelatedField("tipo", read_only=True)
+    titulo = serializers.CharField(read_only=True)
+    description = serializers.CharField(read_only=True)
     status = serializers.CharField(
         source="get_status_display", read_only=True)
-    anexo = serializers.FileField(required=False)
-
+    anexo = serializers.FileField(required=False,read_only=True)
+    persona = serializers.CharField(read_only=True)
+    tipopqrs = serializers.CharField(read_only=True)
 
 class PqrsSerializers(BaseSerializers):
     titulo = serializers.CharField()

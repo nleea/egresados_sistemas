@@ -19,6 +19,10 @@ class BaseModel(models.Model):
 
 
 class Categoria(BaseModel):
+
+    def __str__(self) -> str:
+        return self.name  # type:ignore
+
     class Meta:
         verbose_name = 'Categoria'
         verbose_name_plural = 'Categorias'
@@ -29,6 +33,10 @@ class SubCategoria(BaseModel):
         Categoria, related_name="_id", on_delete=models.CASCADE, blank=True, null=True)
 
     objects = SubCategoryManagers()
+    
+    
+    def __str__(self):
+        return self.name 
 
     class Meta:
         verbose_name = 'SubCategoria'
@@ -36,10 +44,17 @@ class SubCategoria(BaseModel):
 
 
 class TiposCapacitaciones(BaseModel):
+    
+    def __str__(self):
+        return self.name
+    
+    
     class Meta:
         verbose_name = 'Capacitacion'
         verbose_name_plural = 'Capacitacitaciones'
 
+class RedesSociales(BaseModel):
+    link = models.CharField(max_length=500, blank=False, null=False)
 
 class Anuncio(BaseModel):
 
@@ -57,23 +72,13 @@ class Anuncio(BaseModel):
     formas_pago = models.CharField(max_length=300)
     tipo_capacitacion = models.ManyToManyField(
         TiposCapacitaciones)
+    redes = models.ManyToManyField(RedesSociales,related_name="redes_store")
 
     objects = AdvertisementsManagers()
 
     class Meta:
         verbose_name = 'Anuncio'
         verbose_name_plural = 'Anuncios'
-
-
-class RedesSociales(BaseModel):
-    link = models.CharField(max_length=500, blank=False, null=False)
-    anuncio = models.ForeignKey(Anuncio, on_delete=models.CASCADE)
-
-
-class AnuncioHasRedes(BaseModel):
-    anuncio = models.ForeignKey(Anuncio, on_delete=models.CASCADE)
-    redes = models.ForeignKey(RedesSociales, on_delete=models.CASCADE)
-    tipo = models.CharField(max_length=500)
 
 
 class Producto(BaseModel):

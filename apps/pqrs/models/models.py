@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-
 User = get_user_model()
 
 
@@ -19,6 +18,9 @@ class BaseModel(models.Model):
 
 class TipoPqrs(BaseModel):
     tipo = models.CharField(max_length=256)
+    
+    def __str__(self) -> str:
+        return self.tipo
 
 
 class Pqrs(BaseModel):

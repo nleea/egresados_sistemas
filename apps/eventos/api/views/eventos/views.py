@@ -5,9 +5,9 @@ from ....models.models import Eventos
 from rest_framework import status
 
 from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator 
+from django.utils.decorators import method_decorator
 
-@method_decorator(cache_page(60 * 5), name='dispatch') 
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class EventosView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -16,7 +16,7 @@ class EventosView(APIView):
             meta = request.headers["meta"]
 
         data = EventosSerializersView(
-            Eventos.objects.all(), many=True, meta=meta)
+            Eventos.objects.all().select_related("area", "subArea", "userCreate"), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK)
 
 

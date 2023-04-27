@@ -5,8 +5,8 @@ from ..BaseSerializers import BaseSerializers
 
 class EventosSubAreaSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
-    area = serializers.SlugRelatedField("name",read_only=True)
-    name = serializers.CharField()
+    area = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True)
     
     class Meta:
         fields = "__all__"

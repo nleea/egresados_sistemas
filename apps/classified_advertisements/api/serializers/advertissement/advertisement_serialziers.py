@@ -1,11 +1,12 @@
 from rest_framework import serializers
-from ....models.models import Anuncio, SubCategoria, RedesSociales, AnuncioHasRedes, TiposCapacitaciones
+from ....models.models import Anuncio, SubCategoria, RedesSociales, TiposCapacitaciones
 from ..subCategory.subCategory_serializers import SubCategorySerializers
 from apps.auth_module.api.serializers.user.users_serializers import UserSerializersSimple
 from ..BaseSerializers import BaseSerializers
 
 
 class TipoCapacitacionSerializers(BaseSerializers):
+    name = serializers.CharField()
 
     class Meta:
         fields = "__all__"
@@ -27,39 +28,24 @@ class RedesHasSocialesSerializers(BaseSerializers):
 
 class AdvertisementSerializersView(BaseSerializers):
 
-    def to_representation(self, instance):
-
-        redes = RedesSociales.objects.filter(anuncio=instance.id)
-
-        return {
-            "id": instance.id,
-            "nombre_emprendimiento": instance.nombre_emprendimiento,
-            "descripción": instance.descripción,
-            "telefono_emprendimiento": instance.telefono_emprendimiento,
-            "correo_emprendimiento": instance.correo_emprendimiento,
-            "ciudad": instance.ciudad,
-            "municipio": instance.municipio,
-            "redes": [{"link": x.link, "name": x.name} for x in redes.iterator()],
-            "direccion": instance.direccion,
-            "subCategoria": instance.subCategori.name,
-            "metodos_entrega": [x for x in instance.metodos_entrega.split(",")],
-            "formas_pago": [x for x in instance.formas_pago.split(",")],
-            "tipo_capacitacion": [{"name": x.name, "id": x.id}for x in instance.tipo_capacitacion.prefetch_related("anuncio").iterator()]
-        }
-
-    id = serializers.PrimaryKeyRelatedField(read_only=True)
-    nombre_emprendimiento = serializers.CharField()
-    descripción = serializers.CharField()
-    telefono_emprendimiento = serializers.CharField()
-    correo_emprendimiento = serializers.EmailField()
-    ciudad = serializers.CharField()
-    municipio = serializers.CharField()
+    id = serializers.IntegerField(read_only=True)
+    nombre_emprendimiento = serializers.CharField(read_only=True)
+    descripción = serializers.CharField(read_only=True)
+    telefono_emprendimiento = serializers.CharField(read_only=True)
+    correo_emprendimiento = serializers.EmailField(read_only=True)
+    ciudad = serializers.CharField(read_only=True)
+    municipio = serializers.CharField(read_only=True)
     redes = RedesSocialesSerializers(many=True, read_only=True)
-    direccion = serializers.CharField()
-    subCategori = serializers.PrimaryKeyRelatedField(read_only=True)
-    metodos_entrega = serializers.CharField()
-    formas_pago = serializers.CharField()
+    direccion = serializers.CharField(read_only=True)
+    subCategori = serializers.CharField(read_only=True)
+    metodos_entrega = serializers.CharField(read_only=True)
+    formas_pago = serializers.CharField(read_only=True)
     tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
+
+    def to_representation(self, instance):
+        results = super().to_representation(instance)
+        results["formas_pago"] = instance.formas_pago.split(",")
+        return results
 
     class Meta:
         fields = '__all__'
@@ -84,8 +70,6 @@ class AdvertisementSerializers(BaseSerializers):
 
     def create(self, validated_data):
 
-        redes = []
-
         metodos_entrega = ",".join(validated_data["metodos_entrega"])
         formas_pago = ",".join(validated_data["formas_pago"])
 
@@ -100,15 +84,14 @@ class AdvertisementSerializers(BaseSerializers):
                                          formas_pago=formas_pago)
 
         if len(validated_data.get("tipo_capacitacion", None)):
-            for capacitacion in validated_data.pop("tipo_capacitacion", None):
-                anuncio.tipo_capacitacion.add(
-                    TiposCapacitaciones.objects.get(pk=capacitacion))
+            capacitaciones = TiposCapacitaciones.objects.filter(pk__in=validated_data.pop("tipo_capacitacion", None))
+            for capacitacion in capacitaciones:
+                anuncio.tipo_capacitacion.add(capacitacion)
 
         if len(validated_data.get("redes", None)):
             for red in validated_data.pop("redes", None):
-                redes.append(RedesSociales(
-                    link=red["link"], anuncio_id=anuncio.pk))
-            RedesSociales.objects.bulk_create(redes)
+                anuncio.redes.add(RedesSociales.objects.create(
+                    link=red["link"]).pk)
 
         return anuncio
 

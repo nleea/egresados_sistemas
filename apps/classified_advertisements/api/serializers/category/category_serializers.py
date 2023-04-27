@@ -2,6 +2,10 @@ from rest_framework import serializers
 from ....models.models import Categoria
 from ..BaseSerializers import BaseSerializers
 
+class CategorySerializersView(BaseSerializers):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField()
+
 class CategorySerializers(BaseSerializers):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()

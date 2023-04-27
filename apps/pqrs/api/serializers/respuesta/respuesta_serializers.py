@@ -2,8 +2,13 @@ from rest_framework import serializers
 from ....models.models import Pqrs,Respuesta
 from ..BaseSerializers import BaseSerializers
 
+class RespuestaSerializersView(BaseSerializers):
+    pqrs = serializers.CharField(read_only=True)
+    descripcion = serializers.CharField()
+    anexo = serializers.CharField()
+
 class RespuestaSerializers(BaseSerializers):
-    pqrs = serializers.SlugRelatedField("description",read_only=True)
+    pqrs = serializers.IntegerField()
     descripcion = serializers.CharField()
     anexo = serializers.FileField()
     

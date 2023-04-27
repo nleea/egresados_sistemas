@@ -1,22 +1,22 @@
 from rest_framework.views import APIView
-from ...serializers.respuesta.respuesta_serializers import RespuestaSerializers, RespuestaPqrsSerializers
+from ...serializers.respuesta.respuesta_serializers import RespuestaSerializers, RespuestaPqrsSerializers, RespuestaSerializersView
 from ....models.models import Respuesta, Pqrs
 from rest_framework.response import Response
 from rest_framework import status
 from ...serializers.pqrs.pqrs_serialziers import PqrsRespuestaSerializers
 
 from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator 
+from django.utils.decorators import method_decorator
 
-@method_decorator(cache_page(60 * 5), name='dispatch') 
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class RespuestaView(APIView):
 
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = RespuestaSerializers(
-            Respuesta.objects.all(), many=True, meta=meta)
+        data = RespuestaSerializersView(
+            Respuesta.objects.select_related("pqrs").all(), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK,)
 
 
@@ -25,8 +25,7 @@ class SaveRespuestaView(APIView):
     def post(self, request, *args, **kwargs):
         data = RespuestaSerializers(data=request.data)
         if data.is_valid():
-            data.save(
-                pqrs=request.data["pqrs"], userCreate=request.user)
+            data.save(userCreate=request.user)
             return Response("Sucess", status.HTTP_200_OK)
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -81,7 +80,8 @@ class UpdateRespuestaView(APIView):
 
         return Response(instance.errors, status.HTTP_400_BAD_REQUEST)
 
-@method_decorator(cache_page(60 * 5), name='dispatch') 
+
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class RespuestasQuery(APIView):
 
     def get_object(self):
@@ -107,7 +107,7 @@ class RespuestasQuery(APIView):
 
         pqrsId = request.data["pqrs"]
         respuesta, pqrs = self.query(pqrsId)
-        
+
         if respuesta is None or pqrs is None:
             return Response("PQRS with id {} not exist".format(pqrsId), status.HTTP_400_BAD_REQUEST)
 

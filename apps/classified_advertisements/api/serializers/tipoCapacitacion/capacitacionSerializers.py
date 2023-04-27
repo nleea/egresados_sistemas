@@ -1,11 +1,13 @@
 from rest_framework import serializers
-from ....models.models import SubCategoria,Categoria,TiposCapacitaciones
+from ....models.models import TiposCapacitaciones
 from ..BaseSerializers import BaseSerializers
-from ...serializers.category.category_serializers import CategorySerializers
 
+class CapacitacionesSerializersView(BaseSerializers):
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
 
 class CapacitacionesSerializers(BaseSerializers):
-    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
         
     class Meta:

@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ...serializers.category.category_serializers import CategorySerializers
+from ...serializers.category.category_serializers import CategorySerializers,CategorySerializersView
 from ....models.models import Categoria
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,7 +13,7 @@ class CategoryView(APIView):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = CategorySerializers(Categoria.objects.all(),many=True,meta=meta)
+        data = CategorySerializersView(Categoria.objects.select_related("userCreate","userUpdate").all(),many=True,meta=meta)
         return Response(data.data,status.HTTP_200_OK)
 
 

@@ -3,8 +3,10 @@ from ...serializers.subCategory.subCategory_serializers import SubCategorySerial
 from ....models.models import SubCategoria
 from rest_framework.response import Response
 from rest_framework import status
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator 
 
-
+@method_decorator(cache_page(60 * 5), name='dispatch') 
 class SubCategoryView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -12,7 +14,7 @@ class SubCategoryView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
         data = SubCategorySerializersView(
-            SubCategoria.objects.all(), many=True, meta=meta)
+            SubCategoria.objects.select_related("categoriId","userUpdate","userCreate").all(), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK)
 
 

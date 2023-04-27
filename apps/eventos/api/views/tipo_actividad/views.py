@@ -3,8 +3,10 @@ from rest_framework.response import Response
 from ...serializers.eventos.eventos_tipo import TipoEventosSerializers
 from ....models.models import TipoEvento
 from rest_framework import status
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
-
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class TipoEventosView(APIView):
 
     def get(self, request, *args, **kwargs):

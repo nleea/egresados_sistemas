@@ -5,35 +5,19 @@ from ..BaseSerializers import BaseSerializers
 
 class EventosSerializersView(BaseSerializers):
 
-    def to_representation(self, instance):
-        return {
-            "id": instance.id,
-            "area": instance.area.name,
-            "subArea": instance.subArea.name,
-            "nombre_actividad": instance.nombre_actividad,
-            "tipo_actividad": instance.tipo_actividad,
-            "responsable": instance.responsable,
-            "fecha": instance.fecha,
-            "hora": instance.hora,
-            "lugar": instance.lugar,
-            "cupos": instance.cupos,
-            "descripcion": instance.descripcion,
-            "objectivo": instance.objectivo,
-            "creado": instance.userCreate.username
-        }
 
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     area = serializers.SlugRelatedField("name", read_only=True)
     subArea = serializers.SlugRelatedField("name", read_only=True)
-    nombre_actividad = serializers.CharField()
-    tipo_actividad = serializers.CharField()
-    responsable = serializers.CharField()
-    fecha = serializers.DateField()
-    hora = serializers.CharField()
-    lugar = serializers.CharField()
-    cupos = serializers.IntegerField()
-    descripcion = serializers.CharField()
-    objectivo = serializers.CharField()
+    nombre_actividad = serializers.CharField(read_only=True)
+    tipo_actividad = serializers.CharField(read_only=True)
+    responsable = serializers.CharField(read_only=True)
+    fecha = serializers.DateField(read_only=True)
+    hora = serializers.CharField(read_only=True)
+    lugar = serializers.CharField(read_only=True)
+    cupos = serializers.IntegerField(read_only=True)
+    descripcion = serializers.CharField(read_only=True)
+    objectivo = serializers.CharField(read_only=True)
 
     class Meta:
         fields = "__all__"

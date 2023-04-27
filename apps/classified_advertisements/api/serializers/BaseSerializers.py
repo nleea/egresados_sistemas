@@ -4,8 +4,8 @@ class BaseSerializers(serializers.Serializer):
     
     createdAt = serializers.DateField(read_only=True)
     updateAt = serializers.DateField(read_only=True)
-    userCreate = serializers.SlugRelatedField("username",read_only=True)
-    userUpdate = serializers.SlugRelatedField("username",read_only=True)
+    userCreate = serializers.CharField(read_only=True)
+    userUpdate = serializers.CharField(read_only=True)
     
     
     def __init__(self, instance=None, data=..., **kwargs):

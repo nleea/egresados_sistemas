@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ...serializers.tipoCapacitacion.capacitacionSerializers import CapacitacionesSerializers
+from ...serializers.tipoCapacitacion.capacitacionSerializers import CapacitacionesSerializers,CapacitacionesSerializersView
 from ....models.models import TiposCapacitaciones
 from rest_framework.response import Response
 from rest_framework import status
@@ -8,18 +8,16 @@ from ..Base.BaseView import ViewPagination
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator 
 
-@method_decorator(cache_page(60 * 5), name='dispatch') 
+# @method_decorator(cache_page(60 * 5), name='dispatch') 
 class CapacitacionesView(ViewPagination):
 
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        results = self.paginate_queryset(
-            TiposCapacitaciones.objects.all())
 
-        data = CapacitacionesSerializers(
-            results, many=True, meta=meta)
+        data = CapacitacionesSerializersView(
+             self.paginate_queryset(TiposCapacitaciones.objects.select_related("userCreate","userUpdate").all()), many=True, meta=meta)
         paginated_data = self.get_paginated_response(data.data).data
 
         if paginated_data is None:

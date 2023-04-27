@@ -1,21 +1,21 @@
 from rest_framework.views import APIView
-from ...serializers.asignacion.asignacion_serializers import AsignacionSerializers
+from ...serializers.asignacion.asignacion_serializers import AsignacionSerializers, AsignacionSerializerView
 from ....models.models import Asignacion
 from rest_framework.response import Response
 from rest_framework import status
 
 from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator 
+from django.utils.decorators import method_decorator
 
-@method_decorator(cache_page(60 * 5), name='dispatch') 
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class AsignacionView(APIView):
 
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = AsignacionSerializers(
-            Asignacion.objects.all(), many=True, meta=meta)
+        data = AsignacionSerializerView(
+            Asignacion.objects.select_related("funcionarioId", "pqrs").all(), many=True)
         return Response(data.data, status.HTTP_200_OK)
 
 

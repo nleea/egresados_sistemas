@@ -4,9 +4,9 @@ from ..BaseSerializers import BaseSerializers
 from ...serializers.category.category_serializers import CategorySerializers
 
 class SubCategorySerializersView(BaseSerializers):
-    id = serializers.IntegerField()
-    name = serializers.CharField()
-    categoriId = serializers.PrimaryKeyRelatedField(read_only=True)
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
+    categoriId = serializers.CharField(read_only=True)
 
 
 class SubCategorySerializers(BaseSerializers):

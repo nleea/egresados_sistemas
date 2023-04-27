@@ -18,6 +18,10 @@ class BaseModel(models.Model):
 
 
 class EventosArea(BaseModel):
+    
+    def __str__(self) -> str:
+        return self.name # type: ignore
+    
     class Meta:
         verbose_name = "Area Evento"
         verbose_name_plural = "Areas Eventos"
@@ -25,7 +29,7 @@ class EventosArea(BaseModel):
 
 class SubAreaEventos(BaseModel):
     area = models.ForeignKey(
-        EventosArea, on_delete=models.CASCADE, related_name="areas")
+        EventosArea, on_delete=models.CASCADE, related_name="areas",db_index=True)
 
     class Meta:
         verbose_name = "Sub Area Evento"

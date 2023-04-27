@@ -3,8 +3,11 @@ from rest_framework.response import Response
 from ...serializers.eventos.eventos_sub_area_serializers import EventosSubAreaSerializers, EventosSubAreaSerializersView
 from ....models.models import SubAreaEventos
 from rest_framework import status
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class EventosSubAreaView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -13,7 +16,7 @@ class EventosSubAreaView(APIView):
             meta = request.headers["meta"]
 
         data = EventosSubAreaSerializersView(
-            SubAreaEventos.objects.all(), many=True, meta=meta)
+            SubAreaEventos.objects.select_related("area").defer("area__userCreate_id", "area__userUpdate_id", "userCreate", "userUpdate").all(), many=True, meta=meta)
 
         return Response(data.data, status.HTTP_200_OK)
 
@@ -22,7 +25,8 @@ class EventosQuery(APIView):
 
     def post(self, request, *args, **kwargs):
         if 'area' in request.data:
-            subAreas = SubAreaEventos.objects.filter(area=request.data["area"])
+            subAreas = SubAreaEventos.objects.filter(
+                area=request.data["area"]).select_related("area")
             data = EventosSubAreaSerializersView(subAreas, many=True)
             return Response(data.data, status.HTTP_200_OK)
         else:

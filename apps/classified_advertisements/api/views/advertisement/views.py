@@ -1,14 +1,13 @@
 from rest_framework.views import APIView
 from ...serializers.advertissement.advertisement_serialziers import AdvertisementSerializers, AdvertisementSerializersView
 from ...serializers.subCategory.subCategory_serializers import SubCategorySerializersView
-from ....models.models import Anuncio, SubCategoria
+from ....models.models import Anuncio, SubCategoria,RedesSociales
 from rest_framework.response import Response
 from rest_framework import status
 from ..Base.BaseView import ViewPagination
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator 
 
-@method_decorator(cache_page(60 * 5), name='dispatch') 
 class AdvertisementsQueryView(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -23,16 +22,16 @@ class AdvertisementsQueryView(APIView):
 
         return Response(results, status.HTTP_200_OK,)
 
-
+@method_decorator(cache_page(60 * 5), name='dispatch') 
 class AdvertisementView(ViewPagination):
 
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-
-        results = self.paginate_queryset(
-            Anuncio.objects.all())
+        anuncios = Anuncio.objects.select_related("subCategori","userCreate","userUpdate").prefetch_related("redes","tipo_capacitacion").all()
+        
+        results = self.paginate_queryset(anuncios)
         data = AdvertisementSerializersView(
             results, many=True, meta=meta)
         paginated_data = self.get_paginated_response(data.data).data
