@@ -31,7 +31,7 @@ class AdvertisementSerializersView(BaseSerializers):
     descripcion = serializers.CharField(read_only=True)
     telefono_emprendimiento = serializers.CharField(read_only=True)
     correo_emprendimiento = serializers.EmailField(read_only=True)
-    ciudad = serializers.CharField(read_only=True)
+    corregimiento = serializers.CharField(read_only=True)
     municipio = serializers.CharField(read_only=True)
     redes = RedesSocialesSerializers(many=True, read_only=True)
     direccion = serializers.CharField(read_only=True)
@@ -56,7 +56,7 @@ class AdvertisementSerializers(BaseSerializers):
     descripcion = serializers.CharField()
     telefono_emprendimiento = serializers.CharField()
     correo_emprendimiento = serializers.EmailField()
-    ciudad = serializers.CharField()
+    corregimiento = serializers.CharField()
     municipio = serializers.CharField()
     direccion = serializers.CharField()
     subCategori = serializers.IntegerField()
@@ -76,7 +76,7 @@ class AdvertisementSerializers(BaseSerializers):
                                          descripcion=validated_data["descripcion"], telefono_emprendimiento=validated_data[
                                              "telefono_emprendimiento"],
                                          correo_emprendimiento=validated_data[
-                                             "correo_emprendimiento"], ciudad=validated_data["ciudad"],
+                                             "correo_emprendimiento"], corregimiento=validated_data["corregimiento"],
                                          municipio=validated_data["municipio"], direccion=validated_data[
                                              "direccion"], userCreate=validated_data["userCreate"],
                                          subCategori_id=validated_data["subCategori"], metodos_entrega=metodos_entrega,
@@ -107,9 +107,9 @@ class AdvertisementSerializers(BaseSerializers):
             'telefono_emprendimiento', instance.telefono_emprendimiento)
         instance.correo_emprendimiento = validated_data.get(
             'correo_emprendimiento', instance.correo_emprendimiento)
-        instance.ciudad = validated_data.get('ciudad', instance.ciudad)
+        instance.corregimiento = validated_data.get('corregimiento', instance.corregimiento)
         instance.municipio = validated_data.get(
-            'direccion', instance.municipio)
+            'municipio', instance.municipio)
         instance.direccion = validated_data.get(
             'direccion', instance.direccion)
         instance.subCategori_id = validated_data.get(
