@@ -585,3 +585,104 @@
 2023-04-28 15:42:36,217:INFO:configs.middlewares.auth:request received for endpoint /advertisements/create/
 2023-04-28 15:42:37,275:WARNING:root:The response content must be rendered before it can be iterated over.
 2023-04-28 15:42:37,276:WARNING:django.request:Bad Request: /advertisements/create/
+2023-04-28 16:08:08,119:INFO:configs.middlewares.auth:request received for endpoint /eventos/
+2023-04-28 16:08:26,603:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 16:08:27,792:WARNING:root:{"anexo":["No file was submitted."]}
+2023-04-28 16:08:28,239:WARNING:django.request:Bad Request: /pqrs/respuesta/create/
+2023-04-28 16:11:02,128:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:11:06,444:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 16:11:07,522:WARNING:root:{"anexo":["No file was submitted."]}
+2023-04-28 16:11:07,964:WARNING:django.request:Bad Request: /pqrs/respuesta/create/
+2023-04-28 16:11:15,223:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:11:21,139:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:11:33,381:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:11:38,023:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 16:11:39,088:WARNING:root:{"anexo":["No file was submitted."]}
+2023-04-28 16:11:39,538:WARNING:django.request:Bad Request: /pqrs/respuesta/create/
+2023-04-28 16:11:56,862:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:11:58,081:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:11:58,436:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:12:08,623:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:12:12,346:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:12:13,414:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:12:13,757:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:12:21,297:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:12:25,007:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:12:26,072:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:12:26,407:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:12:40,589:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:12:47,968:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:12:49,361:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:12:49,717:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:13:27,726:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:13:31,927:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:13:32,988:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:13:33,341:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:13:43,727:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:13:47,893:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:13:48,944:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:13:49,308:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:14:13,849:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:14:18,158:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:14:19,258:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:14:19,621:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:14:26,791:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:14:31,479:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:14:32,558:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:14:32,920:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:14:42,903:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:14:46,809:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:14:47,867:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:14:48,216:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:15:30,926:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:16:47,600:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:16:51,201:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:21:25,842:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:21:42,382:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:22:03,510:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:22:07,132:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:22:10,769:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:22:15,383:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:22:18,249:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:22:52,282:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:22:55,072:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:23:07,605:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:23:11,332:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:23:31,080:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:23:35,511:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:23:49,119:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:23:52,990:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:23:58,976:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:26:01,181:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:26:07,386:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:26:27,116:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:26:31,203:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:26:39,418:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:26:40,560:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:26:40,910:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:27:07,480:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:27:10,987:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:27:12,064:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 16:27:12,414:WARNING:django.request:Bad Request: /clear/cache
+2023-04-28 16:27:31,801:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:27:35,718:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:27:55,446:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:27:59,035:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:28:03,006:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:28:23,250:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:28:28,624:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:28:45,420:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:29:06,106:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:29:10,142:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:32:25,913:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/urls.py changed, reloading.
+2023-04-28 16:32:53,133:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:33:16,190:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:33:29,075:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:33:43,143:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:33:46,941:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:34:54,669:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:34:58,265:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 16:35:09,753:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:35:23,407:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 16:35:27,028:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 16:35:29,899:INFO:configs.middlewares.auth:request received for endpoint /advertisements/

@@ -1,6 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.utils.serializer_helpers import ReturnDict
 import json
+import re
 
 
 def create_response(code, message, data, path='', method=""):
@@ -20,7 +21,7 @@ def create_response(code, message, data, path='', method=""):
         if code != 200:
             proccess_data = data
             if type(data) is list and len(data) > 0:
-                proccess_data = [ "".join(x) for x in data]
+                proccess_data = ["".join(x) for x in data]
             elif type(data) is dict:
                 proccess_data = [{x: data[x]} for x in data]
             elif type(data) is ReturnDict:
@@ -42,16 +43,20 @@ def create_response(code, message, data, path='', method=""):
 
             return data_parse, code
 
+        match = re.search(r'^{', data)
+        if match is None:
+            data_parse["data"] = data
+        else:
+            data = json.loads(data)
+            data_parse["data"] = data if 'count' not in data else data["results"]
+            data_parse["next"] = None if "next" not in data else data["next"]
+            data_parse["previous"] = None if "previous" not in data else data["previous"]
+            data_parse["count"] = None if "count" not in data else data["count"]
 
-        data = json.loads(data)
-        data_parse["data"] = data if 'count' not in data else data["results"]
         data_parse["message"] = message
         data_parse["ok"] = True
         data_parse["path"] = path
         data_parse["method"] = method
-        data_parse["next"] = None if "next" not in data else data["next"]
-        data_parse["previous"] = None if "previous" not in data else data["previous"]
-        data_parse["count"] = None if "count" not in data else data["count"]
 
         return data_parse, code
     except (Exception, BaseException) as creation_error:
