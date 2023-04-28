@@ -704,3 +704,17 @@
 2023-04-28 17:25:29,759:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
 2023-04-28 17:25:37,206:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
 2023-04-28 17:25:40,839:INFO:configs.middlewares.auth:request received for endpoint /eventos/
+2023-04-28 18:39:09,878:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-04-28 18:39:18,730:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 18:39:26,894:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-04-28 18:41:06,421:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-28 18:41:10,706:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-04-28 18:41:17,438:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 18:41:35,450:INFO:configs.middlewares.auth:request received for endpoint /eventos/
+2023-04-28 18:41:59,268:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 18:42:04,152:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-04-28 18:42:14,261:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 18:42:23,348:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 18:42:33,690:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 18:42:37,375:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 18:42:41,582:INFO:configs.middlewares.auth:request received for endpoint /clear/cache

@@ -16,6 +16,7 @@ class CustomResponseMiddleware(object):
         response = self.get_response(request)     
         try:
             decode = response.getvalue().decode()
+            print(decode)
             match = re.search(r'^[\d+]\s(.+)', decode)
             if response.status_code != 200:
                 logging.warning(f"{decode}")
