@@ -14,7 +14,7 @@ class SubCategoryView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
         data = SubCategorySerializersView(
-            SubCategoria.objects.select_related("categoriId","userUpdate","userCreate").all(), many=True, meta=meta)
+            SubCategoria.objects.select_related("categoriaId","userUpdate","userCreate").all(), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK)
 
 

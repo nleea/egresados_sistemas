@@ -29,7 +29,7 @@ class Categoria(BaseModel):
 
 
 class SubCategoria(BaseModel):
-    categoriId = models.ForeignKey(
+    categoriaId = models.ForeignKey(
         Categoria, related_name="_id", on_delete=models.CASCADE, blank=True, null=True)
 
     objects = SubCategoryManagers()
