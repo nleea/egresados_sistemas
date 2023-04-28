@@ -4,13 +4,13 @@ from ..BaseSerializers import BaseSerializers
 
 class RespuestaSerializersView(BaseSerializers):
     pqrs = serializers.CharField(read_only=True)
-    descripcion = serializers.CharField()
-    anexo = serializers.CharField()
+    descripcion = serializers.CharField(read_only=True)
+    anexo = serializers.CharField(read_only=True)
 
 class RespuestaSerializers(BaseSerializers):
     pqrs = serializers.IntegerField()
     descripcion = serializers.CharField()
-    anexo = serializers.FileField()
+    anexo = serializers.FileField(required=False)
     
     class Meta:
         fields = "__all__"
@@ -26,6 +26,7 @@ class RespuestaSerializers(BaseSerializers):
 
     def update(self, instance, validated_data):
         try:
+            instance.descripcion = validated_data.get("descripcion",instance.descripcion)
             instance.userUpdate = validated_data.get("userUpdate",instance.userUpdate)
             instance.save()
             return instance
