@@ -63,6 +63,7 @@ class AdvertisementSerializers(BaseSerializers):
     metodos_entrega = serializers.ListField()
     formas_pago = serializers.ListField()
     tipo_capacitacion = serializers.ListField()
+    redes = serializers.ListField()
 
     class Meta:
         fields = "__all__"

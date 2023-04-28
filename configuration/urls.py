@@ -21,6 +21,7 @@ from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
 from django.core.cache import cache
+from django.http import HttpResponse
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -37,7 +38,7 @@ schema_view = get_schema_view(
 
 def clear_cache(request):
     cache.clear()
-    return request
+    return HttpResponse("Clear Cache",content_type="application/json",status=200)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,7 +47,7 @@ urlpatterns = [
     path("eventos/", include('apps.eventos.api.urls')),
     path("poll/", include('apps.encuestas.api.urls')),
     path("pqrs/",include("apps.pqrs.api.urls")),
-    path("cache/clear",clear_cache),
+    path("clear/cache",clear_cache),
     re_path(r'^redoc/$', schema_view.with_ui('redoc',
             cache_timeout=0), name='schema-redoc'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

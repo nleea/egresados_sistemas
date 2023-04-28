@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.utils.serializer_helpers import ReturnDict
+import json
 
 
 def create_response(code, message, data, path='', method=""):
@@ -25,6 +26,8 @@ def create_response(code, message, data, path='', method=""):
             elif type(data) is ReturnDict:
                 proccess_data = [{x: data[x]['non_field_errors'][0]
                                   if "non_field_errors" in data[x] else data[x][0]} for x in data]
+            elif type(data) is str:
+                proccess_data = data
 
             if type(proccess_data) is dict or type(proccess_data) is list:
                 data_parse["errors"] = proccess_data
@@ -39,6 +42,8 @@ def create_response(code, message, data, path='', method=""):
 
             return data_parse, code
 
+
+        data = json.loads(data)
         data_parse["data"] = data if 'count' not in data else data["results"]
         data_parse["message"] = message
         data_parse["ok"] = True

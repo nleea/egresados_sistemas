@@ -43,11 +43,8 @@ class SaveAdvertisementView(APIView):
 
     def post(self, request, *args, **kwargs):
         data = AdvertisementSerializers(data=request.data)
-        redes = []
         if data.is_valid():
-            if 'redes' in request.data:
-                redes = request.data["redes"]
-            data.save(userCreate=request.user, redes=redes)
+            data.save(userCreate=request.user)
             return Response("Success", status.HTTP_200_OK)
 
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
