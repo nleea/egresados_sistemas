@@ -60,14 +60,14 @@ class Anuncio(BaseModel):
 
     nombre_emprendimiento = models.CharField(
         max_length=256, null=False, blank=False)
-    descripción = models.CharField(max_length=300, blank=False, null=False)
+    descripcion = models.CharField(max_length=300, blank=False, null=False)
     telefono_emprendimiento = models.CharField(
         max_length=11, blank=False, null=False)
     correo_emprendimiento = models.EmailField(null=False, blank=False)
     ciudad = models.CharField(max_length=50, null=False, blank=False)
     municipio = models.CharField(max_length=50, null=False, blank=False)
     direccion = models.CharField(max_length=50, null=False, blank=False)
-    subCategori = models.ForeignKey(SubCategoria, on_delete=models.CASCADE)
+    subCategoria = models.ForeignKey(SubCategoria, on_delete=models.CASCADE)
     metodos_entrega = models.CharField(max_length=300)
     formas_pago = models.CharField(max_length=300)
     tipo_capacitacion = models.ManyToManyField(
