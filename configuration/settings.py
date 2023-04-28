@@ -152,7 +152,7 @@ WSGI_APPLICATION = 'configuration.wsgi.application'
 
 db = 'mysql-'
 db += env('MYSQL_DATABASE').strip()
-DATABASES = DBS[db]
+DATABASES = DBS["mysql-aws"]
 
 
 # Password validation
@@ -264,18 +264,18 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 
 
-sentry_sdk.init(
-    dsn="https://933151f4971b4e20a0d864b46a2ee8cc@o4505058180399104.ingest.sentry.io/4505058181840896",
-    integrations=[
-        DjangoIntegration(),
-    ],
+# sentry_sdk.init(
+#     dsn="https://933151f4971b4e20a0d864b46a2ee8cc@o4505058180399104.ingest.sentry.io/4505058181840896",
+#     integrations=[
+#         DjangoIntegration(),
+#     ],
 
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
-    traces_sample_rate=1.0,
+#     # Set traces_sample_rate to 1.0 to capture 100%
+#     # of transactions for performance monitoring.
+#     # We recommend adjusting this value in production.
+#     traces_sample_rate=1.0,
 
-    # If you wish to associate users to errors (assuming you are using
-    # django.contrib.auth) you may enable sending PII data.
-    send_default_pii=True
-)
+#     # If you wish to associate users to errors (assuming you are using
+#     # django.contrib.auth) you may enable sending PII data.
+#     send_default_pii=True
+# )

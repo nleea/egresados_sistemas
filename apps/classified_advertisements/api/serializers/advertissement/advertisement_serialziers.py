@@ -1,7 +1,6 @@
 from rest_framework import serializers
-from ....models.models import Anuncio, SubCategoria, RedesSociales, TiposCapacitaciones
+from ....models.models import Anuncio, RedesSociales, TiposCapacitaciones
 from ..subCategory.subCategory_serializers import SubCategorySerializers
-from apps.auth_module.api.serializers.user.users_serializers import UserSerializersSimple
 from ..BaseSerializers import BaseSerializers
 
 
@@ -27,10 +26,9 @@ class RedesHasSocialesSerializers(BaseSerializers):
 
 
 class AdvertisementSerializersView(BaseSerializers):
-
     id = serializers.IntegerField(read_only=True)
     nombre_emprendimiento = serializers.CharField(read_only=True)
-    descripción = serializers.CharField(read_only=True)
+    descripcion = serializers.CharField(read_only=True)
     telefono_emprendimiento = serializers.CharField(read_only=True)
     correo_emprendimiento = serializers.EmailField(read_only=True)
     ciudad = serializers.CharField(read_only=True)
@@ -45,6 +43,7 @@ class AdvertisementSerializersView(BaseSerializers):
     def to_representation(self, instance):
         results = super().to_representation(instance)
         results["formas_pago"] = [x for x in instance.formas_pago.split(",")]
+        results["metodos_entrega"] = [x for x in instance.metodos_entrega.split(",")]
         return results
 
     class Meta:
@@ -54,7 +53,7 @@ class AdvertisementSerializersView(BaseSerializers):
 class AdvertisementSerializers(BaseSerializers):
 
     nombre_emprendimiento = serializers.CharField()
-    descripción = serializers.CharField()
+    descripcion = serializers.CharField()
     telefono_emprendimiento = serializers.CharField()
     correo_emprendimiento = serializers.EmailField()
     ciudad = serializers.CharField()
@@ -74,7 +73,7 @@ class AdvertisementSerializers(BaseSerializers):
         formas_pago = ",".join(validated_data["formas_pago"])
 
         anuncio = Anuncio.objects.create(nombre_emprendimiento=validated_data["nombre_emprendimiento"],
-                                         descripción=validated_data["descripción"], telefono_emprendimiento=validated_data[
+                                         descripcion=validated_data["descripcion"], telefono_emprendimiento=validated_data[
                                              "telefono_emprendimiento"],
                                          correo_emprendimiento=validated_data[
                                              "correo_emprendimiento"], ciudad=validated_data["ciudad"],
@@ -102,8 +101,8 @@ class AdvertisementSerializers(BaseSerializers):
             validated_data["formas_pago"]) if "formas_pago" in validated_data != None else instance.formas_pago
         instance.nombre_emprendimiento = validated_data.get(
             'nombre_emprendimiento', instance.nombre_emprendimiento)
-        instance.descripción = validated_data.get(
-            'descripción', instance.descripción)
+        instance.descripcion = validated_data.get(
+            'descripcion', instance.descripcion)
         instance.telefono_emprendimiento = validated_data.get(
             'telefono_emprendimiento', instance.telefono_emprendimiento)
         instance.correo_emprendimiento = validated_data.get(

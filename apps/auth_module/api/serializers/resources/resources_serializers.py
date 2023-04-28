@@ -1,16 +1,16 @@
 from ....models import Resources, Resources_roles, Roles
-from rest_framework.serializers import ModelSerializer, Serializer, IntegerField, BooleanField,CharField
+from rest_framework.serializers import Serializer, IntegerField, BooleanField,CharField
 from configs.helpers.menu_resources import menuResources
 
 
 class ResourcesSerializers(Serializer):
-    id = IntegerField()
-    path = CharField()
-    id_padre = IntegerField()
-    path = CharField()
-    icono = CharField()
-    link = CharField()
-    titulo = CharField()
+    id = IntegerField(read_only=True)
+    path = CharField(read_only=True)
+    id_padre = IntegerField(read_only=True)
+    path = CharField(read_only=True)
+    icono = CharField(read_only=True)
+    link = CharField(read_only=True)
+    titulo = CharField(read_only=True)
     
     class Meta:
         fields ="__All__"
