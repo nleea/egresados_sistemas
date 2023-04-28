@@ -8,7 +8,7 @@ from ..Base.BaseView import ViewPagination
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator 
 
-# @method_decorator(cache_page(60 * 5), name='dispatch') 
+@method_decorator(cache_page(60 * 5), name='dispatch') 
 class CapacitacionesView(ViewPagination):
 
     def get(self, request, *args, **kwargs):

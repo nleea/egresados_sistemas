@@ -1,5 +1,4 @@
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
 from ...serializers.momento.momento_serializers import MomentSerializers
 from ....models.models import TipoMomento
 from rest_framework.response import Response
@@ -10,7 +9,12 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator 
 
 @method_decorator(cache_page(60 * 5), name='dispatch') 
-class MomentView(BaseView):
+class MomentView(APIView):
+    
+    def get_meta(self) -> object | None:
+        if "meta" in self.request.headers:
+            return self.request.headers["meta"]
+        return None
 
     def get(self, request, *args, **kwargs):
         data = MomentSerializers(

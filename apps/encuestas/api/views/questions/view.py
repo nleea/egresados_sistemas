@@ -11,7 +11,7 @@ from django.utils.decorators import method_decorator
 class QuestionsView(APIView):
 
     def get(self, request, *args, **kwargs):
-        data = QuestionSerializers(Question.objects.all(), many=True)
+        data = QuestionSerializers(Question.objects.select_related("momento").all(), many=True)
         return Response(data.data, status.HTTP_200_OK)
 
 
