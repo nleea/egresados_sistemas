@@ -345,6 +345,7 @@
 2023-04-28 13:53:20,218:DEBUG:environ.environ:get 'SECRET_OR_KEY' casted as 'None' with default '<NoValue>'
 2023-04-28 13:53:20,320:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
 2023-04-28 13:53:43,590:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+<<<<<<< HEAD
 2023-04-28 14:04:38,639:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
 2023-04-28 14:15:52,676:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/urls.py changed, reloading.
 2023-04-28 14:30:38,296:INFO:configs.middlewares.auth:request received for endpoint /advertisements/create/
