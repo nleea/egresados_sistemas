@@ -59,7 +59,7 @@ class AdvertisementSerializers(BaseSerializers):
     corregimiento = serializers.CharField()
     municipio = serializers.CharField()
     direccion = serializers.CharField()
-    subCategori = serializers.IntegerField()
+    subCategoria = serializers.IntegerField()
     metodos_entrega = serializers.ListField()
     formas_pago = serializers.ListField()
     tipo_capacitacion = serializers.ListField()
@@ -80,7 +80,7 @@ class AdvertisementSerializers(BaseSerializers):
                                              "correo_emprendimiento"], corregimiento=validated_data["corregimiento"],
                                          municipio=validated_data["municipio"], direccion=validated_data[
                                              "direccion"], userCreate=validated_data["userCreate"],
-                                         subCategoria_id=validated_data["subCategori"], metodos_entrega=metodos_entrega,
+                                         subCategoria_id=validated_data["subCategoria"], metodos_entrega=metodos_entrega,
                                          formas_pago=formas_pago)
 
         if len(validated_data.get("tipo_capacitacion", None)):

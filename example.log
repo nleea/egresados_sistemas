@@ -787,3 +787,17 @@
 2023-04-28 19:31:11,459:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
 2023-04-28 19:31:11,510:WARNING:root:The response content must be rendered before it can be iterated over.
 2023-04-28 19:31:11,521:WARNING:django.request:Bad Request: /advertisements/
+2023-04-28 19:31:55,802:INFO:environ.environ:/home/ubuntu/main/egresados_sistemas/configs/.env not found - if you're not configuring your environment separately, check this.
+2023-04-28 19:31:55,805:INFO:environ.environ:/home/ubuntu/main/egresados_sistemas/configs/.env not found - if you're not configuring your environment separately, check this.
+2023-04-28 19:31:55,806:DEBUG:environ.environ:get 'SECRET_OR_KEY' casted as 'None' with default '<NoValue>'
+2023-04-28 19:31:55,807:DEBUG:environ.environ:get 'SECRET_OR_KEY' casted as 'None' with default '<NoValue>'
+2023-04-28 19:31:56,076:INFO:configs.middlewares.auth:request received for endpoint /
+2023-04-28 19:31:56,076:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-04-28 19:31:56,077:WARNING:django.request:Unauthorized: /
+2023-04-28 19:31:56,342:INFO:configs.middlewares.auth:request received for endpoint /favicon.ico
+2023-04-28 19:31:56,343:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-04-28 19:31:56,343:WARNING:django.request:Unauthorized: /favicon.ico
+2023-04-28 19:32:04,373:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 19:32:16,930:INFO:configs.middlewares.auth:request received for endpoint /advertisements/create/
+2023-04-28 19:32:17,052:WARNING:root:{"subCategori":["This field is required."]}
+2023-04-28 19:32:17,069:WARNING:django.request:Bad Request: /advertisements/create/
