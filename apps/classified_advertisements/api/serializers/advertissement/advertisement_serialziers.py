@@ -79,7 +79,7 @@ class AdvertisementSerializers(BaseSerializers):
                                              "correo_emprendimiento"], corregimiento=validated_data["corregimiento"],
                                          municipio=validated_data["municipio"], direccion=validated_data[
                                              "direccion"], userCreate=validated_data["userCreate"],
-                                         subCategori_id=validated_data["subCategori"], metodos_entrega=metodos_entrega,
+                                         subCategoria_id=validated_data["subCategori"], metodos_entrega=metodos_entrega,
                                          formas_pago=formas_pago)
 
         if len(validated_data.get("tipo_capacitacion", None)):

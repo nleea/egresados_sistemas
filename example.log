@@ -1718,3 +1718,16 @@ TypeError: 'int' object is not callable
 2023-04-28 13:53:43,590:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
 2023-04-28 14:04:38,639:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
 2023-04-28 14:15:52,676:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/urls.py changed, reloading.
+2023-04-28 14:30:38,296:INFO:configs.middlewares.auth:request received for endpoint /advertisements/create/
+2023-04-28 14:30:39,685:WARNING:root:{"descripcion":["This field is required."],"corregimiento":["This field is required."]}
+2023-04-28 14:30:40,045:WARNING:django.request:Bad Request: /advertisements/create/
+2023-04-28 14:30:53,847:INFO:configs.middlewares.auth:request received for endpoint /advertisements/create/
+2023-04-28 14:30:55,014:WARNING:root:Expecting value: line 1 column 1 (char 0)
+2023-04-28 14:30:55,376:WARNING:django.request:Bad Request: /advertisements/create/
+2023-04-28 14:31:58,074:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-28 14:32:01,930:INFO:configs.middlewares.auth:request received for endpoint /advertisements/create/
+2023-04-28 14:32:02,991:WARNING:root:Expecting value: line 1 column 1 (char 0)
+2023-04-28 14:32:03,347:WARNING:django.request:Bad Request: /advertisements/create/
+2023-04-28 14:32:09,712:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-28 14:32:19,578:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/serializers/advertissement/advertisement_serialziers.py changed, reloading.
+2023-04-28 14:32:23,515:INFO:configs.middlewares.auth:request received for endpoint /advertisements/create/
