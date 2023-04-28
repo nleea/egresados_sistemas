@@ -42,9 +42,9 @@ def create_response(code, message, data, path='', method=""):
                 data_parse["method"] = method
 
             return data_parse, code
-
+        
         match = re.search(r'^{', data)
-        if match is None:
+        if match is None and len(data) < 100:
             data_parse["data"] = data
         else:
             data = json.loads(data)
