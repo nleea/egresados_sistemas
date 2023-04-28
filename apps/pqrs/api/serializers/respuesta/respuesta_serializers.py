@@ -20,9 +20,9 @@ class RespuestaSerializers(BaseSerializers):
             userCreate = None
             if "userCreate" in validated_data:
                 userCreate = validated_data["userCreate"]
-            return Respuesta.objects.create(descripcion=validated_data["descripcion"],pqrs_id=validated_data["pqrs"],userCreate=userCreate,anexo=validated_data["anexo"])
+            return Respuesta.objects.create(descripcion=validated_data["descripcion"],pqrs_id=validated_data["pqrs"],userCreate=userCreate,anexo= validated_data["anexo"] if "anexo" in validated_data else None)
         except Pqrs.DoesNotExist as e:
-            raise serializers.ValidationError(e.args[0])
+            raise serializers.ValidationError(e.args)
 
     def update(self, instance, validated_data):
         try:

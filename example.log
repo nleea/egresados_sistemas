@@ -722,3 +722,42 @@
 2023-04-28 18:59:46,121:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
 2023-04-28 18:59:54,712:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
 2023-04-28 19:00:48,812:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
+2023-04-28 19:12:18,068:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:12:48,536:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-28 19:12:52,801:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:13:21,689:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:13:35,041:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-28 19:13:40,654:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-28 19:13:59,975:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-28 19:14:33,888:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 19:14:37,803:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 19:14:38,974:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 19:14:39,330:WARNING:django.request:Bad Request: /pqrs/respuesta/create/
+2023-04-28 19:14:51,439:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 19:15:01,096:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 19:15:13,054:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/helpers/create_response.py changed, reloading.
+2023-04-28 19:15:24,717:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-28 19:15:28,775:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 19:15:38,882:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-28 19:15:56,874:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-28 19:16:15,936:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
+2023-04-28 19:16:19,899:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 19:16:26,981:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
+2023-04-28 19:16:31,050:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 19:16:36,105:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
+2023-04-28 19:16:44,027:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-28 19:16:48,287:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 19:16:58,383:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-28 19:17:08,518:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
+2023-04-28 19:17:12,392:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 19:17:50,300:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
+2023-04-28 19:17:54,793:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 19:17:59,314:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:18:28,310:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/models/models.py changed, reloading.
+2023-04-28 19:18:32,203:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:19:46,408:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/models/models.py changed, reloading.
+2023-04-28 19:19:50,245:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:20:05,870:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
+2023-04-28 19:20:31,119:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:20:43,724:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-28 19:20:46,978:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/

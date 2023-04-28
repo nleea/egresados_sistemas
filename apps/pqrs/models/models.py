@@ -41,6 +41,8 @@ class Pqrs(BaseModel):
     class Meta:
         verbose_name = 'Pqrs'
 
+    def __str__(self):
+        return self.titulo
 
 class Asignacion(BaseModel):
     funcionarioId = models.ForeignKey(User, on_delete=models.CASCADE)
