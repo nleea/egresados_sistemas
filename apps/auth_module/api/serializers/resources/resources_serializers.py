@@ -4,11 +4,13 @@ from configs.helpers.menu_resources import menuResources
 
 
 class ResourcesSerializers(Serializer):
+    id = IntegerField()
     path = CharField()
     id_padre = IntegerField()
     path = CharField()
     icono = CharField()
     link = CharField()
+    titulo = CharField()
     
     class Meta:
         fields ="__All__"
