@@ -37,14 +37,14 @@ class AdvertisementSerializersView(BaseSerializers):
     municipio = serializers.CharField(read_only=True)
     redes = RedesSocialesSerializers(many=True, read_only=True)
     direccion = serializers.CharField(read_only=True)
-    subCategori = serializers.CharField(read_only=True)
+    subCategoria = SubCategorySerializers(read_only=True)
     metodos_entrega = serializers.CharField(read_only=True)
     formas_pago = serializers.CharField(read_only=True)
     tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
-        results["formas_pago"] = instance.formas_pago.split(",")
+        results["formas_pago"] = [x for x in instance.formas_pago.split(",")]
         return results
 
     class Meta:

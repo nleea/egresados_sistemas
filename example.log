@@ -1,0 +1,28 @@
+2023-04-28 02:18:00,994:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 02:18:05,065:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): o4505058180399104.ingest.sentry.io:443
+2023-04-28 02:18:05,579:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 41
+2023-04-28 02:18:22,130:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/serializers/advertissement/advertisement_serialziers.py changed, reloading.
+2023-04-28 02:18:22,234:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 2
+2023-04-28 02:18:26,085:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 02:18:28,582:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): o4505058180399104.ingest.sentry.io:443
+2023-04-28 02:18:29,035:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 41
+2023-04-28 02:18:52,572:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/views/advertisement/views.py changed, reloading.
+2023-04-28 02:18:52,697:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 2
+2023-04-28 02:18:56,633:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 02:18:58,579:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): o4505058180399104.ingest.sentry.io:443
+2023-04-28 02:18:58,987:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 41
+2023-04-28 02:19:05,597:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/views/advertisement/views.py changed, reloading.
+2023-04-28 02:19:05,711:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 2
+2023-04-28 02:19:15,109:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/views/advertisement/views.py changed, reloading.
+2023-04-28 02:19:19,004:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 02:19:21,626:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): o4505058180399104.ingest.sentry.io:443
+2023-04-28 02:19:22,069:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 41
+2023-04-28 02:20:21,795:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 2
+2023-04-28 13:25:21,448:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/views/advertisement/views.py changed, reloading.
+2023-04-28 13:25:56,826:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/serializers/advertissement/advertisement_serialziers.py changed, reloading.
+2023-04-28 13:27:17,165:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/serializers/advertissement/advertisement_serialziers.py changed, reloading.
+2023-04-28 13:27:33,662:DEBUG:urllib3.connectionpool:Starting new HTTPS connection (1): o4505058180399104.ingest.sentry.io:443
+2023-04-28 13:27:34,148:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 41
+2023-04-28 13:27:38,527:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 13:27:43,561:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 41
+2023-04-28 13:28:33,822:DEBUG:urllib3.connectionpool:https://o4505058180399104.ingest.sentry.io:443 "POST /api/4505058181840896/envelope/ HTTP/1.1" 200 2
