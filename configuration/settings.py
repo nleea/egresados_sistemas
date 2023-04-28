@@ -34,8 +34,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_OR_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
-
+DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 #CORS_ALLOWED_ORIGINS = []
@@ -82,10 +81,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    "configs.middlewares.auth.CustomMiddleware",
+    # "configs.middlewares.auth.CustomMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "configs.middlewares.view_responses.CustomResponseMiddleware"
+    # "configs.middlewares.view_responses.CustomResponseMiddleware"
 ]
 
 DEBUG_TOOLBAR_PANELS = [

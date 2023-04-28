@@ -29,7 +29,7 @@ class AdvertisementView(ViewPagination):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        anuncios = Anuncio.objects.select_related("subCategoria","userCreate","userUpdate").prefetch_related("redes","tipo_capacitacion").all()
+        anuncios = Anuncio.objects.select_related("subCategoria","userCreate","userUpdate","subCategoria__categoriaId").prefetch_related("redes","tipo_capacitacion").all()
         results = self.paginate_queryset(anuncios)
         data = AdvertisementSerializersView(
             results, many=True, meta=meta)

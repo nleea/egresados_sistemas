@@ -761,3 +761,21 @@
 2023-04-28 19:20:31,119:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
 2023-04-28 19:20:43,724:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
 2023-04-28 19:20:46,978:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:31:15,608:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 19:42:00,184:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-04-28 19:42:16,663:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-04-28 19:42:40,345:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 19:42:40,345:WARNING:django.request:Bad Request: /eventos/
+2023-04-28 19:42:40,434:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-04-28 19:42:40,435:WARNING:django.request:Not Found: /favicon.ico
+2023-04-28 19:42:45,966:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.

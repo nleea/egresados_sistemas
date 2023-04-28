@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from ....models.models import Anuncio, RedesSociales, TiposCapacitaciones
-from ..subCategory.subCategory_serializers import SubCategorySerializers
+from ..subCategory.subCategory_serializers import SubCategorySerializersView
 from ..BaseSerializers import BaseSerializers
 
 
@@ -35,7 +35,7 @@ class AdvertisementSerializersView(BaseSerializers):
     municipio = serializers.CharField(read_only=True)
     redes = RedesSocialesSerializers(many=True, read_only=True)
     direccion = serializers.CharField(read_only=True)
-    subCategoria = SubCategorySerializers(read_only=True)
+    subCategoria = SubCategorySerializersView(read_only=True)
     metodos_entrega = serializers.CharField(read_only=True)
     formas_pago = serializers.CharField(read_only=True)
     tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
