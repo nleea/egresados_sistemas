@@ -20,7 +20,7 @@ from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from django.conf import settings
 from django.conf.urls.static import static
-
+from django.core.cache import cache
 
 schema_view = get_schema_view(
     openapi.Info(
@@ -35,6 +35,10 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
+def clear_cache(request):
+    cache.clear()
+    return request
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apps.auth_module.api.urls')),
@@ -42,6 +46,7 @@ urlpatterns = [
     path("eventos/", include('apps.eventos.api.urls')),
     path("poll/", include('apps.encuestas.api.urls')),
     path("pqrs/",include("apps.pqrs.api.urls")),
+    path("cache/clear",clear_cache),
     re_path(r'^redoc/$', schema_view.with_ui('redoc',
             cache_timeout=0), name='schema-redoc'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
