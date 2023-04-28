@@ -761,3 +761,29 @@
 2023-04-28 19:20:31,119:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
 2023-04-28 19:20:43,724:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
 2023-04-28 19:20:46,978:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:24:00,780:INFO:environ.environ:/home/ubuntu/main/egresados_sistemas/configs/.env not found - if you're not configuring your environment separately, check this.
+2023-04-28 19:24:00,780:DEBUG:environ.environ:get 'SECRET_OR_KEY' casted as 'None' with default '<NoValue>'
+2023-04-28 19:24:00,899:INFO:environ.environ:/home/ubuntu/main/egresados_sistemas/configs/.env not found - if you're not configuring your environment separately, check this.
+2023-04-28 19:24:00,899:DEBUG:environ.environ:get 'SECRET_OR_KEY' casted as 'None' with default '<NoValue>'
+2023-04-28 19:24:01,226:INFO:configs.middlewares.auth:request received for endpoint /
+2023-04-28 19:24:01,226:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-04-28 19:24:01,227:WARNING:django.request:Unauthorized: /
+2023-04-28 19:24:01,490:INFO:configs.middlewares.auth:request received for endpoint /favicon.ico
+2023-04-28 19:24:01,490:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-04-28 19:24:01,490:WARNING:django.request:Unauthorized: /favicon.ico
+2023-04-28 19:24:20,796:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-28 19:24:24,562:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:24:26,920:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:24:28,400:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-28 19:24:38,661:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-28 19:24:43,139:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-28 19:25:52,483:INFO:configs.middlewares.auth:request received for endpoint /
+2023-04-28 19:25:52,483:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-04-28 19:25:52,484:WARNING:django.request:Unauthorized: /
+2023-04-28 19:26:00,551:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 19:26:49,052:INFO:configs.middlewares.auth:request received for endpoint /
+2023-04-28 19:26:49,052:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-04-28 19:26:49,053:WARNING:django.request:Unauthorized: /
+2023-04-28 19:31:11,459:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 19:31:11,510:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 19:31:11,521:WARNING:django.request:Bad Request: /advertisements/
