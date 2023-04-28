@@ -779,3 +779,32 @@
 
 2023-04-28 19:42:40,435:WARNING:django.request:Not Found: /favicon.ico
 2023-04-28 19:42:45,966:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-04-28 22:06:49,180:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:06:50,461:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 22:06:50,868:WARNING:django.request:Bad Request: /advertisements/query/
+2023-04-28 22:06:54,499:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 22:07:16,310:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-28 22:07:19,938:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:07:21,420:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 22:07:21,896:WARNING:django.request:Bad Request: /advertisements/query/
+2023-04-28 22:07:29,269:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-28 22:07:33,033:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:07:34,419:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-28 22:07:34,881:WARNING:django.request:Bad Request: /advertisements/query/
+2023-04-28 22:07:48,206:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:08:18,526:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-04-28 22:08:33,511:INFO:configs.middlewares.auth:request received for endpoint /advertisements/create/
+2023-04-28 22:08:38,811:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:08:43,513:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:08:51,659:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-28 22:08:59,169:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:09:04,562:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 22:09:16,983:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 22:09:20,806:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-04-28 22:10:08,344:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/views/advertisement/views.py changed, reloading.
+2023-04-28 22:10:16,299:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/models/managers.py changed, reloading.
+2023-04-28 22:10:20,575:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:10:36,674:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:10:47,792:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/api/views/advertisement/views.py changed, reloading.
+2023-04-28 22:10:51,650:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
+2023-04-28 22:10:57,854:INFO:configs.middlewares.auth:request received for endpoint /advertisements/query/
