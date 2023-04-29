@@ -1,11 +1,10 @@
 from rest_framework.views import APIView
-from ...serializers.respuesta.respuesta_serializers import RespuestaSerializers, RespuestaPqrsSerializers, RespuestaSerializersView
+from ...serializers.respuesta.respuesta_serializers import RespuestaSerializers, RespuestaSerializersView
 from ...serializers.pqrs.pqrs_serialziers import PqrsSerializers
 from ....models.models import Respuesta, Pqrs
 from rest_framework.response import Response
 from rest_framework import status
-from ...serializers.pqrs.pqrs_serialziers import PqrsRespuestaSerializers
-
+from ...serializers.pqrs.pqrs_serialziers import PqrsSerializersView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 
@@ -92,37 +91,29 @@ class UpdateRespuestaView(APIView):
 @method_decorator(cache_page(60 * 5), name='dispatch')
 class RespuestasQuery(APIView):
 
-    def get_object(self):
-        try:
-            pk = self.kwargs.get("pk")
-            pqrs = Pqrs.objects.filter(pk=pk)
-            seccionId = Respuesta.objects.filter(pqrs=pqrs[0].pk)
-            return seccionId, pqrs
-        except (Pqrs.DoesNotExist, Respuesta.DoesNotExist):
-            return None, None
-
     def query(self, pk):
         try:
-            seccionId = None
-            pqrs = Pqrs.objects.filter(pk=pk)
-            if pqrs:
-                seccionId = Respuesta.objects.filter(pqrs=pqrs[0].pk)
-            return seccionId, pqrs
-        except (Pqrs.DoesNotExist, Respuesta.DoesNotExist):
+
+            pqrs = Pqrs.objects.defer("userCreate", "userUpdate","tipopqrs__userCreate","tipopqrs__userUpdate").select_related("tipopqrs","persona").get(pk=pk)
+            respuestas = pqrs.respuesta_pqrs.defer("userCreate", "userUpdate").all()  # type:ignore
+            return pqrs, respuestas
+        except (Pqrs.DoesNotExist):
             return None, None
 
     def post(self, request, *args, **kwargs):
 
         pqrsId = request.data["pqrs"]
-        respuesta, pqrs = self.query(pqrsId)
+        pqrs, respuesta = self.query(pqrsId)
 
-        if respuesta is None or pqrs is None:
+        if pqrs is None:
             return Response("PQRS with id {} not exist".format(pqrsId), status.HTTP_400_BAD_REQUEST)
 
-        data = RespuestaPqrsSerializers(respuesta, many=True)
-        pqrsRespuesta = PqrsRespuestaSerializers(pqrs, many=True)
-        resp = {
-            "pqrs": pqrsRespuesta.data[0],
-            "respuestas": data.data
+        resulst = PqrsSerializersView([pqrs], many=True)
+        resulst_respuestas = RespuestaSerializersView(respuesta, many=True)
+
+        response = {
+            "pqrs":resulst.data,
+            "respuestas": resulst_respuestas.data
         }
-        return Response(resp, status.HTTP_200_OK)
+
+        return Response(response, status.HTTP_200_OK)

@@ -10,17 +10,24 @@ class PqrsSerializersView(BaseSerializers):
     anexo = serializers.FileField(required=False,read_only=True)
     persona = serializers.CharField(read_only=True)
     tipopqrs = serializers.CharField(read_only=True)
+    
+    
+    
+    def __init__(self, instance=None, data=..., **kwargs):
+        meta = bool(kwargs.pop("meta",True))
+        super().__init__(instance, data, **kwargs)
+        
+        if not meta:
+            self.fields.pop("persona")
+            self.fields.pop("tipopqrs")
 
 class PqrsSerializers(BaseSerializers):
     titulo = serializers.CharField()
     description = serializers.CharField()
     persona = serializers.SlugRelatedField("username", read_only=True)
-    tipopqrs = serializers.SlugRelatedField("name", read_only=True)
     tipopqrs = serializers.IntegerField(write_only=True)
     persona = serializers.IntegerField(write_only=True)
     status = serializers.CharField(write_only=True,required=False)
-    status_display = serializers.CharField(
-        source="get_status_display", read_only=True)
     anexo = serializers.FileField(required=False)
 
     class Meta:
@@ -48,8 +55,8 @@ class PqrsSerializers(BaseSerializers):
 
 
 class PqrsRespuestaSerializers(BaseSerializers):
-    titulo = serializers.CharField()
-    description = serializers.CharField()
+    titulo = serializers.CharField(read_only=True)
+    description = serializers.CharField(read_only=True)
 
     class Meta:
         fields = "__all__"

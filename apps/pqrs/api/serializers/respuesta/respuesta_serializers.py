@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ....models.models import Pqrs,Respuesta
 from ..BaseSerializers import BaseSerializers
+from ....api.serializers.pqrs.pqrs_serialziers import PqrsSerializersView
 
 class RespuestaSerializersView(BaseSerializers):
     pqrs = serializers.CharField(read_only=True)
@@ -35,7 +36,8 @@ class RespuestaSerializers(BaseSerializers):
 
 
 class RespuestaPqrsSerializers(BaseSerializers):
-    descripcion = serializers.CharField()
+    descripcion = serializers.CharField(read_only=True)
+        
     
     class Meta:
         fields = "__all__"

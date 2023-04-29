@@ -840,3 +840,36 @@
 2023-04-29 15:33:57,861:INFO:configs.middlewares.auth:request received for endpoint /pqrs/tipo/
 2023-04-29 15:34:12,556:INFO:configs.middlewares.auth:request received for endpoint /pqrs/
 2023-04-29 15:35:00,547:INFO:configs.middlewares.auth:request received for endpoint /pqrs/asignacion/
+2023-04-29 18:27:57,465:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:28:42,328:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 18:28:46,156:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:29:03,203:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-29 18:29:08,005:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:29:36,800:INFO:configs.middlewares.auth:request received for endpoint /pqrs/
+2023-04-29 18:29:49,038:INFO:configs.middlewares.auth:request received for endpoint /pqrs/asignacion/
+2023-04-29 18:29:58,211:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-29 18:30:07,435:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:30:50,363:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 18:30:55,148:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 18:30:59,463:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:31:13,488:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 18:31:26,777:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/respuesta/respuesta_serializers.py changed, reloading.
+2023-04-29 18:31:31,174:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:32:16,335:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 18:32:20,160:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:33:54,759:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:35:03,999:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 18:35:07,698:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:35:57,218:INFO:configs.middlewares.auth:request received for endpoint /clear/cache
+2023-04-29 18:36:01,134:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:36:14,952:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 18:36:51,906:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/serializers/pqrs/pqrs_serialziers.py changed, reloading.
+2023-04-29 18:37:19,782:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/query/
+2023-04-29 18:38:27,272:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-04-29 18:38:46,881:INFO:configs.middlewares.auth:request received for endpoint /eventos/
+2023-04-29 18:38:46,881:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-04-29 18:38:46,881:WARNING:django.request:Unauthorized: /eventos/
+2023-04-29 18:38:46,948:INFO:configs.middlewares.auth:request received for endpoint /favicon.ico
+2023-04-29 18:38:46,948:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-04-29 18:38:46,948:WARNING:django.request:Unauthorized: /favicon.ico
+2023-04-29 18:38:55,676:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.

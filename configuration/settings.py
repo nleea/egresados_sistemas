@@ -81,10 +81,10 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    "configs.middlewares.auth.CustomMiddleware",
+    # "configs.middlewares.auth.CustomMiddleware",
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "configs.middlewares.view_responses.CustomResponseMiddleware"
+    # "configs.middlewares.view_responses.CustomResponseMiddleware"
 ]
 
 DEBUG_TOOLBAR_PANELS = [
@@ -102,6 +102,8 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.redirects.RedirectsPanel',
     'debug_toolbar.panels.profiling.ProfilingPanel',
 ]
+
+RENDER_PANELS = True
 
 INTERNAL_IPS = [
     "127.0.0.1"
