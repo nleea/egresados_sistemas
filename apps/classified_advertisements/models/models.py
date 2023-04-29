@@ -10,9 +10,9 @@ class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
     userCreate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+")
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
     userUpdate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+")
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
 
     class Meta:
         abstract = True
@@ -30,7 +30,7 @@ class Categoria(BaseModel):
 
 class SubCategoria(BaseModel):
     categoriaId = models.ForeignKey(
-        Categoria, related_name="_id", on_delete=models.CASCADE, blank=True, null=True)
+        Categoria, related_name="_id", on_delete=models.CASCADE, blank=True, null=True,db_index=True)
 
     objects = SubCategoryManagers()
     
@@ -67,12 +67,12 @@ class Anuncio(BaseModel):
     corregimiento = models.CharField(max_length=50, null=False, blank=False)
     municipio = models.CharField(max_length=50, null=False, blank=False)
     direccion = models.CharField(max_length=50, null=False, blank=False)
-    subCategoria = models.ForeignKey(SubCategoria, on_delete=models.CASCADE)
+    subCategoria = models.ForeignKey(SubCategoria, on_delete=models.CASCADE,db_index=True)
     metodos_entrega = models.CharField(max_length=300)
     formas_pago = models.CharField(max_length=300)
     tipo_capacitacion = models.ManyToManyField(
-        TiposCapacitaciones)
-    redes = models.ManyToManyField(RedesSociales,related_name="redes_store")
+        TiposCapacitaciones,db_index=True)
+    redes = models.ManyToManyField(RedesSociales,related_name="redes_store",db_index=True)
 
     objects = AdvertisementsManagers()
 

@@ -8,9 +8,9 @@ class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True, blank=True, null=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
     userCreate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+")
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
     userUpdate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+")
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
 
     class Meta:
         abstract = True
@@ -32,8 +32,8 @@ class Pqrs(BaseModel):
 
     titulo = models.CharField(max_length=256)
     description = models.CharField(max_length=600)
-    persona = models.ForeignKey(User, on_delete=models.CASCADE)
-    tipopqrs = models.ForeignKey(TipoPqrs, on_delete=models.CASCADE)
+    persona = models.ForeignKey(User, on_delete=models.CASCADE,db_index=True)
+    tipopqrs = models.ForeignKey(TipoPqrs, on_delete=models.CASCADE,db_index=True)
     anexo = models.FileField(
         upload_to="static/files/pqrs/", blank=True, null=True)
     status = models.CharField(choices=STATUS_PQRS.choices, max_length=10,default=STATUS_PQRS.ACTIVA)
@@ -45,9 +45,9 @@ class Pqrs(BaseModel):
         return self.titulo
 
 class Asignacion(BaseModel):
-    funcionarioId = models.ForeignKey(User, on_delete=models.CASCADE)
+    funcionarioId = models.ForeignKey(User, on_delete=models.CASCADE,db_index=True)
     fecha_asignacion = models.DateField(auto_now=True)
-    pqrs = models.ForeignKey(Pqrs, on_delete=models.CASCADE)
+    pqrs = models.ForeignKey(Pqrs, on_delete=models.CASCADE,db_index=True)
 
     class Meta:
         verbose_name = 'Asignacion'
@@ -56,7 +56,7 @@ class Asignacion(BaseModel):
 
 class Respuesta(BaseModel):
     pqrs = models.ForeignKey(
-        Pqrs, on_delete=models.CASCADE, related_name="respuesta_pqrs")
+        Pqrs, on_delete=models.CASCADE, related_name="respuesta_pqrs",db_index=True)
     anexo = models.FileField(
         upload_to="static/files/respuesta/", blank=True, null=True)
     descripcion = models.CharField(max_length=256, null=True, blank=True)

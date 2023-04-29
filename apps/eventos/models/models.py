@@ -9,9 +9,9 @@ class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
     userCreate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+")
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
     userUpdate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+")
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
 
     class Meta:
         abstract = True
@@ -44,14 +44,14 @@ class TipoEvento(BaseModel):
 
 class Eventos(BaseModel):
     area = models.ForeignKey(
-        EventosArea, on_delete=models.CASCADE, related_name="+")
+        EventosArea, on_delete=models.CASCADE, related_name="+",db_index=True)
     subArea = models.ForeignKey(
-        SubAreaEventos, on_delete=models.CASCADE, related_name="+")
+        SubAreaEventos, on_delete=models.CASCADE, related_name="+",db_index=True)
     nombre_actividad = models.CharField(max_length=256)
     tipo_actividad = models.CharField(max_length=256)
     responsable = models.CharField(max_length=256)
     tipo = models.ForeignKey(
-        TipoEvento, on_delete=models.CASCADE, blank=True, null=True)
+        TipoEvento, on_delete=models.CASCADE, blank=True, null=True,db_index=True)
     fecha = models.DateField(blank=True, null=True)
     hora = models.CharField(max_length=10)
     lugar = models.CharField(max_length=256)

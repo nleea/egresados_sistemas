@@ -6,8 +6,8 @@ User = get_user_model()
 class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True,blank=True, null=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
-    userCreate = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True,related_name="+")
-    userUpdate = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True,related_name="+")
+    userCreate = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True,related_name="+",db_index=True)
+    userUpdate = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True,related_name="+",db_index=True)
     
     class Meta:
         abstract = True
@@ -21,7 +21,7 @@ class TipoMomento(BaseModel):
 
 class Question(BaseModel):
     pregunta_nombre = models.CharField(max_length=500)
-    momento = models.ForeignKey(TipoMomento,on_delete=models.CASCADE)
+    momento = models.ForeignKey(TipoMomento,on_delete=models.CASCADE,db_index=True)
     
     class Meta:
         verbose_name = "Question"
@@ -30,8 +30,8 @@ class Question(BaseModel):
 
 class Answer(BaseModel):
     respuesta = models.CharField(max_length=256)
-    usuario = models.ForeignKey(User,on_delete=models.CASCADE)
-    pregunta = models.ForeignKey(Question,on_delete=models.CASCADE)
+    usuario = models.ForeignKey(User,on_delete=models.CASCADE,db_index=True)
+    pregunta = models.ForeignKey(Question,on_delete=models.CASCADE,db_index=True)
     
     class Meta:
         verbose_name = "Answers"
