@@ -813,3 +813,30 @@
 2023-04-29 12:02:44,119:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/models/models.py changed, reloading.
 2023-04-29 12:03:07,213:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/encuestas/models/models.py changed, reloading.
 2023-04-29 12:03:35,615:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/classified_advertisements/models/models.py changed, reloading.
+2023-04-29 15:06:35,505:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 15:08:29,532:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-29 15:08:29,545:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': ['Authorization has failed, Please send valid token.']}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-04-29 15:08:29,621:WARNING:django.request:Unauthorized: /pqrs/respuesta/create/
+2023-04-29 15:08:44,199:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-29 15:09:01,151:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-29 15:09:02,573:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-29 15:09:03,015:WARNING:django.request:Bad Request: /pqrs/respuesta/create/
+2023-04-29 15:12:02,883:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 15:17:09,104:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-29 15:18:55,258:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 15:26:50,959:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 15:27:09,018:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-29 15:27:10,977:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-04-29 15:27:11,424:WARNING:django.request:Bad Request: /pqrs/respuesta/create/
+2023-04-29 15:27:39,353:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/pqrs/api/views/respuesta/view.py changed, reloading.
+2023-04-29 15:27:44,678:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/create/
+2023-04-29 15:27:52,375:INFO:configs.middlewares.auth:request received for endpoint /pqrs/
+2023-04-29 15:30:52,297:INFO:configs.middlewares.auth:request received for endpoint /pqrs/asignacion/
+2023-04-29 15:31:30,428:INFO:configs.middlewares.auth:request received for endpoint /pqrs/asignacion/create/
+2023-04-29 15:31:34,478:INFO:configs.middlewares.auth:request received for endpoint /pqrs/asignacion/
+2023-04-29 15:31:43,891:INFO:configs.middlewares.auth:request received for endpoint /pqrs/
+2023-04-29 15:31:53,233:INFO:configs.middlewares.auth:request received for endpoint /pqrs/respuesta/
+2023-04-29 15:32:15,023:INFO:configs.middlewares.auth:request received for endpoint /pqrs/
+2023-04-29 15:33:57,861:INFO:configs.middlewares.auth:request received for endpoint /pqrs/tipo/
+2023-04-29 15:34:12,556:INFO:configs.middlewares.auth:request received for endpoint /pqrs/
+2023-04-29 15:35:00,547:INFO:configs.middlewares.auth:request received for endpoint /pqrs/asignacion/

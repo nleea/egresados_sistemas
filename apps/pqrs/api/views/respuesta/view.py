@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from ...serializers.respuesta.respuesta_serializers import RespuestaSerializers, RespuestaPqrsSerializers, RespuestaSerializersView
+from ...serializers.pqrs.pqrs_serialziers import PqrsSerializers
 from ....models.models import Respuesta, Pqrs
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,6 +8,7 @@ from ...serializers.pqrs.pqrs_serialziers import PqrsRespuestaSerializers
 
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
+
 
 @method_decorator(cache_page(60 * 5), name='dispatch')
 class RespuestaView(APIView):
@@ -26,6 +28,12 @@ class SaveRespuestaView(APIView):
         data = RespuestaSerializers(data=request.data)
         if data.is_valid():
             data.save(userCreate=request.user)
+            if "status" in request.data:
+                pqrsResulst = Pqrs.objects.get(pk=request.data["pqrs"])
+                resulst = PqrsSerializers(
+                    pqrsResulst, {"status": request.data["status"]}, partial=True)
+                if resulst.is_valid():
+                    resulst.save()
             return Response("Sucess", status.HTTP_200_OK)
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
