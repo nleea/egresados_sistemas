@@ -11,8 +11,6 @@ class PqrsSerializersView(BaseSerializers):
     persona = serializers.CharField(read_only=True)
     tipopqrs = serializers.CharField(read_only=True)
     
-    
-    
     def __init__(self, instance=None, data=..., **kwargs):
         meta = bool(kwargs.pop("meta",True))
         super().__init__(instance, data, **kwargs)

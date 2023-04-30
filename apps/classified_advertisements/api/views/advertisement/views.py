@@ -22,14 +22,14 @@ class AdvertisementsQueryView(APIView):
 
         return Response(results, status.HTTP_200_OK,)
 
-@method_decorator(cache_page(60 * 5), name='dispatch') 
+# @method_decorator(cache_page(60 * 5), name='dispatch') 
 class AdvertisementView(ViewPagination):
 
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        anuncios = Anuncio.objects.select_related("subCategoria","userCreate","userUpdate","subCategoria__categoriaId").prefetch_related("redes","tipo_capacitacion").all()
+        anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id","redes__userUpdate_id","redes__userCreate_id","subCategoria__userCreate_id").select_related("subCategoria","userCreate","userUpdate","subCategoria__categoriaId").prefetch_related("redes","tipo_capacitacion").all()
         results = self.paginate_queryset(anuncios)
         data = AdvertisementSerializersView(
             results, many=True, meta=meta)

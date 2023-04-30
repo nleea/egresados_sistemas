@@ -873,3 +873,54 @@
 2023-04-29 18:38:46,948:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
 2023-04-29 18:38:46,948:WARNING:django.request:Unauthorized: /favicon.ico
 2023-04-29 18:38:55,676:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-04-30 13:50:40,872:ERROR:django.request:Internal Server Error: /pqrs/respuesta/query/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/views.py", line 497, in dispatch
+    self.initial(request, *args, **kwargs)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/views.py", line 406, in initial
+    neg = self.perform_content_negotiation(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/views.py", line 306, in perform_content_negotiation
+    renderers = self.get_renderers()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/views.py", line 260, in get_renderers
+    return [renderer() for renderer in self.renderer_classes]
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/views.py", line 260, in <listcomp>
+    return [renderer() for renderer in self.renderer_classes]
+TypeError: CustomResponseMiddleware.__init__() missing 1 required positional argument: 'get_response'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/request.py", line 416, in __getattr__
+    return getattr(self._request, attr)
+AttributeError: 'WSGIRequest' object has no attribute 'accepted_renderer'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/views/decorators/csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/views/generic/base.py", line 103, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/decorators.py", line 46, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/decorators.py", line 133, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/views.py", line 477, in raise_uncaught_exception
+    renderer_format = getattr(request.accepted_renderer, 'format')
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework/request.py", line 418, in __getattr__
+    return self.__getattribute__(attr)
+AttributeError: 'Request' object has no attribute 'accepted_renderer'
+2023-04-30 13:52:06,984:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-30 13:52:12,945:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-30 13:52:16,995:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-30 13:52:26,090:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-04-30 13:53:48,249:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
+2023-04-30 13:53:58,737:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.

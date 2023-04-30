@@ -7,6 +7,7 @@ from rest_framework import status
 from ...serializers.pqrs.pqrs_serialziers import PqrsSerializersView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
+from django.db.models import Prefetch
 
 
 @method_decorator(cache_page(60 * 5), name='dispatch')
@@ -93,9 +94,9 @@ class RespuestasQuery(APIView):
 
     def query(self, pk):
         try:
-
-            pqrs = Pqrs.objects.defer("userCreate", "userUpdate","tipopqrs__userCreate","tipopqrs__userUpdate").select_related("tipopqrs","persona").get(pk=pk)
-            respuestas = pqrs.respuesta_pqrs.defer("userCreate", "userUpdate").all()  # type:ignore
+            pqrs = Pqrs.objects.defer("userCreate", "userUpdate", "tipopqrs__userCreate", "tipopqrs__userUpdate").prefetch_related(
+                Prefetch("respuesta_pqrs", queryset=Respuesta.objects.defer("userCreate","userUpdate").all())).select_related("tipopqrs", "persona").get(pk=pk)
+            respuestas = pqrs._prefetched_objects_cache["respuesta_pqrs"]# type:ignore
             return pqrs, respuestas
         except (Pqrs.DoesNotExist):
             return None, None
@@ -109,10 +110,11 @@ class RespuestasQuery(APIView):
             return Response("PQRS with id {} not exist".format(pqrsId), status.HTTP_400_BAD_REQUEST)
 
         resulst = PqrsSerializersView([pqrs], many=True)
-        resulst_respuestas = RespuestaSerializersView(respuesta, many=True)
+        resulst_respuestas = RespuestaSerializersView(
+            respuesta, many=True, extra=False)
 
         response = {
-            "pqrs":resulst.data,
+            "pqrs": resulst.data,
             "respuestas": resulst_respuestas.data
         }
 

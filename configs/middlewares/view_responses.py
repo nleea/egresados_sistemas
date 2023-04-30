@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from ..helpers.create_response import create_response
 import json
 from django.db.utils import IntegrityError
+from rest_framework.renderers import JSONRenderer
 import re
 from django.core.cache import cache
 import logging
@@ -30,7 +31,6 @@ class CustomResponseMiddleware(object):
         except (Exception,IntegrityError) as e:
             logging.warning(f"{e}")
             return HttpResponse("Unexpected error",status=400)
-    
     
     def process_exception(self,request,exception):
         return HttpResponse(exception)

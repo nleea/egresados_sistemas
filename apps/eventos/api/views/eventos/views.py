@@ -16,7 +16,7 @@ class EventosView(APIView):
             meta = request.headers["meta"]
 
         data = EventosSerializersView(
-            Eventos.objects.all().select_related("area", "subArea", "userCreate"), many=True, meta=meta)
+            Eventos.objects.select_related("area", "subArea", "userCreate","userUpdate").all(), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK)
 
 

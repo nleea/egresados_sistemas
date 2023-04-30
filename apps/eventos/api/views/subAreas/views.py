@@ -26,7 +26,7 @@ class EventosQuery(APIView):
     def post(self, request, *args, **kwargs):
         if 'area' in request.data:
             subAreas = SubAreaEventos.objects.filter(
-                area=request.data["area"]).select_related("area")
+                area=request.data["area"]).defer("userCreate","userUpdate","area__userCreate_id","area__userUpdate_id").select_related("area")
             data = EventosSubAreaSerializersView(subAreas, many=True)
             return Response(data.data, status.HTTP_200_OK)
         else:

@@ -1,12 +1,21 @@
 from rest_framework import serializers
 from ....models.models import Pqrs,Respuesta
 from ..BaseSerializers import BaseSerializers
-from ....api.serializers.pqrs.pqrs_serialziers import PqrsSerializersView
+
 
 class RespuestaSerializersView(BaseSerializers):
     pqrs = serializers.CharField(read_only=True)
     descripcion = serializers.CharField(read_only=True)
     anexo = serializers.CharField(read_only=True)
+    
+    def __init__(self, instance=None, data=..., **kwargs):
+        
+        extra = bool(kwargs.pop("extra",True))
+        
+        super().__init__(instance, data, **kwargs)
+        
+        if not extra:
+            self.fields.pop("pqrs")
 
 class RespuestaSerializers(BaseSerializers):
     pqrs = serializers.IntegerField()
