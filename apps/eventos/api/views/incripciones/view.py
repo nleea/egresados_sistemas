@@ -2,17 +2,22 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from ....models.models import Inscripcion, User
 from ...serializers.eventos.inscripciones import InscripcionesSerializersView, InscripcionesSerializers
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
-
+@method_decorator(cache_page(60 * 5), name='dispatch')
 class InscripcionView(APIView):
-    def post(self, request, *args, **kwargs):
-        if 'evento' in request.data:
+    def get(self, request, *args, **kwargs):
+        
+        param = request.GET.get("evento",None)
+        
+        if param:
             results = Inscripcion.objects.defer("user__roles", "evento__userCreate_id", "evento__userUpdate_id", "evento__tipo__userCreate_id",
                                                 "evento__tipo__userUpdate_id", "evento__subArea__userUpdate_id",
                                                 "evento__subArea__userCreate_id", "evento__area__userCreate_id",
                                                 "evento__area__userUpdate_id").select_related("evento", "evento__tipo",
                                                                                               "evento__subArea",
-                                                                                              "evento__area").prefetch_related("user").filter(evento=request.data["evento"])
+                                                                                              "evento__area").prefetch_related("user").filter(evento=param)
             inscripcionesResulst = InscripcionesSerializersView(
                 results, many=True)
             return Response(inscripcionesResulst.data, 200)

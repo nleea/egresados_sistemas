@@ -45,7 +45,7 @@ urlpatterns = [
     path('', include('apps.auth_module.api.urls')),
     path('advertisements/', include('apps.classified_advertisements.api.urls')),
     path("eventos/", include('apps.eventos.api.urls')),
-    path("poll/", include('apps.encuestas.api.urls')),
+    re_path("poll/", include('apps.encuestas.api.urls')),
     path("pqrs/",include("apps.pqrs.api.urls")),
     path("clear/cache",clear_cache),
     re_path(r'^redoc/$', schema_view.with_ui('redoc',

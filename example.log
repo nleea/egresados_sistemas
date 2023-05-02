@@ -1136,3 +1136,2234 @@ django.template.response.ContentNotRenderedError: The response content must be r
 2023-05-02 19:40:48,277:WARNING:django.request:Bad Request: /eventos/inscripciones/
 2023-05-02 19:40:57,353:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
 2023-05-02 19:41:12,328:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:29:38,005:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:29:39,470:WARNING:root:<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /eventos/inscripciones/</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; background:#eee; color:#000; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; margin-bottom:.4em; }
+    h1 span { font-size:60%; color:#666; font-weight:normal; }
+    table { border:none; border-collapse: collapse; width:100%; }
+    td, th { vertical-align:top; padding:2px 3px; }
+    th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    #info { background:#f6f6f6; }
+    #info ol { margin: 0.5em 4em; }
+    #info ol li { font-family: monospace; }
+    #summary { background: #ffc; }
+    #explanation { background:#eee; border-bottom: 0px none; }
+    pre.exception_value { font-family: sans-serif; color: #575757; font-size: 1.5em; margin: 10px 0 10px 0; }
+  </style>
+</head>
+<body>
+  <div id="summary">
+    <h1>Page not found <span>(404)</span></h1>
+    
+    <table class="meta">
+      <tr>
+        <th>Request Method:</th>
+        <td>POST</td>
+      </tr>
+      <tr>
+        <th>Request URL:</th>
+        <td>http://127.0.0.1:8000/eventos/inscripciones/</td>
+      </tr>
+      
+    </table>
+  </div>
+  <div id="info">
+    
+      <p>
+      Using the URLconf defined in <code>configuration.urls</code>,
+      Django tried these URL patterns, in this order:
+      </p>
+      <ol>
+        
+          <li>
+            
+                admin/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                auth/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                users/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                roles/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                resources/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                persons/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                genders/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                documents/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                security/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                university/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                __debug__/
+                
+            
+          </li>
+        
+          <li>
+            
+                advertisements/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                create/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                update/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                delete/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                sub/areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                tipos/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                ^(?P&lt;evento&gt;)/$
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                save/
+                
+            
+          </li>
+        
+          <li>
+            
+                poll/
+                
+            
+          </li>
+        
+          <li>
+            
+                pqrs/
+                
+            
+          </li>
+        
+          <li>
+            
+                clear/cache
+                
+            
+          </li>
+        
+          <li>
+            
+                ^redoc/$
+                [name='schema-redoc']
+            
+          </li>
+        
+          <li>
+            
+                ^static/(?P&lt;path&gt;.*)$
+                
+            
+          </li>
+        
+      </ol>
+      <p>
+        
+          The current path, <code>eventos/inscripciones/</code>,
+        
+        didn’t match any of these.
+      </p>
+    
+  </div>
+
+  <div id="explanation">
+    <p>
+      You’re seeing this error because you have <code>DEBUG = True</code> in
+      your Django settings file. Change that to <code>False</code>, and Django
+      will display a standard 404 page.
+    </p>
+  </div>
+</body>
+</html>
+
+2023-05-02 21:29:39,991:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:29:54,806:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:29:55,995:WARNING:root:<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /eventos/inscripciones/</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; background:#eee; color:#000; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; margin-bottom:.4em; }
+    h1 span { font-size:60%; color:#666; font-weight:normal; }
+    table { border:none; border-collapse: collapse; width:100%; }
+    td, th { vertical-align:top; padding:2px 3px; }
+    th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    #info { background:#f6f6f6; }
+    #info ol { margin: 0.5em 4em; }
+    #info ol li { font-family: monospace; }
+    #summary { background: #ffc; }
+    #explanation { background:#eee; border-bottom: 0px none; }
+    pre.exception_value { font-family: sans-serif; color: #575757; font-size: 1.5em; margin: 10px 0 10px 0; }
+  </style>
+</head>
+<body>
+  <div id="summary">
+    <h1>Page not found <span>(404)</span></h1>
+    
+    <table class="meta">
+      <tr>
+        <th>Request Method:</th>
+        <td>GET</td>
+      </tr>
+      <tr>
+        <th>Request URL:</th>
+        <td>http://127.0.0.1:8000/eventos/inscripciones/</td>
+      </tr>
+      
+    </table>
+  </div>
+  <div id="info">
+    
+      <p>
+      Using the URLconf defined in <code>configuration.urls</code>,
+      Django tried these URL patterns, in this order:
+      </p>
+      <ol>
+        
+          <li>
+            
+                admin/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                auth/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                users/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                roles/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                resources/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                persons/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                genders/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                documents/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                security/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                university/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                __debug__/
+                
+            
+          </li>
+        
+          <li>
+            
+                advertisements/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                create/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                update/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                delete/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                sub/areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                tipos/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                ^(?P&lt;evento&gt;)/$
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                save/
+                
+            
+          </li>
+        
+          <li>
+            
+                poll/
+                
+            
+          </li>
+        
+          <li>
+            
+                pqrs/
+                
+            
+          </li>
+        
+          <li>
+            
+                clear/cache
+                
+            
+          </li>
+        
+          <li>
+            
+                ^redoc/$
+                [name='schema-redoc']
+            
+          </li>
+        
+          <li>
+            
+                ^static/(?P&lt;path&gt;.*)$
+                
+            
+          </li>
+        
+      </ol>
+      <p>
+        
+          The current path, <code>eventos/inscripciones/</code>,
+        
+        didn’t match any of these.
+      </p>
+    
+  </div>
+
+  <div id="explanation">
+    <p>
+      You’re seeing this error because you have <code>DEBUG = True</code> in
+      your Django settings file. Change that to <code>False</code>, and Django
+      will display a standard 404 page.
+    </p>
+  </div>
+</body>
+</html>
+
+2023-05-02 21:29:56,389:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:31:00,768:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:31:04,732:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:31:06,039:WARNING:root:<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /eventos/inscripciones/</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; background:#eee; color:#000; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; margin-bottom:.4em; }
+    h1 span { font-size:60%; color:#666; font-weight:normal; }
+    table { border:none; border-collapse: collapse; width:100%; }
+    td, th { vertical-align:top; padding:2px 3px; }
+    th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    #info { background:#f6f6f6; }
+    #info ol { margin: 0.5em 4em; }
+    #info ol li { font-family: monospace; }
+    #summary { background: #ffc; }
+    #explanation { background:#eee; border-bottom: 0px none; }
+    pre.exception_value { font-family: sans-serif; color: #575757; font-size: 1.5em; margin: 10px 0 10px 0; }
+  </style>
+</head>
+<body>
+  <div id="summary">
+    <h1>Page not found <span>(404)</span></h1>
+    
+    <table class="meta">
+      <tr>
+        <th>Request Method:</th>
+        <td>GET</td>
+      </tr>
+      <tr>
+        <th>Request URL:</th>
+        <td>http://127.0.0.1:8000/eventos/inscripciones/</td>
+      </tr>
+      
+    </table>
+  </div>
+  <div id="info">
+    
+      <p>
+      Using the URLconf defined in <code>configuration.urls</code>,
+      Django tried these URL patterns, in this order:
+      </p>
+      <ol>
+        
+          <li>
+            
+                admin/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                auth/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                users/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                roles/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                resources/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                persons/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                genders/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                documents/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                security/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                university/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                __debug__/
+                
+            
+          </li>
+        
+          <li>
+            
+                advertisements/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                create/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                update/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                delete/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                sub/areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                tipos/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                ^(?P&lt;evento&gt;)/$
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                save/
+                
+            
+          </li>
+        
+          <li>
+            
+                poll/
+                
+            
+          </li>
+        
+          <li>
+            
+                pqrs/
+                
+            
+          </li>
+        
+          <li>
+            
+                clear/cache
+                
+            
+          </li>
+        
+          <li>
+            
+                ^redoc/$
+                [name='schema-redoc']
+            
+          </li>
+        
+          <li>
+            
+                ^static/(?P&lt;path&gt;.*)$
+                
+            
+          </li>
+        
+      </ol>
+      <p>
+        
+          The current path, <code>eventos/inscripciones/</code>,
+        
+        didn’t match any of these.
+      </p>
+    
+  </div>
+
+  <div id="explanation">
+    <p>
+      You’re seeing this error because you have <code>DEBUG = True</code> in
+      your Django settings file. Change that to <code>False</code>, and Django
+      will display a standard 404 page.
+    </p>
+  </div>
+</body>
+</html>
+
+2023-05-02 21:31:06,477:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:31:22,521:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:31:23,775:WARNING:root:<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /eventos/inscripciones/</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; background:#eee; color:#000; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; margin-bottom:.4em; }
+    h1 span { font-size:60%; color:#666; font-weight:normal; }
+    table { border:none; border-collapse: collapse; width:100%; }
+    td, th { vertical-align:top; padding:2px 3px; }
+    th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    #info { background:#f6f6f6; }
+    #info ol { margin: 0.5em 4em; }
+    #info ol li { font-family: monospace; }
+    #summary { background: #ffc; }
+    #explanation { background:#eee; border-bottom: 0px none; }
+    pre.exception_value { font-family: sans-serif; color: #575757; font-size: 1.5em; margin: 10px 0 10px 0; }
+  </style>
+</head>
+<body>
+  <div id="summary">
+    <h1>Page not found <span>(404)</span></h1>
+    
+    <table class="meta">
+      <tr>
+        <th>Request Method:</th>
+        <td>GET</td>
+      </tr>
+      <tr>
+        <th>Request URL:</th>
+        <td>http://127.0.0.1:8000/eventos/inscripciones/?evento=2</td>
+      </tr>
+      
+    </table>
+  </div>
+  <div id="info">
+    
+      <p>
+      Using the URLconf defined in <code>configuration.urls</code>,
+      Django tried these URL patterns, in this order:
+      </p>
+      <ol>
+        
+          <li>
+            
+                admin/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                auth/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                users/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                roles/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                resources/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                persons/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                genders/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                documents/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                security/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                university/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                __debug__/
+                
+            
+          </li>
+        
+          <li>
+            
+                advertisements/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                create/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                update/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                delete/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                sub/areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                tipos/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                ^(?P&lt;evento&gt;)/$
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                save/
+                
+            
+          </li>
+        
+          <li>
+            
+                poll/
+                
+            
+          </li>
+        
+          <li>
+            
+                pqrs/
+                
+            
+          </li>
+        
+          <li>
+            
+                clear/cache
+                
+            
+          </li>
+        
+          <li>
+            
+                ^redoc/$
+                [name='schema-redoc']
+            
+          </li>
+        
+          <li>
+            
+                ^static/(?P&lt;path&gt;.*)$
+                
+            
+          </li>
+        
+      </ol>
+      <p>
+        
+          The current path, <code>eventos/inscripciones/</code>,
+        
+        didn’t match any of these.
+      </p>
+    
+  </div>
+
+  <div id="explanation">
+    <p>
+      You’re seeing this error because you have <code>DEBUG = True</code> in
+      your Django settings file. Change that to <code>False</code>, and Django
+      will display a standard 404 page.
+    </p>
+  </div>
+</body>
+</html>
+
+2023-05-02 21:31:24,176:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:31:55,564:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:32:00,219:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:32:01,611:WARNING:root:<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /eventos/inscripciones/</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; background:#eee; color:#000; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; margin-bottom:.4em; }
+    h1 span { font-size:60%; color:#666; font-weight:normal; }
+    table { border:none; border-collapse: collapse; width:100%; }
+    td, th { vertical-align:top; padding:2px 3px; }
+    th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    #info { background:#f6f6f6; }
+    #info ol { margin: 0.5em 4em; }
+    #info ol li { font-family: monospace; }
+    #summary { background: #ffc; }
+    #explanation { background:#eee; border-bottom: 0px none; }
+    pre.exception_value { font-family: sans-serif; color: #575757; font-size: 1.5em; margin: 10px 0 10px 0; }
+  </style>
+</head>
+<body>
+  <div id="summary">
+    <h1>Page not found <span>(404)</span></h1>
+    
+    <table class="meta">
+      <tr>
+        <th>Request Method:</th>
+        <td>GET</td>
+      </tr>
+      <tr>
+        <th>Request URL:</th>
+        <td>http://127.0.0.1:8000/eventos/inscripciones/?evento=2</td>
+      </tr>
+      
+    </table>
+  </div>
+  <div id="info">
+    
+      <p>
+      Using the URLconf defined in <code>configuration.urls</code>,
+      Django tried these URL patterns, in this order:
+      </p>
+      <ol>
+        
+          <li>
+            
+                admin/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                auth/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                users/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                roles/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                resources/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                persons/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                genders/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                documents/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                security/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                university/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                __debug__/
+                
+            
+          </li>
+        
+          <li>
+            
+                advertisements/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                create/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                update/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                delete/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                sub/areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                tipos/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                /^(?P&lt;evento&gt;)/$
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                save/
+                
+            
+          </li>
+        
+          <li>
+            
+                poll/
+                
+            
+          </li>
+        
+          <li>
+            
+                pqrs/
+                
+            
+          </li>
+        
+          <li>
+            
+                clear/cache
+                
+            
+          </li>
+        
+          <li>
+            
+                ^redoc/$
+                [name='schema-redoc']
+            
+          </li>
+        
+          <li>
+            
+                ^static/(?P&lt;path&gt;.*)$
+                
+            
+          </li>
+        
+      </ol>
+      <p>
+        
+          The current path, <code>eventos/inscripciones/</code>,
+        
+        didn’t match any of these.
+      </p>
+    
+  </div>
+
+  <div id="explanation">
+    <p>
+      You’re seeing this error because you have <code>DEBUG = True</code> in
+      your Django settings file. Change that to <code>False</code>, and Django
+      will display a standard 404 page.
+    </p>
+  </div>
+</body>
+</html>
+
+2023-05-02 21:32:02,062:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:32:57,265:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/2
+2023-05-02 21:32:58,387:WARNING:root:<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <title>Page not found at /eventos/inscripciones/2</title>
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; background:#eee; color:#000; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; margin-bottom:.4em; }
+    h1 span { font-size:60%; color:#666; font-weight:normal; }
+    table { border:none; border-collapse: collapse; width:100%; }
+    td, th { vertical-align:top; padding:2px 3px; }
+    th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    #info { background:#f6f6f6; }
+    #info ol { margin: 0.5em 4em; }
+    #info ol li { font-family: monospace; }
+    #summary { background: #ffc; }
+    #explanation { background:#eee; border-bottom: 0px none; }
+    pre.exception_value { font-family: sans-serif; color: #575757; font-size: 1.5em; margin: 10px 0 10px 0; }
+  </style>
+</head>
+<body>
+  <div id="summary">
+    <h1>Page not found <span>(404)</span></h1>
+    
+    <table class="meta">
+      <tr>
+        <th>Request Method:</th>
+        <td>GET</td>
+      </tr>
+      <tr>
+        <th>Request URL:</th>
+        <td>http://127.0.0.1:8000/eventos/inscripciones/2</td>
+      </tr>
+      
+    </table>
+  </div>
+  <div id="info">
+    
+      <p>
+      Using the URLconf defined in <code>configuration.urls</code>,
+      Django tried these URL patterns, in this order:
+      </p>
+      <ol>
+        
+          <li>
+            
+                admin/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                auth/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                users/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                roles/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                resources/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                persons/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                genders/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                documents/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                security/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                university/
+                
+            
+          </li>
+        
+          <li>
+            
+                
+                
+            
+                __debug__/
+                
+            
+          </li>
+        
+          <li>
+            
+                advertisements/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                create/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                update/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                
+                
+            
+                delete/&lt;int:pk&gt;/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                sub/areas/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                tipos/
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                /^(?P&lt;evento&gt;)/$
+                
+            
+          </li>
+        
+          <li>
+            
+                eventos/
+                
+            
+                inscripciones/
+                
+            
+                save/
+                
+            
+          </li>
+        
+          <li>
+            
+                poll/
+                
+            
+          </li>
+        
+          <li>
+            
+                pqrs/
+                
+            
+          </li>
+        
+          <li>
+            
+                clear/cache
+                
+            
+          </li>
+        
+          <li>
+            
+                ^redoc/$
+                [name='schema-redoc']
+            
+          </li>
+        
+          <li>
+            
+                ^static/(?P&lt;path&gt;.*)$
+                
+            
+          </li>
+        
+      </ol>
+      <p>
+        
+          The current path, <code>eventos/inscripciones/2</code>,
+        
+        didn’t match any of these.
+      </p>
+    
+  </div>
+
+  <div id="explanation">
+    <p>
+      You’re seeing this error because you have <code>DEBUG = True</code> in
+      your Django settings file. Change that to <code>False</code>, and Django
+      will display a standard 404 page.
+    </p>
+  </div>
+</body>
+</html>
+
+2023-05-02 21:32:58,811:WARNING:django.request:Not Found: /eventos/inscripciones/2
+2023-05-02 21:33:29,844:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-05-02 21:33:42,119:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:33:48,289:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/2
+2023-05-02 21:33:49,330:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:33:49,710:WARNING:django.request:Not Found: /eventos/inscripciones/2
+2023-05-02 21:35:34,904:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:35:36,015:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:35:36,396:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:35:47,742:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones
+2023-05-02 21:35:48,969:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:35:49,328:WARNING:django.request:Not Found: /eventos/inscripciones
+2023-05-02 21:35:51,600:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:35:52,533:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:35:52,902:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:36:07,892:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:36:09,042:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:36:09,411:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:36:36,504:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/urls.py changed, reloading.
+2023-05-02 21:36:40,911:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:36:41,932:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:36:42,308:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:37:22,791:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:37:26,690:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:37:27,699:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:37:28,076:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:37:33,561:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:37:37,748:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:37:41,404:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:37:42,668:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:37:43,035:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:37:51,791:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:37:55,446:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:37:56,455:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:37:56,825:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:38:03,615:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:38:07,693:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:38:08,727:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:38:09,101:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:39:24,425:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:39:36,845:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:39:43,130:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:39:47,082:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:39:48,097:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:39:48,465:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:40:17,227:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones
+2023-05-02 21:40:18,375:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:40:18,733:WARNING:django.request:Not Found: /eventos/inscripciones
+2023-05-02 21:40:21,524:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:40:22,430:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:40:22,793:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:40:35,767:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/urls.py changed, reloading.
+2023-05-02 21:40:39,557:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:40:40,609:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:40:40,980:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:40:55,646:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:40:56,906:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:40:57,277:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:41:07,112:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:41:08,213:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:41:08,584:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:41:53,797:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:41:58,458:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:41:59,502:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:41:59,870:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:42:33,447:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:42:34,603:WARNING:root:
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Not Found</title>
+</head>
+<body>
+  <h1>Not Found</h1><p>The requested resource was not found on this server.</p>
+</body>
+</html>
+
+2023-05-02 21:42:34,967:WARNING:django.request:Not Found: /eventos/inscripciones/
+2023-05-02 21:42:41,011:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/urls.py changed, reloading.
+2023-05-02 21:42:45,036:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:42:46,047:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-02 21:42:46,406:WARNING:django.request:Bad Request: /eventos/inscripciones/
+2023-05-02 21:43:07,103:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-02 21:43:46,309:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-02 21:43:49,966:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:44:15,253:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-02 21:44:36,516:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-02 21:44:40,422:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:44:47,087:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:44:52,852:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:44:57,558:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 21:44:59,895:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
