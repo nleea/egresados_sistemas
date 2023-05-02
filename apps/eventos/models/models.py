@@ -9,19 +9,19 @@ class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
     userCreate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
     userUpdate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
 
     class Meta:
         abstract = True
 
 
 class EventosArea(BaseModel):
-    
+
     def __str__(self) -> str:
-        return self.name # type: ignore
-    
+        return self.name  # type: ignore
+
     class Meta:
         verbose_name = "Area Evento"
         verbose_name_plural = "Areas Eventos"
@@ -29,7 +29,7 @@ class EventosArea(BaseModel):
 
 class SubAreaEventos(BaseModel):
     area = models.ForeignKey(
-        EventosArea, on_delete=models.CASCADE, related_name="areas",db_index=True)
+        EventosArea, on_delete=models.CASCADE, related_name="areas", db_index=True)
 
     class Meta:
         verbose_name = "Sub Area Evento"
@@ -44,14 +44,14 @@ class TipoEvento(BaseModel):
 
 class Eventos(BaseModel):
     area = models.ForeignKey(
-        EventosArea, on_delete=models.CASCADE, related_name="+",db_index=True)
+        EventosArea, on_delete=models.CASCADE, related_name="+", db_index=True)
     subArea = models.ForeignKey(
-        SubAreaEventos, on_delete=models.CASCADE, related_name="+",db_index=True)
+        SubAreaEventos, on_delete=models.CASCADE, related_name="+", db_index=True)
     nombre_actividad = models.CharField(max_length=256)
     tipo_actividad = models.CharField(max_length=256)
     responsable = models.CharField(max_length=256)
     tipo = models.ForeignKey(
-        TipoEvento, on_delete=models.CASCADE, blank=True, null=True,db_index=True)
+        TipoEvento, on_delete=models.CASCADE, blank=True, null=True, db_index=True)
     fecha = models.DateField(blank=True, null=True)
     hora = models.CharField(max_length=10)
     lugar = models.CharField(max_length=256)
@@ -62,3 +62,9 @@ class Eventos(BaseModel):
     class Meta:
         verbose_name = 'Evento'
         verbose_name_plural = 'Eventos'
+
+
+class Inscripcion(models.Model):
+    evento = models.ForeignKey(
+        Eventos, on_delete=models.CASCADE, related_name="+",db_index=True)
+    user = models.ManyToManyField(User, related_name="+")
