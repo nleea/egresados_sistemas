@@ -93,7 +93,7 @@ class CustomMiddleware(MiddlewareMixin):
 
                 if tokenUser.email != user.email:
                     response, code = create_response(
-                        401, {
+                        401, "Unauthorized",{
                             "message": 'Access not match'
                         }
                     )
@@ -112,7 +112,7 @@ class CustomMiddleware(MiddlewareMixin):
                 if ('refresh-token' in request.session):
                     token = RefreshToken(request.session['refresh-token'])
                     response, code = create_response(
-                        200, 'Unauthorized', {"token": f"{token.access_token}"})
+                        400, 'Unauthorized', "ss")
                     return HttpResponse(json.dumps(response), status=code)
                 response, code = create_response(
                     401, 'Unauthorized', {"message": ["Authorization has failed, Please send valid token."]})

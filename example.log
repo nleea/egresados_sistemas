@@ -924,3 +924,215 @@ AttributeError: 'Request' object has no attribute 'accepted_renderer'
 2023-04-30 13:52:26,090:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
 2023-04-30 13:53:48,249:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/view_responses.py changed, reloading.
 2023-04-30 13:53:58,737:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-05-02 19:33:10,852:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:33:10,862:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': ['Authorization has failed, Please send valid token.']}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-05-02 19:33:10,935:WARNING:django.request:Unauthorized: /eventos/inscripciones/
+2023-05-02 19:33:22,587:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:33:23,763:ERROR:django.request:Internal Server Error: /eventos/inscripciones/
+Traceback (most recent call last):
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 58, in process_request
+    tokenUser, token = auth.authenticate(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 34, in authenticate
+    raw_token = self.get_raw_token(header)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 77, in get_raw_token
+    raise AuthenticationFailed(
+rest_framework_simplejwt.exceptions.AuthenticationFailed: {'detail': ErrorDetail(string='Authorization header must contain two space-delimited values', code='authentication_failed'), 'code': ErrorDetail(string='bad_authorization_header', code='authentication_failed')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 114, in process_request
+    response, code = create_response(
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/template/response.py", line 127, in __iter__
+    raise ContentNotRenderedError(
+django.template.response.ContentNotRenderedError: The response content must be rendered before it can be iterated over.
+2023-05-02 19:34:02,099:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-02 19:34:03,187:ERROR:django.request:Internal Server Error: /eventos/inscripciones/save/
+Traceback (most recent call last):
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 58, in process_request
+    tokenUser, token = auth.authenticate(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 34, in authenticate
+    raw_token = self.get_raw_token(header)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 77, in get_raw_token
+    raise AuthenticationFailed(
+rest_framework_simplejwt.exceptions.AuthenticationFailed: {'detail': ErrorDetail(string='Authorization header must contain two space-delimited values', code='authentication_failed'), 'code': ErrorDetail(string='bad_authorization_header', code='authentication_failed')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 114, in process_request
+    response, code = create_response(
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/template/response.py", line 127, in __iter__
+    raise ContentNotRenderedError(
+django.template.response.ContentNotRenderedError: The response content must be rendered before it can be iterated over.
+2023-05-02 19:36:27,451:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:36:33,291:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-02 19:36:34,587:ERROR:django.request:Internal Server Error: /eventos/inscripciones/save/
+Traceback (most recent call last):
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 58, in process_request
+    tokenUser, token = auth.authenticate(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 34, in authenticate
+    raw_token = self.get_raw_token(header)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 77, in get_raw_token
+    raise AuthenticationFailed(
+rest_framework_simplejwt.exceptions.AuthenticationFailed: {'detail': ErrorDetail(string='Authorization header must contain two space-delimited values', code='authentication_failed'), 'code': ErrorDetail(string='bad_authorization_header', code='authentication_failed')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 114, in process_request
+    response, code = create_response(
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/template/response.py", line 127, in __iter__
+    raise ContentNotRenderedError(
+django.template.response.ContentNotRenderedError: The response content must be rendered before it can be iterated over.
+2023-05-02 19:36:57,649:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:36:58,526:ERROR:django.request:Internal Server Error: /eventos/inscripciones/
+Traceback (most recent call last):
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 58, in process_request
+    tokenUser, token = auth.authenticate(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 34, in authenticate
+    raw_token = self.get_raw_token(header)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 77, in get_raw_token
+    raise AuthenticationFailed(
+rest_framework_simplejwt.exceptions.AuthenticationFailed: {'detail': ErrorDetail(string='Authorization header must contain two space-delimited values', code='authentication_failed'), 'code': ErrorDetail(string='bad_authorization_header', code='authentication_failed')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 114, in process_request
+    response, code = create_response(
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/template/response.py", line 127, in __iter__
+    raise ContentNotRenderedError(
+django.template.response.ContentNotRenderedError: The response content must be rendered before it can be iterated over.
+2023-05-02 19:37:16,268:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:37:20,280:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:37:23,315:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:37:27,570:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:37:29,155:WARNING:django.request:Unauthorized: /eventos/inscripciones/
+2023-05-02 19:37:55,769:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:38:00,803:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:38:02,130:ERROR:django.request:Internal Server Error: /eventos/inscripciones/
+Traceback (most recent call last):
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 58, in process_request
+    tokenUser, token = auth.authenticate(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 34, in authenticate
+    raw_token = self.get_raw_token(header)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 77, in get_raw_token
+    raise AuthenticationFailed(
+rest_framework_simplejwt.exceptions.AuthenticationFailed: {'detail': ErrorDetail(string='Authorization header must contain two space-delimited values', code='authentication_failed'), 'code': ErrorDetail(string='bad_authorization_header', code='authentication_failed')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 114, in process_request
+    response, code = create_response(
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/template/response.py", line 127, in __iter__
+    raise ContentNotRenderedError(
+django.template.response.ContentNotRenderedError: The response content must be rendered before it can be iterated over.
+2023-05-02 19:38:30,658:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:38:33,190:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:38:42,555:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:38:46,556:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:38:47,858:ERROR:django.request:Internal Server Error: /eventos/inscripciones/
+Traceback (most recent call last):
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 58, in process_request
+    tokenUser, token = auth.authenticate(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 34, in authenticate
+    raw_token = self.get_raw_token(header)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 77, in get_raw_token
+    raise AuthenticationFailed(
+rest_framework_simplejwt.exceptions.AuthenticationFailed: {'detail': ErrorDetail(string='Authorization header must contain two space-delimited values', code='authentication_failed'), 'code': ErrorDetail(string='bad_authorization_header', code='authentication_failed')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 114, in process_request
+    response, code = create_response(
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/template/response.py", line 127, in __iter__
+    raise ContentNotRenderedError(
+django.template.response.ContentNotRenderedError: The response content must be rendered before it can be iterated over.
+2023-05-02 19:38:54,310:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:38:58,256:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:38:59,598:ERROR:django.request:Internal Server Error: /eventos/inscripciones/
+Traceback (most recent call last):
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 58, in process_request
+    tokenUser, token = auth.authenticate(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 34, in authenticate
+    raw_token = self.get_raw_token(header)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 77, in get_raw_token
+    raise AuthenticationFailed(
+rest_framework_simplejwt.exceptions.AuthenticationFailed: {'detail': ErrorDetail(string='Authorization header must contain two space-delimited values', code='authentication_failed'), 'code': ErrorDetail(string='bad_authorization_header', code='authentication_failed')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 114, in process_request
+    response, code = create_response(
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/template/response.py", line 127, in __iter__
+    raise ContentNotRenderedError(
+django.template.response.ContentNotRenderedError: The response content must be rendered before it can be iterated over.
+2023-05-02 19:39:09,840:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:39:13,785:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:39:15,062:ERROR:django.request:Internal Server Error: /eventos/inscripciones/
+Traceback (most recent call last):
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 58, in process_request
+    tokenUser, token = auth.authenticate(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 34, in authenticate
+    raw_token = self.get_raw_token(header)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/rest_framework_simplejwt/authentication.py", line 77, in get_raw_token
+    raise AuthenticationFailed(
+rest_framework_simplejwt.exceptions.AuthenticationFailed: {'detail': ErrorDetail(string='Authorization header must contain two space-delimited values', code='authentication_failed'), 'code': ErrorDetail(string='bad_authorization_header', code='authentication_failed')}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 135, in __call__
+    response = self.process_request(request)
+  File "/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py", line 114, in process_request
+    response, code = create_response(
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/template/response.py", line 127, in __iter__
+    raise ContentNotRenderedError(
+django.template.response.ContentNotRenderedError: The response content must be rendered before it can be iterated over.
+2023-05-02 19:39:26,284:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:39:30,444:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:39:40,487:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:39:44,334:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:40:00,956:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:40:07,871:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:40:30,414:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-02 19:40:33,494:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:40:35,071:WARNING:django.request:Bad Request: /eventos/inscripciones/
+2023-05-02 19:40:46,719:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:40:48,277:WARNING:django.request:Bad Request: /eventos/inscripciones/
+2023-05-02 19:40:57,353:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-02 19:41:12,328:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
