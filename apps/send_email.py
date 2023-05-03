@@ -3,7 +3,7 @@ from django.core.mail import send_mail
 from configuration import settings
 from django.http import HttpResponse
 
-@shared_task(bind=True)
+@shared_task(bind=True,rate_limit='50/m',autoretry_for=(Exception,),retry_kwargs={'max_retries': 5})
 def send_notification_mail(self, target_mail, message):
     try:
         mail_subject = "Welcome on Board!"
