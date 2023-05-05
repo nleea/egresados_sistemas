@@ -98,14 +98,7 @@ class CustomMiddleware(MiddlewareMixin):
                         }
                     )
                     return HttpResponse(json.dumps(response), status=code)
-
-                """if request.user.email != user.email:
-                        response, code = create_response(
-                            401, {
-                                "message": 'Access not match'
-                            }
-                        )
-                        return HttpResponse(json.dumps(response), status=code)"""
+                
                 request.user = user
                 return None
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
@@ -119,6 +112,7 @@ class CustomMiddleware(MiddlewareMixin):
                 logger.info(f"Response {response}")
                 return HttpResponse(json.dumps(response), status=code)
             except Exception as e:
+                print(e)
                 return HttpResponse(e.args,status=400)
         else:
             response, code = create_response(

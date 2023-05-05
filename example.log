@@ -3734,3 +3734,33 @@ django.contrib.sessions.exceptions.SessionInterrupted: The request's session was
 2023-05-05 17:23:00,020:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
 2023-05-05 17:23:04,149:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
 2023-05-05 17:23:06,328:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-05-05 18:49:32,356:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/create/
+2023-05-05 18:49:33,998:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-05 18:49:34,495:WARNING:django.request:Bad Request: /eventos/tipos/create/
+2023-05-05 18:50:00,118:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/create/
+2023-05-05 18:50:01,269:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-05 18:50:01,700:WARNING:django.request:Bad Request: /eventos/tipos/create/
+2023-05-05 18:50:41,325:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/
+2023-05-05 18:50:52,917:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/create/
+2023-05-05 18:50:54,047:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-05 18:50:54,418:WARNING:django.request:Bad Request: /eventos/tipos/create/
+2023-05-05 18:51:38,113:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/create/
+2023-05-05 18:51:39,933:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-05 18:51:40,427:WARNING:django.request:Bad Request: /eventos/tipos/create/
+2023-05-05 18:52:08,964:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/create/
+2023-05-05 18:52:10,848:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-05 18:52:11,391:WARNING:django.request:Bad Request: /eventos/tipos/create/
+2023-05-05 18:52:26,983:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/create/
+2023-05-05 18:52:27,886:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-05 18:52:28,276:WARNING:django.request:Bad Request: /eventos/tipos/create/
+2023-05-05 18:52:59,367:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/create/
+2023-05-05 18:53:00,902:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-05 18:53:01,404:WARNING:django.request:Bad Request: /eventos/tipos/create/
+2023-05-05 18:53:29,475:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/create/
+2023-05-05 18:53:36,222:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/
+2023-05-05 18:54:17,176:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/
+2023-05-05 18:54:33,628:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/
+2023-05-05 18:56:30,496:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/
+2023-05-05 18:56:30,497:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-05-05 18:56:30,516:WARNING:django.request:Unauthorized: /eventos/tipos/
+2023-05-05 18:56:33,983:INFO:configs.middlewares.auth:request received for endpoint /eventos/tipos/
