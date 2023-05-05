@@ -3510,3 +3510,227 @@ django.template.response.ContentNotRenderedError: The response content must be r
 2023-05-03 00:52:09,402:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
 2023-05-03 00:52:25,484:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
 2023-05-03 01:00:06,278:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-04 14:10:26,564:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-04 14:10:52,593:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-04 14:11:00,971:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-04 14:11:09,949:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-04 14:11:13,621:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-04 14:11:40,115:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-04 14:11:47,465:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/
+2023-05-04 14:11:51,877:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-04 14:11:52,867:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-04 14:11:53,227:WARNING:django.request:Bad Request: /eventos/inscripciones/save/
+2023-05-04 14:12:01,186:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-04 14:12:05,638:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-04 14:12:06,826:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-04 14:12:07,197:WARNING:django.request:Bad Request: /eventos/inscripciones/save/
+2023-05-04 14:13:02,218:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-04 14:13:06,236:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-04 14:13:07,425:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-04 14:13:07,772:WARNING:django.request:Bad Request: /eventos/inscripciones/save/
+2023-05-04 14:13:49,593:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-04 14:13:53,732:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-04 14:14:01,200:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-04 14:31:14,073:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-05-04 14:34:01,337:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-04 14:34:09,093:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-04 14:34:23,075:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-04 14:34:28,618:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-04 14:34:41,732:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-04 14:34:44,811:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-04 14:35:45,975:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-04 14:35:49,953:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-04 14:37:02,865:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-04 14:39:29,944:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-05-04 14:39:52,075:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-05-04 14:40:39,289:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-05-05 17:00:23,779:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:00:29,077:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:00:31,965:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:04:02,374:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:04:04,337:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:04:05,948:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:04:07,976:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:04:10,399:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:04:12,051:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:05:32,721:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:05:34,404:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:05:36,165:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:06:01,100:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-05 17:06:28,071:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-05-05 17:06:30,617:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-05-05 17:06:44,083:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-05-05 17:07:34,168:INFO:configs.middlewares.auth:request received for endpoint /eventos/
+2023-05-05 17:07:34,168:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-05-05 17:07:34,169:WARNING:django.request:Unauthorized: /eventos/
+2023-05-05 17:07:34,244:INFO:configs.middlewares.auth:request received for endpoint /favicon.ico
+2023-05-05 17:07:34,256:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-05-05 17:07:34,256:WARNING:django.request:Unauthorized: /favicon.ico
+2023-05-05 17:08:20,358:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-05-05 17:08:36,576:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-05-05 17:10:43,503:WARNING:django.request:The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.: /auth/login/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 59, in process_response
+    request.session.save()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/backends/cache.py", line 62, in save
+    raise UpdateError
+django.contrib.sessions.backends.base.UpdateError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 138, in __call__
+    response = self.process_response(request, response)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 61, in process_response
+    raise SessionInterrupted(
+django.contrib.sessions.exceptions.SessionInterrupted: The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.
+2023-05-05 17:10:57,990:WARNING:django.request:The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.: /auth/login/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 59, in process_response
+    request.session.save()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/backends/cache.py", line 62, in save
+    raise UpdateError
+django.contrib.sessions.backends.base.UpdateError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 138, in __call__
+    response = self.process_response(request, response)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 61, in process_response
+    raise SessionInterrupted(
+django.contrib.sessions.exceptions.SessionInterrupted: The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.
+2023-05-05 17:11:25,494:WARNING:django.request:The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.: /auth/login/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 59, in process_response
+    request.session.save()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/backends/cache.py", line 62, in save
+    raise UpdateError
+django.contrib.sessions.backends.base.UpdateError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 138, in __call__
+    response = self.process_response(request, response)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 61, in process_response
+    raise SessionInterrupted(
+django.contrib.sessions.exceptions.SessionInterrupted: The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.
+2023-05-05 17:12:11,219:WARNING:django.request:The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.: /auth/login/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 59, in process_response
+    request.session.save()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/backends/cache.py", line 62, in save
+    raise UpdateError
+django.contrib.sessions.backends.base.UpdateError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 138, in __call__
+    response = self.process_response(request, response)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 61, in process_response
+    raise SessionInterrupted(
+django.contrib.sessions.exceptions.SessionInterrupted: The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.
+2023-05-05 17:12:58,207:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/create/
+2023-05-05 17:13:25,876:WARNING:django.request:The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.: /auth/login/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 59, in process_response
+    request.session.save()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/backends/cache.py", line 62, in save
+    raise UpdateError
+django.contrib.sessions.backends.base.UpdateError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 138, in __call__
+    response = self.process_response(request, response)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 61, in process_response
+    raise SessionInterrupted(
+django.contrib.sessions.exceptions.SessionInterrupted: The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.
+2023-05-05 17:14:01,355:WARNING:django.request:The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.: /auth/login/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 59, in process_response
+    request.session.save()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/backends/cache.py", line 62, in save
+    raise UpdateError
+django.contrib.sessions.backends.base.UpdateError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 138, in __call__
+    response = self.process_response(request, response)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 61, in process_response
+    raise SessionInterrupted(
+django.contrib.sessions.exceptions.SessionInterrupted: The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.
+2023-05-05 17:14:15,582:WARNING:django.request:The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.: /auth/login/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 59, in process_response
+    request.session.save()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/backends/cache.py", line 62, in save
+    raise UpdateError
+django.contrib.sessions.backends.base.UpdateError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 138, in __call__
+    response = self.process_response(request, response)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 61, in process_response
+    raise SessionInterrupted(
+django.contrib.sessions.exceptions.SessionInterrupted: The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.
+2023-05-05 17:15:30,822:WARNING:django.request:The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.: /auth/login/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 59, in process_response
+    request.session.save()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/backends/cache.py", line 62, in save
+    raise UpdateError
+django.contrib.sessions.backends.base.UpdateError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 138, in __call__
+    response = self.process_response(request, response)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 61, in process_response
+    raise SessionInterrupted(
+django.contrib.sessions.exceptions.SessionInterrupted: The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.
+2023-05-05 17:16:47,601:WARNING:django.request:The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.: /auth/login/
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 59, in process_response
+    request.session.save()
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/backends/cache.py", line 62, in save
+    raise UpdateError
+django.contrib.sessions.backends.base.UpdateError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/utils/deprecation.py", line 138, in __call__
+    response = self.process_response(request, response)
+  File "/home/nelson/.local/share/virtualenvs/sistema_egresados-UZ6tVXQk/lib/python3.10/site-packages/django/contrib/sessions/middleware.py", line 61, in process_response
+    raise SessionInterrupted(
+django.contrib.sessions.exceptions.SessionInterrupted: The request's session was deleted before the request completed. The user may have logged out in a concurrent request, for example.
+2023-05-05 17:23:00,020:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-05-05 17:23:04,149:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/
+2023-05-05 17:23:06,328:INFO:configs.middlewares.auth:request received for endpoint /advertisements/category/

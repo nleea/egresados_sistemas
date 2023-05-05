@@ -5,9 +5,13 @@ from ...serializers.eventos.inscripciones import InscripcionesSerializersView, I
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from apps.send_email import send_notification_mail
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(60 * 5), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
 class InscripcionView(APIView):
     def get(self, request, *args, **kwargs):
 
@@ -34,9 +38,10 @@ class IncripcionSave(APIView):
             inscripcionesResulst = InscripcionesSerializers(data=request.data)
             if inscripcionesResulst.is_valid():
                 try:
-                    send_notification_mail.delay(
-                        [x.email for x in user],"Test")  # type: ignore
-                    inscripcionesResulst.save(user=user)
+                    for x in user:
+                        send_notification_mail.delay(
+                        x.email,"Test") # type: ignore
+                    # inscripcionesResulst.save(user=user)
                     return Response("Inscripciones creadas", 200)
                 except Exception as e:
                     return Response(e, 400)

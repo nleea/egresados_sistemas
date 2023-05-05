@@ -7,8 +7,13 @@ from ..Base.BaseView import ViewPagination
 
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator 
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
-@method_decorator(cache_page(60 * 5), name='dispatch') 
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+
+
+@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
 class CapacitacionesView(ViewPagination):
 
     def get(self, request, *args, **kwargs):

@@ -15,8 +15,6 @@ from datetime import timedelta
 import os
 import environ
 from .db import DBS
-import sentry_sdk
-from sentry_sdk.integrations.django import DjangoIntegration
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -34,7 +32,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = env('SECRET_OR_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 #CORS_ALLOWED_ORIGINS = []
@@ -60,7 +58,8 @@ INSTALLS_APPS = [
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
     "whitenoise.runserver_nostatic",
-    'drf_yasg'
+    'drf_yasg',
+    "qr_code"
 ]
 
 THIRDS_APPS = [
@@ -111,8 +110,7 @@ INTERNAL_IPS = [
 ]
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
-CACHE_MIDDLEWARE_SECONDS = '600'
-CACHE_MIDDLEWARE_KEY_PREFIX = '' 
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
 
 SESSION_SAVE_EVERY_REQUEST = True
 
@@ -121,7 +119,7 @@ ROOT_URLCONF = 'configuration.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': os.path.join(BASE_DIR, 'templates'),
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -195,9 +193,9 @@ REST_FRAMEWORK = {
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     "DEFAULT_RENDERER_CLASSES": (
-       "rest_framework.renderers.JSONRenderer",
-       "rest_framework.renderers.BrowsableAPIRenderer",
-   ),
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    ),
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 100
 }
@@ -234,10 +232,17 @@ SIMPLE_JWT = {
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
 }
 
+
+CACHE_TTL = 60 * 15
+
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
-        'LOCATION': 'table_cache',
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        "KEY_PREFIX": "cache"
     }
 }
 
@@ -248,13 +253,12 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Paris'
 
-EMAIL_BACKEND ="django.core.mail.backends.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "egresados398@gmail.com"
 EMAIL_HOST_PASSWORD = "plxxaijdrpdosfvz"
-
 
 
 # Internationalization
@@ -281,8 +285,6 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
-
-
 
 
 # sentry_sdk.init(

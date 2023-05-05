@@ -10,7 +10,7 @@ DBS = {
             'PASSWORD': 'xyz3602',
         }
     },
-    'mysql-clever': {
+    'mysql-azure': {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'bryu1vdeobm9tpqkip87',
@@ -23,8 +23,8 @@ DBS = {
     'mysql-aws': {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'db_egresados',
-            'HOST': 'aws-egresado.cgtkjmmfwdhc.us-east-2.rds.amazonaws.com',
+            'NAME': 'egresados-db',
+            'HOST': 'egresados.cgtkjmmfwdhc.us-east-2.rds.amazonaws.com',
             'PORT': '3306',
             'USER': 'admin',
             'PASSWORD': 'xyz3602password',
