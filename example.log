@@ -4014,3 +4014,33 @@ django.contrib.sessions.exceptions.SessionInterrupted: The request's session was
 2023-05-06 20:16:10,729:INFO:configs.middlewares.auth:request received for endpoint /eventos/create/
 2023-05-06 20:16:26,153:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/eventos/views.py changed, reloading.
 2023-05-06 20:16:30,594:INFO:configs.middlewares.auth:request received for endpoint /eventos/create/
+2023-05-06 22:25:57,427:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:26:15,541:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:26:28,414:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:26:34,788:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:27:08,863:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:27:22,828:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:28:14,077:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:29:49,768:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:30:14,104:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:30:43,883:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configs/middlewares/auth.py changed, reloading.
+2023-05-06 22:31:00,596:INFO:configs.middlewares.auth:request received for endpoint /advertisements/
+2023-05-06 22:31:00,596:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-05-06 22:31:00,640:WARNING:django.request:Unauthorized: /advertisements/
+2023-05-06 22:31:00,722:INFO:configs.middlewares.auth:request received for endpoint /favicon.ico
+2023-05-06 22:31:00,722:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-05-06 22:31:00,737:WARNING:django.request:Unauthorized: /favicon.ico
+2023-05-06 22:31:06,059:WARNING:root:
+2023-05-06 22:31:06,154:INFO:configs.middlewares.auth:request received for endpoint /favicon.ico
+2023-05-06 22:31:06,154:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-05-06 22:31:06,166:WARNING:django.request:Unauthorized: /favicon.ico
+2023-05-06 22:31:35,103:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-05-06 22:31:50,334:WARNING:root:
+2023-05-06 22:31:50,449:INFO:configs.middlewares.auth:request received for endpoint /favicon.ico
+2023-05-06 22:31:50,449:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-05-06 22:31:50,461:WARNING:django.request:Unauthorized: /favicon.ico
+2023-05-06 22:33:12,834:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-06 22:33:12,851:WARNING:django.request:Bad Request: /redoc/
+2023-05-06 22:33:12,950:INFO:configs.middlewares.auth:request received for endpoint /favicon.ico
+2023-05-06 22:33:12,951:INFO:configs.middlewares.auth:Response {'ok': False, 'message': 'Unauthorized', 'errors': [{'message': 'Authorization not found, Please send valid token'}], 'path': '', 'method': '', 'next': None, 'previous': None, 'count': None}
+2023-05-06 22:33:12,969:WARNING:django.request:Unauthorized: /favicon.ico

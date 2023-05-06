@@ -12,6 +12,8 @@ from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
 from pathlib import Path
 import os
+import re
+
 import environ
 
 env = environ.Env(
@@ -44,8 +46,9 @@ class CustomMiddleware(MiddlewareMixin):
         :return: HTTP Response if authorization fails, else None
         """
         routes_free = ['/auth/login/', '/auth/register/',
-                       '/redoc/', '/admin/','/__debug__/']
-        if routes_free.__contains__(request.path):
+                       '/redoc/', '/admin/','/__debug__/',"/asistencia/"]
+        match = re.search('|'.join(routes_free), request.path)
+        if match:
             return None
 
         jwt_token: str = request.headers.get('authorization', None)
