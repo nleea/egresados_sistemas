@@ -12,7 +12,8 @@ class TipoCapacitacionSerializers(BaseSerializers):
 
 
 class RedesSocialesSerializers(BaseSerializers):
-    link = serializers.CharField()
+    name = serializers.CharField(read_only=True)
+    link = serializers.CharField(read_only=True)
 
     class Meta:
         fields = '__all__'

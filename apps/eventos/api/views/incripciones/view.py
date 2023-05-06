@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from ....models.models import Inscripcion, User
-from ...serializers.eventos.inscripciones import InscripcionesSerializersView, InscripcionesSerializers
+from ....models.models import Inscripcion, User, Asistencia
+from ...serializers.eventos.inscripciones import InscripcionesSerializersView, InscripcionesSerializers, AsistenciaSerializer
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from apps.send_email import send_notification_mail
@@ -11,7 +11,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class InscripcionView(APIView):
     def get(self, request, *args, **kwargs):
 
@@ -34,20 +34,30 @@ class IncripcionSave(APIView):
 
     def post(self, request, *args, **kwargs):
         if 'evento' in request.data:
-            user = User.objects.all().defer("roles")
+            user = User.objects.all().defer("roles")[0]
             inscripcionesResulst = InscripcionesSerializers(data=request.data)
             if inscripcionesResulst.is_valid():
                 try:
-                    for x in user:
-                        send_notification_mail.delay(
-                        x.email,"Test") # type: ignore
+                    send_notification_mail.delay(
+                        [user.email], "Test")  # type: ignore
                     # inscripcionesResulst.save(user=user)
                     return Response("Inscripciones creadas", 200)
                 except Exception as e:
+                    print(e)
                     return Response(e, 400)
             return Response(inscripcionesResulst.errors, 404)
         return Response("Evento Not found", 404)
 
 
-class GenerateQrCode(APIView):
-    pass
+class AsistenciaView(APIView):
+    def get(self, request, *args, **kwargs):
+        user = request.GET.get("user", None)
+        evento = request.GET.get("evento", None)
+
+        resulst = AsistenciaSerializer(data={"user": user, "evento": evento})
+
+        if resulst.is_valid():
+            resulst.save()
+            return Response("Ok", 200)
+
+        return Response(resulst.errors, 404)
