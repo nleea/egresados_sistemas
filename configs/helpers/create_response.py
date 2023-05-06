@@ -43,15 +43,12 @@ def create_response(code, message, data, path='', method=""):
 
             return data_parse, code
         
-        match = re.search(r'^{', data)
-        if match is None and len(data) < 15:
-            data_parse["data"] = data
-        else:
-            data = json.loads(data)
-            data_parse["data"] = data if 'count' not in data else data["results"]
-            data_parse["next"] = None if "next" not in data else data["next"]
-            data_parse["previous"] = None if "previous" not in data else data["previous"]
-            data_parse["count"] = None if "count" not in data else data["count"]
+        
+        data = json.loads(data)
+        data_parse["data"] = data if 'count' not in data else data["results"]
+        data_parse["next"] = None if "next" not in data else data["next"]
+        data_parse["previous"] = None if "previous" not in data else data["previous"]
+        data_parse["count"] = None if "count" not in data else data["count"]
 
         data_parse["message"] = message
         data_parse["ok"] = True
