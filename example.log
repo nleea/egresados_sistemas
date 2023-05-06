@@ -3902,3 +3902,18 @@ django.contrib.sessions.exceptions.SessionInterrupted: The request's session was
 2023-05-06 17:22:34,324:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
 2023-05-06 17:22:36,925:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
 2023-05-06 17:22:42,059:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/configuration/settings.py changed, reloading.
+2023-05-06 17:28:09,100:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-06 17:28:24,755:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-06 17:28:29,052:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-06 17:28:30,374:WARNING:root:The response content must be rendered before it can be iterated over.
+2023-05-06 17:28:30,487:WARNING:django.request:Bad Request: /eventos/inscripciones/save/
+2023-05-06 17:29:31,595:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-06 17:29:36,367:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-06 17:30:03,016:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-06 17:30:57,603:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-06 17:31:01,782:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-06 17:31:29,012:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-06 17:31:39,688:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-06 17:32:18,726:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-06 17:32:35,717:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-06 17:33:44,095:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.

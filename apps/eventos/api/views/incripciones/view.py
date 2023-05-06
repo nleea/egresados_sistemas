@@ -38,13 +38,12 @@ class IncripcionSave(APIView):
             inscripcionesResulst = InscripcionesSerializers(data=request.data)
             if inscripcionesResulst.is_valid():
                 try:
-                    for x in user:
+                    for _, x in enumerate(user):
                         send_notification_mail.delay(
-                            [x.email], "Test")  # type: ignore
-                    # inscripcionesResulst.save(user=user)
+                            [x.email], x.pk,inscripcionesResulst.data["evento"])  # type: ignore
+                    inscripcionesResulst.save(user=user)
                     return Response("Inscripciones creadas", 200)
                 except Exception as e:
-                    print(e)
                     return Response(e, 400)
             return Response(inscripcionesResulst.errors, 404)
         return Response("Evento Not found", 404)
