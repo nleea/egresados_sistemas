@@ -92,7 +92,7 @@ class AdvertisementSerializers(BaseSerializers):
         if len(validated_data.get("redes", None)):
             for red in validated_data.pop("redes", None):
                 anuncio.redes.add(RedesSociales.objects.create(
-                    link=red["link"]).pk)
+                    link=red["link"],name=red["name"] if "name" in red else None).pk)
 
         return anuncio
 
