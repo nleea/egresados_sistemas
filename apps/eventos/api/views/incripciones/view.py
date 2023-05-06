@@ -34,12 +34,13 @@ class IncripcionSave(APIView):
 
     def post(self, request, *args, **kwargs):
         if 'evento' in request.data:
-            user = User.objects.all().defer("roles")[0]
+            user = User.objects.all().defer("roles")
             inscripcionesResulst = InscripcionesSerializers(data=request.data)
             if inscripcionesResulst.is_valid():
                 try:
-                    send_notification_mail.delay(
-                        [user.email], "Test")  # type: ignore
+                    for x in user:
+                        send_notification_mail.delay(
+                            [x.email], "Test")  # type: ignore
                     # inscripcionesResulst.save(user=user)
                     return Response("Inscripciones creadas", 200)
                 except Exception as e:

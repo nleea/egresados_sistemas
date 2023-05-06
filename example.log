@@ -3883,3 +3883,6 @@ django.contrib.sessions.exceptions.SessionInterrupted: The request's session was
 2023-05-06 16:21:56,521:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
 2023-05-06 16:23:42,149:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
 2023-05-06 16:25:20,573:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/send_email.py changed, reloading.
+2023-05-06 16:27:00,155:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
+2023-05-06 16:28:16,841:INFO:django.utils.autoreload:/media/nelson/Apacer PHD/projects/centro/sistema_egresados/apps/eventos/api/views/incripciones/view.py changed, reloading.
+2023-05-06 16:28:52,073:INFO:configs.middlewares.auth:request received for endpoint /eventos/inscripciones/save/
