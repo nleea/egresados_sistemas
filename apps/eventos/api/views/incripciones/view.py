@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from ....models.models import Inscripcion, User, Asistencia
+from ....models.models import Inscripcion, User
 from ...serializers.eventos.inscripciones import InscripcionesSerializersView, InscripcionesSerializers, AsistenciaSerializer
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
@@ -40,10 +40,11 @@ class IncripcionSave(APIView):
                 try:
                     for _, x in enumerate(user):
                         send_notification_mail.delay(
-                            [x.email], x.pk,inscripcionesResulst.data["evento"])  # type: ignore
+                            [x.email], x.pk,inscripcionesResulst.validated_data["evento"])  # type: ignore
                     inscripcionesResulst.save(user=user)
                     return Response("Inscripciones creadas", 200)
                 except Exception as e:
+                    print(e)
                     return Response(e, 400)
             return Response(inscripcionesResulst.errors, 404)
         return Response("Evento Not found", 404)

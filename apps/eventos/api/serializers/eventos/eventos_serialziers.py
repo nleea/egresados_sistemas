@@ -52,6 +52,7 @@ class EventosSerializers(BaseSerializers):
                                             "nombre_actividad"], responsable=validated_data["responsable"], lugar=validated_data[
                                             "lugar"], hora=validated_data["hora"], userCreate=validated_data["userCreate"],
                                             cupos=validated_data["cupos"], objectivo=validated_data["objectivo"])
+            
             return evento
         except BaseException as e:
             raise

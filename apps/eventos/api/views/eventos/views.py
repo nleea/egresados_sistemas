@@ -1,9 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from ...serializers.eventos.eventos_serialziers import EventosSerializers, EventosSerializersView
+from ...serializers.eventos.inscripciones import InscripcionesSerializers
 from ....models.models import Eventos
 from rest_framework import status
-
+from ....models.models import User
+from apps.send_email import send_notification_mail
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
@@ -28,9 +30,20 @@ class EventosView(APIView):
 class SaveEventosView(APIView):
 
     def post(self, request, *args, **kwargs):
+        
         data = EventosSerializers(data=request.data)
         if data.is_valid():
-            data.save(userCreate=request.user)
+            evento = data.save(userCreate=request.user)
+            user = User.objects.all().defer("roles")
+            inscripcionesResulst = InscripcionesSerializers(data={"evento":evento.pk})
+            if inscripcionesResulst.is_valid():
+                try:
+                    for _, x in enumerate(user):
+                        send_notification_mail.delay(
+                            [x.email], x.pk, inscripcionesResulst.validated_data["evento"])  # type: ignore
+                    inscripcionesResulst.save(user=user)
+                except Exception as e:
+                    return Response(e, status.HTTP_400_BAD_REQUEST)
             return Response("Success", status.HTTP_200_OK)
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -38,7 +51,7 @@ class SaveEventosView(APIView):
 class UpdateEventosView(APIView):
 
     def _allowed_methods(self):
-        self.http_method_names.append("put")
+        self.http_method_names.append("put") # type: ignore
         return [m.upper() for m in self.http_method_names if hasattr(self, m)]
 
     def get_object(self):

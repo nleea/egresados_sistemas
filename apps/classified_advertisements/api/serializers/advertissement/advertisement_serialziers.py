@@ -5,6 +5,7 @@ from ..BaseSerializers import BaseSerializers
 
 
 class TipoCapacitacionSerializers(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
 
     class Meta:
