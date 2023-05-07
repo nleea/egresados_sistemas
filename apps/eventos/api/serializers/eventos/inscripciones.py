@@ -37,7 +37,7 @@ class AsistenciaSerializer(BaseSerializers):
         fields = "__all__"
 
     def create(self, validated_data):
-        asistencia = Asistencia.objects.create(evento_id=validated_data["evento"],user_id=validated_data["user"])
+        asistencia = Asistencia.objects.create(evento_id=validated_data["evento"],user_id=validated_data["user"],userCreate_id=validated_data["user"])
         return asistencia
 
     def update(self, instance, validated_data):

@@ -54,11 +54,11 @@ class AsistenciaView(APIView):
     def get(self, request, *args, **kwargs):
         user = request.GET.get("user", None)
         evento = request.GET.get("evento", None)
-
+    
         resulst = AsistenciaSerializer(data={"user": user, "evento": evento})
 
         if resulst.is_valid():
             resulst.save()
             return Response("Ok", 200)
 
-        return Response(resulst.errors, 404)
+        return Response("Ok", 404)
