@@ -1,0 +1,11 @@
+.container {
+  width: 50%;
+  margin: auto;
+}
+
+.titulo {
+  font-size: 2rem;
+  font-style: italic;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+}

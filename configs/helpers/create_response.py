@@ -42,8 +42,14 @@ def create_response(code, message, data, path='', method=""):
                 data_parse["method"] = method
 
             return data_parse, code
-        
-        
+
+        render = False
+
+        match = re.search("html", data)
+        if match:
+            render = True
+            return data,code,True
+
         data = json.loads(data)
         data_parse["data"] = data if 'count' not in data else data["results"]
         data_parse["next"] = None if "next" not in data else data["next"]
@@ -55,6 +61,6 @@ def create_response(code, message, data, path='', method=""):
         data_parse["path"] = path
         data_parse["method"] = method
 
-        return data_parse, code
+        return data_parse, code, render
     except (Exception, BaseException) as creation_error:
-        return Response({creation_error}, status=code)
+        return creation_error, code, render

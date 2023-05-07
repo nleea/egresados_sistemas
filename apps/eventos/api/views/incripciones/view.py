@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from apps.send_email import send_notification_mail
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.shortcuts import render
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -59,6 +60,6 @@ class AsistenciaView(APIView):
 
         if resulst.is_valid():
             resulst.save()
-            return Response("Ok", 200)
+            return render(request, "index.html")
 
-        return Response("Ok", 404)
+        return render(request, "index.html")
