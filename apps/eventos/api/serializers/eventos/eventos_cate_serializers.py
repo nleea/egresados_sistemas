@@ -2,6 +2,9 @@ from rest_framework import serializers
 from ....models import EventosArea
 from ..BaseSerializers import BaseSerializers
 
+class EventosCategorySerializersView(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    name = serializers.CharField()
 
 class EventosCategorySerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)

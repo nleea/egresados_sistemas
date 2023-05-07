@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ....models.models import Pqrs
 from ..BaseSerializers import BaseSerializers
+from .tipo_serializers import PqrsTipoSerializers
 
 class PqrsSerializersView(BaseSerializers):
     titulo = serializers.CharField(read_only=True)
@@ -9,7 +10,7 @@ class PqrsSerializersView(BaseSerializers):
         source="get_status_display", read_only=True)
     anexo = serializers.FileField(required=False,read_only=True)
     persona = serializers.CharField(read_only=True)
-    tipopqrs = serializers.CharField(read_only=True)
+    tipopqrs = PqrsTipoSerializers(read_only=True)
     
     def __init__(self, instance=None, data=..., **kwargs):
         meta = bool(kwargs.pop("meta",True))

@@ -7,7 +7,16 @@ class EventosSubAreaSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     area = serializers.CharField(read_only=True)
     name = serializers.CharField(read_only=True)
-    
+
+    def __init__(self, instance=None, data=..., **kwargs):
+        expanded = bool(kwargs.pop("expands", True))
+        
+        super().__init__(instance, data, **kwargs)
+
+        if not expanded:
+            self.fields.pop("area")
+        
+
     class Meta:
         fields = "__all__"
 

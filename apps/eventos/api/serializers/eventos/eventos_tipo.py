@@ -2,6 +2,9 @@ from rest_framework import serializers
 from ....models import TipoEvento
 from ..BaseSerializers import BaseSerializers
 
+class TipoEventosSerializersView(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    name = serializers.CharField(read_only=True)
 
 class TipoEventosSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)

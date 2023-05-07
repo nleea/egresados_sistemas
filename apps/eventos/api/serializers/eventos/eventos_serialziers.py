@@ -1,14 +1,14 @@
 from rest_framework import serializers
 from ....models import Eventos
 from ..BaseSerializers import BaseSerializers
-
+from .eventos_sub_area_serializers import EventosSubAreaSerializersView
+from .eventos_cate_serializers import EventosCategorySerializersView
+from .eventos_tipo import TipoEventosSerializersView
 
 class EventosSerializersView(BaseSerializers):
-
-
     id = serializers.PrimaryKeyRelatedField(read_only=True)
-    area = serializers.SlugRelatedField("name", read_only=True)
-    subArea = serializers.SlugRelatedField("name", read_only=True)
+    area = EventosCategorySerializersView(read_only=True)
+    subArea = EventosSubAreaSerializersView(read_only=True,expands=False)
     nombre_actividad = serializers.CharField(read_only=True)
     tipo_actividad = serializers.CharField(read_only=True)
     responsable = serializers.CharField(read_only=True)
@@ -64,6 +64,8 @@ class EventosSerializers(BaseSerializers):
             'descripcion', instance.descripcion)
         instance.subArea_id = validated_data.get(
             'subArea', instance.subArea)
+        instance.tipo_actividad = validated_data.get(
+            'tipo_actividad', instance.tipo_actividad)
         instance.nombre_actividad = validated_data.get(
             'nombre_actividad', instance.nombre_actividad)
         instance.responsable = validated_data.get(
