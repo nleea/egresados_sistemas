@@ -6,7 +6,7 @@ from ...serializers.category.category_serializers import CategorySerializers
 class SubCategorySerializersView(BaseSerializers):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField(read_only=True)
-    categoriaId = serializers.CharField(read_only=True)
+    categoriaId = CategorySerializers(read_only=True)
 
 
 class SubCategorySerializers(BaseSerializers):

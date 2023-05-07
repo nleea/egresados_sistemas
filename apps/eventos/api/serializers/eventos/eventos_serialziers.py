@@ -8,7 +8,7 @@ from .eventos_tipo import TipoEventosSerializersView
 class EventosSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     area = EventosCategorySerializersView(read_only=True)
-    subArea = EventosSubAreaSerializersView(read_only=True,expands=False)
+    subArea = EventosSubAreaSerializersView(read_only=True)
     nombre_actividad = serializers.CharField(read_only=True)
     tipo_actividad = serializers.CharField(read_only=True)
     responsable = serializers.CharField(read_only=True)
