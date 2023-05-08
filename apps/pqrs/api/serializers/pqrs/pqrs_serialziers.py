@@ -6,12 +6,19 @@ from .tipo_serializers import PqrsTipoSerializers
 class PqrsSerializersView(BaseSerializers):
     titulo = serializers.CharField(read_only=True)
     description = serializers.CharField(read_only=True)
-    status = serializers.CharField(
+    status_dic = serializers.CharField(
         source="get_status_display", read_only=True)
+    status = serializers.CharField(read_only=True)
     anexo = serializers.FileField(required=False,read_only=True)
     persona = serializers.CharField(read_only=True)
     tipopqrs = PqrsTipoSerializers(read_only=True)
     
+
+    def to_representation(self, instance):
+        results = super().to_representation(instance)
+        results["status"] = {"name": instance.status, "valor":results["status_dic"] }
+        return results
+
     def __init__(self, instance=None, data=..., **kwargs):
         meta = bool(kwargs.pop("meta",True))
         super().__init__(instance, data, **kwargs)

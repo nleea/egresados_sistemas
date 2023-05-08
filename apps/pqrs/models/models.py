@@ -29,7 +29,7 @@ class Pqrs(BaseModel):
     class STATUS_PQRS(models.TextChoices):
         FINALIZADA = "FN", _("Finalizada")
         ACTIVA = "AC", _("Activa")
-        PENDIENTE = "PD", _("Pendiente")
+        ESPERA = "EP", _("En espera")
 
     titulo = models.CharField(max_length=256)
     description = models.CharField(max_length=600)
