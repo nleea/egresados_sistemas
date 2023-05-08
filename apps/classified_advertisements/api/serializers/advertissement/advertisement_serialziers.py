@@ -123,8 +123,8 @@ class AdvertisementSerializers(BaseSerializers):
             'municipio', instance.municipio)
         instance.direccion = validated_data.get(
             'direccion', instance.direccion)
-        instance.subCategori_id = validated_data.get(
-            'subCategori', instance.subCategori)
+        instance.subCategoria_id = validated_data.get(
+            'subCategoria', instance.subCategoria)
         instance.metodos_entrega = metodos_entrega
         instance.formas_pago = formas_pago
         instance.tipo_capacitacion_id = validated_data.get(
