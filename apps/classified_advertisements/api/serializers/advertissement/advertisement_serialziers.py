@@ -46,9 +46,12 @@ class AdvertisementSerializersView(BaseSerializers):
     def to_representation(self, instance):
         results = super().to_representation(instance)
         results["formas_pago"] = [x for x in instance.formas_pago.split(",")]
-        results["metodos_entrega"] = [x for x in instance.metodos_entrega.split(",")]
-        results["categoria"] = {"id":instance.subCategoria.categoriaId.id,"name":instance.subCategoria.categoriaId.name,"subcategoria":instance.subCategoria.name}
-        results["subCategoria"] = {"id":instance.subCategoria.id, "name":instance.subCategoria.name  }
+        results["metodos_entrega"] = [
+            x for x in instance.metodos_entrega.split(",")]
+        results["categoria"] = {"id": instance.subCategoria.categoriaId.id,
+                                "name": instance.subCategoria.categoriaId.name}
+        results["subCategoria"] = {"id": instance.subCategoria.id,
+                                   "name": instance.subCategoria.name, "categoriaId": instance.subCategoria.categoriaId.name}
         return results
 
     class Meta:
@@ -89,14 +92,15 @@ class AdvertisementSerializers(BaseSerializers):
                                          formas_pago=formas_pago)
 
         if len(validated_data.get("tipo_capacitacion", None)):
-            capacitaciones = TiposCapacitaciones.objects.filter(pk__in=validated_data.pop("tipo_capacitacion", None))
+            capacitaciones = TiposCapacitaciones.objects.filter(
+                pk__in=validated_data.pop("tipo_capacitacion", None))
             for capacitacion in capacitaciones:
                 anuncio.tipo_capacitacion.add(capacitacion)
 
         if len(validated_data.get("redes", None)):
             for red in validated_data.pop("redes", None):
                 anuncio.redes.add(RedesSociales.objects.create(
-                    link=red["link"],name=red["name"] if "name" in red else None).pk)
+                    link=red["link"], name=red["name"] if "name" in red else None).pk)
 
         return anuncio
 
@@ -113,7 +117,8 @@ class AdvertisementSerializers(BaseSerializers):
             'telefono_emprendimiento', instance.telefono_emprendimiento)
         instance.correo_emprendimiento = validated_data.get(
             'correo_emprendimiento', instance.correo_emprendimiento)
-        instance.corregimiento = validated_data.get('corregimiento', instance.corregimiento)
+        instance.corregimiento = validated_data.get(
+            'corregimiento', instance.corregimiento)
         instance.municipio = validated_data.get(
             'municipio', instance.municipio)
         instance.direccion = validated_data.get(
