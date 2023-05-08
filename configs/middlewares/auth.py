@@ -72,7 +72,7 @@ class CustomMiddleware(MiddlewareMixin):
                     user = User.objects.get(id=token['user_id'])
 
                 if not tokenUser.is_authenticated:
-                    response, code = create_response(
+                    response, code,render = create_response(
                         401, 'Unauthorized', {
                             "message": 'User not in session'
                         }
@@ -80,7 +80,7 @@ class CustomMiddleware(MiddlewareMixin):
                     return HttpResponse(json.dumps(response), status=code)
 
                 if 'sessionid' in request.COOKIES and len(request.COOKIES['sessionid']) == 0:
-                    response, code = create_response(
+                    response, code,render = create_response(
                         401, 'Unauthorized', {
                             "message": 'User not in session'
                         }
@@ -96,7 +96,7 @@ class CustomMiddleware(MiddlewareMixin):
                     return HttpResponse(json.dumps(response), status=code)
 
                 if tokenUser.email != user.email:
-                    response, code = create_response(
+                    response, code,render = create_response(
                         401, "Unauthorized",{
                             "message": 'Access not match'
                         }
@@ -108,10 +108,10 @@ class CustomMiddleware(MiddlewareMixin):
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
                 if ('refresh-token' in request.session):
                     token = RefreshToken(request.session['refresh-token'])
-                    response, code = create_response(
+                    response, code,render = create_response(
                         400, 'Unauthorized', "ss")
                     return HttpResponse(json.dumps(response), status=code)
-                response, code = create_response(
+                response, code, render = create_response(
                     401, 'Unauthorized', {"message": ["Authorization has failed, Please send valid token."]})
                 logger.info(f"Response {response}")
                 return HttpResponse(json.dumps(response), status=code)
@@ -119,7 +119,7 @@ class CustomMiddleware(MiddlewareMixin):
                 print(e)
                 return HttpResponse(e.args,status=400)
         else:
-            response, code = create_response(
+            response, code, render = create_response(
                 401, 'Unauthorized', {
                     "message": "Authorization not found, Please send valid token"}
             )
