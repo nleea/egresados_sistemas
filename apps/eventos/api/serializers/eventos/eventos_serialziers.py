@@ -71,8 +71,8 @@ class EventosSerializers(BaseSerializers):
             'descripcion', instance.descripcion)
         instance.subArea_id = validated_data.get(
             'subArea', instance.subArea)
-        instance.tipo_actividad = validated_data.get(
-            'tipo_actividad', instance.tipo_actividad)
+        instance.tipo_id = validated_data.get(
+            'tipo_actividad', instance.tipo)
         instance.nombre_actividad = validated_data.get(
             'nombre_actividad', instance.nombre_actividad)
         instance.responsable = validated_data.get(
