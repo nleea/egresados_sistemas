@@ -79,6 +79,8 @@ class EventosSerializers(BaseSerializers):
             'responsable', instance.responsable)
         instance.fecha = validated_data.get(
             'fecha', instance.fecha)
+        instance.fecha = validated_data.get(
+            'hora', instance.hora)
         instance.lugar = validated_data.get(
             'lugar', instance.lugar)
         instance.cupos = validated_data.get(
