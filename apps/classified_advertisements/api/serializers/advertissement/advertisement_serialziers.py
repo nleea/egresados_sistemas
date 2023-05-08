@@ -131,11 +131,11 @@ class AdvertisementSerializers(BaseSerializers):
         instance.tipo_capacitacion_id = validated_data.get(
             'tipo_capacitacion', instance.tipo_capacitacion)
 
-        results = instance.redes.all().in_bulk()
+        results = RedesSociales.objects.filter(id__in=[x["id"] for x in validated_data["redes"]])
         
-        for i,red in enumerate(results.values()):
+        for i,red in enumerate(results):
             red.link = validated_data["redes"][i]["link"]
 
-        RedesSociales.objects.bulk_update(results.values(), ["link"])
+        RedesSociales.objects.bulk_update(results, ["link"])
         instance.save()
         return instance
