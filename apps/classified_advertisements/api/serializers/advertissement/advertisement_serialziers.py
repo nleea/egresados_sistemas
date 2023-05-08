@@ -13,6 +13,7 @@ class TipoCapacitacionSerializers(BaseSerializers):
 
 
 class RedesSocialesSerializers(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField(read_only=True)
     link = serializers.CharField(read_only=True)
 
@@ -51,7 +52,7 @@ class AdvertisementSerializersView(BaseSerializers):
         results["categoria"] = {"id": instance.subCategoria.categoriaId.id,
                                 "name": instance.subCategoria.categoriaId.name}
         results["subCategoria"] = {"id": instance.subCategoria.id,
-                                   "name": instance.subCategoria.name, "categoriaId": {"id":instance.subCategoria.categoriaId.id,"name":instance.subCategoria.categoriaId.name}}
+                                   "name": instance.subCategoria.name, "categoriaId": {"id": instance.subCategoria.categoriaId.id, "name": instance.subCategoria.categoriaId.name}}
         return results
 
     class Meta:
@@ -129,5 +130,12 @@ class AdvertisementSerializers(BaseSerializers):
         instance.formas_pago = formas_pago
         instance.tipo_capacitacion_id = validated_data.get(
             'tipo_capacitacion', instance.tipo_capacitacion)
+
+        results = instance.redes.all().in_bulk()
+        
+        for i,red in enumerate(results.values()):
+            red.link = validated_data["redes"][i]["link"]
+
+        RedesSociales.objects.bulk_update(results.values(), ["link"])
         instance.save()
         return instance

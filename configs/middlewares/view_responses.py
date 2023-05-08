@@ -16,7 +16,6 @@ class CustomResponseMiddleware(object):
         response = self.get_response(request)
         try:
             decode = response.getvalue().decode()
-            print(decode)
             match = re.search(r'^[\d+]\s(.+)', decode)
             if match or type(decode) is list and decode[0].isdigit():
                 decode = ["".join(x) for x in decode]
