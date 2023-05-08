@@ -36,12 +36,12 @@ def create_response(code, message, data, path='', method=""):
                 data_parse["path"] = path
                 data_parse["method"] = method
             else:
-                data_parse["errors"] = proccess_data
+                data_parse["errors"] = json.loads(proccess_data)
                 data_parse["message"] = message
                 data_parse["path"] = path
                 data_parse["method"] = method
 
-            return data_parse, code
+            return data_parse, code,False
 
         render = False
 
