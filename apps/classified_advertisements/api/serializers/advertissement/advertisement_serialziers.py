@@ -51,7 +51,7 @@ class AdvertisementSerializersView(BaseSerializers):
         results["categoria"] = {"id": instance.subCategoria.categoriaId.id,
                                 "name": instance.subCategoria.categoriaId.name}
         results["subCategoria"] = {"id": instance.subCategoria.id,
-                                   "name": instance.subCategoria.name, "categoriaId": instance.subCategoria.categoriaId.name}
+                                   "name": instance.subCategoria.name, "categoriaId": {"id":instance.subCategoria.categoriaId.id,"name":instance.subCategoria.categoriaId.name}}
         return results
 
     class Meta:
