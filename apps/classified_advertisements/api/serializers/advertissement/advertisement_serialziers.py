@@ -41,11 +41,14 @@ class AdvertisementSerializersView(BaseSerializers):
     metodos_entrega = serializers.CharField(read_only=True)
     formas_pago = serializers.CharField(read_only=True)
     tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
+    categoria = serializers.DictField(read_only=True)
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
         results["formas_pago"] = [x for x in instance.formas_pago.split(",")]
         results["metodos_entrega"] = [x for x in instance.metodos_entrega.split(",")]
+        results["categoria"] = {"id":instance.subCategoria.categoriaId.id,"name":instance.subCategoria.categoriaId.name,"subcategoria":instance.subCategoria.name}
+        results["subCategoria"] = {"id":instance.subCategoria.id, "name":instance.subCategoria.name  }
         return results
 
     class Meta:
