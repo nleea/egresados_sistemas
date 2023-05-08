@@ -18,7 +18,7 @@ class PqrsView(APIView):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = PqrsSerializersView(Pqrs.objects.select_related("persona","tipopqrs").all(), many=True, meta=meta)
+        data = PqrsSerializersView(Pqrs.objects.select_related("persona","tipopqrs").all(), many=True, meta=True)
         return Response(data.data,status.HTTP_200_OK)
 
 
