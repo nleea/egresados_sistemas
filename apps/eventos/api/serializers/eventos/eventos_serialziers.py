@@ -81,8 +81,6 @@ class EventosSerializers(BaseSerializers):
             'fecha', instance.fecha)
         instance.lugar = validated_data.get(
             'lugar', instance.lugar)
-        instance.userCreate_id = validated_data.get(
-            'userCreate', instance.userCreate)
         instance.cupos = validated_data.get(
             'cupos', instance.cupos)
         instance.objectivo = validated_data.get(
