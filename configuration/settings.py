@@ -152,7 +152,7 @@ WSGI_APPLICATION = 'configuration.wsgi.application'
 
 db = 'mysql-'
 db += env('MYSQL_DATABASE').strip()
-DATABASES = DBS["mysql-aws"]
+DATABASES = DBS["mysql-local"]
 
 
 # Password validation

@@ -1,5 +1,5 @@
-from ....models import Resources, Resources_roles, Roles
-from rest_framework.serializers import Serializer, IntegerField, BooleanField,CharField
+from ....models import Resources, Resources_roles
+from rest_framework.serializers import Serializer, IntegerField, BooleanField, CharField
 from configs.helpers.menu_resources import menuResources
 
 
@@ -11,18 +11,19 @@ class ResourcesSerializers(Serializer):
     icono = CharField(read_only=True)
     link = CharField(read_only=True)
     titulo = CharField(read_only=True)
-    
+
     class Meta:
-        fields ="__All__"
+        fields = "__All__"
 
 
 class ResourcesRolesSerializers(Serializer):
-    merge = BooleanField()
+    merge = BooleanField(required=False)
     rolesId = IntegerField()
     resources = ResourcesSerializers(many=True)
 
     def create(self, validated_data):
         try:
+            merge = validated_data.get("merge",False)
             new_resources = []
             resources = []
             list_resources_roles = []
@@ -30,24 +31,22 @@ class ResourcesRolesSerializers(Serializer):
             id_last_resources = 0
             last = Resources.objects.last()
 
-            if validated_data["merge"] == True:
-                for i in validated_data["resources"]:
-                    id_padre = Resources.objects.filter(path=i["path"])[0].pk
+            if merge:
+                for _, resource in enumerate(validated_data["resources"]):
+                    id_padre = Resources.objects.get(path=resource["path"]).pk
                     new_resources = [{**x, "id_padre": id_padre}
-                                     for x in i["items"]]
+                                     for x in resource["items"]]
 
             if last:
                 id_last_resources = last.id + 1  # type: ignore
 
-            menuResources(new_resources if validated_data["merge"] else validated_data["resources"],
+            menuResources(new_resources if merge else validated_data["resources"],
                           resources, Resources, id_last_resources)
 
             resources = Resources.objects.bulk_create(resources)
 
-            roles = Roles.objects.get(pk=validated_data['rolesId'])
-
             list_resources_roles = [Resources_roles(
-                rolesId=roles, resourcesId=r) for r in resources]
+                rolesId_id=validated_data['rolesId'], resourcesId=resource) for resource in resources]
 
             Resources_roles.objects.bulk_create(list_resources_roles)
             return None
