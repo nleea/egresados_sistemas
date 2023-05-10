@@ -11,7 +11,7 @@ class AsignacionSerializerView(BaseSerializers):
 
 
 class AsignacionSerializers(BaseSerializers):
-    funcionarioId = serializers.IntegerField()
+    # funcionarioId = serializers.IntegerField()
     pqrs = serializers.IntegerField()
 
     class Meta:

@@ -1,25 +1,36 @@
 from rest_framework.views import APIView
-from ...serializers.pqrs.pqrs_serialziers import PqrsSerializers,PqrsSerializersView
+from ...serializers.pqrs.pqrs_serialziers import PqrsSerializers, PqrsSerializersView
 from ....models.models import Pqrs
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator 
+from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class PqrsView(APIView):
 
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = PqrsSerializersView(Pqrs.objects.select_related("persona","tipopqrs").all(), many=True, meta=True)
-        return Response(data.data,status.HTTP_200_OK)
+
+        roles = request.user.roles.filter(name="Admin")
+
+        if roles:
+            pqrs_filter = Pqrs.objects.select_related(
+                "persona", "tipopqrs").filter(status="AC")
+            data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
+            return Response(data.data, status.HTTP_200_OK)
+        else:
+            pqrs_filter = Pqrs.objects.select_related(
+                "persona", "tipopqrs").filter(userCreate=request.user.id)
+            data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
+            return Response(data.data, status.HTTP_200_OK)
 
 
 class SavePqrsView(APIView):
@@ -74,7 +85,8 @@ class UpdatePqrsView(APIView):
         if instanceOrNone is None:
             return Response("Pqrs {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
-        instance = PqrsSerializers(instanceOrNone, data=request.data,partial=True)
+        instance = PqrsSerializers(
+            instanceOrNone, data=request.data, partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
             return Response("Success", status.HTTP_200_OK)
