@@ -1,5 +1,5 @@
 from ..roles.roles_serializers import RolesSerializers
-from rest_framework.serializers import CharField, ModelSerializer, SlugField
+from rest_framework.serializers import CharField, ModelSerializer, SlugField,Serializer,EmailField
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
@@ -8,9 +8,11 @@ User = get_user_model()
 #from drf_queryfields import QueryFieldsMixin
 
 
-class UserSerializersSimple(ModelSerializer):
+class UserSerializersSimple(Serializer):
+    username = CharField(read_only=True)
+    email = EmailField(read_only=True)
+
     class Meta:
-        model = User
         fields = ('username', 'email')
 
 

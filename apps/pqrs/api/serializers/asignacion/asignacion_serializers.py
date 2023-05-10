@@ -1,11 +1,13 @@
 from rest_framework import serializers
 from ....models.models import Asignacion, User, Pqrs
 from ..BaseSerializers import BaseSerializers
+from ..pqrs.pqrs_serialziers import PqrsSerializersView
+from .....auth_module.api.serializers.user.users_serializers import UserSerializersSimple
 
 
-class AsignacionSerializerView(serializers.Serializer):
-    funcionarioId = serializers.CharField(read_only=True)
-    pqrs = serializers.CharField(read_only=True)
+class AsignacionSerializerView(BaseSerializers):
+    # funcionarioId = UserSerializersSimple(read_only=True)
+    pqrs = PqrsSerializersView(read_only=True,meta=False)
 
 
 class AsignacionSerializers(BaseSerializers):
@@ -26,7 +28,8 @@ class AsignacionSerializers(BaseSerializers):
 
     def update(self, instance, validated_data):
         try:
-            instance.funcionarioId_id = validated_data.get("funcionarioId",instance.funcionarioId)
+            instance.funcionarioId_id = validated_data.get(
+                "funcionarioId", instance.funcionarioId)
             instance.userUpdate = validated_data.get(
                 "userUpdate", instance.userUpdate)
             instance.save()

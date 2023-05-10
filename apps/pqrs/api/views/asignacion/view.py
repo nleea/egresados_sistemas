@@ -8,20 +8,26 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from .....auth_module.models import User
+from .....auth_module.api.serializers.user.users_serializers import UserSerializersSimple
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class AsignacionView(APIView):
 
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = AsignacionSerializerView(
-            Asignacion.objects.select_related("funcionarioId", "pqrs").all(), many=True)
-        return Response(data.data, status.HTTP_200_OK)
+
+        user = User.objects.only("email","id","username").get(pk=1)
+        queryset = Asignacion.objects.defer("pqrs__persona_id","userCreate","userUpdate","pqrs__userCreate_id","pqrs__userUpdate","pqrs__tipopqrs__userCreate_id","pqrs__tipopqrs__userUpdate_id").select_related(
+            "pqrs","pqrs__tipopqrs").filter(funcionarioId=user.id)
+        data = AsignacionSerializerView(queryset, many=True)
+        serialziersUser = UserSerializersSimple([user], many=True)
+        return Response({**serialziersUser.data[0], "pqrs": [x["pqrs"] for x in data.data]}, status.HTTP_200_OK)
 
 
 class SaveAsignacionView(APIView):
@@ -30,7 +36,7 @@ class SaveAsignacionView(APIView):
         data = AsignacionSerializers(data=request.data)
 
         if data.is_valid():
-            data.save(funcionarioId=request.data["funcionarioId"],
+            data.save(funcionarioId=request.user.id,
                       pqrs=request.data["pqrs"], userCreate=request.user)
             return Response("Sucess", status.HTTP_200_OK)
 
