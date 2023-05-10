@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from apps.auth_module.api.serializers.head_serializers import ProgramsSerializers
+from apps.auth_module.api.serializers.head_serializers import ProgramsSerializers,ProgramsSerializersView
 from apps.auth_module.models import Programs
 from rest_framework import status
 
@@ -12,7 +12,7 @@ class ProgramsView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
 
-        data = ProgramsSerializers(
+        data = ProgramsSerializersView(
             Programs.objects.all(), many=True)
 
         return Response(data.data, 200)

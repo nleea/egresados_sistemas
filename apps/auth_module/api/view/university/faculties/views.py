@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from apps.auth_module.models import Faculties 
 from rest_framework import status
-from apps.auth_module.api.serializers.head_serializers import FacultiesSerializers
+from apps.auth_module.api.serializers.head_serializers import FacultiesSerializers,FacultiesSerializersView
 
 
 class FacultiesView(APIView):
@@ -12,7 +12,7 @@ class FacultiesView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
 
-        data = FacultiesSerializers(
+        data = FacultiesSerializersView(
             Faculties.objects.all(), many=True)
 
         return Response(data.data, status.HTTP_200_OK)

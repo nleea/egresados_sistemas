@@ -38,11 +38,29 @@ class HeadSerializers(BaseSerializers):
         instance.save()
         return instance
 
+class FacultiesSerializersView(BaseSerializers):
+    name = serializers.CharField(read_only=True)
+    headquarter = HeadSerializers(read_only=True)
+
+
+    def to_representation(self, instance):
+        return {
+            "id":instance.id,
+            "name":instance.name,
+            "sede": {
+                "id":instance.headquarter.id,
+                "name":instance.headquarter.name
+            }
+        }
+    
+    class Meta:
+        fields = '__all__'
+
 
 class FacultiesSerializers(BaseSerializers):
     name = serializers.CharField()
     sede = serializers.IntegerField(write_only=True)
-    headquarter = serializers.SlugRelatedField("name", read_only=True)
+    headquarter = HeadSerializers(read_only=True)
     
     class Meta:
         fields = '__all__'
@@ -51,7 +69,10 @@ class FacultiesSerializers(BaseSerializers):
         return {
             "id":instance.id,
             "name":instance.name,
-            "sede": instance.headquarter.name
+            "sede": {
+                "id":instance.headquarter.id,
+                "name":instance.headquarter.name
+            }
         }
 
     def create(self, validated_data):
@@ -67,10 +88,28 @@ class FacultiesSerializers(BaseSerializers):
         return instance
 
 
+class ProgramsSerializersView(BaseSerializers):
+    name = serializers.CharField(read_only=True)
+    faculty = FacultiesSerializers(read_only=True)
+
+    def to_representation(self, instance):
+        return {
+            "id":instance.id,
+            "name":instance.name,
+            "faculty": {
+                "id":instance.faculty.id,
+                "name":instance.faculty.name
+            }
+        }
+
+    class Meta:
+        fields = '__all__'
+
+
 class ProgramsSerializers(BaseSerializers):
     name = serializers.CharField()
     faculta = serializers.IntegerField(write_only=True)
-    faculty = serializers.SlugRelatedField("name", read_only=True)
+    faculty = FacultiesSerializers(read_only=True)
 
     class Meta:
             fields = '__all__'
