@@ -1,10 +1,11 @@
 from rest_framework import serializers
 from ....models.models import Question,TipoMomento
 from ..BaseSerializers import BaseSerializers
+from ..momento.momento_serializers import MomentSerializers
 
 class QuestionSerializers(BaseSerializers):
     pregunta_nombre = serializers.CharField()
-    momento = serializers.SlugRelatedField("tipo",read_only=True)
+    momento = MomentSerializers(read_only=True)
 
     class Meta:
         fields = "__all__"

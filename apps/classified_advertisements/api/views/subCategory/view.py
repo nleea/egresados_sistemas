@@ -75,8 +75,20 @@ class DeleteSubCategoryView(APIView):
             return subCategoria
         except SubCategoria.DoesNotExist:
             return None
+    
+
+    def bulk_delete(self, ids):
+        try:
+            resulstForDelete = SubCategoria.objects.filter(pk__in=ids)
+            resulstForDelete._raw_delete(resulstForDelete.db)#type: ignore
+            return Response("Success", 200)
+        except Exception as e:
+            return Response(e.args, 400)
 
     def delete(self, request, *args, **kwargs):
+
+        if "ids" in request.data:
+            return self.bulk_delete(request.data["ids"])
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:

@@ -15,8 +15,14 @@ def create_response(code, message, data, path='', method=""):
 
     data_parse = {'ok': False, "message": "",
                   "errors": "", "path": "", "method": "", "next": None, "previous": None, "count": None}
+    render = False
 
     try:
+
+        match = re.search("html", data)
+        if match:
+            render = True
+            return data, code, True
 
         if code != 200:
             proccess_data = data
@@ -36,21 +42,17 @@ def create_response(code, message, data, path='', method=""):
                 data_parse["path"] = path
                 data_parse["method"] = method
             else:
-                data_parse["errors"] = json.loads(proccess_data)
+                data_parse["errors"] = json.loads(proccess_data)#type:ignore
                 data_parse["message"] = message
                 data_parse["path"] = path
                 data_parse["method"] = method
 
-            return data_parse, code,False
+            return data_parse, code, False
 
-        render = False
+        match = re.search("{|]", data)
 
-        match = re.search("html", data)
-        if match:
-            render = True
-            return data,code,True
+        data = data if not match else json.loads(data)
 
-        data = json.loads(data)
         data_parse["data"] = data if 'count' not in data else data["results"]
         data_parse["next"] = None if "next" not in data else data["next"]
         data_parse["previous"] = None if "previous" not in data else data["previous"]
