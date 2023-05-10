@@ -24,6 +24,8 @@ def create_response(code, message, data, path='', method=""):
             render = True
             return data, code, True
 
+        match_object = re.search("{|]", data)
+
         if code != 200:
             proccess_data = data
             if type(data) is list and len(data) > 0:
@@ -42,16 +44,14 @@ def create_response(code, message, data, path='', method=""):
                 data_parse["path"] = path
                 data_parse["method"] = method
             else:
-                data_parse["errors"] = json.loads(proccess_data)#type:ignore
+                data_parse["errors"] = proccess_data if  not match_object else json.loads(proccess_data)  # type:ignore
                 data_parse["message"] = message
                 data_parse["path"] = path
                 data_parse["method"] = method
 
             return data_parse, code, False
 
-        match = re.search("{|]", data)
-
-        data = data if not match else json.loads(data)
+        data = data if not match_object else json.loads(data)
 
         data_parse["data"] = data if 'count' not in data else data["results"]
         data_parse["next"] = None if "next" not in data else data["next"]

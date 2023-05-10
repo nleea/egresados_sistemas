@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from ....models import SubAreaEventos
 from ..BaseSerializers import BaseSerializers
-
+from .eventos_cate_serializers import EventosCategorySerializersView
 
 class EventosSubAreaSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
-    area = serializers.CharField(read_only=True)
+    area = EventosCategorySerializersView(read_only=True)
     name = serializers.CharField(read_only=True)
 
     def __init__(self, instance=None, data=..., **kwargs):
