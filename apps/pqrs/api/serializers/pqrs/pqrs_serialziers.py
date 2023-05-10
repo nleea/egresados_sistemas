@@ -11,7 +11,7 @@ class PqrsSerializersView(BaseSerializers):
     status = serializers.CharField(read_only=True)
     anexo = serializers.FileField(required=False,read_only=True)
     persona = serializers.CharField(read_only=True)
-    tipopqrs = PqrsTipoSerializers(read_only=True)
+    tipopqrs = PqrsTipoSerializers(read_only=True,meta=False)
     
 
     def to_representation(self, instance):
@@ -25,7 +25,6 @@ class PqrsSerializersView(BaseSerializers):
         
         if not meta:
             self.fields.pop("persona")
-            self.fields.pop("tipopqrs")
 
 class PqrsSerializers(BaseSerializers):
     titulo = serializers.CharField()

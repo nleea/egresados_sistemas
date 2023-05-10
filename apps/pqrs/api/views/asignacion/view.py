@@ -16,7 +16,7 @@ from .....auth_module.api.serializers.user.users_serializers import UserSerializ
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class AsignacionView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -25,8 +25,10 @@ class AsignacionView(APIView):
             meta = request.headers["meta"]
 
         user = User.objects.only("email", "id", "username").get(pk=1)
-        queryset = Asignacion.objects.defer("pqrs__persona_id", "userCreate", "userUpdate", "pqrs__userCreate_id", "pqrs__userUpdate", "pqrs__tipopqrs__userCreate_id", "pqrs__tipopqrs__userUpdate_id").select_related(
-            "pqrs", "pqrs__tipopqrs").filter(funcionarioId=user.id)
+        queryset = Asignacion.objects.defer("userCreate", "userUpdate", "pqrs__userCreate_id",
+                                            "pqrs__userUpdate", "pqrs__tipopqrs__userCreate_id",
+                                            "pqrs__tipopqrs__userUpdate_id").select_related(
+            "pqrs", "pqrs__tipopqrs","pqrs__persona").filter(funcionarioId=user.id)
         data = AsignacionSerializerView(queryset, many=True)
         serialziersUser = UserSerializersSimple([user], many=True)
         return Response({**serialziersUser.data[0], "pqrs": [x["pqrs"] for x in data.data]}, status.HTTP_200_OK)
