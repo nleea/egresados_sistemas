@@ -7,7 +7,7 @@ from .....auth_module.api.serializers.user.users_serializers import UserSerializ
 
 class AsignacionSerializerView(BaseSerializers):
     # funcionarioId = UserSerializersSimple(read_only=True)
-    pqrs = PqrsSerializersView(read_only=True,meta=False)
+    pqrs = PqrsSerializersView(read_only=True)
 
 
 class AsignacionSerializers(BaseSerializers):

@@ -5,8 +5,6 @@ from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
 User = get_user_model()
 
-#from drf_queryfields import QueryFieldsMixin
-
 
 class UserSerializersSimple(Serializer):
     username = CharField(read_only=True)

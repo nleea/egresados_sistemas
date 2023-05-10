@@ -1,6 +1,8 @@
 from rest_framework.views import APIView
 from ...serializers.asignacion.asignacion_serializers import AsignacionSerializers, AsignacionSerializerView
-from ....models.models import Asignacion
+from ...serializers.pqrs.pqrs_serialziers import PqrsSerializersView
+
+from ....models.models import Asignacion, Pqrs
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -22,12 +24,27 @@ class AsignacionView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
 
-        user = User.objects.only("email","id","username").get(pk=1)
-        queryset = Asignacion.objects.defer("pqrs__persona_id","userCreate","userUpdate","pqrs__userCreate_id","pqrs__userUpdate","pqrs__tipopqrs__userCreate_id","pqrs__tipopqrs__userUpdate_id").select_related(
-            "pqrs","pqrs__tipopqrs").filter(funcionarioId=user.id)
+        user = User.objects.only("email", "id", "username").get(pk=1)
+        queryset = Asignacion.objects.defer("pqrs__persona_id", "userCreate", "userUpdate", "pqrs__userCreate_id", "pqrs__userUpdate", "pqrs__tipopqrs__userCreate_id", "pqrs__tipopqrs__userUpdate_id").select_related(
+            "pqrs", "pqrs__tipopqrs").filter(funcionarioId=user.id)
         data = AsignacionSerializerView(queryset, many=True)
         serialziersUser = UserSerializersSimple([user], many=True)
         return Response({**serialziersUser.data[0], "pqrs": [x["pqrs"] for x in data.data]}, status.HTTP_200_OK)
+
+
+class AsignacionPqrsView(APIView):
+    def get(self, request, *args, **kwargs):
+        meta = None
+        if 'meta' in request.headers:
+            meta = request.headers["meta"]
+
+        roles = request.user.roles.filter(name="Admin")
+
+        if roles:
+            pqrs_filter = Pqrs.objects.select_related(
+                "persona", "tipopqrs").filter(status="AC")
+            data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
+            return Response(data.data, status.HTTP_200_OK)
 
 
 class SaveAsignacionView(APIView):

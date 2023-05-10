@@ -22,8 +22,7 @@ class PqrsView(APIView):
         roles = request.user.roles.filter(name="Admin")
 
         if roles:
-            pqrs_filter = Pqrs.objects.select_related(
-                "persona", "tipopqrs").filter(status="AC")
+            pqrs_filter = Pqrs.objects.select_related("persona", "tipopqrs")
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
             return Response(data.data, status.HTTP_200_OK)
         else:
