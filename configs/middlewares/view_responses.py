@@ -5,7 +5,8 @@ from django.db.utils import IntegrityError
 from rest_framework.renderers import JSONRenderer
 import re
 from django.core.cache import cache
-
+import logging
+logging.basicConfig(filename='example.log', encoding='utf-8', level=logging.DEBUG,format = '%(asctime)s:%(levelname)s:%(name)s:%(message)s')
 
 class CustomResponseMiddleware(object):
 
