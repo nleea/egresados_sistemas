@@ -152,7 +152,7 @@ WSGI_APPLICATION = 'configuration.wsgi.application'
 
 db = 'mysql-'
 db += env('MYSQL_DATABASE').strip()
-DATABASES = DBS["mysql-local"]
+DATABASES = DBS["mysql-azure"]
 
 
 # Password validation
