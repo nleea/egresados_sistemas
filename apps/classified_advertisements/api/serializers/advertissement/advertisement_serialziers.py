@@ -110,6 +110,13 @@ class AdvertisementSerializers(BaseSerializers):
             validated_data["metodos_entrega"]) if "metodos_entrega" in validated_data != None else instance.metodos_entrega
         formas_pago = ",".join(
             validated_data["formas_pago"]) if "formas_pago" in validated_data != None else instance.formas_pago
+        
+        if len(validated_data.get("tipo_capacitacion", None)):
+            capacitaciones = TiposCapacitaciones.objects.filter(
+                pk__in=validated_data.pop("tipo_capacitacion", None))
+            for capacitacion in capacitaciones:
+                instance.tipo_capacitacion.add(capacitacion)
+
         instance.nombre_emprendimiento = validated_data.get(
             'nombre_emprendimiento', instance.nombre_emprendimiento)
         instance.descripcion = validated_data.get(
