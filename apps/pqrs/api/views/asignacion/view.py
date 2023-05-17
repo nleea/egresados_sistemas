@@ -28,7 +28,7 @@ class AsignacionView(APIView):
         queryset = Asignacion.objects.defer("userCreate", "userUpdate", "pqrs__userCreate_id",
                                             "pqrs__userUpdate", "pqrs__tipopqrs__userCreate_id",
                                             "pqrs__tipopqrs__userUpdate_id").select_related(
-            "pqrs", "pqrs__tipopqrs","pqrs__persona").filter(funcionarioId=user.id)
+            "pqrs", "pqrs__tipopqrs", "pqrs__persona").filter(funcionarioId=user.id,visible=True)
         data = AsignacionSerializerView(queryset, many=True)
         serialziersUser = UserSerializersSimple([user], many=True)
         return Response({**serialziersUser.data[0], "pqrs": [x["pqrs"] for x in data.data]}, status.HTTP_200_OK)
@@ -77,7 +77,12 @@ class DeleteAsignacionView(APIView):
         if instanceOrNone is None:
             return Response("Bad Request", "Asignacion {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST,)
         try:
-            instanceOrNone.delete()
+            instance = AsignacionSerializers(instanceOrNone, data={"visible": False},partial=True)
+
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+                return Response("Success", status.HTTP_200_OK)
+
             return Response("Delete", status.HTTP_200_OK)
         except BaseException as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
@@ -105,7 +110,6 @@ class UpdateAsignacionView(APIView):
 
         instance = AsignacionSerializers(instanceOrNone, data=request.data)
         if instance.is_valid():
-
             try:
                 instance.save(
                     funcionarioId=request.data["funcionarioId"], userUpdate=request.user)

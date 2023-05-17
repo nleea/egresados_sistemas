@@ -21,6 +21,8 @@ class RespuestaSerializers(BaseSerializers):
     pqrs = serializers.IntegerField()
     descripcion = serializers.CharField()
     anexo = serializers.FileField(required=False)
+    visible = serializers.BooleanField(required=False,write_only=True)
+
     
     class Meta:
         fields = "__all__"
@@ -38,6 +40,7 @@ class RespuestaSerializers(BaseSerializers):
         try:
             instance.descripcion = validated_data.get("descripcion",instance.descripcion)
             instance.userUpdate = validated_data.get("userUpdate",instance.userUpdate)
+            instance.visible = validated_data.get("visible",instance.visible)
             instance.save()
             return instance
         except Exception as e:

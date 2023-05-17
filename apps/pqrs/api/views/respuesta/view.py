@@ -15,7 +15,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class RespuestaView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -23,7 +23,7 @@ class RespuestaView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
         data = RespuestaSerializersView(
-            Respuesta.objects.select_related("pqrs").all(), many=True, meta=meta)
+            Respuesta.objects.select_related("pqrs").filter(visible=True), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK,)
 
 
@@ -59,7 +59,12 @@ class DeleteRespuestaView(APIView):
             return Response("Respuesta {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
+            instance = RespuestaSerializers(
+                instanceOrNone, data={"visible": False}, partial=True)  # type: ignore
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Success", status.HTTP_200_OK)
             return Response("Delete", status.HTTP_200_OK)
         except BaseException as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
@@ -100,8 +105,9 @@ class RespuestasQuery(APIView):
     def query(self, pk):
         try:
             pqrs = Pqrs.objects.defer("userCreate", "userUpdate", "tipopqrs__userCreate", "tipopqrs__userUpdate").prefetch_related(
-                Prefetch("respuesta_pqrs", queryset=Respuesta.objects.defer("userCreate","userUpdate").all())).select_related("tipopqrs", "persona").get(pk=pk)
-            respuestas = pqrs._prefetched_objects_cache["respuesta_pqrs"]# type:ignore
+                Prefetch("respuesta_pqrs", queryset=Respuesta.objects.defer("userCreate", "userUpdate").all())).select_related("tipopqrs", "persona").get(pk=pk)
+            # type:ignore
+            respuestas = pqrs._prefetched_objects_cache["respuesta_pqrs"]
             return pqrs, respuestas
         except (Pqrs.DoesNotExist):
             return None, None

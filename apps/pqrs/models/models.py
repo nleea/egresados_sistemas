@@ -9,9 +9,10 @@ class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True, blank=True, null=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
     userCreate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
     userUpdate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
+    visible = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
@@ -19,7 +20,7 @@ class BaseModel(models.Model):
 
 class TipoPqrs(BaseModel):
     tipo = models.CharField(max_length=256)
-    
+
     def __str__(self) -> str:
         return self.tipo
 
@@ -33,11 +34,13 @@ class Pqrs(BaseModel):
 
     titulo = models.CharField(max_length=256)
     description = models.CharField(max_length=600)
-    persona = models.ForeignKey(User, on_delete=models.CASCADE,db_index=True)
-    tipopqrs = models.ForeignKey(TipoPqrs, on_delete=models.CASCADE,db_index=True)
+    persona = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True)
+    tipopqrs = models.ForeignKey(
+        TipoPqrs, on_delete=models.CASCADE, db_index=True)
     anexo = models.FileField(
         upload_to="static/files/pqrs/", blank=True, null=True)
-    status = models.CharField(choices=STATUS_PQRS.choices, max_length=10,default=STATUS_PQRS.ACTIVA)
+    status = models.CharField(
+        choices=STATUS_PQRS.choices, max_length=10, default=STATUS_PQRS.ACTIVA)
 
     class Meta:
         verbose_name = 'Pqrs'
@@ -45,10 +48,12 @@ class Pqrs(BaseModel):
     def __str__(self):
         return self.titulo
 
+
 class Asignacion(BaseModel):
-    funcionarioId = models.ForeignKey(User, on_delete=models.CASCADE,db_index=True)
+    funcionarioId = models.ForeignKey(
+        User, on_delete=models.CASCADE, db_index=True)
     fecha_asignacion = models.DateField(auto_now=True)
-    pqrs = models.ForeignKey(Pqrs, on_delete=models.CASCADE,db_index=True)
+    pqrs = models.ForeignKey(Pqrs, on_delete=models.CASCADE, db_index=True)
 
     class Meta:
         verbose_name = 'Asignacion'
@@ -57,7 +62,7 @@ class Asignacion(BaseModel):
 
 class Respuesta(BaseModel):
     pqrs = models.ForeignKey(
-        Pqrs, on_delete=models.CASCADE, related_name="respuesta_pqrs",db_index=True)
+        Pqrs, on_delete=models.CASCADE, related_name="respuesta_pqrs", db_index=True)
     anexo = models.FileField(
         upload_to="static/files/respuesta/", blank=True, null=True)
     descripcion = models.CharField(max_length=256, null=True, blank=True)

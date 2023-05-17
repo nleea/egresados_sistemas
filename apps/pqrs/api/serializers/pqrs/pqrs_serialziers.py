@@ -12,7 +12,7 @@ class PqrsSerializersView(BaseSerializers):
     anexo = serializers.FileField(required=False,read_only=True)
     persona = serializers.CharField(read_only=True)
     tipopqrs = PqrsTipoSerializers(read_only=True,meta=False)
-    
+        
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
@@ -34,6 +34,7 @@ class PqrsSerializers(BaseSerializers):
     persona = serializers.IntegerField(write_only=True)
     status = serializers.CharField(write_only=True,required=False)
     anexo = serializers.FileField(required=False)
+    visible = serializers.BooleanField(required=False,write_only=True)
 
     class Meta:
         fields = "__all__"
@@ -55,6 +56,8 @@ class PqrsSerializers(BaseSerializers):
         instance.userUpdate = validated_data.get(
             "userUpdate", instance.userUpdate)
         instance.status = validated_data.get("status", instance.status)
+        instance.visible = validated_data.get("visible", instance.visible)
+
         instance.save()
         return instance
 

@@ -4,6 +4,7 @@ from ..BaseSerializers import BaseSerializers
 
 class PqrsTipoSerializers(BaseSerializers):
     tipo = serializers.CharField()
+    visible = serializers.BooleanField(required=False,write_only=True)
 
     class Meta:
         fields = "__all__"
@@ -17,5 +18,6 @@ class PqrsTipoSerializers(BaseSerializers):
     def update(self, instance, validated_data):
         instance.tipo = validated_data.get('tipo', instance.tipo)
         instance.userUpdate = validated_data.get("userUpdate",instance.userUpdate)
+        instance.visible = validated_data.get("visible",instance.visible)
         instance.save()
         return instance

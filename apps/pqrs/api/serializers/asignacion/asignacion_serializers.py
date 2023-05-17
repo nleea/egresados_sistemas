@@ -13,6 +13,8 @@ class AsignacionSerializerView(BaseSerializers):
 class AsignacionSerializers(BaseSerializers):
     # funcionarioId = serializers.IntegerField()
     pqrs = serializers.IntegerField()
+    visible = serializers.BooleanField(required=False,write_only=True)
+
 
     class Meta:
         fields = "__all__"
@@ -32,6 +34,8 @@ class AsignacionSerializers(BaseSerializers):
                 "funcionarioId", instance.funcionarioId)
             instance.userUpdate = validated_data.get(
                 "userUpdate", instance.userUpdate)
+            instance.visible = validated_data.get(
+                "visible", instance.visible)
             instance.save()
             return instance
         except User.DoesNotExist as e:

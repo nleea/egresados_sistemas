@@ -4,14 +4,16 @@ from ....models.models import TipoPqrs
 from rest_framework.response import Response
 from rest_framework import status
 
+
 class TipoPqrsView(APIView):
-   
+
     def get(self, request, *args, **kwargs):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        data = PqrsTipoSerializers(TipoPqrs.objects.all(),many=True,meta=meta)
-        return Response(data.data,status.HTTP_200_OK)
+        data = PqrsTipoSerializers(
+            TipoPqrs.objects.filter(visible=True), many=True, meta=meta)
+        return Response(data.data, status.HTTP_200_OK)
 
 
 class SaveTipoPqrsView(APIView):
@@ -21,13 +23,13 @@ class SaveTipoPqrsView(APIView):
 
         if data.is_valid():
             data.save(userCreate=request.user)
-            return Response("Sucess",status.HTTP_200_OK)
+            return Response("Sucess", status.HTTP_200_OK)
 
-        return Response(data.errors,status.HTTP_400_BAD_REQUEST)
+        return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteTipoPqrsView(APIView):
-    
+
     def get_object(self):
         try:
             pk = self.kwargs.get("pk")
@@ -36,16 +38,21 @@ class DeleteTipoPqrsView(APIView):
         except TipoPqrs.DoesNotExist:
             return None
 
-    def delete(self,request,*args, **kwargs):
+    def delete(self, request, *args, **kwargs):
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            return Response("Bad Request","Pqrs tipo {} not exist".format(self.kwargs.get('pk')),status.HTTP_400_BAD_REQUEST)
+            return Response("Bad Request", "Pqrs tipo {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
-            return Response("Delete" ,status.HTTP_200_OK)
+            instance = PqrsTipoSerializers(
+                instanceOrNone, data={"visible": False}, partial=True)
+            if instance.is_valid():
+                instance.save()
+            else:
+                return Response("Invalid Delete", status.HTTP_200_OK)
+            return Response("Delete", status.HTTP_200_OK)
         except BaseException as e:
-            return Response(e.args,status.HTTP_400_BAD_REQUEST)
+            return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
 class UpdatePqrsView(APIView):
@@ -61,16 +68,15 @@ class UpdatePqrsView(APIView):
         except TipoPqrs.DoesNotExist:
             return None
 
-
     def put(self, request, *args, **kwargs):
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            return Response("Pqrs tipo {} not exist".format(self.kwargs.get('pk')),status.HTTP_400_BAD_REQUEST,)
+            return Response("Pqrs tipo {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST,)
 
-        instance = PqrsTipoSerializers(instanceOrNone,data=request.data)
+        instance = PqrsTipoSerializers(instanceOrNone, data=request.data)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
-            return Response("Success",status.HTTP_200_OK)
+            return Response("Success", status.HTTP_200_OK)
 
-        return Response(instance.errors,status.HTTP_400_BAD_REQUEST)
+        return Response(instance.errors, status.HTTP_400_BAD_REQUEST)

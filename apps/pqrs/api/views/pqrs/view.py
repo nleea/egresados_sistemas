@@ -22,7 +22,8 @@ class PqrsView(APIView):
         roles = request.user.roles.filter(name="Admin")
 
         if roles:
-            pqrs_filter = Pqrs.objects.select_related("persona", "tipopqrs")
+            pqrs_filter = Pqrs.objects.select_related(
+                "persona", "tipopqrs").filter(visible=True)
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
             return Response(data.data, status.HTTP_200_OK)
         else:
@@ -58,7 +59,12 @@ class DeletePqrsView(APIView):
             return Response("Pqrs {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
+            instance = PqrsSerializers(
+                instanceOrNone, data={"visible": False}, partial=True)
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Invalid Delete", status.HTTP_200_OK)
             return Response("Delete", status.HTTP_200_OK)
         except BaseException as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
