@@ -80,7 +80,10 @@ class DeleteSubCategoryView(APIView):
     def bulk_delete(self, ids):
         try:
             resulstForDelete = SubCategoria.objects.filter(pk__in=ids)
-            resulstForDelete._raw_delete(resulstForDelete.db)#type: ignore
+            for _,categoria in enumerate(resulstForDelete):
+                categoria.visible = False 
+
+            SubCategoria.objects.bulk_update(resulstForDelete,["visible"])
             return Response("Success", 200)
         except Exception as e:
             return Response(e.args, 400)

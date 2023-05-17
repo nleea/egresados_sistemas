@@ -52,8 +52,24 @@ class DeleteRespuestaView(APIView):
             return seccionId
         except Respuesta.DoesNotExist:
             return None
+    
+    def bulk_delete(self, ids):
+        try:
+            resulstForDelete = Respuesta.objects.filter(pk__in=ids)
+            for _,instance in enumerate(resulstForDelete):
+                instance.visible = False 
+
+            Respuesta.objects.bulk_update(resulstForDelete,["visible"])
+
+            return Response("Success", 200)
+        except Exception as e:
+            return Response(e.args, 400)
 
     def delete(self, request, *args, **kwargs):
+
+        if "ids" in request.data:
+            return self.bulk_delete(request.data["ids"])
+        
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
             return Response("Respuesta {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
@@ -107,7 +123,7 @@ class RespuestasQuery(APIView):
             pqrs = Pqrs.objects.defer("userCreate", "userUpdate", "tipopqrs__userCreate", "tipopqrs__userUpdate").prefetch_related(
                 Prefetch("respuesta_pqrs", queryset=Respuesta.objects.defer("userCreate", "userUpdate").all())).select_related("tipopqrs", "persona").get(pk=pk)
             # type:ignore
-            respuestas = pqrs._prefetched_objects_cache["respuesta_pqrs"]
+            respuestas = pqrs._prefetched_objects_cache["respuesta_pqrs"]#type:ignore
             return pqrs, respuestas
         except (Pqrs.DoesNotExist):
             return None, None

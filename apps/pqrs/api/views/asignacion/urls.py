@@ -7,5 +7,6 @@ urlpatterns = [
     path("create/", SaveAsignacionView.as_view()),
     path("update/<int:pk>/", UpdateAsignacionView.as_view()),
     path("delete/<int:pk>/", DeleteAsignacionView.as_view()),
+    path("delete/", DeleteAsignacionView.as_view()),
 
 ]

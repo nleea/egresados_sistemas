@@ -1,5 +1,5 @@
 from rest_framework.views import APIView
-from ...serializers.questions.questions_serializers import QuestionSerializers,QuestionSerializersView
+from ...serializers.questions.questions_serializers import QuestionSerializers, QuestionSerializersView
 from ....models.models import Question
 from rest_framework.response import Response
 from rest_framework import status
@@ -42,7 +42,23 @@ class DeleteQuestionsView(APIView):
         except Question.DoesNotExist:
             return None
 
+    def bulk_delete(self, ids):
+        try:
+            resulstForDelete = Question.objects.filter(pk__in=ids)
+            for _, instance in enumerate(resulstForDelete):
+                instance.visible = False
+
+            Question.objects.bulk_update(resulstForDelete, ["visible"])
+
+            return Response("Success", 200)
+        except Exception as e:
+            return Response(e.args, 400)
+
     def delete(self, request, *args, **kwargs):
+
+        if "ids" in request.data:
+            return self.bulk_delete(request.data["ids"])
+
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
             return Response("Questions {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
@@ -78,7 +94,7 @@ class UpdateQuestionsView(APIView):
         if instanceOrNone is None:
             return Response("Questions {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
-        instance = QuestionSerializersUpate(
+        instance = QuestionSerializers(
             instanceOrNone, data=request.data, partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)

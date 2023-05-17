@@ -79,7 +79,10 @@ class DeleteCategoryView(APIView):
     def bulk_delete(self, ids):
         try:
             resulstForDelete = Categoria.objects.filter(pk__in=ids)
-            resulstForDelete._raw_delete(resulstForDelete.db)#type: ignore
+            for _,instance in enumerate(resulstForDelete):
+                instance.visible = False 
+
+            Categoria.objects.bulk_update(resulstForDelete,["visible"])
 
             return Response("Success", 200)
         except Exception as e:

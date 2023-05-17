@@ -76,8 +76,23 @@ class DeleteEventosAreaView(APIView):
             return eventos
         except EventosArea.DoesNotExist:
             return None
+    
+    def bulk_delete(self, ids):
+        try:
+            resulstForDelete = EventosArea.objects.filter(pk__in=ids)
+            for _,instance in enumerate(resulstForDelete):
+                instance.visible = False 
+
+            EventosArea.objects.bulk_update(resulstForDelete,["visible"])
+
+            return Response("Success", 200)
+        except Exception as e:
+            return Response(e.args, 400)
 
     def delete(self, request, *args, **kwargs):
+
+        if "ids" in request.data:
+            return self.bulk_delete(request.data["ids"])
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:

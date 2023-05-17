@@ -5,5 +5,6 @@ urlpatterns = [
     path("", TipoEventosView.as_view()),
     path("create/", SaveTipoEventos.as_view()),
     path("update/<int:pk>/", UpdateTipoEventosView.as_view()),
-    path("delete/<int:pk>/", DeleteTipoEventosView.as_view())
+    path("delete/<int:pk>/", DeleteTipoEventosView.as_view()),
+    path("delete/", DeleteTipoEventosView.as_view())
 ]

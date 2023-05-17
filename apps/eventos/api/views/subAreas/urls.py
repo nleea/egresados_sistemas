@@ -6,5 +6,6 @@ urlpatterns = [
     path("create/", SaveEventosSubAreaView.as_view()),
     path("update/<int:pk>/", UpdateEventosSubAreaView.as_view()),
     path("delete/<int:pk>/", DeleteEventosSubAreaView.as_view()),
+    path("delete/", DeleteEventosSubAreaView.as_view()),
     path("query/", EventosQuery.as_view())
 ]
