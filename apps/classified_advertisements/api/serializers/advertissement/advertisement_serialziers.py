@@ -112,10 +112,11 @@ class AdvertisementSerializers(BaseSerializers):
             validated_data["formas_pago"]) if "formas_pago" in validated_data != None else instance.formas_pago
         
         if len(validated_data.get("tipo_capacitacion", None)):
+            instance.tipo_capacitacion.remove(*instance.tipo_capacitacion.all())
+
             capacitaciones = TiposCapacitaciones.objects.filter(
                 pk__in=validated_data.pop("tipo_capacitacion", None))
-            for capacitacion in capacitaciones:
-                instance.tipo_capacitacion.add(capacitacion)
+            instance.tipo_capacitacion.add(*capacitaciones)
 
         instance.nombre_emprendimiento = validated_data.get(
             'nombre_emprendimiento', instance.nombre_emprendimiento)
