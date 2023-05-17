@@ -12,6 +12,7 @@ class BaseModel(models.Model):
         User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
     userUpdate = models.ForeignKey(
         User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
+    visible = models.BooleanField(default=True)
 
     class Meta:
         abstract = True

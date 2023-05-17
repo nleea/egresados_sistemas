@@ -43,6 +43,7 @@ class AdvertisementSerializersView(BaseSerializers):
     formas_pago = serializers.CharField(read_only=True)
     tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
     categoria = serializers.DictField(read_only=True)
+    
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
@@ -73,6 +74,8 @@ class AdvertisementSerializers(BaseSerializers):
     formas_pago = serializers.ListField()
     tipo_capacitacion = serializers.ListField()
     redes = serializers.ListField()
+    visible = serializers.BooleanField(required=False,write_only=True)
+
 
     class Meta:
         fields = "__all__"
@@ -111,7 +114,7 @@ class AdvertisementSerializers(BaseSerializers):
         formas_pago = ",".join(
             validated_data["formas_pago"]) if "formas_pago" in validated_data != None else instance.formas_pago
         
-        if len(validated_data.get("tipo_capacitacion", None)):
+        if len(validated_data.get("tipo_capacitacion", [])):
             instance.tipo_capacitacion.remove(*instance.tipo_capacitacion.all())
 
             capacitaciones = TiposCapacitaciones.objects.filter(
@@ -138,6 +141,7 @@ class AdvertisementSerializers(BaseSerializers):
         instance.formas_pago = formas_pago
         instance.tipo_capacitacion_id = validated_data.get(
             'tipo_capacitacion', instance.tipo_capacitacion)
+        instance.visible = validated_data.get('visible', instance.visible)
 
         results = RedesSociales.objects.filter(id__in=[x["id"] for x in validated_data["redes"]])
         

@@ -9,10 +9,13 @@ class InscripcionesSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     evento = EventosSerializersView(read_only=True)
     user = UserSerializersSimple(read_only=True,many=True)
+    
 
 
 class InscripcionesSerializers(BaseSerializers):
     evento = serializers.IntegerField()
+    visible = serializers.BooleanField(required=False,write_only=True)
+
 
     class Meta:
         fields = "__all__"
@@ -25,6 +28,7 @@ class InscripcionesSerializers(BaseSerializers):
     def update(self, instance, validated_data):
         instance.name = validated_data.get(
             'name', instance.name)
+        instance.visible = validated_data.get('visible', instance.visible)
         instance.save()
         return instance
 
@@ -32,6 +36,7 @@ class InscripcionesSerializers(BaseSerializers):
 class AsistenciaSerializer(BaseSerializers):
     evento = serializers.IntegerField()
     user = serializers.IntegerField()
+    visible = serializers.BooleanField(required=False,write_only=True)
     
     class Meta:
         fields = "__all__"
@@ -43,6 +48,7 @@ class AsistenciaSerializer(BaseSerializers):
     def update(self, instance, validated_data):
         instance.name = validated_data.get(
             'name', instance.name)
+        instance.visible = validated_data.get('visible', instance.visible)
         instance.save()
         return instance
     

@@ -22,7 +22,7 @@ class CapacitacionesView(ViewPagination):
             meta = request.headers["meta"]
 
         data = CapacitacionesSerializersView(
-             self.paginate_queryset(TiposCapacitaciones.objects.select_related("userCreate","userUpdate").all()), many=True, meta=meta)
+             self.paginate_queryset(TiposCapacitaciones.objects.select_related("userCreate","userUpdate").filter(visible=True)), many=True, meta=meta)
         paginated_data = self.get_paginated_response(data.data).data
 
         if paginated_data is None:
@@ -92,7 +92,12 @@ class DeleteCapacitacionesView(APIView):
             return Response("Capacitacion {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
+            instance = CapacitacionesSerializers(
+            instanceOrNone, data={"visible":False}, partial=True)
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Invalid Delete", status.HTTP_400_BAD_REQUEST)
         except instanceOrNone.DoesNotExist:
             return Response("Error", status.HTTP_400_BAD_REQUEST)
 

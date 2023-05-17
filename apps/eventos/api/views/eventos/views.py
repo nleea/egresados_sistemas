@@ -14,7 +14,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class EventosView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -23,19 +23,20 @@ class EventosView(APIView):
             meta = request.headers["meta"]
 
         data = EventosSerializersView(
-            Eventos.objects.select_related("area", "subArea", "userCreate","userUpdate").all(), many=True, meta=True)
+            Eventos.objects.select_related("area", "subArea", "userCreate", "userUpdate").filter(visible=True), many=True, meta=True)
         return Response(data.data, status.HTTP_200_OK)
 
 
 class SaveEventosView(APIView):
 
     def post(self, request, *args, **kwargs):
-        
+
         data = EventosSerializers(data=request.data)
         if data.is_valid():
             evento = data.save(userCreate=request.user)
             user = User.objects.all().defer("roles")
-            inscripcionesResulst = InscripcionesSerializers(data={"evento":evento.pk})
+            inscripcionesResulst = InscripcionesSerializers(
+                data={"evento": evento.pk})
             if inscripcionesResulst.is_valid():
                 try:
                     for _, x in enumerate(user):
@@ -51,7 +52,7 @@ class SaveEventosView(APIView):
 class UpdateEventosView(APIView):
 
     def _allowed_methods(self):
-        self.http_method_names.append("put") # type: ignore
+        self.http_method_names.append("put")  # type: ignore
         return [m.upper() for m in self.http_method_names if hasattr(self, m)]
 
     def get_object(self):
@@ -98,7 +99,13 @@ class DeleteEventosView(APIView):
             return Response("Evento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
+            instance = EventosSerializers(
+                instanceOrNone, data={"visible":False}, partial=True)
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Invalid Delete", status.HTTP_400_BAD_REQUEST)
+            return Response("Success", status.HTTP_200_OK)
         except instanceOrNone.DoesNotExist:
             return Response("Error", status.HTTP_400_BAD_REQUEST)
 

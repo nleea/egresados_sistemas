@@ -6,16 +6,16 @@ from rest_framework import status
 from ..BaseView import BaseView
 
 from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator 
+from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class MomentView(APIView):
-    
+
     def get_meta(self) -> object | None:
         if "meta" in self.request.headers:
             return self.request.headers["meta"]
@@ -23,7 +23,7 @@ class MomentView(APIView):
 
     def get(self, request, *args, **kwargs):
         data = MomentSerializers(
-            TipoMomento.objects.all(), many=True, meta=self.get_meta())
+            TipoMomento.objects.filter(visible=True), many=True, meta=self.get_meta())
         return Response(data.data, status.HTTP_200_OK)
 
 
@@ -54,7 +54,13 @@ class DeleteMomentsView(BaseView):
             return Response("Momento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
+            instance = MomentSerializers(
+                instanceOrNone, data={"visible": False}, partial=True)
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Invalid Delete", status.HTTP_400_BAD_REQUEST)
+
             return Response("Delete", status.HTTP_200_OK)
         except BaseException as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)

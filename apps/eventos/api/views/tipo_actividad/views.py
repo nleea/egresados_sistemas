@@ -12,7 +12,7 @@ class TipoEventosView(APIView):
             meta = request.headers["meta"]
 
         data = TipoEventosSerializers(
-            TipoEvento.objects.select_related("userCreate","userUpdate").all(), many=True, meta=meta)
+            TipoEvento.objects.select_related("userCreate","userUpdate").filter(visible=True), many=True, meta=meta)
 
         return Response(data.data, status.HTTP_200_OK)
 
@@ -76,7 +76,13 @@ class DeleteTipoEventosView(APIView):
             return Response("Bad Request", "Evento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
+            instance = TipoEventosSerializers(
+            instanceOrNone, data={"visible":False}, partial=True)
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Invalid Delete", status.HTTP_400_BAD_REQUEST)
+
         except instanceOrNone.DoesNotExist:
             return Response("Error", status.HTTP_400_BAD_REQUEST)
         return Response("Delete Success", status.HTTP_200_OK)

@@ -9,6 +9,8 @@ class CapacitacionesSerializersView(BaseSerializers):
 class CapacitacionesSerializers(BaseSerializers):
     id = serializers.IntegerField(read_only=True)
     name = serializers.CharField()
+    visible = serializers.BooleanField(required=False,write_only=True)
+
         
     class Meta:
         fields = "__all__"
@@ -22,5 +24,7 @@ class CapacitacionesSerializers(BaseSerializers):
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)
         instance.userUpdate = validated_data.get('userUpdate', instance.userUpdate)
+        instance.visible = validated_data.get('visible', instance.visible)
+
         instance.save()
         return instance

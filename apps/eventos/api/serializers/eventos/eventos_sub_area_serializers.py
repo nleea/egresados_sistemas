@@ -25,6 +25,8 @@ class EventosSubAreaSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     area = serializers.IntegerField()
     name = serializers.CharField()
+    visible = serializers.BooleanField(required=False,write_only=True)
+
 
     class Meta:
         fields = "__all__"
@@ -39,5 +41,6 @@ class EventosSubAreaSerializers(BaseSerializers):
             'name', instance.name)
         instance.area_id = validated_data.get(
             'area', instance.area)
+        instance.visible = validated_data.get('visible', instance.visible)
         instance.save()
         return instance

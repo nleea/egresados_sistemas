@@ -9,6 +9,7 @@ class EventosCategorySerializersView(BaseSerializers):
 class EventosCategorySerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
+    visible = serializers.BooleanField(required=False,write_only=True)
 
     class Meta:
         fields = "__all__"
@@ -21,5 +22,6 @@ class EventosCategorySerializers(BaseSerializers):
     def update(self, instance, validated_data):
         instance.name = validated_data.get(
             'name', instance.name)
+        instance.visible = validated_data.get('visible', instance.visible)
         instance.save()
         return instance

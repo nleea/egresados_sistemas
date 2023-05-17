@@ -1,22 +1,23 @@
 from rest_framework.views import APIView
-from ...serializers.questions.questions_serializers import QuestionSerializers, QuestionSerializersUpate
+from ...serializers.questions.questions_serializers import QuestionSerializers,QuestionSerializersView
 from ....models.models import Question
 from rest_framework.response import Response
 from rest_framework import status
 
 from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator 
+from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class QuestionsView(APIView):
 
     def get(self, request, *args, **kwargs):
-        data = QuestionSerializers(Question.objects.select_related("momento").all(), many=True)
+        data = QuestionSerializersView(
+            Question.objects.select_related("momento").filter(visible=True), many=True)
         return Response(data.data, status.HTTP_200_OK)
 
 
@@ -46,7 +47,12 @@ class DeleteQuestionsView(APIView):
         if instanceOrNone is None:
             return Response("Questions {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
         try:
-            instanceOrNone.delete()
+            instance = QuestionSerializers(
+                instanceOrNone, data={"visible": False}, partial=True)
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Invalid Delete", status.HTTP_400_BAD_REQUEST)
             return Response("Delete", status.HTTP_200_OK)
         except BaseException as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)

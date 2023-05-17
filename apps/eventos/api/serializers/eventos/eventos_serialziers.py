@@ -44,6 +44,8 @@ class EventosSerializers(BaseSerializers):
     descripcion = serializers.CharField()
     objectivo = serializers.CharField()
     userCreate = serializers.SlugRelatedField("username", read_only=True)
+    visible = serializers.BooleanField(required=False,write_only=True)
+
 
     class Meta:
         fields = "__all__"
@@ -89,5 +91,7 @@ class EventosSerializers(BaseSerializers):
             'objectivo', instance.objectivo)
         instance.userCreate = validated_data.get(
             'userCreate', instance.userCreate)
+        instance.visible = validated_data.get(
+            'visible', instance.visible)
         instance.save()
         return instance

@@ -33,7 +33,7 @@ class AdvertisementView(ViewPagination):
         meta = None
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id","redes__userUpdate_id","redes__userCreate_id","subCategoria__userCreate_id").select_related("subCategoria","userCreate","userUpdate","subCategoria__categoriaId").prefetch_related("redes","tipo_capacitacion").all()
+        anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id","redes__userUpdate_id","redes__userCreate_id","subCategoria__userCreate_id").select_related("subCategoria","userCreate","userUpdate","subCategoria__categoriaId").prefetch_related("redes","tipo_capacitacion").filter(visible=True)
         results = self.paginate_queryset(anuncios)
         data = AdvertisementSerializersView(
             results, many=True, meta=meta)
@@ -104,7 +104,12 @@ class DeleteCategoryView(APIView):
             return Response("Anuncio {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
+            instance = AdvertisementSerializers(
+            instanceOrNone, data={"visible":False}, partial=True)
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Invalid Delete",  status.HTTP_400_BAD_REQUEST)
         except instanceOrNone.DoesNotExist:
             return Response("Error", status.HTTP_400_BAD_REQUEST)
         return Response("Delete Success", status.HTTP_200_OK)

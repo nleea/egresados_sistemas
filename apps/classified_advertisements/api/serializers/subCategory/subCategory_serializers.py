@@ -12,6 +12,7 @@ class SubCategorySerializersView(BaseSerializers):
 class SubCategorySerializers(BaseSerializers):
     name = serializers.CharField()
     categoriaId = serializers.CharField()
+    visible = serializers.BooleanField(required=False,write_only=True)
         
 
     class Meta:
@@ -28,5 +29,7 @@ class SubCategorySerializers(BaseSerializers):
         instance.name = validated_data.get('name', instance.name)
         instance.categoriaId_id = validated_data.get("categoriaId",instance.categoriaId)
         instance.userUpdate = validated_data.get('userUpdate', instance.userUpdate)
+        instance.visible = validated_data.get('visible', instance.visible)
+
         instance.save()
         return instance

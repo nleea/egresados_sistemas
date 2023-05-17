@@ -5,14 +5,14 @@ from ....models.models import EventosArea
 from rest_framework import status
 
 from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator 
+from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')  
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class EventosAreaView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -21,7 +21,7 @@ class EventosAreaView(APIView):
             meta = request.headers["meta"]
 
         data = EventosCategorySerializers(
-            EventosArea.objects.all(), many=True, meta=meta)
+            EventosArea.objects.filter(visible=True), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK)
 
 
@@ -84,7 +84,12 @@ class DeleteEventosAreaView(APIView):
             return Response("Evento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
+            instance = EventosCategorySerializers(
+                instanceOrNone, data={"visible": False}, partial=True)
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Success", status.HTTP_200_OK)
         except instanceOrNone.DoesNotExist:
             return Response("Error", status.HTTP_400_BAD_REQUEST)
 

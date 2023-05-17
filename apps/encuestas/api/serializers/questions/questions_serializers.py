@@ -1,11 +1,21 @@
 from rest_framework import serializers
-from ....models.models import Question,TipoMomento
+from ....models.models import Question, TipoMomento
 from ..BaseSerializers import BaseSerializers
 from ..momento.momento_serializers import MomentSerializers
 
+
+class QuestionSerializersView(BaseSerializers):
+    pregunta_nombre = serializers.CharField(read_only=True)
+    momento = MomentSerializers(read_only=True)
+
+    class Meta:
+        fields = "__all__"
+
+
 class QuestionSerializers(BaseSerializers):
     pregunta_nombre = serializers.CharField()
-    momento = MomentSerializers(read_only=True)
+    momento = serializers.IntegerField()
+    visible = serializers.BooleanField(required=False, write_only=True)
 
     class Meta:
         fields = "__all__"
@@ -15,40 +25,16 @@ class QuestionSerializers(BaseSerializers):
         userCreate = None
         if validated_data["userCreate"]:
             userCreate = validated_data["userCreate"]
-        return Question.objects.create(pregunta_nombre=validated_data["pregunta_nombre"],momento=momento,userCreate=userCreate)
+        return Question.objects.create(pregunta_nombre=validated_data["pregunta_nombre"], momento=momento, userCreate=userCreate)
 
     def update(self, instance, validated_data):
 
-        instance.pregunta_nombre = validated_data.get('pregunta_nombre', instance.pregunta_nombre)
-        if "momento" in validated_data:
-            try:
-                momento = TipoMomento.objects.get(pk=validated_data["momento"])
-                instance.momento = momento
-            except TipoMomento.DoesNotExist as e:
-                raise serializers.ValidationError(e)
+        instance.pregunta_nombre = validated_data.get(
+            'pregunta_nombre', instance.pregunta_nombre)
+        instance.momento_id = validated_data.get('momento', instance.momento)
 
-        instance.userUpdate = validated_data.get("userUpdate",instance.userUpdate)
-        instance.save()
-        return instance
-
-
-class QuestionSerializersUpate(BaseSerializers):
-    pregunta_nombre = serializers.CharField()
-    momento = serializers.IntegerField()
-
-    class Meta:
-        fields = "__all__"
-
-    def update(self, instance, validated_data):
-
-        instance.pregunta_nombre = validated_data.get('pregunta_nombre', instance.pregunta_nombre)
-        if "momento" in validated_data:
-            try:
-                momento = TipoMomento.objects.get(pk=validated_data["momento"])
-                instance.momento = momento
-            except TipoMomento.DoesNotExist as e:
-                raise serializers.ValidationError(e)
-
-        instance.userUpdate = validated_data.get("userUpdate",instance.userUpdate)
+        instance.userUpdate = validated_data.get(
+            "userUpdate", instance.userUpdate)
+        instance.visible = validated_data.get('visible', instance.visible)
         instance.save()
         return instance

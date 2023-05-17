@@ -16,7 +16,7 @@ class EventosSubAreaView(APIView):
             meta = request.headers["meta"]
 
         data = EventosSubAreaSerializersView(
-            SubAreaEventos.objects.select_related("area").defer("area__userCreate_id", "area__userUpdate_id", "userCreate", "userUpdate").all(), many=True, meta=meta)
+            SubAreaEventos.objects.select_related("area").defer("area__userCreate_id", "area__userUpdate_id", "userCreate", "userUpdate").filter(visible=True), many=True, meta=meta)
 
         return Response(data.data, status.HTTP_200_OK)
 
@@ -92,7 +92,12 @@ class DeleteEventosSubAreaView(APIView):
             return Response("Bad Request", "Evento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
 
         try:
-            instanceOrNone.delete()
+            instance = EventosSubAreaSerializers(
+            instanceOrNone, data={"visible":False}, partial=True)
+            if instance.is_valid():
+                instance.save(userUpdate=request.user)
+            else:
+                return Response("Delete Invalid", status.HTTP_200_OK)
         except instanceOrNone.DoesNotExist:
             return Response("Error", status.HTTP_400_BAD_REQUEST)
         return Response("Delete Success", status.HTTP_200_OK)

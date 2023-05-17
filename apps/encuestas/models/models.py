@@ -8,6 +8,8 @@ class BaseModel(models.Model):
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
     userCreate = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True,related_name="+",db_index=True)
     userUpdate = models.ForeignKey(User,on_delete=models.CASCADE,blank=True,null=True,related_name="+",db_index=True)
+    visible = models.BooleanField(default=True)
+
     
     class Meta:
         abstract = True
