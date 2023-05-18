@@ -43,7 +43,7 @@ class AuthLogin(APIView):
         request.session['refresh-token'] = token['refresh']
         return Response({'token': token, 'user': {'name': serializers.validated_data.username,  # type:ignore
                                                   'id': serializers.validated_data.id},  # type:ignore
-                         'menu': menu.data}, status.HTTP_200_OK)
+                         'menu': menu.data,"permissions":serializers.validated_data.get_group_permissions() }, status.HTTP_200_OK) # type: ignore
 
 
 class AuthRegister(APIView):

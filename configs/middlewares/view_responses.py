@@ -17,12 +17,12 @@ class CustomResponseMiddleware(object):
         response = self.get_response(request)
         try:
             decode = response.getvalue().decode()
-            match = re.search(r'^[\d+]\s(.+)', decode)
-            if match or type(decode) is list and decode[0].isdigit():
-                decode = ["".join(x) for x in decode]
-                parseResponse, code, render = create_response(
-                    response.status_code, "Ok", decode, request.path, request.method)
-                return HttpResponse(json.dumps(parseResponse), content_type="application/json", status=code)
+            # match = re.search(r'^[\d+]\s(.+)', decode)
+            # if match or type(decode) is list and decode[0].isdigit():
+            #     decode = ["".join(x) for x in decode]
+            #     parseResponse, code, render = create_response(
+            #         response.status_code, "Ok", decode, request.path, request.method)
+            #     return HttpResponse(json.dumps(parseResponse), content_type="application/json", status=code)
             if request.method in ["POST", "PUT", "DELETE"]:
                 cache.clear()
             parseResponse, code, render = create_response(

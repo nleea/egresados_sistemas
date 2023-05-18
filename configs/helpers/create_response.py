@@ -21,7 +21,6 @@ def create_response(code, message, data, path='', method=""):
 
         match = re.search("html", data)
         if match:
-            render = True
             return data, code, True
 
         match_object = re.search("{|]", data)
@@ -44,7 +43,8 @@ def create_response(code, message, data, path='', method=""):
                 data_parse["path"] = path
                 data_parse["method"] = method
             else:
-                data_parse["errors"] = proccess_data if  not match_object else json.loads(proccess_data)  # type:ignore
+                data_parse["errors"] = proccess_data if not match_object else json.loads(
+                    proccess_data)  # type:ignore
                 data_parse["message"] = message
                 data_parse["path"] = path
                 data_parse["method"] = method
