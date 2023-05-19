@@ -48,3 +48,8 @@ def send_notification_mail(self, target_mail, id, evento):
 
     except Exception as e:
         raise e
+
+
+def send_email_list(userList,evento):
+    for _, x in enumerate(userList):
+        send_notification_mail.delay([x.email], x.pk, evento)#type: ignore

@@ -4,10 +4,11 @@ from ....models.models import Inscripcion, User
 from ...serializers.eventos.inscripciones import InscripcionesSerializersView, InscripcionesSerializers, AsistenciaSerializer
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
-from apps.send_email import send_notification_mail
+from apps.send_email import send_email_list
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.shortcuts import render
+import threading
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -39,13 +40,12 @@ class IncripcionSave(APIView):
             inscripcionesResulst = InscripcionesSerializers(data=request.data)
             if inscripcionesResulst.is_valid():
                 try:
-                    for _, x in enumerate(user):
-                        send_notification_mail.delay(
-                            [x.email], x.pk,inscripcionesResulst.validated_data["evento"])  # type: ignore
+                    evento = inscripcionesResulst.validated_data["evento"]#type: ignore
+                    threading_emails = threading.Thread(target=send_email_list, args=(user,evento))
+                    threading_emails.start()
                     inscripcionesResulst.save(user=user)
                     return Response("Inscripciones creadas", 200)
                 except Exception as e:
-                    print(e)
                     return Response(e, 400)
             return Response(inscripcionesResulst.errors, 404)
         return Response("Evento Not found", 404)
@@ -55,11 +55,12 @@ class AsistenciaView(APIView):
     def get(self, request, *args, **kwargs):
         user = request.GET.get("user", None)
         evento = request.GET.get("evento", None)
-    
+        user_session = request.user
+
         resulst = AsistenciaSerializer(data={"user": user, "evento": evento})
 
         if resulst.is_valid():
-            resulst.save()
+            resulst.save(user_session=user_session)
             return render(request, "index.html")
 
         return render(request, "index.html")

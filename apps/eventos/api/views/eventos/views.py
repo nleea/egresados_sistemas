@@ -5,11 +5,12 @@ from ...serializers.eventos.inscripciones import InscripcionesSerializers
 from ....models.models import Eventos
 from rest_framework import status
 from ....models.models import User
-from apps.send_email import send_notification_mail
+from apps.send_email import send_email_list
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+import threading
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -39,9 +40,9 @@ class SaveEventosView(APIView):
                 data={"evento": evento.pk})
             if inscripcionesResulst.is_valid():
                 try:
-                    for _, x in enumerate(user):
-                        send_notification_mail.delay(
-                            [x.email], x.pk, inscripcionesResulst.validated_data["evento"])  # type: ignore
+                    evento = inscripcionesResulst.validated_data["evento"]#type: ignore
+                    threading_emails = threading.Thread(target=send_email_list, args=(user,evento))
+                    threading_emails.start()
                     inscripcionesResulst.save(user=user)
                 except Exception as e:
                     return Response(e, status.HTTP_400_BAD_REQUEST)
