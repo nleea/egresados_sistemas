@@ -1,8 +1,8 @@
-from django.urls import path
+from django.urls import path,re_path
 from .views import DeleteEventosView, SaveEventosView, EventosView, UpdateEventosView
 
 urlpatterns = [
-    path("", EventosView.as_view()),
+    re_path(r"(?P<mine>)$", EventosView.as_view()),
     path("create/", SaveEventosView.as_view()),
     path("update/<int:pk>/", UpdateEventosView.as_view()),
     path("delete/<int:pk>/", DeleteEventosView.as_view()),

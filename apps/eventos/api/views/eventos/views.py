@@ -15,16 +15,19 @@ import threading
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class EventosView(APIView):
 
     def get(self, request, *args, **kwargs):
-        meta = None
-        if 'meta' in request.headers:
-            meta = request.headers["meta"]
+        mine = request.GET.get("mine", None)
+        data = None
+        if mine:
+            data = EventosSerializersView(
+                Eventos.objects.select_related("area", "subArea", "userCreate", "userUpdate","tipo").filter(visible=True,userCreate__id=request.user.id), many=True, meta=True)
+        else:
+            data = EventosSerializersView(
+                Eventos.objects.select_related("area", "subArea", "userCreate", "userUpdate","tipo").filter(visible=True), many=True, meta=True)
 
-        data = EventosSerializersView(
-            Eventos.objects.select_related("area", "subArea", "userCreate", "userUpdate").filter(visible=True), many=True, meta=True)
         return Response(data.data, status.HTTP_200_OK)
 
 
@@ -40,8 +43,9 @@ class SaveEventosView(APIView):
                 data={"evento": evento.pk})
             if inscripcionesResulst.is_valid():
                 try:
-                    evento = inscripcionesResulst.validated_data["evento"]#type: ignore
-                    threading_emails = threading.Thread(target=send_email_list, args=(user,evento))
+                    evento = inscripcionesResulst.validated_data["evento"]# type: ignore
+                    threading_emails = threading.Thread(
+                        target=send_email_list, args=(user, evento))
                     threading_emails.start()
                     inscripcionesResulst.save(user=user)
                 except Exception as e:
@@ -92,14 +96,14 @@ class DeleteEventosView(APIView):
             return eventos
         except Eventos.DoesNotExist:
             return None
-    
+
     def bulk_delete(self, ids):
         try:
             resulstForDelete = Eventos.objects.filter(pk__in=ids)
-            for _,instance in enumerate(resulstForDelete):
-                instance.visible = False 
+            for _, instance in enumerate(resulstForDelete):
+                instance.visible = False
 
-            Eventos.objects.bulk_update(resulstForDelete,["visible"])
+            Eventos.objects.bulk_update(resulstForDelete, ["visible"])
 
             return Response("Success", 200)
         except Exception as e:
@@ -116,7 +120,7 @@ class DeleteEventosView(APIView):
 
         try:
             instance = EventosSerializers(
-                instanceOrNone, data={"visible":False}, partial=True)
+                instanceOrNone, data={"visible": False}, partial=True)
             if instance.is_valid():
                 instance.save(userUpdate=request.user)
             else:

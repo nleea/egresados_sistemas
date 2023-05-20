@@ -5,10 +5,11 @@ from .eventos_sub_area_serializers import EventosSubAreaSerializersView
 from .eventos_cate_serializers import EventosCategorySerializersView
 from .eventos_tipo import TipoEventosSerializersView
 
+
 class EventosSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     area = EventosCategorySerializersView(read_only=True)
-    subArea = EventosSubAreaSerializersView(read_only=True)
+    subArea = EventosSubAreaSerializersView(read_only=True,expands=False)
     nombre_actividad = serializers.CharField(read_only=True)
     tipo = TipoEventosSerializersView(read_only=True)
     responsable = serializers.CharField(read_only=True)
@@ -21,10 +22,12 @@ class EventosSerializersView(BaseSerializers):
 
     def to_representation(self, instance):
         resulst = super().to_representation(instance)
-        resulst["tipo_actividad"] = {"id":instance.tipo.id,"name":instance.tipo.name}
+        resulst["tipo_actividad"] = {
+            "id": instance.tipo.id, "name": instance.tipo.name}
+        resulst["subArea"] = {**resulst["subArea"],
+                              "area": {**resulst["area"]}}
         del resulst["tipo"]
         return resulst
-
 
     class Meta:
         fields = "__all__"
@@ -44,8 +47,7 @@ class EventosSerializers(BaseSerializers):
     descripcion = serializers.CharField()
     objectivo = serializers.CharField()
     userCreate = serializers.SlugRelatedField("username", read_only=True)
-    visible = serializers.BooleanField(required=False,write_only=True)
-
+    visible = serializers.BooleanField(required=False, write_only=True)
 
     class Meta:
         fields = "__all__"
@@ -61,7 +63,7 @@ class EventosSerializers(BaseSerializers):
                                             "nombre_actividad"], responsable=validated_data["responsable"], lugar=validated_data[
                                             "lugar"], hora=validated_data["hora"], userCreate=validated_data["userCreate"],
                                             cupos=validated_data["cupos"], objectivo=validated_data["objectivo"])
-            
+
             return evento
         except BaseException as e:
             raise
