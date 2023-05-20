@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import UserManager
+from django.contrib.auth.models import Group
 # Create your models here.
 
 
@@ -44,7 +45,7 @@ class User(AbstractUser, BaseModel):
     resetToken = models.CharField(max_length=256, blank=True, null=True)
     avatar = models.CharField(max_length=256, blank=True, null=True)
     roles = models.ManyToManyField(
-        'Roles', through='User_roles', related_name='user_roles')
+        Group, through='User_roles', related_name='user_roles')
 
     objects = UserManager()
 
@@ -57,20 +58,20 @@ class User(AbstractUser, BaseModel):
         return self.username
 
 
-class Roles(BaseModel):
-    name = models.CharField(max_length=200, unique=True)
-    status = models.BooleanField(default=True)
-    users = models.ManyToManyField(
-        User, through='User_roles', related_name='roles_user')
-    resources = models.ManyToManyField(
-        'Resources', through='Resources_roles', related_name='roles_resources')
+# class Roles(BaseModel):
+#     name = models.CharField(max_length=200, unique=True)
+#     status = models.BooleanField(default=True)
+#     users = models.ManyToManyField(
+#         User, through='User_roles', related_name='roles_user')
+#     resources = models.ManyToManyField(
+#         'Resources', through='Resources_roles', related_name='roles_resources')
 
-    def __str__(self) -> str:
-        return self.name
+#     def __str__(self) -> str:
+#         return self.name
 
-    class Meta:
-        verbose_name = 'Roles'
-        verbose_name_plural = 'Roles'
+#     class Meta:
+#         verbose_name = 'Roles'
+#         verbose_name_plural = 'Roles'
 
 
 class Persons(BaseModel):
@@ -105,7 +106,7 @@ class User_roles(BaseModel):
     userId = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='users')
     rolesId = models.ForeignKey(
-        Roles, on_delete=models.CASCADE, related_name='roles')
+        Group, on_delete=models.CASCADE, related_name='roles')
 
     def __str__(self) -> str:
         return self.userId.username + '-' + self.rolesId.name
@@ -124,7 +125,7 @@ class Resources(BaseModel):
     link = models.CharField(max_length=256)
     titulo = models.CharField(max_length=100)
     roles = models.ManyToManyField(
-        Roles, through='Resources_roles', related_name='resources_roles')
+        Group, through='Resources_roles', related_name='resources_roles')
 
     class Meta:
         verbose_name = 'Resources'
@@ -135,7 +136,7 @@ class Resources_roles(BaseModel):
     resourcesId = models.ForeignKey(
         Resources, on_delete=models.CASCADE, related_name='resources')
     rolesId = models.ForeignKey(
-        Roles, on_delete=models.CASCADE, related_name='resouces_roles')
+        Group, on_delete=models.CASCADE, related_name='resouces_roles')
 
     def __str__(self) -> str:
         return self.resourcesId.path + '' + self.rolesId.name

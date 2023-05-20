@@ -1,6 +1,6 @@
-from ....models import Roles, User_roles, Resources_roles, User
+from ....models import  User_roles, User
 from rest_framework.serializers import ModelSerializer, ValidationError
-
+from django.contrib.auth.models import Group
 
 class UserSerilizers(ModelSerializer):
     class Meta:
@@ -10,22 +10,10 @@ class UserSerilizers(ModelSerializer):
 
 class RolesSerializers(ModelSerializer):
     class Meta:
-        model = Roles
+        model = Group
         fields = ('id', 'name')
 
 
-class ResourcesSerializers(ModelSerializer):
-    class Meta:
-        model = Resources_roles
-        fields = '__all__'
-
-
-class RolesSimpleSerializers(ModelSerializer):
-    resources = ResourcesSerializers(many=True)
-
-    class Meta:
-        model = User_roles
-        fields = '__all__'
 
 
 class RolesUserSerializers(ModelSerializer):

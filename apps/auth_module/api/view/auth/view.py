@@ -8,7 +8,7 @@ from django.contrib.auth import logout
 from rest_framework import status
 from django.http import HttpResponse
 from django.contrib.auth import login
-from configs.helpers.flat_List import flatList
+from ....models import Resources
 
 class AuthLogin(APIView):
 
@@ -28,22 +28,21 @@ class AuthLogin(APIView):
             data = request.data
 
         serializers = LoginSerializers(
-            data=data, context={'request': self.request})  # type: ignore
+            data=request.data, context={'request': self.request})  
         if not serializers.is_valid():
             return Response(serializers.errors, status.HTTP_400_BAD_REQUEST)
 
         login(request, serializers.validated_data)  # type: ignore
         token = self.get_tokens_for_user(serializers.validated_data)
-
-        resources = flatList([e.resources.prefetch_related(
-            'resources').defer("createdAt","updateAt") for e in serializers.validated_data.roles.all()])  # type: ignore
+    
+        resources = Resources.objects.defer("createdAt","updateAt").filter(roles__in=serializers.validated_data.roles.all())#type:ignore
 
         menu = ResourcesSerializers(set(resources), many=True)
 
         request.session['refresh-token'] = token['refresh']
-        return Response({'token': token, 'user': {'name': serializers.validated_data.username,  # type:ignore
-                                                  'id': serializers.validated_data.id},  # type:ignore
-                         'menu': menu.data,"permissions":serializers.validated_data.get_group_permissions() }, status.HTTP_200_OK) # type: ignore
+        return Response({'token': token, 'user': {'name': serializers.validated_data.username, #type: ignore
+                                                 'id': serializers.validated_data.id}, #type: ignore
+                          "menu": menu.data}, status.HTTP_200_OK)
 
 
 class AuthRegister(APIView):

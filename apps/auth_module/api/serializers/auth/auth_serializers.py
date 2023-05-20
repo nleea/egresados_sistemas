@@ -3,8 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
-from ....models import Persons, User
-from ...serializers.roles.roles_serializers import RolesSimpleSerializers
+from ....models import User
 from ...serializers.person.persons_serializers import PersonsSimpleSerializers
 User = get_user_model()
 
@@ -33,14 +32,11 @@ class RegisterSerializers(serializers.ModelSerializer):
         return user
 
 
-class LoginSerializers(serializers.ModelSerializer):
+class LoginSerializers(serializers.Serializer):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
     username = serializers.CharField(label='Email/username')
     password = serializers.CharField()
-    roles = RolesSimpleSerializers(many=True, required=False)
-
-    class Meta:
-        model = User
-        fields = ('id', 'password', 'username', 'roles')
+    roles = serializers.ListField(required=False,read_only=True)
 
     def validate(self, attrs):
         user = authenticate(**attrs)

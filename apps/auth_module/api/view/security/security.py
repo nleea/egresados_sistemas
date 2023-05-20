@@ -3,9 +3,9 @@ from rest_framework.views import APIView
 from ...serializers.resources.resources_serializers import ResourcesRolesSerializers
 from ...serializers.roles.roles_serializers import RolesUserSerializers
 from rest_framework import status
-from ....models import Resources, User_roles, Roles
+from ....models import Resources, User_roles
 from rest_framework.response import Response
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Group
 
 class SecurityResourcesCreate(CreateAPIView):
     queryset = Resources.objects.all()
@@ -28,7 +28,7 @@ class SecurityRolesUser(CreateAPIView):
     def post(self, request, *args, **kwargs):
         user = request.data['user']
         rolesId = request.data['roles']
-        roles = Roles.objects.filter(id__in=rolesId)
+        roles = Group.objects.filter(id__in=rolesId)
 
         rolesUser = RolesUserSerializers(
             data={'userId': user})  # type: ignore
