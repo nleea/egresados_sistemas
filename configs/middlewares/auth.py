@@ -106,14 +106,10 @@ class CustomMiddleware(MiddlewareMixin):
                 request.user = user
                 return None
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
-                if ('refresh-token' in request.session):
-                    token = RefreshToken(request.session['refresh-token'])
-                    response, code,render = create_response(
-                        400, 'Unauthorized', "ss")
-                    return HttpResponse(json.dumps(response), content_type="application/json",status=code)
                 response, code, render = create_response(
-                    401, 'Unauthorized', {"message": ["Authorization has failed, Please send valid token."]})
+                    401, 'Unauthorized', "Authorization has failed, Please send valid token")
                 logger.info(f"Response {response}")
+
                 return HttpResponse(json.dumps(response), content_type="application/json",status=code)
             except Exception as e:
                 print(e)
