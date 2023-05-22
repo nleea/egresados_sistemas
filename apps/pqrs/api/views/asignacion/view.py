@@ -20,24 +20,16 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 class AsignacionView(APIView):
 
     def get(self, request, *args, **kwargs):
-        meta = None
-        if 'meta' in request.headers:
-            meta = request.headers["meta"]
-
         queryset = Asignacion.objects.defer("userCreate", "userUpdate", "pqrs__userCreate_id",
                                             "pqrs__userUpdate", "pqrs__tipopqrs__userCreate_id",
                                             "pqrs__tipopqrs__userUpdate_id").select_related(
-            "pqrs", "pqrs__tipopqrs","pqrs__persona").filter(funcionarioId=request.user.id,visible=True)
+            "pqrs", "pqrs__tipopqrs","pqrs__persona").filter(funcionarioId=request.user.id,pqrs__visible=True)
         data = AsignacionSerializerView(queryset, many=True)
         return Response({"pqrs": [x["pqrs"] for x in data.data]}, status.HTTP_200_OK)
 
 
 class AsignacionPqrsView(APIView):
     def get(self, request, *args, **kwargs):
-        meta = None
-        if 'meta' in request.headers:
-            meta = request.headers["meta"]
-
         roles = request.user.roles.get(name="Admin")
 
         if roles:
