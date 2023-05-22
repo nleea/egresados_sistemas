@@ -28,7 +28,7 @@ class AsignacionView(APIView):
         queryset = Asignacion.objects.defer("userCreate", "userUpdate", "pqrs__userCreate_id",
                                             "pqrs__userUpdate", "pqrs__tipopqrs__userCreate_id",
                                             "pqrs__tipopqrs__userUpdate_id").select_related(
-            "pqrs", "pqrs__tipopqrs", "pqrs__persona").filter(funcionarioId=user.id,visible=True)
+            "pqrs", "pqrs__tipopqrs","pqrs__persona").filter(funcionarioId=user.id,visible=True)
         data = AsignacionSerializerView(queryset, many=True)
         serialziersUser = UserSerializersSimple([user], many=True)
         return Response({**serialziersUser.data[0], "pqrs": [x["pqrs"] for x in data.data]}, status.HTTP_200_OK)
