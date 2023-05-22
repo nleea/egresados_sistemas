@@ -28,7 +28,7 @@ class PqrsView(APIView):
             return Response(data.data, status.HTTP_200_OK)
         else:
             pqrs_filter = Pqrs.objects.select_related(
-                "persona", "tipopqrs").filter(userCreate=request.user.id)
+                "persona", "tipopqrs").filter(userCreate=request.user.id,visible=True)
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
             return Response(data.data, status.HTTP_200_OK)
 

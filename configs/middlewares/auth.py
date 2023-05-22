@@ -59,11 +59,10 @@ class CustomMiddleware(MiddlewareMixin):
         if jwt_token:
             try:
                 auth = JWTAuthentication()
-                tokenUser, token = auth.authenticate(request)
+                tokenUser, token = auth.authenticate(request)       
 
-                
+
                 if request.user.is_authenticated:
-
                     user = None
 
                 if ('user' in request.session):

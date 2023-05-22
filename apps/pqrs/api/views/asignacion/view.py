@@ -16,7 +16,7 @@ from .....auth_module.api.serializers.user.users_serializers import UserSerializ
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class AsignacionView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -40,7 +40,7 @@ class AsignacionPqrsView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
 
-        roles = request.user.roles.filter(name="Admin")
+        roles = request.user.roles.get(name="Admin")
 
         if roles:
             pqrs_filter = Pqrs.objects.select_related(
