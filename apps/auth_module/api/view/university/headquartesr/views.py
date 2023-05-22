@@ -13,7 +13,7 @@ class HeadquartersView(APIView):
             meta = request.headers["meta"]
 
         data = HeadSerializers(
-            Headquarters.objects.all(), many=True)
+            Headquarters.objects.filter(visible=True), many=True)
 
         return Response(data.data, status.HTTP_200_OK)
 
@@ -62,6 +62,18 @@ class DeleteHeadquartersView(APIView):
         self.http_method_names.append("delete")
         return [m.upper() for m in self.http_method_names if hasattr(self, m)]
 
+    def bulk_delete(self, ids):
+        try:
+            resulstForDelete = Headquarters.objects.filter(pk__in=ids)
+            for _,instance in enumerate(resulstForDelete):
+                instance.visible = False 
+
+            Headquarters.objects.bulk_update(resulstForDelete,["visible"])
+
+            return Response("Success", 200)
+        except Exception as e:
+            return Response(e.args, 400)
+
     def get_object(self):
         try:
             pk = self.kwargs.get("pk")
@@ -71,6 +83,9 @@ class DeleteHeadquartersView(APIView):
             return None
 
     def delete(self, request, *args, **kwargs):
+
+        if "ids" in request.data:
+            return self.bulk_delete(request.data["ids"])
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:

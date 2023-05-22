@@ -9,6 +9,7 @@ from django.contrib.auth.models import Group
 class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
+    visible = models.BooleanField(default=True)
 
     class Meta:
         abstract = True

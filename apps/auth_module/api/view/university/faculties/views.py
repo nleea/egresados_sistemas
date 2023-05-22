@@ -13,7 +13,7 @@ class FacultiesView(APIView):
             meta = request.headers["meta"]
 
         data = FacultiesSerializersView(
-            Faculties.objects.all(), many=True)
+            Faculties.objects.filter(visible=True), many=True)
 
         return Response(data.data, status.HTTP_200_OK)
 
@@ -61,6 +61,19 @@ class DeleteFacultiesView(APIView):
         self.http_method_names.append("delete")
         return [m.upper() for m in self.http_method_names if hasattr(self, m)]
 
+
+    def bulk_delete(self, ids):
+        try:
+            resulstForDelete = Faculties.objects.filter(pk__in=ids)
+            for _,instance in enumerate(resulstForDelete):
+                instance.visible = False 
+
+            Faculties.objects.bulk_update(resulstForDelete,["visible"])
+
+            return Response("Success", 200)
+        except Exception as e:
+            return Response(e.args, 400)
+
     def get_object(self):
         try:
             pk = self.kwargs.get("pk")
@@ -70,6 +83,9 @@ class DeleteFacultiesView(APIView):
             return None
 
     def delete(self, request, *args, **kwargs):
+
+        if "ids" in request.data:
+            return self.bulk_delete(request.data["ids"])
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:

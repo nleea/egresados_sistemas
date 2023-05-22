@@ -13,7 +13,7 @@ class ProgramsView(APIView):
             meta = request.headers["meta"]
 
         data = ProgramsSerializersView(
-            Programs.objects.all(), many=True)
+            Programs.objects.filter(visible=True), many=True)
 
         return Response(data.data, 200)
 
@@ -62,6 +62,19 @@ class DeleteProgramsView(APIView):
         self.http_method_names.append("delete")
         return [m.upper() for m in self.http_method_names if hasattr(self, m)]
 
+
+    def bulk_delete(self, ids):
+        try:
+            resulstForDelete = Programs.objects.filter(pk__in=ids)
+            for _,instance in enumerate(resulstForDelete):
+                instance.visible = False 
+
+            Programs.objects.bulk_update(resulstForDelete,["visible"])
+
+            return Response("Success", 200)
+        except Exception as e:
+            return Response(e.args, 400)
+
     def get_object(self):
         try:
             pk = self.kwargs.get("pk")
@@ -71,6 +84,9 @@ class DeleteProgramsView(APIView):
             return None
 
     def delete(self, request, *args, **kwargs):
+
+        if "ids" in request.data:
+            return self.bulk_delete(request.data["ids"])
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:

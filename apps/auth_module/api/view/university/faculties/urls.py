@@ -5,5 +5,6 @@ urlpatterns = [
     path("", FacultiesView.as_view()),
     path("create/", SaveFacultiesView.as_view()),
     path("update/<int:pk>/", UpdateFacultiesAreaView.as_view()),
-    path("delete/<int:pk>/", DeleteFacultiesView.as_view())
+    path("delete/<int:pk>/", DeleteFacultiesView.as_view()),
+    path("delete/", DeleteFacultiesView.as_view())
 ]
