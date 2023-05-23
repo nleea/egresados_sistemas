@@ -21,7 +21,10 @@ class UsersView(RetrieveAPIView):
             return None
 
     def get(self, request, *args, **kwargs):
-        if request.user.is_staff:
+
+        all_user = request.GET.get("all",None)
+
+        if request.user.is_staff and all_user:
             users = self.get_queryset()
             serializers = UserSerializers(
                 users, context={'request': request}, many=True)

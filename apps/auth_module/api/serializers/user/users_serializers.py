@@ -1,3 +1,4 @@
+from rest_framework.fields import empty
 from ..roles.roles_serializers import RolesSerializers
 from rest_framework.serializers import CharField, ModelSerializer, SlugField,Serializer,EmailField
 from django.contrib.auth import get_user_model
@@ -12,19 +13,28 @@ class UserSerializersSimple(Serializer):
 
     class Meta:
         fields = ('username', 'email')
+    
+
+    def __init__(self, instance=None, data=..., **kwargs):
+        expands = kwargs.pop("expands",True)
+        meta = kwargs.pop("meta",False)
+        super().__init__(instance, data, **kwargs)
+
+        if not expands:
+            self.fields.pop("username")
 
 
 class UserSerializers(ModelSerializer):
     roles = RolesSerializers(many=True, read_only=True)
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        try:
-            if (len(representation['roles'])):
-                representation['roles'][0] = representation['roles'][0]['id']
-            return representation
-        except Exception as e:
-            return representation
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
+    #     try:
+    #         if (len(representation['roles'])):
+    #             representation['roles'][0] = representation['roles'][0]['id']
+    #         return representation
+    #     except Exception as e:
+    #         return representation
 
     class Meta:
         model = User

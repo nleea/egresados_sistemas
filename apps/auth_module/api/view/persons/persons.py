@@ -2,15 +2,22 @@ from ...serializers.person.persons_serializers import PersonsSerializers
 from ....models import Persons
 from rest_framework import status
 from ..modules import ListAPIView, CreateAPIView, UpdateAPIView, Response
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.conf import settings
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class PersonView(ListAPIView):
     queryset = Persons.objects.all()
     serializer_class = PersonsSerializers
 
     def get(self, request, *args, **kwargs):
-        data = self.get_queryset()
-        serializers = PersonsSerializers(data, many=True)
+        data = Persons.objects.select_related("user").get(user__id=request.user.id)
+        serializers = PersonsSerializers([data], many=True)
         return Response(serializers.data, status.HTTP_200_OK)
 
 
