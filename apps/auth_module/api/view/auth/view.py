@@ -47,7 +47,7 @@ class AuthLogin(APIView):
 
         request.session['refresh-token'] = token['refresh']
         return Response({'token': token, 'user': {'name': serializers.validated_data.username, #type: ignore
-                                                 'id': serializers.validated_data.id, "person": serializes_person.data[0]}, #type: ignore
+                                                 'id': serializers.validated_data.id, "person": serializes_person.data}, #type: ignore
                           "menu": menu.data}, status.HTTP_200_OK)
 
 
