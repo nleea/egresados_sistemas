@@ -40,6 +40,7 @@ class Genders(BaseModel):
 
 
 class User(AbstractUser, BaseModel):
+    username = models.CharField(blank=False, null=False, unique=True,max_length=256)
     email = models.EmailField(
         _("email address"), blank=False, null=False, unique=True)
     password = models.CharField(max_length=100)
