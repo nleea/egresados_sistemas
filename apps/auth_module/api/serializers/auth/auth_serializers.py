@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth import authenticate
 from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
-from ....models import User
+from ....models import User,Persons
 from ...serializers.person.persons_serializers import PersonsSimpleSerializers
 User = get_user_model()
 
@@ -22,13 +22,13 @@ class RegisterSerializers(serializers.ModelSerializer):
         fields = '__all__'
         validators = [UserValidatorBefore()]
 
-    person = PersonsSimpleSerializers(read_only=True)
+    person = PersonsSimpleSerializers()
 
 
     def create(self, validated_data):
-        #person = validated_data.pop('person')
+        person = validated_data.pop('person')
         user = User.objects.create(**validated_data)
-        #Persons.objects.create(**person, user=user)
+        Persons.objects.create(**person, user=user)
         return user
 
 
@@ -37,6 +37,7 @@ class LoginSerializers(serializers.Serializer):
     username = serializers.CharField(label='Email/username')
     password = serializers.CharField()
     roles = serializers.ListField(required=False,read_only=True)
+    person = PersonsSimpleSerializers(read_only=True)
 
     def validate(self, attrs):
         user = authenticate(**attrs)

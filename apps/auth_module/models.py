@@ -46,7 +46,7 @@ class User(AbstractUser, BaseModel):
     resetToken = models.CharField(max_length=256, blank=True, null=True)
     avatar = models.CharField(max_length=256, blank=True, null=True)
     roles = models.ManyToManyField(
-        Group, through='User_roles', related_name='user_roles')
+        Group, through='User_roles', related_name='user_roles',db_index=True)
 
     objects = UserManager()
 
@@ -91,7 +91,7 @@ class Persons(BaseModel):
     gender_type = models.ForeignKey(
         Genders, related_name='gender_types', on_delete=models.SET_NULL, blank=True, null=True)
     user = models.ForeignKey(User, related_name='user',
-                             on_delete=models.SET_NULL, blank=True, null=True)
+                             on_delete=models.SET_NULL, blank=True, null=True,db_index=True)
 
     def __str__(self) -> str:
         return self.name  # type: ignore
@@ -126,7 +126,7 @@ class Resources(BaseModel):
     link = models.CharField(max_length=256)
     titulo = models.CharField(max_length=100)
     roles = models.ManyToManyField(
-        Group, through='Resources_roles', related_name='resources_roles')
+        Group, through='Resources_roles', related_name='resources_roles',db_index=True)
 
     class Meta:
         verbose_name = 'Resources'

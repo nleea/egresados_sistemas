@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from ...serializers.auth.auth_serializers import LoginSerializers, RegisterSerializers
+from ...serializers.person.persons_serializers import PersonsSimpleSerializers
 from ...serializers.resources.resources_serializers import ResourcesSerializers
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework.response import Response
@@ -31,17 +32,22 @@ class AuthLogin(APIView):
             data=request.data, context={'request': self.request})  
         if not serializers.is_valid():
             return Response(serializers.errors, status.HTTP_400_BAD_REQUEST)
+        
 
         login(request, serializers.validated_data)  # type: ignore
         token = self.get_tokens_for_user(serializers.validated_data)
-    
-        resources = Resources.objects.defer("createdAt","updateAt").filter(roles__in=serializers.validated_data.roles.all())#type:ignore
 
-        menu = ResourcesSerializers(set(resources), many=True)
+        person = serializers.validated_data.user.select_related("user","document_type","gender_type")#type: ignore
+
+        serializes_person = PersonsSimpleSerializers(person,many=True)
+    
+        resources = Resources.objects.defer("createdAt","updateAt").distinct().filter(roles__in=serializers.validated_data.roles.all())#type:ignore
+
+        menu = ResourcesSerializers(resources, many=True)
 
         request.session['refresh-token'] = token['refresh']
         return Response({'token': token, 'user': {'name': serializers.validated_data.username, #type: ignore
-                                                 'id': serializers.validated_data.id}, #type: ignore
+                                                 'id': serializers.validated_data.id, "person": serializes_person.data[0]}, #type: ignore
                           "menu": menu.data}, status.HTTP_200_OK)
 
 
