@@ -24,6 +24,7 @@ class PersonsSimpleSerializers(Serializer):
     nationality  = CharField(read_only=True)
     date_of_birth = DateField(read_only=True)
     gender_type = CharField(read_only=True)
+    phone = CharField(read_only=True)
 
 
     class Meta:

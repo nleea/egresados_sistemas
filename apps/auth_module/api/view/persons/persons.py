@@ -1,4 +1,4 @@
-from ...serializers.person.persons_serializers import PersonsSerializers
+from ...serializers.person.persons_serializers import PersonsSerializers,PersonsSimpleSerializers
 from ....models import Persons
 from rest_framework import status
 from ..modules import ListAPIView, CreateAPIView, UpdateAPIView, Response
@@ -35,7 +35,7 @@ class PersonCreateView(CreateAPIView):
 
 class PersonUpdateView(UpdateAPIView):
     queryset = Persons.objects.all()
-    serializer_class = PersonsSerializers
+    serializer_class = PersonsSimpleSerializers
 
     def get_object(self):
         try:
@@ -49,7 +49,7 @@ class PersonUpdateView(UpdateAPIView):
         if person is None:
             return Response(personSerializers.data, status.HTTP_400_BAD_REQUEST) #type: ignore
         try:
-            personSerializers = PersonsSerializers(instance=person, data=request.data)
+            personSerializers = PersonsSimpleSerializers(instance=person, data=request.data)
             if personSerializers.is_valid():
                 personSerializers.update()  # type: ignore
                 return Response(personSerializers.data, status.HTTP_200_OK)

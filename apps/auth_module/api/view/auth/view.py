@@ -59,7 +59,7 @@ class AuthRegister(APIView):
         if registerUser.is_valid():
             password = make_password(
                 registerUser.validated_data['password'])  # type:ignore
-            registerUser.save(password=password)
+            registerUser.save(password=password,persona=request.data["persona"])
             return Response('Registro Exitosos', status.HTTP_200_OK)
         return Response(registerUser.errors, status.HTTP_400_BAD_REQUEST)
 
