@@ -61,6 +61,6 @@ class AsistenciaView(APIView):
 
         if resulst.is_valid():
             resulst.save(user_session=user_session)
-            return render(request, "index.html")
+            return Response({"message":"Ok"}, status=200)
 
-        return render(request, "index.html")
+        return Response({"message":"Error"}, status=400)
