@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Persons, Genders, Document_types, Resources,  Resources_roles, User, User_roles
+from .models import Persons, Genders, Document_types, Resources,  Resources_roles, User
 
 
 # Register your models here.
@@ -10,5 +10,5 @@ admin.site.register(Resources);
 admin.site.register(Resources_roles);
 # admin.site.register(Roles);
 admin.site.register(User);
-admin.site.register(User_roles);
+# admin.site.register(User_roles);
 

@@ -33,21 +33,16 @@ class AuthLogin(APIView):
         if not serializers.is_valid():
             return Response(serializers.errors, status.HTTP_400_BAD_REQUEST)
         
-
         login(request, serializers.validated_data)  # type: ignore
         token = self.get_tokens_for_user(serializers.validated_data)
-
-        person = serializers.validated_data.user.select_related("user","document_type","gender_type")#type: ignore
-
-        serializes_person = PersonsSimpleSerializers(person,many=True)
     
-        resources = Resources.objects.defer("createdAt","updateAt").distinct().filter(roles__in=serializers.validated_data.roles.all())#type:ignore
+        resources = Resources.objects.defer("createdAt","updateAt").distinct().filter(roles__in=serializers.validated_data.groups.all())#type:ignore
 
         menu = ResourcesSerializers(resources, many=True)
 
         request.session['refresh-token'] = token['refresh']
         return Response({'token': token, 'user': {'name': serializers.validated_data.username, #type: ignore
-                                                 'id': serializers.validated_data.id, "person": serializes_person.data}, #type: ignore
+                                                 'id': serializers.validated_data.id}, #type: ignore
                           "menu": menu.data}, status.HTTP_200_OK)
 
 

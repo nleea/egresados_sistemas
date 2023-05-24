@@ -55,7 +55,6 @@ class LoginSerializers(serializers.Serializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     username = serializers.CharField(label='Email/username')
     password = serializers.CharField()
-    roles = serializers.ListField(required=False, read_only=True)
     person = PersonsSimpleSerializers(read_only=True)
 
     def validate(self, attrs):

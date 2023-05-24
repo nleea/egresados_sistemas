@@ -46,8 +46,8 @@ class User(AbstractUser, BaseModel):
     password = models.CharField(max_length=100)
     resetToken = models.CharField(max_length=256, blank=True, null=True)
     avatar = models.CharField(max_length=256, blank=True, null=True)
-    roles = models.ManyToManyField(
-        Group, through='User_roles', related_name='user_roles',db_index=True)
+    # roles = models.ManyToManyField(
+    #     Group, through='User_roles', related_name='user_roles',db_index=True)
 
     objects = UserManager()
 
@@ -103,20 +103,20 @@ class Persons(BaseModel):
         verbose_name_plural = 'Persons'
 
 
-class User_roles(BaseModel):
-    status = models.BooleanField(default=True)
-    userId = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='users')
-    rolesId = models.ForeignKey(
-        Group, on_delete=models.CASCADE, related_name='roles')
+# class User_roles(BaseModel):
+#     status = models.BooleanField(default=True)
+#     userId = models.ForeignKey(
+#         User, on_delete=models.CASCADE, related_name='users')
+#     rolesId = models.ForeignKey(
+#         Group, on_delete=models.CASCADE, related_name='roles')
 
-    def __str__(self) -> str:
-        return self.userId.username + '-' + self.rolesId.name
+#     def __str__(self) -> str:
+#         return self.userId.username + '-' + self.rolesId.name
 
-    class Meta:
-        unique_together = (('userId', 'rolesId'))
-        verbose_name = 'User_roles'
-        verbose_name_plural = 'user_roles'
+#     class Meta:
+#         unique_together = (('userId', 'rolesId'))
+#         verbose_name = 'User_roles'
+#         verbose_name_plural = 'user_roles'
 
 
 class Resources(BaseModel):
