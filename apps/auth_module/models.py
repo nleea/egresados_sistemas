@@ -46,8 +46,8 @@ class User(AbstractUser, BaseModel):
     password = models.CharField(max_length=100)
     resetToken = models.CharField(max_length=256, blank=True, null=True)
     avatar = models.CharField(max_length=256, blank=True, null=True)
-    # roles = models.ManyToManyField(
-    #     Group, through='User_roles', related_name='user_roles',db_index=True)
+    roles = models.ManyToManyField(
+        Group, related_name='user_roles',db_index=True)
 
     objects = UserManager()
 

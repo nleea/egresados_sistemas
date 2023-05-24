@@ -25,7 +25,6 @@ class UserSerializersSimple(Serializer):
 
 
 class UserSerializers(ModelSerializer):
-    roles = RolesSerializers(many=True, read_only=True)
 
     # def to_representation(self, instance):
     #     representation = super().to_representation(instance)
@@ -48,11 +47,10 @@ class CreateUserSerializers(ModelSerializer):
         max_length=100,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
-    roles = RolesSerializers()
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'email', 'roles')
+        fields = ('username', 'password', 'email')
         validators = [UserValidatorBefore()]
 
 

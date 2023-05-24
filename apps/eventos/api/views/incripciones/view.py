@@ -20,7 +20,7 @@ class InscripcionView(APIView):
         param = request.GET.get("evento", None)
 
         if param:
-            results = Inscripcion.objects.defer("user__roles", "evento__userCreate_id", "evento__userUpdate_id", "evento__tipo__userCreate_id",
+            results = Inscripcion.objects.defer("evento__userCreate_id", "evento__userUpdate_id", "evento__tipo__userCreate_id",
                                                 "evento__tipo__userUpdate_id", "evento__subArea__userUpdate_id",
                                                 "evento__subArea__userCreate_id", "evento__area__userCreate_id",
                                                 "evento__area__userUpdate_id").select_related("evento", "evento__tipo",
@@ -36,7 +36,7 @@ class IncripcionSave(APIView):
 
     def post(self, request, *args, **kwargs):
         if 'evento' in request.data:
-            user = User.objects.all().defer("roles")
+            user = User.objects.all().defer("groups")
             inscripcionesResulst = InscripcionesSerializers(data=request.data)
             if inscripcionesResulst.is_valid():
                 try:
