@@ -44,7 +44,7 @@ class RegisterSerializers(serializers.Serializer):
                 else:
                     group_selected = Group.objects.get(pk=rol)
                     user.groups.add(group_selected)  # type:ignore
-            
+                transaction.commit()
             return user
         except Exception as e:
             transaction.rollback()

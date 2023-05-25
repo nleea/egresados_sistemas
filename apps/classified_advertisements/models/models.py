@@ -74,6 +74,8 @@ class Anuncio(BaseModel):
     tipo_capacitacion = models.ManyToManyField(
         TiposCapacitaciones,db_index=True)
     redes = models.ManyToManyField(RedesSociales,related_name="redes_store",db_index=True)
+    logo = models.FileField(
+        upload_to="static/files/advertisements/", blank=True, null=True)
 
     objects = AdvertisementsManagers()
 

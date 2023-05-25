@@ -7,7 +7,6 @@ from django.utils.decorators import method_decorator
 from apps.send_email import send_email_list
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.shortcuts import render
 import threading
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
