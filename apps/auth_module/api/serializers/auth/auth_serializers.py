@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
 from ....models import User, Persons
-from ...serializers.person.persons_serializers import PersonsSimpleSerializers
+from ...serializers.person.persons_serializers import PersonsSimpleSerializersView
 from django.db import transaction
 
 User = get_user_model()
@@ -44,7 +44,6 @@ class RegisterSerializers(serializers.Serializer):
                 else:
                     group_selected = Group.objects.get(pk=rol)
                     user.groups.add(group_selected)  # type:ignore
-                transaction.commit()
             return user
         except Exception as e:
             transaction.rollback()
@@ -55,7 +54,7 @@ class LoginSerializers(serializers.Serializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     username = serializers.CharField(label='Email/username')
     password = serializers.CharField()
-    person = PersonsSimpleSerializers(read_only=True)
+    person = PersonsSimpleSerializersView(read_only=True)
 
     def validate(self, attrs):
         user = authenticate(**attrs)

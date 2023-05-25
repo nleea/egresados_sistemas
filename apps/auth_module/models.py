@@ -88,7 +88,7 @@ class Persons(BaseModel):
     phone = models.CharField(max_length=20, blank=True, null=True)
     status = models.BooleanField(default=True)
     document_type = models.ForeignKey(
-        Document_types, related_name='document_types', on_delete=models.SET_NULL, blank=True, null=True)
+        Document_types, on_delete=models.SET_NULL, blank=True, null=True)
     gender_type = models.ForeignKey(
         Genders, related_name='gender_types', on_delete=models.SET_NULL, blank=True, null=True)
     user = models.ForeignKey(User, related_name='user',

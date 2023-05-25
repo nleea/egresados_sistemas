@@ -1,14 +1,13 @@
-from ..modules import CreateAPIView, ListAPIView, UpdateAPIView, status, Response,IsAdminRole,DestroyAPIView
+from ..modules import CreateAPIView, UpdateAPIView, status, Response,IsAdminRole,DestroyAPIView
+from rest_framework.views import APIView
 from ....models import Genders
 from ...serializers.gender.gender_Serializers import GenderSerializers
 
 
-class GenderListView(ListAPIView):
-    queryset = Genders.objects.all()
-    serializer_class = GenderSerializers
+class GenderListView(APIView):
 
     def get(self, request, *args, **kwargs):
-        data = self.get_queryset()
+        data = Genders.objects.filter(visible=True)
         serializers = GenderSerializers(data, many=True)
         return Response(serializers.data, status.HTTP_200_OK)
 
@@ -47,7 +46,7 @@ class GenderUpdateView(UpdateAPIView):
             if genderSerializers.is_valid():
                 genderSerializers.update(
                     gender, genderSerializers.validated_data)
-                return Response(genderSerializers.data, status.HTTP_200_OK)
+                return Response("SUccess", status.HTTP_200_OK)
             return Response(genderSerializers.errors, status.HTTP_400_BAD_REQUEST)
         except (AttributeError, Exception) as e:
             return Response( e.args, status.HTTP_400_BAD_REQUEST)

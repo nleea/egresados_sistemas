@@ -3,6 +3,6 @@ from .persons import PersonCreateView, PersonView, PersonUpdateView, CreateAPIVi
 
 urlpatterns = [
     path('', PersonView.as_view()),
-    path('update/<int:pk>/', PersonUpdateView.as_view()),
+    path('update/profile/', PersonUpdateView.as_view()),
     path('create/', PersonCreateView.as_view())
 ]

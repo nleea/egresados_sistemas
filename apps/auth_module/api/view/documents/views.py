@@ -8,7 +8,7 @@ class DocumentListView(ListAPIView):
     serializer_class = DocumentSerializers
 
     def get(self, request, *args, **kwargs):
-        data = self.get_queryset()
+        data = Document_types.objects.filter(visible=True)
         serializers = DocumentSerializers(data, many=True)
         return Response(serializers.data, status.HTTP_200_OK)
 
@@ -48,7 +48,7 @@ class DocumentUpdateView(UpdateAPIView):
                 document, data=request.data)
             if documentSerializers.is_valid():
                 documentSerializers.save()
-                return Response(documentSerializers.data, status.HTTP_200_OK)
+                return Response("Success", status.HTTP_200_OK)
             return Response(documentSerializers.errors, status.HTTP_400_BAD_REQUEST)
         except (AttributeError, Exception) as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)

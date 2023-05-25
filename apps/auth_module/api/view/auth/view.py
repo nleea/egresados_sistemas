@@ -1,6 +1,5 @@
 from rest_framework.views import APIView
 from ...serializers.auth.auth_serializers import LoginSerializers, RegisterSerializers
-from ...serializers.person.persons_serializers import PersonsSimpleSerializers
 from ...serializers.resources.resources_serializers import ResourcesSerializers
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from rest_framework.response import Response
