@@ -31,7 +31,8 @@ class AuthLogin(APIView):
             data=request.data, context={'request': self.request})  
         if not serializers.is_valid():
             return Response(serializers.errors, status.HTTP_400_BAD_REQUEST)
-        
+    
+
         login(request, serializers.validated_data)  # type: ignore
         token = self.get_tokens_for_user(serializers.validated_data)
     

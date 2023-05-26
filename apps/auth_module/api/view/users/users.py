@@ -126,10 +126,10 @@ class UserChangePasswordView(UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
-        user = self.get_object()
+        user = request.user
 
         if user is None:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)# type: ignore
+            return Response("User don't exist", status.HTTP_400_BAD_REQUEST)# type: ignore
 
         if 'original-password' not in self.request.data: # type: ignore
             return Response('Password Error', status.HTTP_400_BAD_REQUEST)
