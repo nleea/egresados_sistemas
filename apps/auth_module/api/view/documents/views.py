@@ -1,15 +1,13 @@
 from ..modules import ListAPIView, CreateAPIView, Response, status, UpdateAPIView, IsAdminRole, DestroyAPIView
 from ....models import Document_types
-from ...serializers.document.document_serializers import DocumentSerializers
+from ...serializers.document.document_serializers import DocumentSerializers,DocumentSerializersView
+from rest_framework.views import APIView
 
-
-class DocumentListView(ListAPIView):
-    queryset = Document_types.objects.all()
-    serializer_class = DocumentSerializers
+class DocumentListView(APIView):
 
     def get(self, request, *args, **kwargs):
         data = Document_types.objects.filter(visible=True)
-        serializers = DocumentSerializers(data, many=True)
+        serializers = DocumentSerializersView(data, many=True)
         return Response(serializers.data, status.HTTP_200_OK)
 
 
@@ -54,9 +52,7 @@ class DocumentUpdateView(UpdateAPIView):
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
-class DocumentDestroyView(DestroyAPIView):
-    queryset = Document_types.objects.all()
-    serializer_class = DocumentSerializers
+class DocumentDestroyView(APIView):
     permission_classes = [IsAdminRole]
 
     def get_object(self):
@@ -65,8 +61,24 @@ class DocumentDestroyView(DestroyAPIView):
             return Document_types.objects.get(id=pk)
         except Document_types.DoesNotExist:
             return None
+    
+    def bulk_delete(self, ids):
+        try:
+            resulstForDelete = Document_types.objects.filter(pk__in=ids)
+            for _,instance in enumerate(resulstForDelete):
+                instance.visible = False 
+
+            Document_types.objects.bulk_update(resulstForDelete,["visible"])
+
+            return Response("Success", 200)
+        except Exception as e:
+            return Response(e.args, 400)
 
     def delete(self, request, *args, **kwargs):
+
+        if "ids" in request.data:
+            return self.bulk_delete(request.data["ids"])
+
         document = self.get_object()
         if document is None:
             return Response('Type document Not Exist', status.HTTP_200_OK)

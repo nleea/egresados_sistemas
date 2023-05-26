@@ -6,5 +6,5 @@ urlpatterns = [
     path('update/<int:pk>/', DocumentUpdateView.as_view()),
     path('create/', DocumentCreateView.as_view()),
     path('delete/<int:pk>/', DocumentDestroyView.as_view()),
-    
+    path('delete/', DocumentDestroyView.as_view()),
 ]

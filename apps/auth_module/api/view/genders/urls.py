@@ -6,5 +6,6 @@ urlpatterns = [
     path('update/<int:pk>/', GenderUpdateView.as_view()),
     path('create/', GenderCreateView.as_view()),
     path('delete/<int:pk>/', GendersDestroyView.as_view()),
+    path('delete/', GendersDestroyView.as_view()),
 
 ]

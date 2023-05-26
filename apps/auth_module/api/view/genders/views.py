@@ -1,14 +1,14 @@
 from ..modules import CreateAPIView, UpdateAPIView, status, Response,IsAdminRole,DestroyAPIView
 from rest_framework.views import APIView
 from ....models import Genders
-from ...serializers.gender.gender_Serializers import GenderSerializers
+from ...serializers.gender.gender_Serializers import GenderSerializers,GenderSerializersView
 
 
 class GenderListView(APIView):
 
     def get(self, request, *args, **kwargs):
         data = Genders.objects.filter(visible=True)
-        serializers = GenderSerializers(data, many=True)
+        serializers = GenderSerializersView(data, many=True)
         return Response(serializers.data, status.HTTP_200_OK)
 
 
@@ -46,7 +46,7 @@ class GenderUpdateView(UpdateAPIView):
             if genderSerializers.is_valid():
                 genderSerializers.update(
                     gender, genderSerializers.validated_data)
-                return Response("SUccess", status.HTTP_200_OK)
+                return Response("Success", status.HTTP_200_OK)
             return Response(genderSerializers.errors, status.HTTP_400_BAD_REQUEST)
         except (AttributeError, Exception) as e:
             return Response( e.args, status.HTTP_400_BAD_REQUEST)
@@ -63,7 +63,24 @@ class GendersDestroyView(DestroyAPIView):
         except Genders.DoesNotExist:
             return None
 
+
+    def bulk_delete(self, ids):
+        try:
+            resulstForDelete = Genders.objects.filter(pk__in=ids)
+            for _,instance in enumerate(resulstForDelete):
+                instance.visible = False 
+
+            Genders.objects.bulk_update(resulstForDelete,["visible"])
+
+            return Response("Success", 200)
+        except Exception as e:
+            return Response(e.args, 400)
+
     def delete(self, request, *args, **kwargs):
+
+        if "ids" in request.data:
+            return self.bulk_delete(request.data["ids"])
+
         gender = self.get_object()
         if gender is None:
             return Response('Gender Not Exist', status.HTTP_200_OK)
