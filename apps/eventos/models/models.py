@@ -67,11 +67,12 @@ class Eventos(BaseModel):
 
 class Inscripcion(models.Model):
     evento = models.ForeignKey(
-        Eventos, on_delete=models.CASCADE, related_name="+", db_index=True)
-    user = models.ManyToManyField(User, related_name="+")
+        Eventos, on_delete=models.CASCADE, db_index=True)
+    user = models.ManyToManyField(User, related_name="evento_inscripcion")
 
 
 class Asistencia(BaseModel):
     evento = models.ForeignKey(
-        Eventos, on_delete=models.CASCADE, related_name="+", db_index=True)
+        Eventos, on_delete=models.CASCADE, db_index=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
+    confirm = models.BooleanField(default=True)

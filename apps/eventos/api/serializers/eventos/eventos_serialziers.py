@@ -5,6 +5,21 @@ from .eventos_sub_area_serializers import EventosSubAreaSerializersView
 from .eventos_cate_serializers import EventosCategorySerializersView
 from .eventos_tipo import TipoEventosSerializersView
 
+class EventosAsistenciaSerializersView(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    area = EventosCategorySerializersView(read_only=True)
+    subArea = EventosSubAreaSerializersView(read_only=True,expands=False)
+    nombre_actividad = serializers.CharField(read_only=True)
+    tipo = TipoEventosSerializersView(read_only=True)
+    responsable = serializers.CharField(read_only=True)
+    fecha = serializers.DateField(read_only=True)
+    hora = serializers.CharField(read_only=True)
+    lugar = serializers.CharField(read_only=True)
+    cupos = serializers.IntegerField(read_only=True)
+    descripcion = serializers.CharField(read_only=True)
+    objectivo = serializers.CharField(read_only=True)
+    confirm = serializers.BooleanField(read_only=True)
+
 
 class EventosSerializersView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
