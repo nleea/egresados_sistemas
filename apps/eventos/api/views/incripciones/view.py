@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from ....models.models import Inscripcion, User
-from ...serializers.eventos.inscripciones import InscripcionesSerializersView, InscripcionesSerializers, AsistenciaSerializer
+from ....models.models import Inscripcion, User, Asistencia
+from ...serializers.eventos.inscripciones import InscripcionesSerializersView, InscripcionesSerializers, AsistenciaSerializer, AsistenciaSerializerView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from apps.send_email import send_email_list
@@ -31,6 +31,21 @@ class InscripcionView(APIView):
         return Response("Evento Not found", 404)
 
 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+class InscripcionEventosView(APIView):
+    def get(self, request, *args, **kwargs):
+
+        results = Inscripcion.objects.defer("evento__userCreate_id", "evento__userUpdate_id", "evento__tipo__userCreate_id",
+                                            "evento__tipo__userUpdate_id", "evento__subArea__userUpdate_id",
+                                            "evento__subArea__userCreate_id", "evento__area__userCreate_id",
+                                            "evento__area__userUpdate_id").select_related("evento", "evento__tipo",
+                                                                                          "evento__subArea",
+                                                                                          "evento__area").filter(user=request.user.id)
+        resulstSerializers = InscripcionesSerializersView(
+            results, many=True)
+        return Response(resulstSerializers.data, 200)
+
+
 class IncripcionSave(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -39,8 +54,9 @@ class IncripcionSave(APIView):
             inscripcionesResulst = InscripcionesSerializers(data=request.data)
             if inscripcionesResulst.is_valid():
                 try:
-                    evento = inscripcionesResulst.validated_data["evento"]#type: ignore
-                    threading_emails = threading.Thread(target=send_email_list, args=(user,evento))
+                    evento = inscripcionesResulst.data["evento"]
+                    threading_emails = threading.Thread(
+                        target=send_email_list, args=(user, evento))
                     threading_emails.start()
                     inscripcionesResulst.save(user=user)
                     return Response("Inscripciones creadas", 200)
@@ -60,6 +76,6 @@ class AsistenciaView(APIView):
 
         if resulst.is_valid():
             resulst.save(user_session=user_session)
-            return Response({"message":"Ok"}, status=200)
+            return Response({"message": "Ok"}, status=200)
 
-        return Response({"message":"Error"}, status=400)
+        return Response({"message": "Error"}, status=400)

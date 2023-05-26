@@ -32,6 +32,13 @@ class InscripcionesSerializers(BaseSerializers):
         return instance
 
 
+class AsistenciaSerializerView(BaseSerializers):
+    evento = EventosSerializersView(read_only=True)
+    # user = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        fields = "__all__"
+
 class AsistenciaSerializer(BaseSerializers):
     evento = serializers.IntegerField()
     user = serializers.IntegerField()

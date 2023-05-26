@@ -23,10 +23,12 @@ class EventosView(APIView):
         data = None
         if mine:
             data = EventosSerializersView(
-                Eventos.objects.select_related("area", "subArea", "userCreate", "userUpdate","tipo").filter(visible=True,userCreate__id=request.user.id), many=True, meta=True)
+                Eventos.objects.select_related("area", "subArea", "userCreate", "userUpdate", "tipo").filter(visible=True, userCreate__id=request.user.id), many=True, meta=True)
         else:
             data = EventosSerializersView(
-                Eventos.objects.select_related("area", "subArea", "userCreate", "userUpdate","tipo").filter(visible=True), many=True, meta=True)
+                Eventos.objects.select_related("area",
+                                               "subArea", "userCreate", 
+                                               "userUpdate", "tipo").filter(visible=True), many=True, meta=True)
 
         return Response(data.data, status.HTTP_200_OK)
 
@@ -43,7 +45,7 @@ class SaveEventosView(APIView):
                 data={"evento": evento.pk})
             if inscripcionesResulst.is_valid():
                 try:
-                    evento = inscripcionesResulst.validated_data["evento"]# type: ignore
+                    evento = inscripcionesResulst.validated_data["evento"] # type: ignore
                     threading_emails = threading.Thread(
                         target=send_email_list, args=(user, evento))
                     threading_emails.start()
@@ -128,5 +130,3 @@ class DeleteEventosView(APIView):
             return Response("Success", status.HTTP_200_OK)
         except instanceOrNone.DoesNotExist:
             return Response("Error", status.HTTP_400_BAD_REQUEST)
-
-        return Response("Delete Success", status.HTTP_200_OK)

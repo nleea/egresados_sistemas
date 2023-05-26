@@ -19,8 +19,6 @@ def create_response(code, message, data, path='', method=""):
 
     try:
 
-        print(code)
-
         match = re.search("html", data)
         if match:
             return data, code, True
