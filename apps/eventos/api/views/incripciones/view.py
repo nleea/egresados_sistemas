@@ -36,7 +36,12 @@ class InscripcionView(APIView):
 @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class InscripcionEventosView(APIView):
     def get(self, request, *args, **kwargs):
-        results = Eventos.objects.filter(inscripcion__user=request.user.id)
+
+        results = Eventos.objects.defer("userCreate", "userUpdate", "area__userCreate",
+                                        "area__userUpdate", "subArea__userCreate",
+                                        "subArea__userUpdate", "tipo__userCreate",
+                                        "tipo__userUpdate").filter(inscripcion__user=request.user.id,
+                                                                   visible=True).select_related("area", "subArea", "tipo")
         eventos_asistencia = results.annotate(confirm=models.Exists(
             Asistencia.objects.filter(evento=models.OuterRef(
                 'pk'), user=request.user.id, confirm=True)
