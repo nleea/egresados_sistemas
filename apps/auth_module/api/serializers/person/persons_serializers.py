@@ -1,13 +1,13 @@
 from ....models import Persons
 from rest_framework.serializers import ModelSerializer, Serializer, CharField, DateField, IntegerField
 from ..document.document_serializers import DocumentSerializersView
-from ..gender.gender_Serializers import GenderSerializers
+from ..gender.gender_Serializers import GenderSerializersView
 from ..user.users_serializers import UserSerializersSimple
 
 
 class PersonsSerializers(ModelSerializer):
     document_type = DocumentSerializersView(read_only=True)
-    gender_type = GenderSerializers(read_only=True)
+    gender_type = GenderSerializersView(read_only=True)
     user = UserSerializersSimple(read_only=True, expands=False)
 
     class Meta:
