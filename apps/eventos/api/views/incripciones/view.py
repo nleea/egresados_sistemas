@@ -1,7 +1,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from ....models.models import Inscripcion, User, Asistencia
+from ....models.models import Inscripcion, User, Asistencia, Eventos
 from ...serializers.eventos.inscripciones import InscripcionesSerializersView, InscripcionesSerializers, AsistenciaSerializer, AsistenciaSerializerView
+from ...serializers.eventos.eventos_serialziers import EventosSerializersView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from apps.send_email import send_email_list
@@ -35,13 +36,9 @@ class InscripcionView(APIView):
 class InscripcionEventosView(APIView):
     def get(self, request, *args, **kwargs):
 
-        results = Inscripcion.objects.defer("evento__userCreate_id", "evento__userUpdate_id", "evento__tipo__userCreate_id",
-                                            "evento__tipo__userUpdate_id", "evento__subArea__userUpdate_id",
-                                            "evento__subArea__userCreate_id", "evento__area__userCreate_id",
-                                            "evento__area__userUpdate_id").select_related("evento", "evento__tipo",
-                                                                                          "evento__subArea",
-                                                                                          "evento__area").filter(user=request.user.id)
-        resulstSerializers = InscripcionesSerializersView(
+        results = Eventos.objects.all().filter(
+            inscripcion_set__user=request.user.id)
+        resulstSerializers = EventosSerializersView(
             results, many=True)
         return Response(resulstSerializers.data, 200)
 

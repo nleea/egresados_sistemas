@@ -20,7 +20,7 @@ class GenderCreateView(CreateAPIView):
         genderSerializers = GenderSerializers(data=request.data)
         if genderSerializers.is_valid():
             genderSerializers.save()
-            return Response(genderSerializers.data, status.HTTP_200_OK)
+            return Response("Success", status.HTTP_200_OK)
         return Response(genderSerializers.errors, status.HTTP_400_BAD_REQUEST)
 
 

@@ -10,6 +10,14 @@ class InscripcionesSerializersView(BaseSerializers):
     evento = EventosSerializersView(read_only=True)
     user = UserSerializersSimple(read_only=True, many=True)
 
+    def __init__(self, instance=None, data=..., **kwargs):
+        expands = bool(kwargs.pop("expands", False))
+        super().__init__(instance, data, **kwargs)
+
+        if not expands:
+            self.fields.pop("user")
+            self.fields.pop("id")
+
 
 class InscripcionesSerializers(BaseSerializers):
     evento = serializers.IntegerField()
@@ -34,10 +42,11 @@ class InscripcionesSerializers(BaseSerializers):
 
 class AsistenciaSerializerView(BaseSerializers):
     evento = EventosSerializersView(read_only=True)
-    # user = serializers.IntegerField(read_only=True)
+    user = serializers.IntegerField(read_only=True)
 
     class Meta:
         fields = "__all__"
+
 
 class AsistenciaSerializer(BaseSerializers):
     evento = serializers.IntegerField()

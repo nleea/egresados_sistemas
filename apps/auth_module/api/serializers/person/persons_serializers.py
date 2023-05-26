@@ -12,7 +12,7 @@ class PersonsSerializers(ModelSerializer):
 
     class Meta:
         model = Persons
-        fields = '__all__'
+        exclude=("createdAt","updateAt","visible")
 
 
 class PersonsSimpleSerializersView(Serializer):
