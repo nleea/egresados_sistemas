@@ -12,6 +12,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
+
 class AdvertisementsQueryView(APIView):
 
     def post(self, request, *args, **kwargs):
@@ -19,21 +20,41 @@ class AdvertisementsQueryView(APIView):
         if ("categoryId" in request.data):
             results = SubCategorySerializersView(SubCategoria.objects.filter_subcategory_has_category(
                 request.data["categoryId"]), many=True).data
-        elif ("subCategoryId" in request.data):
-            anuncio = Anuncio.objects.filter_Advertisement_subCategory(
-                request.data["subCategoryId"])
-            results = AdvertisementSerializersView(anuncio, many=True).data
 
         return Response(results, status.HTTP_200_OK,)
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch') 
+
+class AdvertisementsBySubcategory(APIView):
+
+    def get(self, request, *args, **kwargs):
+
+        subCategory = request.GET.get("subCategoryId", None)
+
+        print(subCategory)
+
+        # anuncio = Anuncio.objects.filter_Advertisement_subCategory(
+        #     request.data["subCategoryId"])
+        # results = AdvertisementSerializersView(anuncio, many=True).data
+        return Response("Success", status.HTTP_200_OK)
+
+
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class AdvertisementView(ViewPagination):
 
     def get(self, request, *args, **kwargs):
         meta = None
+        subCategory = request.GET.get("subCategoryId", None)
         if 'meta' in request.headers:
             meta = request.headers["meta"]
-        anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id","redes__userUpdate_id","redes__userCreate_id","subCategoria__userCreate_id").select_related("subCategoria","userCreate","userUpdate","subCategoria__categoriaId").prefetch_related("redes","tipo_capacitacion").filter(visible=True)
+
+        if subCategory:
+            anuncio = Anuncio.objects.filter_Advertisement_subCategory(
+                subCategory)
+            results = AdvertisementSerializersView(anuncio, many=True)
+            return Response(results.data, status.HTTP_200_OK)
+
+        anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id", "redes__userUpdate_id", "redes__userCreate_id", "subCategoria__userCreate_id").select_related(
+            "subCategoria", "userCreate", "userUpdate", "subCategoria__categoriaId").prefetch_related("redes", "tipo_capacitacion").filter(visible=True)
         results = self.paginate_queryset(anuncios)
         data = AdvertisementSerializersView(
             results, many=True, meta=meta)
@@ -96,14 +117,14 @@ class DeleteCategoryView(APIView):
             return subCategoria
         except Anuncio.DoesNotExist:
             return None
-    
+
     def bulk_delete(self, ids):
         try:
             resulstForDelete = Anuncio.objects.filter(pk__in=ids)
-            for _,instance in enumerate(resulstForDelete):
-                instance.visible = False 
+            for _, instance in enumerate(resulstForDelete):
+                instance.visible = False
 
-            Anuncio.objects.bulk_update(resulstForDelete,["visible"])
+            Anuncio.objects.bulk_update(resulstForDelete, ["visible"])
 
             return Response("Success", 200)
         except Exception as e:
@@ -120,7 +141,7 @@ class DeleteCategoryView(APIView):
 
         try:
             instance = AdvertisementSerializers(
-            instanceOrNone, data={"visible":False}, partial=True)
+                instanceOrNone, data={"visible": False}, partial=True)
             if instance.is_valid():
                 instance.save(userUpdate=request.user)
             else:
