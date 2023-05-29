@@ -94,7 +94,7 @@ class AdvertisementSerializers(BaseSerializers):
                                          municipio=validated_data["municipio"], direccion=validated_data[
                                              "direccion"], userCreate=validated_data["userCreate"],
                                          subCategoria_id=validated_data["subCategoria"], metodos_entrega=metodos_entrega,
-                                         formas_pago=formas_pago,logo=validated_data["logo"])
+                                         formas_pago=formas_pago,logo=validated_data.pop("logo",None))
 
         if len(validated_data.get("tipo_capacitacion", None)):
             capacitaciones = TiposCapacitaciones.objects.filter(

@@ -61,7 +61,7 @@ class Anuncio(BaseModel):
 
     nombre_emprendimiento = models.CharField(
         max_length=256, null=False, blank=False)
-    descripcion = models.CharField(max_length=300, blank=False, null=False)
+    descripcion = models.CharField(max_length=600, blank=False, null=False)
     telefono_emprendimiento = models.CharField(
         max_length=11, blank=False, null=False)
     correo_emprendimiento = models.EmailField(null=False, blank=False)
@@ -69,8 +69,8 @@ class Anuncio(BaseModel):
     municipio = models.CharField(max_length=50, null=False, blank=False)
     direccion = models.CharField(max_length=50, null=False, blank=False)
     subCategoria = models.ForeignKey(SubCategoria, on_delete=models.CASCADE,db_index=True)
-    metodos_entrega = models.CharField(max_length=300)
-    formas_pago = models.CharField(max_length=300)
+    metodos_entrega = models.CharField(max_length=900)
+    formas_pago = models.CharField(max_length=900)
     tipo_capacitacion = models.ManyToManyField(
         TiposCapacitaciones,db_index=True)
     redes = models.ManyToManyField(RedesSociales,related_name="redes_store",db_index=True)

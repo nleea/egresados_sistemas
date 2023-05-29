@@ -1,6 +1,6 @@
-import datetime
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 User = get_user_model()
 
@@ -54,12 +54,12 @@ class Eventos(BaseModel):
     responsable = models.CharField(max_length=256)
     tipo = models.ForeignKey(
         TipoEvento, on_delete=models.CASCADE, blank=True, null=True, db_index=True)
-    fecha = models.DateField(blank=False, null=False)
+    fecha = models.DateField(blank=False, null=False,default=timezone.now().date())
     hora = models.CharField(max_length=10)
     lugar = models.CharField(max_length=256)
     cupos = models.IntegerField()
     descripcion = models.CharField(max_length=600)
-    objectivo = models.CharField(max_length=600)
+    objectivo = models.CharField(max_length=300)
 
     class Meta:
         verbose_name = 'Evento'
