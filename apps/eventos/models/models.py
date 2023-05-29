@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -53,12 +54,19 @@ class Eventos(BaseModel):
     responsable = models.CharField(max_length=256)
     tipo = models.ForeignKey(
         TipoEvento, on_delete=models.CASCADE, blank=True, null=True, db_index=True)
-    fecha = models.DateField(blank=True, null=True)
+    fecha = models.DateField(blank=False, null=False)
     hora = models.CharField(max_length=10)
     lugar = models.CharField(max_length=256)
     cupos = models.IntegerField()
     descripcion = models.CharField(max_length=600)
     objectivo = models.CharField(max_length=600)
+
+    def get_date_event(self):
+
+        if self.fecha < datetime.date.today():
+            return True
+        else:
+            return False
 
     class Meta:
         verbose_name = 'Evento'

@@ -18,7 +18,9 @@ class EventosAsistenciaSerializersView(BaseSerializers):
     cupos = serializers.IntegerField(read_only=True)
     descripcion = serializers.CharField(read_only=True)
     objectivo = serializers.CharField(read_only=True)
-    confirm = serializers.BooleanField(read_only=True)
+    confirm_asistencia = serializers.BooleanField(read_only=True)
+    fecha_pasada = serializers.BooleanField(read_only=True)
+
 
 
 class EventosSerializersView(BaseSerializers):

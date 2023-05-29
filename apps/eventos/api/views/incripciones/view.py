@@ -10,6 +10,7 @@ from apps.send_email import send_email_list
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 import threading
+from django.utils import timezone
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -33,7 +34,7 @@ class InscripcionView(APIView):
         return Response("Evento Not found", 404)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class InscripcionEventosView(APIView):
     def get(self, request, *args, **kwargs):
 
@@ -42,9 +43,13 @@ class InscripcionEventosView(APIView):
                                         "subArea__userUpdate", "tipo__userCreate",
                                         "tipo__userUpdate").filter(inscripcion__user=request.user.id,
                                                                    visible=True).select_related("area", "subArea", "tipo")
-        eventos_asistencia = results.annotate(confirm=models.Exists(
+
+        eventos_asistencia = results.annotate(confirm_asistencia=models.Exists(
             Asistencia.objects.filter(evento=models.OuterRef(
                 'pk'), user=request.user.id, confirm=True)
+        ), fecha_pasada=models.Case(
+            models.When(fecha__lt=timezone.now().date(), then=True), default=False,
+            output_field=models.BooleanField()
         ))
 
         resulstSerializers = EventosAsistenciaSerializersView(
