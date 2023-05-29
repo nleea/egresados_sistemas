@@ -5,7 +5,6 @@ from django.contrib.auth.models import UserManager
 from django.contrib.auth.models import Group
 # Create your models here.
 
-
 class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)

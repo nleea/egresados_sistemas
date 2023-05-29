@@ -4,7 +4,7 @@ from ...serializers.subCategory.subCategory_serializers import SubCategorySerial
 from ....models.models import Anuncio, SubCategoria
 from rest_framework.response import Response
 from rest_framework import status
-from ..Base.BaseView import ViewPagination
+from ..Base.BaseView import ViewPagination, DecoratorPaginateView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
@@ -24,23 +24,10 @@ class AdvertisementsQueryView(APIView):
         return Response(results, status.HTTP_200_OK,)
 
 
-class AdvertisementsBySubcategory(APIView):
-
-    def get(self, request, *args, **kwargs):
-
-        subCategory = request.GET.get("subCategoryId", None)
-
-        print(subCategory)
-
-        # anuncio = Anuncio.objects.filter_Advertisement_subCategory(
-        #     request.data["subCategoryId"])
-        # results = AdvertisementSerializersView(anuncio, many=True).data
-        return Response("Success", status.HTTP_200_OK)
-
-
 @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class AdvertisementView(ViewPagination):
 
+    @DecoratorPaginateView
     def get(self, request, *args, **kwargs):
         meta = None
         subCategory = request.GET.get("subCategoryId", None)
@@ -51,17 +38,33 @@ class AdvertisementView(ViewPagination):
             anuncio = Anuncio.objects.filter_Advertisement_subCategory(
                 subCategory)
             results = AdvertisementSerializersView(anuncio, many=True)
-            return Response(results.data, status.HTTP_200_OK)
+            return results.data
 
         anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id", "redes__userUpdate_id", "redes__userCreate_id", "subCategoria__userCreate_id").select_related(
             "subCategoria", "userCreate", "userUpdate", "subCategoria__categoriaId").prefetch_related("redes", "tipo_capacitacion").filter(visible=True)
-        results = self.paginate_queryset(anuncios)
-        data = AdvertisementSerializersView(
-            results, many=True, meta=meta)
-        paginated_data = self.get_paginated_response(data.data).data
-        if paginated_data is None:
-            return Response("error", status.HTTP_400_BAD_REQUEST)
-        return Response(paginated_data, status.HTTP_200_OK)
+
+        advertisements_serializers = AdvertisementSerializersView(
+            anuncios, many=True, meta=meta)
+
+        return advertisements_serializers.data
+
+
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+class MyAdvertisementView(ViewPagination):
+
+    @DecoratorPaginateView
+    def get(self, request, *args, **kwargs):
+        meta = None
+        if 'meta' in request.headers:
+            meta = request.headers["meta"]
+
+        anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id", "redes__userUpdate_id", "redes__userCreate_id", "subCategoria__userCreate_id").select_related(
+            "subCategoria", "userCreate", "userUpdate", "subCategoria__categoriaId").prefetch_related("redes", "tipo_capacitacion").filter(visible=True, userCreate=request.user.id)
+
+        advertisements_serializers = AdvertisementSerializersView(
+            anuncios, many=True, meta=meta)
+
+        return advertisements_serializers.data
 
 
 class SaveAdvertisementView(APIView):
