@@ -83,7 +83,7 @@ class EventosSerializers(BaseSerializers):
 
             return evento
         except BaseException as e:
-            raise
+            raise e
 
     def update(self, instance, validated_data):
         instance.area_id = validated_data.get(

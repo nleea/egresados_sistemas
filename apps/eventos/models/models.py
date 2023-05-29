@@ -61,13 +61,6 @@ class Eventos(BaseModel):
     descripcion = models.CharField(max_length=600)
     objectivo = models.CharField(max_length=600)
 
-    def get_date_event(self):
-
-        if self.fecha < datetime.date.today():
-            return True
-        else:
-            return False
-
     class Meta:
         verbose_name = 'Evento'
         verbose_name_plural = 'Eventos'

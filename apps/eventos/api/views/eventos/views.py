@@ -40,7 +40,7 @@ class SaveEventosView(APIView):
         data = EventosSerializers(data=request.data)
         if data.is_valid():
             evento = data.save(userCreate=request.user)
-            user = User.objects.all().defer("roles")
+            user = User.objects.all().defer("groups")
             inscripcionesResulst = InscripcionesSerializers(
                 data={"evento": evento.pk})
             if inscripcionesResulst.is_valid():

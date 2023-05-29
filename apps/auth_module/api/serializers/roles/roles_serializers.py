@@ -1,19 +1,20 @@
-from ....models import  User
-from rest_framework.serializers import ModelSerializer, ValidationError
+from ....models import User
+from rest_framework import serializers
 from django.contrib.auth.models import Group
 
-class UserSerilizers(ModelSerializer):
+
+class UserSerilizers(serializers.Serializer):
+
     class Meta:
-        model = User
         fields = '__all__'
 
 
-class RolesSerializers(ModelSerializer):
+class RolesSerializers(serializers.Serializer):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    name = serializers.CharField(read_only=True)
+
     class Meta:
-        model = Group
-        fields = ('id', 'name')
-
-
+        fields = '__all__'
 
 
 # class RolesUserSerializers(ModelSerializer):
