@@ -4,6 +4,7 @@ from ..subCategory.subCategory_serializers import SubCategorySerializersView
 from ..BaseSerializers import BaseSerializers
 import json
 
+
 class TipoCapacitacionSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField()
@@ -43,7 +44,6 @@ class AdvertisementSerializersView(BaseSerializers):
     formas_pago = serializers.CharField(read_only=True)
     tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
     categoria = serializers.DictField(read_only=True)
-    
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
@@ -73,10 +73,9 @@ class AdvertisementSerializers(BaseSerializers):
     metodos_entrega = serializers.ListField()
     formas_pago = serializers.ListField()
     tipo_capacitacion = serializers.ListField()
-    redes = serializers.ListField(required=False)
+    redes = serializers.ListField()
     logo = serializers.FileField(required=False)
-    visible = serializers.BooleanField(required=False,write_only=True)
-
+    visible = serializers.BooleanField(required=False, write_only=True)
 
     class Meta:
         fields = "__all__"
@@ -94,31 +93,35 @@ class AdvertisementSerializers(BaseSerializers):
                                          municipio=validated_data["municipio"], direccion=validated_data[
                                              "direccion"], userCreate=validated_data["userCreate"],
                                          subCategoria_id=validated_data["subCategoria"], metodos_entrega=metodos_entrega,
-                                         formas_pago=formas_pago,logo=validated_data.pop("logo",None))
+                                         formas_pago=formas_pago, logo=validated_data.pop("logo", None))
 
-        if len(validated_data.get("tipo_capacitacion", None)):
-            capacitaciones = TiposCapacitaciones.objects.filter(
-                pk__in=validated_data.pop("tipo_capacitacion", None))
-            for capacitacion in capacitaciones:
-                anuncio.tipo_capacitacion.add(capacitacion)
-        
-        redes = validated_data.pop("redes", None)
+        tipo_capacitacion = validated_data.pop("tipo_capacitacion", None)
 
-        if len(redes):
-            for red in redes:
+        if tipo_capacitacion != None:
+            if len(tipo_capacitacion):
+                capacitaciones = TiposCapacitaciones.objects.filter(
+                    pk__in=list(map(int, tipo_capacitacion[0].split(","))))
+                for capacitacion in capacitaciones:
+                    anuncio.tipo_capacitacion.add(capacitacion)
+
+        redes = json.loads(validated_data.pop("redes", None)[0])
+
+        for red in redes:
+            if red["link"]:
                 anuncio.redes.add(RedesSociales.objects.create(
                     link=red["link"], name=red["name"] if "name" in red else None).pk)
 
-        return None
+        return anuncio
 
     def update(self, instance, validated_data):
         metodos_entrega = ",".join(
             validated_data["metodos_entrega"]) if "metodos_entrega" in validated_data != None else instance.metodos_entrega
         formas_pago = ",".join(
             validated_data["formas_pago"]) if "formas_pago" in validated_data != None else instance.formas_pago
-        
+
         if len(validated_data.get("tipo_capacitacion", [])):
-            instance.tipo_capacitacion.remove(*instance.tipo_capacitacion.all())
+            instance.tipo_capacitacion.remove(
+                *instance.tipo_capacitacion.all())
 
             capacitaciones = TiposCapacitaciones.objects.filter(
                 pk__in=validated_data.pop("tipo_capacitacion", None))
@@ -147,7 +150,7 @@ class AdvertisementSerializers(BaseSerializers):
         instance.visible = validated_data.get('visible', instance.visible)
 
         # results = RedesSociales.objects.filter(id__in=[x["id"] for x in validated_data.get("redes",instance.redes)])
-        
+
         # for i,red in enumerate(results):
         #     red.link = validated_data["redes"][i]["link"]
 
