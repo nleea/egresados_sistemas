@@ -73,7 +73,7 @@ class AdvertisementSerializers(BaseSerializers):
     metodos_entrega = serializers.ListField()
     formas_pago = serializers.ListField()
     tipo_capacitacion = serializers.ListField()
-    redes = serializers.ListField()
+    redes = serializers.ListField(required=False)
     logo = serializers.FileField(required=False)
     visible = serializers.BooleanField(required=False,write_only=True)
 
@@ -102,14 +102,14 @@ class AdvertisementSerializers(BaseSerializers):
             for capacitacion in capacitaciones:
                 anuncio.tipo_capacitacion.add(capacitacion)
         
-        redes = json.loads(validated_data.pop("redes", None))
+        redes = validated_data.pop("redes", None)
 
         if len(redes):
             for red in redes:
                 anuncio.redes.add(RedesSociales.objects.create(
                     link=red["link"], name=red["name"] if "name" in red else None).pk)
 
-        return anuncio
+        return None
 
     def update(self, instance, validated_data):
         metodos_entrega = ",".join(
