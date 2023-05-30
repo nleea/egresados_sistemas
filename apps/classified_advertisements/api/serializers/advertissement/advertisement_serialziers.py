@@ -2,7 +2,7 @@ from rest_framework import serializers
 from ....models.models import Anuncio, RedesSociales, TiposCapacitaciones
 from ..subCategory.subCategory_serializers import SubCategorySerializersView
 from ..BaseSerializers import BaseSerializers
-
+import json
 
 class TipoCapacitacionSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -101,9 +101,11 @@ class AdvertisementSerializers(BaseSerializers):
                 pk__in=validated_data.pop("tipo_capacitacion", None))
             for capacitacion in capacitaciones:
                 anuncio.tipo_capacitacion.add(capacitacion)
+        
+        redes = json.loads(validated_data.pop("redes", None))
 
-        if len(validated_data.get("redes", None)):
-            for red in validated_data.pop("redes", None):
+        if len(redes):
+            for red in redes:
                 anuncio.redes.add(RedesSociales.objects.create(
                     link=red["link"], name=red["name"] if "name" in red else None).pk)
 
