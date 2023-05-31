@@ -58,27 +58,10 @@ class CustomMiddleware(MiddlewareMixin):
         # If token Exists
         if jwt_token:
             try:
-                auth = JWTAuthentication()
-                tokenUser, token = auth.authenticate(request)       
-
-
-                if request.user.is_authenticated:
-                    user = None
-
-                if ('user' in request.session):
-                    user = User.objects.get(id=request.session['user'])
-                else:
-                    user = User.objects.get(id=token['user_id'])
+                tokenUser, token = JWTAuthentication.authenticate(JWTAuthentication(),request)       
+                user = tokenUser
 
                 if not tokenUser.is_authenticated:
-                    response, code,render = create_response(
-                        401, 'Unauthorized', {
-                            "message": 'User not in session'
-                        }
-                    )
-                    return HttpResponse(json.dumps(response), content_type="application/json",status=code)
-
-                if 'sessionid' in request.COOKIES and len(request.COOKIES['sessionid']) == 0:
                     response, code,render = create_response(
                         401, 'Unauthorized', {
                             "message": 'User not in session'
@@ -94,15 +77,7 @@ class CustomMiddleware(MiddlewareMixin):
                     )
                     return HttpResponse(json.dumps(response), status=code)
 
-                if tokenUser.email != user.email:
-                    response, code,render = create_response(
-                        401, "Unauthorized",{
-                            "message": 'Access not match'
-                        }
-                    )
-                    return HttpResponse(json.dumps(response), content_type="application/json",status=code)
-                
-                request.user = user
+                request.user = tokenUser
                 return None
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
                 response, code, render = create_response(
@@ -111,7 +86,6 @@ class CustomMiddleware(MiddlewareMixin):
 
                 return HttpResponse(json.dumps(response), content_type="application/json",status=code)
             except Exception as e:
-                print(e)
                 return HttpResponse(e.args,status=400)
         else:
             response, code, render = create_response(
