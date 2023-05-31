@@ -11,7 +11,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class PqrsView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -19,16 +19,16 @@ class PqrsView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
 
-        roles = request.user.roles.filter(name="Admin")
+        roles = request.user.groups.filter(name="Admin")
 
         if roles:
-            pqrs_filter = Pqrs.objects.select_related(
+            pqrs_filter = Pqrs.objects.defer("userCreate", "userUpdate").select_related(
                 "persona", "tipopqrs").filter(visible=True)
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
             return Response(data.data, status.HTTP_200_OK)
         else:
-            pqrs_filter = Pqrs.objects.select_related(
-                "persona", "tipopqrs").filter(userCreate=request.user.id,visible=True)
+            pqrs_filter = Pqrs.objects.defer("userUpdate","tipopqrs__userCreate_id").select_related(
+                "persona", "tipopqrs", "userCreate").filter(userCreate=request.user.id, visible=True)
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
             return Response(data.data, status.HTTP_200_OK)
 
@@ -52,14 +52,14 @@ class DeletePqrsView(APIView):
             return seccionId
         except Pqrs.DoesNotExist:
             return None
-    
+
     def bulk_delete(self, ids):
         try:
             resulstForDelete = Pqrs.objects.filter(pk__in=ids)
-            for _,instance in enumerate(resulstForDelete):
-                instance.visible = False 
+            for _, instance in enumerate(resulstForDelete):
+                instance.visible = False
 
-            Pqrs.objects.bulk_update(resulstForDelete,["visible"])
+            Pqrs.objects.bulk_update(resulstForDelete, ["visible"])
 
             return Response("Success", 200)
         except Exception as e:
@@ -69,7 +69,7 @@ class DeletePqrsView(APIView):
 
         if "ids" in request.data:
             return self.bulk_delete(request.data["ids"])
-        
+
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
             return Response("Pqrs {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)

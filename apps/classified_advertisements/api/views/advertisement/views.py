@@ -24,7 +24,7 @@ class AdvertisementsQueryView(APIView):
         return Response(results, status.HTTP_200_OK,)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class AdvertisementView(ViewPagination):
 
     @DecoratorPaginateView

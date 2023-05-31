@@ -54,6 +54,7 @@ class AdvertisementSerializersView(BaseSerializers):
                                 "name": instance.subCategoria.categoriaId.name}
         results["subCategoria"] = {"id": instance.subCategoria.id,
                                    "name": instance.subCategoria.name, "categoriaId": {"id": instance.subCategoria.categoriaId.id, "name": instance.subCategoria.categoriaId.name}}
+        results["redes"] = [x for x in results["redes"] if x["link"] != ""]
         return results
 
     class Meta:
@@ -149,11 +150,11 @@ class AdvertisementSerializers(BaseSerializers):
             'tipo_capacitacion', instance.tipo_capacitacion)
         instance.visible = validated_data.get('visible', instance.visible)
 
-        redes = validated_data.pop("redes",[])
+        redes = validated_data.pop("redes", [])
         results = RedesSociales.objects.filter(id__in=[x["id"] for x in redes])
 
-        for i,red in enumerate(results):
-             red.link = redes[i]["link"]
+        for i, red in enumerate(results):
+            red.link = redes[i]["link"]
 
         RedesSociales.objects.bulk_update(results, ["link"])
         instance.save()
