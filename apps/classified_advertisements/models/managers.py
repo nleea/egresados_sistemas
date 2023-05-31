@@ -8,5 +8,5 @@ class SubCategoryManagers(models.Manager):
 
 class AdvertisementsManagers(models.Manager):
     def filter_Advertisement_subCategory(self, subCategoryId):
-        advertisements = self.filter(subCategoria=int(subCategoryId)).defer("tipo_capacitacion","userCreate","userUpdate","subCategoria__userCreate_id","subCategoria__userUpdate_id").select_related("subCategoria")
+        advertisements = self.filter(subCategoria=int(subCategoryId),visible=True).prefetch_related("redes","tipo_capacitacion").defer("subCategoria__userCreate","subCategoria__userUpdate_id","subCategoria__categoriaId__userCreate","subCategoria__categoriaId__userUpdate","userCreate","userUpdate").select_related("subCategoria","subCategoria__categoriaId")
         return advertisements
