@@ -60,6 +60,25 @@ class AdvertisementView(ViewPagination):
 
 
 @method_decorator(cache_page(CACHE_TTL), name='dispatch')
+class AdvertisementMostVoteView(ViewPagination):
+
+    @DecoratorPaginateView
+    def get(self, request, *args, **kwargs):
+        meta = None
+        if 'meta' in request.headers:
+            meta = request.headers["meta"]
+
+        anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id", "redes__userUpdate_id", "redes__userCreate_id", "subCategoria__userCreate_id").select_related(
+            "subCategoria", "userCreate", "userUpdate", "subCategoria__categoriaId").prefetch_related("redes", "tipo_capacitacion").filter(visible=True).annotate(nun_votos=models.Count("votoanuncio")).order_by("-nun_votos")[:10]
+        
+
+        advertisements_serializers = AdvertisementSerializersView(
+            anuncios, many=True, meta=meta)
+
+        return advertisements_serializers.data
+
+
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class MyAdvertisementView(ViewPagination):
 
     @DecoratorPaginateView

@@ -45,6 +45,7 @@ class AdvertisementSerializersView(BaseSerializers):
     tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
     categoria = serializers.DictField(read_only=True)
     user_voto = serializers.BooleanField(read_only=True)
+    nun_votos = serializers.IntegerField(read_only=True)
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
