@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
-from ...serializers.advertissement.advertisement_serialziers import AdvertisementSerializers, AdvertisementSerializersView
+from ...serializers.advertissement.advertisement_serialziers import AdvertisementSerializers, AdvertisementSerializersView, AdvertisementVotoSerializers
 from ...serializers.subCategory.subCategory_serializers import SubCategorySerializersView
-from ....models.models import Anuncio, SubCategoria
+from ....models.models import Anuncio, SubCategoria, VotoAnuncio
 from rest_framework.response import Response
 from rest_framework import status
 from ..Base.BaseView import ViewPagination, DecoratorPaginateView
@@ -9,6 +9,7 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.db import models
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -35,16 +36,25 @@ class AdvertisementView(ViewPagination):
             meta = request.headers["meta"]
 
         if subCategory:
-            anuncio = Anuncio.objects.filter_Advertisement_subCategory(
+            anuncios = Anuncio.objects.filter_Advertisement_subCategory(
                 subCategory)
-            results = AdvertisementSerializersView(anuncio, many=True)
+            anuncio_resulst = anuncios.annotate(user_voto=models.Exists(
+                VotoAnuncio.objects.filter(
+                    emprendimiento=models.OuterRef("pk"), user=request.user.id)
+            ))
+            results = AdvertisementSerializersView(anuncio_resulst, many=True)
             return results.data
 
         anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id", "redes__userUpdate_id", "redes__userCreate_id", "subCategoria__userCreate_id").select_related(
             "subCategoria", "userCreate", "userUpdate", "subCategoria__categoriaId").prefetch_related("redes", "tipo_capacitacion").filter(visible=True)
 
+        anuncio_resulst = anuncios.annotate(user_voto=models.Exists(
+            VotoAnuncio.objects.filter(
+                emprendimiento=models.OuterRef("pk"), user=request.user.id)
+        ))
+
         advertisements_serializers = AdvertisementSerializersView(
-            anuncios, many=True, meta=meta)
+            anuncio_resulst, many=True, meta=meta)
 
         return advertisements_serializers.data
 
@@ -76,6 +86,20 @@ class SaveAdvertisementView(APIView):
             return Response("Success", status.HTTP_200_OK)
 
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class SaveAdvertisementVoto(APIView):
+
+    def post(self, request, *args, **kwargs):
+
+        emprendimiento: int = request.data.get("emprendimiento")
+        serializers = AdvertisementVotoSerializers(
+            data={"emprendimiento": emprendimiento, "user": request.user.id})
+
+        if serializers.is_valid():
+            serializers.save()
+            return Response("Success", status=status.HTTP_200_OK)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateCategoryView(APIView):

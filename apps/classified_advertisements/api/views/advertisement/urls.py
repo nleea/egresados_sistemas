@@ -1,5 +1,5 @@
 from django.urls import path, re_path
-from .views import AdvertisementView, SaveAdvertisementView, DeleteCategoryView, UpdateCategoryView, AdvertisementsQueryView, MyAdvertisementView
+from .views import AdvertisementView, SaveAdvertisementView, DeleteCategoryView, UpdateCategoryView, AdvertisementsQueryView, MyAdvertisementView, SaveAdvertisementVoto
 
 urlpatterns = [
     re_path(r"(?P<subCategoryId>\w{0,50})$", AdvertisementView.as_view()),
@@ -9,4 +9,5 @@ urlpatterns = [
     path("delete/<int:pk>/", DeleteCategoryView.as_view()),
     path("delete/", DeleteCategoryView.as_view()),
     path("query/", AdvertisementsQueryView.as_view()),
+    path("recomendar/", SaveAdvertisementVoto.as_view())
 ]

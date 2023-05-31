@@ -14,7 +14,7 @@ class CustomResponseMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        response = self.get_response(request)
+        response = self.get_response(request)  
         try:
             decode = response.getvalue().decode()
 

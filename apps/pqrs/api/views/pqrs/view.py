@@ -11,7 +11,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class PqrsView(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -19,18 +19,18 @@ class PqrsView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
 
-        
+        roles = request.user.groups.filter(name="Admin")
 
-        # if roles:
-        #     pqrs_filter = Pqrs.objects.defer("userCreate", "userUpdate").select_related(
-        #         "persona", "tipopqrs").filter(visible=True)
-        #     data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
-        #     return Response(data.data, status.HTTP_200_OK)
-        # else:
-        #     pqrs_filter = Pqrs.objects.defer("userUpdate","tipopqrs__userCreate_id").select_related(
-        #         "persona", "tipopqrs", "userCreate").filter(userCreate=request.user.id, visible=True)
-        #     data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
-        return Response({}, status.HTTP_200_OK)
+        if roles:
+            pqrs_filter = Pqrs.objects.defer("userCreate", "userUpdate").select_related(
+                "persona", "tipopqrs").filter(visible=True)
+            data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
+            return Response(data.data, status.HTTP_200_OK)
+        else:
+            pqrs_filter = Pqrs.objects.defer("userUpdate","tipopqrs__userCreate_id").select_related(
+                "persona", "tipopqrs", "userCreate").filter(userCreate=request.user.id, visible=True)
+            data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
+            return Response({}, status.HTTP_200_OK)
 
 
 class SavePqrsView(APIView):

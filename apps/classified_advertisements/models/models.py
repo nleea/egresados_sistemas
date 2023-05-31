@@ -10,9 +10,9 @@ class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
     userCreate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
     userUpdate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+",db_index=True)
+        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
     visible = models.BooleanField(default=True)
 
     class Meta:
@@ -31,13 +31,12 @@ class Categoria(BaseModel):
 
 class SubCategoria(BaseModel):
     categoriaId = models.ForeignKey(
-        Categoria, related_name="_id", on_delete=models.CASCADE, blank=True, null=True,db_index=True)
+        Categoria, related_name="_id", on_delete=models.CASCADE, blank=True, null=True, db_index=True)
 
     objects = SubCategoryManagers()
-    
-    
+
     def __str__(self):
-        return self.name 
+        return self.name
 
     class Meta:
         verbose_name = 'SubCategoria'
@@ -45,17 +44,18 @@ class SubCategoria(BaseModel):
 
 
 class TiposCapacitaciones(BaseModel):
-    
+
     def __str__(self):
         return self.name
-    
-    
+
     class Meta:
         verbose_name = 'Capacitacion'
         verbose_name_plural = 'Capacitacitaciones'
 
+
 class RedesSociales(BaseModel):
     link = models.CharField(max_length=500, blank=False, null=False)
+
 
 class Anuncio(BaseModel):
 
@@ -68,12 +68,14 @@ class Anuncio(BaseModel):
     corregimiento = models.CharField(max_length=50, null=False, blank=False)
     municipio = models.CharField(max_length=50, null=False, blank=False)
     direccion = models.CharField(max_length=50, null=False, blank=False)
-    subCategoria = models.ForeignKey(SubCategoria, on_delete=models.CASCADE,db_index=True)
+    subCategoria = models.ForeignKey(
+        SubCategoria, on_delete=models.CASCADE, db_index=True)
     metodos_entrega = models.CharField(max_length=900)
     formas_pago = models.CharField(max_length=900)
     tipo_capacitacion = models.ManyToManyField(
-        TiposCapacitaciones,db_index=True)
-    redes = models.ManyToManyField(RedesSociales,related_name="redes_store",db_index=True)
+        TiposCapacitaciones, db_index=True)
+    redes = models.ManyToManyField(
+        RedesSociales, related_name="redes_store", db_index=True)
     logo = models.FileField(
         upload_to="static/files/advertisements/", blank=True, null=True)
 
@@ -84,6 +86,9 @@ class Anuncio(BaseModel):
         verbose_name_plural = 'Anuncios'
 
 
-class Producto(BaseModel):
-    precio = models.CharField(max_length=256)
-    cantidad = models.CharField(max_length=256)
+class VotoAnuncio(models.Model):
+    emprendimiento = models.ForeignKey(Anuncio, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('emprendimiento', 'user')

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ....models.models import Anuncio, RedesSociales, TiposCapacitaciones
+from ....models.models import Anuncio, RedesSociales, TiposCapacitaciones, VotoAnuncio
 from ..subCategory.subCategory_serializers import SubCategorySerializersView
 from ..BaseSerializers import BaseSerializers
 import json
@@ -44,6 +44,7 @@ class AdvertisementSerializersView(BaseSerializers):
     formas_pago = serializers.CharField(read_only=True)
     tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
     categoria = serializers.DictField(read_only=True)
+    user_voto = serializers.BooleanField(read_only=True)
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
@@ -59,6 +60,20 @@ class AdvertisementSerializersView(BaseSerializers):
 
     class Meta:
         fields = '__all__'
+
+
+class AdvertisementVotoSerializers(BaseSerializers):
+    emprendimiento = serializers.IntegerField()
+    user = serializers.IntegerField()
+
+    def create(self, validated_data):
+        try:
+            resulst = VotoAnuncio.objects.create(
+                user_id=validated_data["user"], emprendimiento_id=validated_data["emprendimiento"])
+
+            return resulst
+        except Exception as e:
+            raise e
 
 
 class AdvertisementSerializers(BaseSerializers):
