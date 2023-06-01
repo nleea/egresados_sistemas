@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.forms import ValidationError
 from .managers import SubCategoryManagers, AdvertisementsManagers
 
 User = get_user_model()
@@ -55,6 +56,13 @@ class TiposCapacitaciones(BaseModel):
 
 class RedesSociales(BaseModel):
     link = models.CharField(max_length=500, blank=False, null=False)
+
+
+def validate_image(fieldfile_obj):
+    filesize = fieldfile_obj.file.size
+    megabyte_limit = 3.0
+    if filesize > megabyte_limit*1024*1024:
+        raise ValidationError("Max file size is %sMB" % str(megabyte_limit))
 
 
 class Anuncio(BaseModel):

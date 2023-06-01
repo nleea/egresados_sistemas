@@ -30,7 +30,7 @@ class AsignacionView(APIView):
 
 class AsignacionPqrsView(APIView):
     def get(self, request, *args, **kwargs):
-        roles = request.user.roles.get(name="Admin")
+        roles = request.user.groups.get(name="Admin")
 
         if roles:
             pqrs_filter = Pqrs.objects.select_related(
