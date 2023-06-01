@@ -57,7 +57,6 @@ class AdvertisementSerializersView(BaseSerializers):
                                 "name": instance.subCategoria.categoriaId.name}
         results["subCategoria"] = {"id": instance.subCategoria.id,
                                    "name": instance.subCategoria.name, "categoriaId": {"id": instance.subCategoria.categoriaId.id, "name": instance.subCategoria.categoriaId.name}}
-        results["redes"] = [x for x in results["redes"] if x["link"] != ""]
         return results
 
     class Meta:
