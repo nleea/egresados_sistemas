@@ -46,6 +46,7 @@ class AdvertisementSerializersView(BaseSerializers):
     categoria = serializers.DictField(read_only=True)
     user_voted = serializers.BooleanField(read_only=True)
     nun_votos = serializers.IntegerField(read_only=True)
+    logo = serializers.CharField(read_only=True)
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
