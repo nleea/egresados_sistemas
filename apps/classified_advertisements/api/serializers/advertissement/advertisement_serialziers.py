@@ -125,7 +125,6 @@ class AdvertisementSerializers(BaseSerializers):
         redes = json.loads(validated_data.pop("redes", None)[0])
 
         for red in redes:
-            if red["link"]:
                 anuncio.redes.add(RedesSociales.objects.create(
                     link=red["link"], name=red["name"] if "name" in red else None).pk)
 
