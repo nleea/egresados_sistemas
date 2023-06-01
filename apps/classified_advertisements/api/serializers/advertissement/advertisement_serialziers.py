@@ -44,7 +44,7 @@ class AdvertisementSerializersView(BaseSerializers):
     formas_pago = serializers.CharField(read_only=True)
     tipo_capacitacion = TipoCapacitacionSerializers(many=True, read_only=True)
     categoria = serializers.DictField(read_only=True)
-    user_voto = serializers.BooleanField(read_only=True)
+    user_voted = serializers.BooleanField(read_only=True)
     nun_votos = serializers.IntegerField(read_only=True)
 
     def to_representation(self, instance):
@@ -159,7 +159,7 @@ class AdvertisementSerializers(BaseSerializers):
         instance.direccion = validated_data.get(
             'direccion', instance.direccion)
         instance.subCategoria_id = validated_data.get(
-            'subCategoria', instance.subCategoria)
+            'subCategoria', instance.subCategoria.id)
         instance.metodos_entrega = metodos_entrega
         instance.formas_pago = formas_pago
         instance.tipo_capacitacion_id = validated_data.get(

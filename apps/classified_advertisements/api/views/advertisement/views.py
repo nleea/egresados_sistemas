@@ -46,9 +46,9 @@ class AdvertisementView(ViewPagination):
             return results.data
 
         anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id", "redes__userUpdate_id", "redes__userCreate_id", "subCategoria__userCreate_id").select_related(
-            "subCategoria", "userCreate", "userUpdate", "subCategoria__categoriaId").prefetch_related("redes", "tipo_capacitacion").filter(visible=True)
+            "subCategoria", "userCreate", "userUpdate", "subCategoria__categoriaId").prefetch_related("redes", "tipo_capacitacion").filter(visible=True).order_by("-id")
 
-        anuncio_resulst = anuncios.annotate(user_voto=models.Exists(
+        anuncio_resulst = anuncios.annotate(user_voted=models.Exists(
             VotoAnuncio.objects.filter(
                 emprendimiento=models.OuterRef("pk"), user=request.user.id)
         ))
