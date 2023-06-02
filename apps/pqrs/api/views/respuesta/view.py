@@ -23,7 +23,7 @@ class RespuestaView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
         data = RespuestaSerializersView(
-            Respuesta.objects.select_related("pqrs").filter(visible=True), many=True, meta=meta)
+            Respuesta.objects.select_related("pqrs").filter(visible=True), many=True, meta=True)
         return Response(data.data, status.HTTP_200_OK,)
 
 

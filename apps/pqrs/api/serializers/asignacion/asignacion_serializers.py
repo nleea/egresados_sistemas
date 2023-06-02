@@ -2,7 +2,6 @@ from rest_framework import serializers
 from ....models.models import Asignacion, User, Pqrs
 from ..BaseSerializers import BaseSerializers
 from ..pqrs.pqrs_serialziers import PqrsSerializersView
-from .....auth_module.api.serializers.user.users_serializers import UserSerializersSimple
 
 
 class AsignacionSerializerView(BaseSerializers):

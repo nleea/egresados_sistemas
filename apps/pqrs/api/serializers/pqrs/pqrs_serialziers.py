@@ -3,6 +3,9 @@ from ....models.models import Pqrs
 from ..BaseSerializers import BaseSerializers
 from .tipo_serializers import PqrsTipoSerializers
 
+class AsignacionSerializerView(serializers.Serializer):
+    funcionarioId = serializers.CharField(read_only=True)
+
 class PqrsSerializersView(BaseSerializers):
     titulo = serializers.CharField(read_only=True)
     description = serializers.CharField(read_only=True)
@@ -12,19 +15,23 @@ class PqrsSerializersView(BaseSerializers):
     anexo = serializers.FileField(required=False,read_only=True)
     persona = serializers.CharField(read_only=True)
     tipopqrs = PqrsTipoSerializers(read_only=True,meta=False)
-        
+    asignacion_set = AsignacionSerializerView(read_only=True,many=True)
+    assigned_to = serializers.CharField(read_only=True)
+
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
         results["status"] = {"name": instance.status, "valor":results["status_dic"] }
+        results["assigned_to"] = results["asignacion_set"][0]["funcionarioId"] if len(results["asignacion_set"]) else None
+        del results["asignacion_set"]
         return results
 
-    def __init__(self, instance=None, data=..., **kwargs):
-        meta = bool(kwargs.pop("meta",True))
-        super().__init__(instance, data, **kwargs)
+    # def __init__(self, instance=None, data=..., **kwargs):
+    #     meta = bool(kwargs.pop("meta",True))
+    #     super().__init__(instance, data, **kwargs)
         
-        if not meta:
-            self.fields.pop("persona")
+    #     if not meta:
+    #         self.fields.pop("persona")
 
 class PqrsSerializers(BaseSerializers):
     titulo = serializers.CharField()

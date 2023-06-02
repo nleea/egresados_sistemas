@@ -1,12 +1,13 @@
 from rest_framework.views import APIView
 from ...serializers.pqrs.pqrs_serialziers import PqrsSerializers, PqrsSerializersView
-from ....models.models import Pqrs
+from ....models.models import Pqrs,Asignacion
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.db import models
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -23,14 +24,14 @@ class PqrsView(APIView):
 
         if roles:
             pqrs_filter = Pqrs.objects.defer("userCreate", "userUpdate").select_related(
-                "persona", "tipopqrs").filter(visible=True)
+                "persona", "tipopqrs").prefetch_related("asignacion_set").filter(visible=True)
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
             return Response(data.data, status.HTTP_200_OK)
         else:
             pqrs_filter = Pqrs.objects.defer("userUpdate","tipopqrs__userCreate_id").select_related(
-                "persona", "tipopqrs", "userCreate").filter(userCreate=request.user.id, visible=True)
+                "persona", "tipopqrs", "userCreate").prefetch_related("asignacion_set").filter(userCreate=request.user.id, visible=True)
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
-            return Response({}, status.HTTP_200_OK)
+            return Response(data.data, status.HTTP_200_OK)
 
 
 class SavePqrsView(APIView):

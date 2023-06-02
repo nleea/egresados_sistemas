@@ -90,7 +90,7 @@ class Persons(BaseModel):
         Document_types, on_delete=models.SET_NULL, blank=True, null=True)
     gender_type = models.ForeignKey(
         Genders, related_name='gender_types', on_delete=models.SET_NULL, blank=True, null=True)
-    user = models.ForeignKey(User, related_name='user',
+    user = models.ForeignKey(User,
                              on_delete=models.SET_NULL, blank=True, null=True,db_index=True)
 
     def __str__(self) -> str:

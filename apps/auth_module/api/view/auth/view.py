@@ -40,9 +40,11 @@ class AuthLogin(APIView):
 
         menu = ResourcesSerializers(resources, many=True)
 
+
+        persons = serializers.validated_data.persons_set.first()
         request.session['refresh-token'] = token['refresh']
         return Response({'token': token, 'user': {'name': serializers.validated_data.username, #type: ignore
-                                                 'id': serializers.validated_data.id}, #type: ignore
+                                                 'id': serializers.validated_data.id,"full_name":f"{persons.name} {persons.surname}"}, #type: ignore
                           "menu": menu.data}, status.HTTP_200_OK)
 
 

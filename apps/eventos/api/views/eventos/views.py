@@ -23,10 +23,10 @@ class EventosView(APIView):
         data = None
         if mine:
             data = EventosSerializersView(
-                Eventos.objects.select_related("area", "subArea", "userCreate", "userUpdate", "tipo").filter(visible=True, userCreate__id=request.user.id), many=True, meta=True)
+                Eventos.objects.defer("tipo__userCreate_id","tipo__userUpdate_id","subArea__userCreate_id","subArea__userUpdate_id").select_related("area", "subArea", "userCreate", "userUpdate", "tipo").filter(visible=True, userCreate__id=request.user.id), many=True, meta=True)
         else:
             data = EventosSerializersView(
-                Eventos.objects.select_related("area",
+                Eventos.objects.defer("tipo__userCreate_id","tipo__userUpdate_id","subArea__userCreate_id","subArea__userUpdate_id").select_related("area",
                                                "subArea", "userCreate", 
                                                "userUpdate", "tipo").filter(visible=True), many=True, meta=True)
 
