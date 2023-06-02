@@ -23,7 +23,7 @@ class AsignacionView(APIView):
         queryset = Asignacion.objects.defer("userCreate", "userUpdate", "pqrs__userCreate_id",
                                             "pqrs__userUpdate", "pqrs__tipopqrs__userCreate_id",
                                             "pqrs__tipopqrs__userUpdate_id").select_related(
-            "pqrs", "pqrs__tipopqrs","pqrs__persona").filter(funcionarioId=request.user.id,pqrs__visible=True)
+            "pqrs", "pqrs__tipopqrs","pqrs__persona").filter(funcionarioId=request.user.id,pqrs__visible=True).order_by("-id")
         data = AsignacionSerializerView(queryset, many=True)
         return Response({"pqrs": [x["pqrs"] for x in data.data]}, status.HTTP_200_OK)
 
@@ -34,7 +34,7 @@ class AsignacionPqrsView(APIView):
 
         if roles:
             pqrs_filter = Pqrs.objects.select_related(
-                "persona", "tipopqrs").filter(status="AC",visible=True)
+                "persona", "tipopqrs").filter(status="AC",visible=True).order_by("-id")
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
             return Response(data.data, status.HTTP_200_OK)
 

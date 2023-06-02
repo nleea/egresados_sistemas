@@ -12,7 +12,7 @@ class TipoEventosView(APIView):
             meta = request.headers["meta"]
 
         data = TipoEventosSerializers(
-            TipoEvento.objects.select_related("userCreate","userUpdate").filter(visible=True), many=True, meta=meta)
+            TipoEvento.objects.select_related("userCreate","userUpdate").filter(visible=True), many=True, meta=meta).order_by("-id")
 
         return Response(data.data, status.HTTP_200_OK)
 

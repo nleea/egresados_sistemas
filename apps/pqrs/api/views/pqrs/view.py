@@ -23,12 +23,12 @@ class PqrsView(APIView):
 
         if roles:
             pqrs_filter = Pqrs.objects.defer("userCreate", "userUpdate").select_related(
-                "persona", "tipopqrs").prefetch_related("asignacion_set").filter(visible=True)
+                "persona", "tipopqrs").prefetch_related("asignacion_set").filter(visible=True).order_by("-id")
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
             return Response(data.data, status.HTTP_200_OK)
         else:
             pqrs_filter = Pqrs.objects.defer("userUpdate","tipopqrs__userCreate_id").select_related(
-                "persona", "tipopqrs", "userCreate").prefetch_related("asignacion_set").filter(userCreate=request.user.id, visible=True)
+                "persona", "tipopqrs", "userCreate").prefetch_related("asignacion_set").filter(userCreate=request.user.id, visible=True).order_by("-id")
             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
             return Response(data.data, status.HTTP_200_OK)
 

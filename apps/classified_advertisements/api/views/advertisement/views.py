@@ -20,7 +20,7 @@ class AdvertisementsQueryView(APIView):
         results = []
         if ("categoryId" in request.data):
             results = SubCategorySerializersView(SubCategoria.objects.filter_subcategory_has_category(
-                request.data["categoryId"]), many=True).data
+                request.data["categoryId"]).order_by("-id"), many=True).data
 
         return Response(results, status.HTTP_200_OK,)
 

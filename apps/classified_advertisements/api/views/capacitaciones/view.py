@@ -22,7 +22,7 @@ class CapacitacionesView(ViewPagination):
             meta = request.headers["meta"]
 
         data = CapacitacionesSerializersView(
-             self.paginate_queryset(TiposCapacitaciones.objects.select_related("userCreate","userUpdate").filter(visible=True)), many=True, meta=meta)
+             self.paginate_queryset(TiposCapacitaciones.objects.select_related("userCreate","userUpdate").filter(visible=True).order_by("-id")), many=True, meta=meta)
         paginated_data = self.get_paginated_response(data.data).data
 
         if paginated_data is None:

@@ -12,7 +12,7 @@ class TipoPqrsView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
         data = PqrsTipoSerializers(
-            TipoPqrs.objects.filter(visible=True), many=True, meta=meta)
+            TipoPqrs.objects.filter(visible=True).order_by("-id"), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK)
 
 

@@ -27,7 +27,7 @@ class InscripcionView(APIView):
                                                 "evento__subArea__userCreate_id", "evento__area__userCreate_id",
                                                 "evento__area__userUpdate_id").select_related("evento", "evento__tipo",
                                                                                               "evento__subArea",
-                                                                                              "evento__area").prefetch_related("user").filter(evento=param)
+                                                                                              "evento__area").prefetch_related("user").filter(evento=param).order_by("-id")
             inscripcionesResulst = InscripcionesSerializersView(
                 results, many=True)
             return Response(inscripcionesResulst.data, 200)
@@ -42,7 +42,7 @@ class InscripcionEventosView(APIView):
                                         "area__userUpdate", "subArea__userCreate",
                                         "subArea__userUpdate", "tipo__userCreate",
                                         "tipo__userUpdate").filter(inscripcion__user=request.user.id,
-                                                                   visible=True).select_related("area", "subArea", "tipo")
+                                                                   visible=True).select_related("area", "subArea", "tipo").order_by("-id")
 
         eventos_asistencia = results.annotate(confirm_asistencia=models.Exists(
             Asistencia.objects.filter(evento=models.OuterRef(

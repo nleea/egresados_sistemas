@@ -20,7 +20,7 @@ class CategoryView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
         data = CategorySerializersView(Categoria.objects.select_related(
-            "userCreate", "userUpdate").filter(visible=True), many=True, meta=meta)
+            "userCreate", "userUpdate").filter(visible=True).order_by("-id"), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK)
 
 

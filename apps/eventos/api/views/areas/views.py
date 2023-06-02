@@ -21,7 +21,7 @@ class EventosAreaView(APIView):
             meta = request.headers["meta"]
 
         data = EventosCategorySerializers(
-            EventosArea.objects.filter(visible=True), many=True, meta=meta)
+            EventosArea.objects.filter(visible=True).order_by("-id"), many=True, meta=meta)
         return Response(data.data, status.HTTP_200_OK)
 
 
