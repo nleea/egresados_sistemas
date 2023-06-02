@@ -12,7 +12,7 @@ class PqrsSerializersView(BaseSerializers):
     status_dic = serializers.CharField(
         source="get_status_display", read_only=True)
     status = serializers.CharField(read_only=True)
-    anexo = serializers.FileField(required=False,read_only=True)
+    anexo = serializers.CharField(required=False,read_only=True)
     persona = serializers.CharField(read_only=True)
     tipopqrs = PqrsTipoSerializers(read_only=True,meta=False)
     asignacion_set = AsignacionSerializerView(read_only=True,many=True)
