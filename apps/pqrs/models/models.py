@@ -64,7 +64,7 @@ class Respuesta(BaseModel):
     pqrs = models.ForeignKey(
         Pqrs, on_delete=models.CASCADE, related_name="respuesta_pqrs", db_index=True)
     anexo = models.FileField(
-        upload_to="static/files/respuesta/", blank=True, null=True)
+        upload_to="pqrs/%Y/respuesta/", blank=True, null=True)
     descripcion = models.CharField(max_length=256, null=True, blank=True)
 
     class Meta:
