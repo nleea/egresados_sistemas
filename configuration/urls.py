@@ -31,14 +31,16 @@ schema_view = get_schema_view(
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="contact@snippets.local"),
         license=openapi.License(name="BSD License"),
-    ), # type: ignore
+    ),  # type: ignore
     public=True,
     permission_classes=[permissions.AllowAny],
 )
 
+
 def clear_cache(request):
     cache.clear()
-    return HttpResponse("Clear Cache",content_type="application/json",status=200)
+    return HttpResponse("Clear Cache", content_type="application/json", status=200)
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -46,8 +48,11 @@ urlpatterns = [
     path('advertisements/', include('apps.classified_advertisements.api.urls')),
     path("eventos/", include('apps.eventos.api.urls')),
     re_path("poll/", include('apps.encuestas.api.urls')),
-    path("pqrs/",include("apps.pqrs.api.urls")),
-    path("clear/cache",clear_cache),
+    path("pqrs/", include("apps.pqrs.api.urls")),
+    path("clear/cache", clear_cache),
     re_path(r'^redoc/$', schema_view.with_ui('redoc',
             cache_timeout=0), name='schema-redoc'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
