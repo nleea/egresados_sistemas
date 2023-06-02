@@ -37,7 +37,6 @@ class PqrsSerializersView(BaseSerializers):
 class PqrsSerializers(BaseSerializers):
     titulo = serializers.CharField()
     description = serializers.CharField()
-    persona = serializers.SlugRelatedField("username", read_only=True)
     tipopqrs = serializers.IntegerField(write_only=True)
     persona = serializers.IntegerField(write_only=True)
     status = serializers.CharField(write_only=True,required=False)
@@ -52,7 +51,7 @@ class PqrsSerializers(BaseSerializers):
             anexo = None
             if 'anexo' in validated_data:
                 anexo = validated_data["anexo"]
-            return Pqrs.objects.create(description=validated_data["description"], titulo=validated_data["titulo"], tipopqrs_id=validated_data["tipopqrs"], persona_id=validated_data["persona"], userCreate=validated_data["userCreate"],anexo=anexo)
+            return Pqrs.objects.create(description=validated_data["description"], titulo=validated_data["titulo"], tipopqrs_id=validated_data["tipopqrs"], persona=validated_data["userCreate"], userCreate=validated_data["userCreate"],anexo=anexo)
         except Exception as e:
             a = serializers.ValidationError(e.args)
             raise a
