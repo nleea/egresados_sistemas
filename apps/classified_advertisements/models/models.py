@@ -85,7 +85,7 @@ class Anuncio(BaseModel):
     redes = models.ManyToManyField(
         RedesSociales, related_name="redes_store", db_index=True)
     logo = models.FileField(
-        upload_to="static/files/advertisements/", blank=True, null=True)
+        upload_to="eventos/%Y/", blank=True, null=True)
 
     objects = AdvertisementsManagers()
 

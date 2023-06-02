@@ -14,7 +14,9 @@ class CustomResponseMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        response = self.get_response(request)  
+        response = self.get_response(request)
+        if re.match(r'/media/',request.path):
+            return HttpResponse(response,content_type=response.headers["Content-type"],status=200)
         try:
             decode = response.getvalue().decode()
 

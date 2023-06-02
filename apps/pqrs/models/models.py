@@ -38,7 +38,7 @@ class Pqrs(BaseModel):
     tipopqrs = models.ForeignKey(
         TipoPqrs, on_delete=models.CASCADE, db_index=True)
     anexo = models.FileField(
-        upload_to="static/files/pqrs/", blank=True, null=True)
+        upload_to="pqrs/%Y/", blank=True, null=True)
     status = models.CharField(
         choices=STATUS_PQRS.choices, max_length=10, default=STATUS_PQRS.ACTIVA)
 

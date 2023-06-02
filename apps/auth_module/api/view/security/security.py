@@ -17,7 +17,7 @@ class SecurityResourcesCreate(CreateAPIView):
             resources.create(request.data)
             return Response('Resources Create', status.HTTP_200_OK)
         except BaseException as e:
-            return Response(e.args[0], status.HTTP_400_BAD_REQUEST)
+            return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
 class SecurityRolesUser(APIView):
