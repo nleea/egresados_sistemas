@@ -28,7 +28,7 @@ class EventosView(APIView):
             data = EventosSerializersView(
                 Eventos.objects.defer("tipo__userCreate_id","tipo__userUpdate_id","subArea__userCreate_id","subArea__userUpdate_id").select_related("area",
                                                "subArea", "userCreate", 
-                                               "userUpdate", "tipo").filter(visible=True), many=True, meta=True).order_by("-id")
+                                               "userUpdate", "tipo").filter(visible=True).order_by("-id"), many=True, meta=True)
 
         return Response(data.data, status.HTTP_200_OK)
 

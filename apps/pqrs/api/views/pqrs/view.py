@@ -7,6 +7,7 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.db import models
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -19,17 +20,17 @@ class PqrsView(APIView):
         if 'meta' in request.headers:
             meta = request.headers["meta"]
 
-        roles = request.user.groups.filter(name="Admin")
+        roles = request.user.groups.get(name="Admin")
 
         if roles:
-            pqrs_filter = Pqrs.objects.defer("userCreate", "userUpdate").select_related(
-                "persona", "tipopqrs").prefetch_related("asignacion_set").filter(visible=True).order_by("-id")
-            data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
+            pqrs_filter = Pqrs.objects.defer("tipopqrs__userCreate_id","tipopqrs__userUpdate_id","userCreate", "userUpdate").select_related(
+                "persona", "tipopqrs").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate"))).filter(visible=True).order_by("-id")
+            data = PqrsSerializersView(pqrs_filter, many=True, meta=False)
             return Response(data.data, status.HTTP_200_OK)
         else:
-            pqrs_filter = Pqrs.objects.defer("userUpdate","tipopqrs__userCreate_id").select_related(
-                "persona", "tipopqrs", "userCreate").prefetch_related("asignacion_set").filter(userCreate=request.user.id, visible=True).order_by("-id")
-            data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
+            pqrs_filter = Pqrs.objects.defer("tipopqrs__userCreate_id","tipopqrs__userUpdate_id","userUpdate").select_related(
+                "persona", "tipopqrs", "userCreate").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate"))).filter(userCreate=request.user.id, visible=True).order_by("-id")
+            data = PqrsSerializersView(pqrs_filter, many=True, meta=False)
             return Response(data.data, status.HTTP_200_OK)
 
 

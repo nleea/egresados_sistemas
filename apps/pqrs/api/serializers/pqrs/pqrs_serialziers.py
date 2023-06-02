@@ -3,7 +3,7 @@ from ....models.models import Pqrs
 from ..BaseSerializers import BaseSerializers
 from .tipo_serializers import PqrsTipoSerializers
 
-class AsignacionSerializerView(serializers.Serializer):
+class AsignacionSerializerView(BaseSerializers):
     funcionarioId = serializers.CharField(read_only=True)
 
 class PqrsSerializersView(BaseSerializers):
@@ -15,7 +15,7 @@ class PqrsSerializersView(BaseSerializers):
     anexo = serializers.CharField(required=False,read_only=True)
     persona = serializers.CharField(read_only=True)
     tipopqrs = PqrsTipoSerializers(read_only=True,meta=False)
-    asignacion_set = AsignacionSerializerView(read_only=True,many=True)
+    asignacion_set = AsignacionSerializerView(read_only=True,many=True,meta=False)
     assigned_to = serializers.CharField(read_only=True)
 
 
@@ -24,6 +24,7 @@ class PqrsSerializersView(BaseSerializers):
         results["status"] = {"name": instance.status, "valor":results["status_dic"] }
         results["assigned_to"] = results["asignacion_set"][0]["funcionarioId"] if len(results["asignacion_set"]) else None
         del results["asignacion_set"]
+        del results["status_dic"]
         return results
 
     # def __init__(self, instance=None, data=..., **kwargs):

@@ -58,11 +58,11 @@ class CustomMiddleware(MiddlewareMixin):
         # If token Exists
         if jwt_token:
             try:
-                tokenUser, token = JWTAuthentication.authenticate(JWTAuthentication(),request)       
+                tokenUser, _ = JWTAuthentication.authenticate(JWTAuthentication(),request)       
                 user = tokenUser
 
                 if not tokenUser.is_authenticated:
-                    response, code,render = create_response(
+                    response, code,_ = create_response(
                         401, 'Unauthorized', {
                             "message": 'User not in session'
                         }
@@ -80,7 +80,7 @@ class CustomMiddleware(MiddlewareMixin):
                 request.user = tokenUser
                 return None
             except (InvalidToken, AuthenticationFailed, TokenBackendError, TokenError, exceptions.ValidationError, exceptions.APIException, exceptions.PermissionDenied):
-                response, code, render = create_response(
+                response, code, _ = create_response(
                     401, 'Unauthorized', "Authorization has failed, Please send valid token")
                 logger.info(f"Response {response}")
 
@@ -88,7 +88,7 @@ class CustomMiddleware(MiddlewareMixin):
             except Exception as e:
                 return HttpResponse(e.args,status=400)
         else:
-            response, code, render = create_response(
+            response, code, _ = create_response(
                 401, 'Unauthorized',  "Authorization not found, Please send valid token"
             )
             logger.info(f"Response {response}")
