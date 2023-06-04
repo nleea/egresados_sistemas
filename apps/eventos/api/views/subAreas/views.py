@@ -16,7 +16,7 @@ class EventosSubAreaView(APIView):
             meta = request.headers["meta"]
 
         data = EventosSubAreaSerializersView(
-            SubAreaEventos.objects.select_related("area").defer("area__userCreate_id", "area__userUpdate_id", "userCreate", "userUpdate").filter(visible=True), many=True, meta=meta).order_by("-id")
+            SubAreaEventos.objects.select_related("area").defer("area__userCreate_id", "area__userUpdate_id", "userCreate", "userUpdate").filter(visible=True).order_by("-id"), many=True, meta=meta)
 
         return Response(data.data, status.HTTP_200_OK)
 

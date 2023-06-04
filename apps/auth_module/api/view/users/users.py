@@ -41,17 +41,6 @@ class UsersView(RetrieveAPIView):
         except (AttributeError, Exception) as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
-
-class UsersViewPublic(RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializers
-
-    def get(self, request, *args, **kwargs):
-        users = self.get_queryset()
-        serializers = UserSerializers(users, many=True)
-        return Response(serializers.data, status.HTTP_200_OK)
-
-
 class UserCreateView(CreateAPIView):
     queryset = User.objects.all()
     serializer_class = CreateUserSerializers

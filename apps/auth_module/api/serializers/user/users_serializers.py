@@ -25,6 +25,7 @@ class UserSerializersSimple(Serializer):
 
 
 class UserSerializers(ModelSerializer):
+    groups = RolesSerializers(read_only=True,many=True)
 
     # def to_representation(self, instance):
     #     representation = super().to_representation(instance)
@@ -38,7 +39,7 @@ class UserSerializers(ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name',
-                  'last_name', 'email', 'roles')
+                  'last_name', 'email', 'groups')
 
 
 class CreateUserSerializers(ModelSerializer):
