@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
+from apps.validators.index import validate_image,extension_type
 
 User = get_user_model()
 
@@ -38,7 +39,7 @@ class Pqrs(BaseModel):
     tipopqrs = models.ForeignKey(
         TipoPqrs, on_delete=models.CASCADE, db_index=True)
     anexo = models.FileField(
-        upload_to="pqrs/%Y/", blank=True, null=True)
+        upload_to="pqrs/%Y/", blank=True, null=True,validators=[validate_image,extension_type])
     status = models.CharField(
         choices=STATUS_PQRS.choices, max_length=10, default=STATUS_PQRS.ACTIVA)
 
