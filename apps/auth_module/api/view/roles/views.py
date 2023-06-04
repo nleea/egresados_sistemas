@@ -1,14 +1,12 @@
 from ...serializers.roles.roles_serializers import RolesSerializers
-from ..modules import (CreateAPIView, ListAPIView, Response,
-                       UpdateAPIView, status, DestroyAPIView, IsAdminRole)
+from ..modules import (CreateAPIView, Response,status)
+from rest_framework.views import APIView
 from django.contrib.auth.models import Group
 
-class RolesListView(ListAPIView):
-    queryset = Group.objects.all()
-    serializer_class = RolesSerializers
+class RolesListView(APIView):
 
     def get(self, request, *args, **kwargs):
-        data = self.get_queryset()
+        data = Group.objects.all()
         serializers = RolesSerializers(data, many=True)
         return Response(serializers.data, status.HTTP_200_OK)
 

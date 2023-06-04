@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from ...serializers.advertissement.advertisement_serialziers import AdvertisementSerializers, AdvertisementSerializersView, AdvertisementVotoSerializers
 from ...serializers.subCategory.subCategory_serializers import SubCategorySerializersView
-from ....models.models import Anuncio, SubCategoria, VotoAnuncio
+from ....models.models import Anuncio, SubCategoria, VotoAnuncio,RedesSociales,TiposCapacitaciones
 from rest_framework.response import Response
 from rest_framework import status
 from ..Base.BaseView import ViewPagination, DecoratorPaginateView
@@ -25,7 +25,7 @@ class AdvertisementsQueryView(APIView):
         return Response(results, status.HTTP_200_OK,)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class AdvertisementView(ViewPagination):
 
     @DecoratorPaginateView
@@ -38,15 +38,15 @@ class AdvertisementView(ViewPagination):
         if subCategory:
             anuncios = Anuncio.objects.filter_Advertisement_subCategory(
                 subCategory)
-            anuncio_resulst = anuncios.annotate(user_voto=models.Exists(
+            anuncio_resulst = anuncios.annotate(user_voted=models.Exists(
                 VotoAnuncio.objects.filter(
                     emprendimiento=models.OuterRef("pk"), user=request.user.id)
             ))
             results = AdvertisementSerializersView(anuncio_resulst, many=True)
             return results.data
 
-        anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id", "redes__userUpdate_id", "redes__userCreate_id", "subCategoria__userCreate_id").select_related(
-            "subCategoria", "userCreate", "userUpdate", "subCategoria__categoriaId").prefetch_related("redes", "tipo_capacitacion").filter(visible=True).order_by("-id")
+        anuncios = Anuncio.objects.defer("tipo_capacitacion__userCreate_id", "redes__userUpdate_id", "redes__userCreate_id", "subCategoria__userCreate_id","subCategoria__userUpdate_id","userCreate","userUpdate","subCategoria__categoriaId__userUpdate_id","subCategoria__categoriaId__userCreate_id").select_related(
+            "subCategoria", "subCategoria__categoriaId").prefetch_related(models.Prefetch("redes",RedesSociales.objects.all().only("id","name","link")),models.Prefetch("tipo_capacitacion",TiposCapacitaciones.objects.all().only("id","name"))).filter(visible=True).order_by("-id")
 
         anuncio_resulst = anuncios.annotate(user_voted=models.Exists(
             VotoAnuncio.objects.filter(

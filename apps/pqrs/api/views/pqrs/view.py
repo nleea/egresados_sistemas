@@ -24,12 +24,12 @@ class PqrsView(APIView):
 
         if roles:
             pqrs_filter = Pqrs.objects.defer("tipopqrs__userCreate_id","tipopqrs__userUpdate_id","userCreate", "userUpdate").select_related(
-                "persona", "tipopqrs").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate"))).filter(visible=True).order_by("-id")
+                "persona", "tipopqrs").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate","funcionarioId","fecha_asignacion","updateAt","createdAt"))).filter(visible=True).order_by("-id")
             data = PqrsSerializersView(pqrs_filter, many=True, meta=False)
             return Response(data.data, status.HTTP_200_OK)
         else:
             pqrs_filter = Pqrs.objects.defer("tipopqrs__userCreate_id","tipopqrs__userUpdate_id","userUpdate").select_related(
-                "persona", "tipopqrs", "userCreate").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate"))).filter(userCreate=request.user.id, visible=True).order_by("-id")
+                "persona", "tipopqrs", "userCreate").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate","funcionarioId","fecha_asignacion","updateAt","createdAt"))).filter(userCreate=request.user.id, visible=True).order_by("-id")
             data = PqrsSerializersView(pqrs_filter, many=True, meta=False)
             return Response(data.data, status.HTTP_200_OK)
 

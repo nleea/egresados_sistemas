@@ -23,12 +23,16 @@ class EventosView(APIView):
         data = None
         if mine:
             data = EventosSerializersView(
-                Eventos.objects.defer("tipo__userCreate_id","tipo__userUpdate_id","subArea__userCreate_id","subArea__userUpdate_id").select_related("area", "subArea", "userCreate", "userUpdate", "tipo").filter(visible=True, userCreate__id=request.user.id), many=True, meta=True).order_by("-id")
+                Eventos.objects.defer("tipo__userCreate_id","tipo__userUpdate_id","subArea__userCreate_id","subArea__userUpdate_id","area__userUpdate_id",
+                                      "area__userCreate_id","userUpdate","updateAt").select_related("area", "subArea", "userCreate", 
+                                                                            "tipo").filter(visible=True, userCreate__id=request.user.id).order_by("-id"), many=True,
+                                      meta=True,excludes=["userUpdate","updateAt"])
         else:
             data = EventosSerializersView(
-                Eventos.objects.defer("tipo__userCreate_id","tipo__userUpdate_id","subArea__userCreate_id","subArea__userUpdate_id").select_related("area",
+                Eventos.objects.defer("tipo__userCreate_id","tipo__userUpdate_id","subArea__userCreate_id","subArea__userUpdate_id",
+                                      "area__userUpdate_id","area__userCreate_id","userUpdate","updateAt").select_related("area",
                                                "subArea", "userCreate", 
-                                               "userUpdate", "tipo").filter(visible=True).order_by("-id"), many=True, meta=True)
+                                                "tipo").filter(visible=True).order_by("-id"), many=True, meta=True,excludes=["userUpdate","updateAt"])
 
         return Response(data.data, status.HTTP_200_OK)
 

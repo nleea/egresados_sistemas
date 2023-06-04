@@ -1,19 +1,18 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView, UpdateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView
+from rest_framework.views import APIView
 from rest_framework import status
 from ...serializers.user.users_serializers import UserSerializers, CreateUserSerializers, UserChangePassword
 from ....models import User
 
 
-class UsersView(RetrieveAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializers
+class UsersView(APIView):
 
     def get_object(self):
         try:
             request_user = self.request.user.id # type: ignore
-            user = User.objects.get(pk=request_user)
+            user = User.objects.prefetch_related("groups").get(pk=request_user)
             return user
         except User.DoesNotExist:
             return None
@@ -25,7 +24,7 @@ class UsersView(RetrieveAPIView):
         all_user = request.GET.get("all",None)
 
         if request.user.is_staff and all_user:
-            users = self.get_queryset()
+            users = User.objects.prefetch_related("groups").all()
             serializers = UserSerializers(
                 users, context={'request': request}, many=True)
             return Response(serializers.data, status.HTTP_200_OK)

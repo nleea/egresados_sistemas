@@ -1,15 +1,14 @@
-from rest_framework.fields import empty
 from ..roles.roles_serializers import RolesSerializers
-from rest_framework.serializers import CharField, ModelSerializer, SlugField,Serializer,EmailField
+from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
 User = get_user_model()
 
 
-class UserSerializersSimple(Serializer):
-    username = CharField(read_only=True)
-    email = EmailField(read_only=True)
+class UserSerializersSimple(serializers.Serializer):
+    username = serializers.CharField(read_only=True)
+    email = serializers.EmailField(read_only=True)
 
     class Meta:
         fields = ('username', 'email')
@@ -24,27 +23,20 @@ class UserSerializersSimple(Serializer):
             self.fields.pop("username")
 
 
-class UserSerializers(ModelSerializer):
+class UserSerializers(serializers.Serializer):
+    username = serializers.CharField(read_only=True)
+    first_name = serializers.CharField(read_only=True)
+    last_name = serializers.CharField(read_only=True)
+    email = serializers.CharField(read_only=True)    
     groups = RolesSerializers(read_only=True,many=True)
 
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-    #     try:
-    #         if (len(representation['roles'])):
-    #             representation['roles'][0] = representation['roles'][0]['id']
-    #         return representation
-    #     except Exception as e:
-    #         return representation
-
     class Meta:
-        model = User
-        fields = ('id', 'username', 'first_name',
-                  'last_name', 'email', 'groups')
+        fields = "__all__"
 
 
-class CreateUserSerializers(ModelSerializer):
+class CreateUserSerializers(serializers.ModelSerializer):
 
-    username = SlugField(
+    username = serializers.SlugField(
         max_length=100,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
@@ -55,8 +47,8 @@ class CreateUserSerializers(ModelSerializer):
         validators = [UserValidatorBefore()]
 
 
-class UserSerializersSimpleRegister(ModelSerializer):
-    username = SlugField(
+class UserSerializersSimpleRegister(serializers.ModelSerializer):
+    username = serializers.SlugField(
         max_length=100,
         validators=[UniqueValidator(queryset=User.objects.all())]
     )
@@ -67,8 +59,8 @@ class UserSerializersSimpleRegister(ModelSerializer):
         validators = [UserValidatorBefore()]
 
 
-class UserChangePassword(ModelSerializer):
-    password = CharField()
+class UserChangePassword(serializers.ModelSerializer):
+    password = serializers.CharField()
 
     class Meta:
         model = User

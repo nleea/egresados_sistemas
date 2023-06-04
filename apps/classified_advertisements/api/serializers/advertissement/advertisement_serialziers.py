@@ -37,7 +37,7 @@ class AdvertisementSerializersView(BaseSerializers):
     correo_emprendimiento = serializers.EmailField(read_only=True)
     corregimiento = serializers.CharField(read_only=True)
     municipio = serializers.CharField(read_only=True)
-    redes = RedesSocialesSerializers(many=True, read_only=True)
+    redes = RedesSocialesSerializers(many=True, read_only=True,meta=False)
     direccion = serializers.CharField(read_only=True)
     subCategoria = SubCategorySerializersView(read_only=True)
     metodos_entrega = serializers.CharField(read_only=True)

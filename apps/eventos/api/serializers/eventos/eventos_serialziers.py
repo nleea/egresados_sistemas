@@ -28,7 +28,7 @@ class EventosSerializersView(BaseSerializers):
     area = EventosCategorySerializersView(read_only=True)
     subArea = EventosSubAreaSerializersView(read_only=True,expands=False)
     nombre_actividad = serializers.CharField(read_only=True)
-    tipo = TipoEventosSerializersView(read_only=True)
+    tipo = TipoEventosSerializersView(read_only=True,meta=False)
     responsable = serializers.CharField(read_only=True)
     fecha = serializers.DateField(read_only=True)
     hora = serializers.CharField(read_only=True)
