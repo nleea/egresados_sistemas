@@ -12,24 +12,39 @@ from django.db import models
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class PqrsView(APIView):
 
-    def get(self, request, *args, **kwargs):
-        meta = None
-        if 'meta' in request.headers:
-            meta = request.headers["meta"]
+    def get_pqrs_date(self,status,order,start,end):
+        pqrs_filter = Pqrs.objects.defer("tipopqrs__userCreate_id","tipopqrs__userUpdate_id","userUpdate").select_related(
+                "persona", "tipopqrs", "userCreate").prefetch_related(
+                    models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer(
+                        "userCreate","userUpdate","funcionarioId","fecha_asignacion","updateAt","createdAt"))).filter(userCreate=self.request.user.id,status=status, createdAt__range=[start,end],  visible=True).order_by(order)
+        data = PqrsSerializersView(pqrs_filter, many=True, meta=False)
+        
+        return data
 
+
+    def get(self, request, *args, **kwargs):
         roles = request.user.groups.get(name="Admin")
+
+        status_pqrs = request.GET.get("status","AC")
+        order_pqrs = request.GET.get("order","-id")
+        start_pqrs = request.GET.get("startdate",None)
+        end_pqrs = request.GET.get("enddate",None)
+
+        if start_pqrs and end_pqrs:
+            results = self.get_pqrs_date(status_pqrs,order_pqrs,start_pqrs,end_pqrs)
+            return Response(results.data,status.HTTP_200_OK)
 
         if roles:
             pqrs_filter = Pqrs.objects.defer("tipopqrs__userCreate_id","tipopqrs__userUpdate_id","userCreate", "userUpdate").select_related(
-                "persona", "tipopqrs").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate","funcionarioId","fecha_asignacion","updateAt","createdAt"))).filter(visible=True).order_by("-id")
+                "persona", "tipopqrs").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate","funcionarioId","fecha_asignacion","updateAt","createdAt"))).filter(visible=True,status=status_pqrs).order_by(order_pqrs)
             data = PqrsSerializersView(pqrs_filter, many=True, meta=False)
             return Response(data.data, status.HTTP_200_OK)
         else:
             pqrs_filter = Pqrs.objects.defer("tipopqrs__userCreate_id","tipopqrs__userUpdate_id","userUpdate").select_related(
-                "persona", "tipopqrs", "userCreate").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate","funcionarioId","fecha_asignacion","updateAt","createdAt"))).filter(userCreate=request.user.id, visible=True).order_by("-id")
+                "persona", "tipopqrs", "userCreate").prefetch_related(models.Prefetch("asignacion_set",queryset=Asignacion.objects.all().defer("userCreate","userUpdate","funcionarioId","fecha_asignacion","updateAt","createdAt"))).filter(userCreate=request.user.id,visible=True).order_by(order_pqrs)
             data = PqrsSerializersView(pqrs_filter, many=True, meta=False)
             return Response(data.data, status.HTTP_200_OK)
 
