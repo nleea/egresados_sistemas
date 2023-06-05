@@ -12,7 +12,7 @@ from django.db import models
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class PqrsView(APIView):
 
     def get_pqrs_date(self,status,order,start,end):

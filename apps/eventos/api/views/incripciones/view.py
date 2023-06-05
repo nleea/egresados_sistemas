@@ -36,13 +36,32 @@ class InscripcionView(APIView):
 
 @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class InscripcionEventosView(APIView):
-    def get(self, request, *args, **kwargs):
-
+    
+    def get_eventos_date(self,order,start_date,end_date):
         results = Eventos.objects.defer("userCreate", "userUpdate", "area__userCreate",
                                         "area__userUpdate", "subArea__userCreate",
                                         "subArea__userUpdate", "tipo__userCreate",
-                                        "tipo__userUpdate").filter(inscripcion__user=request.user.id,
-                                                                   visible=True).select_related("area", "subArea", "tipo").order_by("-id")
+                                        "tipo__userUpdate").select_related("area", "subArea", "tipo").filter(inscripcion__user=self.request.user.id,
+                                                                   createdAt__range=[start_date,end_date],
+                                                                   visible=True).order_by(order)
+
+        return results
+    
+    def get(self, request, *args, **kwargs):
+        
+        status_evento = request.GET.get("status",None)
+        order_evento = request.GET.get("order","-id")
+        start_evento = request.GET.get("startdate",None)
+        end_evento = request.GET.get("enddate",None)
+        
+        if start_evento and end_evento:
+            results = self.get_eventos_date(start_date=start_evento,end_date=end_evento,order=order_evento)
+        else:
+            results = Eventos.objects.defer("userCreate", "userUpdate", "area__userCreate",
+                                            "area__userUpdate", "subArea__userCreate",
+                                            "subArea__userUpdate", "tipo__userCreate",
+                                            "tipo__userUpdate").filter(inscripcion__user=request.user.id,
+                                                                    visible=True).select_related("area", "subArea", "tipo").order_by(order_evento)
 
         eventos_asistencia = results.annotate(confirm_asistencia=models.Exists(
             Asistencia.objects.filter(evento=models.OuterRef(
@@ -51,6 +70,9 @@ class InscripcionEventosView(APIView):
             models.When(fecha__lt=timezone.now().date(), then=True), default=False,
             output_field=models.BooleanField()
         ))
+        
+        if status_evento:
+            eventos_asistencia = eventos_asistencia.filter(fecha_pasada=status_evento)
 
         resulstSerializers = EventosAsistenciaSerializersView(
             eventos_asistencia, many=True)

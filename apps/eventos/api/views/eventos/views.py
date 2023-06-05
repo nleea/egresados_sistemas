@@ -20,6 +20,7 @@ class EventosView(APIView):
 
     def get(self, request, *args, **kwargs):
         mine = request.GET.get("mine", None)
+        
         data = None
         if mine:
             data = EventosSerializersView(
