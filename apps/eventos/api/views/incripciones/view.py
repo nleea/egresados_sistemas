@@ -42,7 +42,7 @@ class InscripcionEventosView(APIView):
                                         "area__userUpdate", "subArea__userCreate",
                                         "subArea__userUpdate", "tipo__userCreate",
                                         "tipo__userUpdate").select_related("area", "subArea", "tipo").filter(inscripcion__user=self.request.user.id,
-                                                                   createdAt__range=[start_date,end_date],
+                                                                   fecha__range=[start_date,end_date],
                                                                    visible=True).order_by(order)
 
         return results
