@@ -1,6 +1,4 @@
 from django.urls import path, re_path,include
-from django.conf import settings
-from django.conf.urls.static import static
 
 urlpatterns = [
     re_path(r'^', include("apps.pqrs.api.views.pqrs.urls")),

@@ -10,8 +10,6 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from .....auth_module.models import User
-from .....auth_module.api.serializers.user.users_serializers import UserSerializersSimple
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 

@@ -1,28 +1,36 @@
 from rest_framework.views import APIView
-from ...serializers.questions.questions_serializers import QuestionSerializers, QuestionSerializersView
+from ...serializers.questions.questions_serializers import (
+    QuestionSerializers,
+    QuestionSerializersView,
+)
 from ....models.models import Question
 from rest_framework.response import Response
 from rest_framework import status
-
+from django.db import models
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.contrib.postgres.aggregates import ArrayAgg
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class QuestionsView(APIView):
-
     def get(self, request, *args, **kwargs):
-        data = QuestionSerializersView(
-            Question.objects.select_related("momento").filter(visible=True), many=True)
+        resulst = (
+            Question.objects.defer("momento")
+            .prefetch_related("answer_set")
+            .filter(visible=True)
+        )
+
+        data = QuestionSerializersView(resulst, many=True, excludes=["momento"])
+
         return Response(data.data, status.HTTP_200_OK)
 
 
 class SaveQuestionsView(APIView):
-
     def post(self, request, *args, **kwargs):
         data = QuestionSerializers(data=request.data)
 
@@ -33,7 +41,6 @@ class SaveQuestionsView(APIView):
 
 
 class DeleteQuestionsView(APIView):
-
     def get_object(self):
         try:
             pk = self.kwargs.get("pk")
@@ -55,16 +62,19 @@ class DeleteQuestionsView(APIView):
             return Response(e.args, 400)
 
     def delete(self, request, *args, **kwargs):
-
         if "ids" in request.data:
             return self.bulk_delete(request.data["ids"])
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            return Response("Questions {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Questions {} not exist".format(self.kwargs.get("pk")),
+                status.HTTP_400_BAD_REQUEST,
+            )
         try:
             instance = QuestionSerializers(
-                instanceOrNone, data={"visible": False}, partial=True)
+                instanceOrNone, data={"visible": False}, partial=True
+            )
             if instance.is_valid():
                 instance.save(userUpdate=request.user)
             else:
@@ -75,7 +85,6 @@ class DeleteQuestionsView(APIView):
 
 
 class UpdateQuestionsView(APIView):
-
     def _allowed_methods(self):
         self.http_method_names.append("put")
         return [m.upper() for m in self.http_method_names if hasattr(self, m)]
@@ -89,13 +98,14 @@ class UpdateQuestionsView(APIView):
             return None
 
     def put(self, request, *args, **kwargs):
-
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            return Response("Questions {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Questions {} not exist".format(self.kwargs.get("pk")),
+                status.HTTP_400_BAD_REQUEST,
+            )
 
-        instance = QuestionSerializers(
-            instanceOrNone, data=request.data, partial=True)
+        instance = QuestionSerializers(instanceOrNone, data=request.data, partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
             return Response("Success", status.HTTP_200_OK)

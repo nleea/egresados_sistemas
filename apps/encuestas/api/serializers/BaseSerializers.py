@@ -10,6 +10,7 @@ class BaseSerializers(serializers.Serializer):
     
     def __init__(self, instance=None, data=..., **kwargs):
         meta = bool(kwargs.pop('meta', None))
+        excludes = kwargs.pop("excludes",None)
         
         super().__init__(instance, data, **kwargs)
         
@@ -18,6 +19,10 @@ class BaseSerializers(serializers.Serializer):
             self.fields.pop("updateAt")
             self.fields.pop("userCreate")
             self.fields.pop("userUpdate")
+        
+        if excludes != None:
+            for _,exclude in enumerate(excludes):
+                self.fields.pop(exclude)
     
     
 
