@@ -20,6 +20,18 @@ class EventosAsistenciaSerializersView(BaseSerializers):
     objectivo = serializers.CharField(read_only=True)
     confirm_asistencia = serializers.BooleanField(read_only=True)
     fecha_pasada = serializers.BooleanField(read_only=True)
+    
+    def to_representation(self, instance):
+        resulst = super().to_representation(instance)
+        resulst["tipo_actividad"] = {
+            "id": instance.tipo.id, "name": instance.tipo.name}
+        resulst["subArea"] = {**resulst["subArea"],
+                              "area": {**resulst["area"]}}
+        del resulst["tipo"]
+        return resulst
+
+    class Meta:
+        fields = "__all__"
 
 
 

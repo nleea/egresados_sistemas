@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    command: python /app/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    # network_mode: host
+    depends_on:
+      - db
+  db:
+    image: mysql:8.0
+    volumes:
+      - mysql:/var/lib/mysql_data/data/
+    environment:
+      - "MYSQL_ROOT_PASSWORD=xyz3602"
+      - "MYSQL_DATABASE=egresados"
+      - "host_cache_size=10"
+    ports:
+      - 33306:3306
+
+volumes:
+  mysql:

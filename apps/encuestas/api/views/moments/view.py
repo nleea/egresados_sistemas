@@ -16,7 +16,7 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class MomentView(APIView):
 
-    def get_meta(self) -> object | None:
+    def get_meta(self):
         if "meta" in self.request.headers:
             return self.request.headers["meta"]
         return None

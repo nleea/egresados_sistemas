@@ -4,7 +4,7 @@ from django.views.decorators.cache import cache_page
 
 class BaseView(APIView):
     
-    def get_meta(self) -> object | None:
+    def get_meta(self):
         if "meta" in self.request.headers:
             return self.request.headers["meta"]
         return None

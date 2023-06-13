@@ -19,7 +19,7 @@ class CustomResponseMiddleware(object):
             return HttpResponse(response,content_type=response.headers["Content-type"],status=200)
         try:
             decode = response.getvalue().decode()
-
+            
             match = re.search(r'^[\d+]\s(.+)', decode)
             if match or type(decode) is list and decode[0].isdigit():
                 decode = ["".join(x) for x in decode]

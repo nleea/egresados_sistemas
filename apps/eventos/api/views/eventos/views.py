@@ -1,41 +1,77 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from ...serializers.eventos.eventos_serialziers import EventosSerializers, EventosSerializersView
+from ...serializers.eventos.eventos_serialziers import EventosSerializers,EventosAsistenciaSerializersView
 from ...serializers.eventos.inscripciones import InscripcionesSerializers
-from ....models.models import Eventos
+from ....models.models import Eventos,Asistencia
 from rest_framework import status
 from ....models.models import User
+from django.db import models
 from apps.send_email import send_email_list
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 import threading
+from django.utils import timezone
+
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class EventosView(APIView):
+    
+    def get_eventos_date(self,order,start_date,end_date):
+        results = Eventos.objects.defer("userCreate", "userUpdate", "area__userCreate",
+                                        "area__userUpdate", "subArea__userCreate",
+                                        "subArea__userUpdate", "tipo__userCreate",
+                                        "tipo__userUpdate").select_related("area", "subArea", "tipo").filter(inscripcion__user=self.request.user.id,
+                                                                   fecha__range=[start_date,end_date],
+                                                                   visible=True).order_by(order)
+
+        return results
+    
 
     def get(self, request, *args, **kwargs):
         mine = request.GET.get("mine", None)
+        status_evento = request.GET.get("status",None)
+        order_evento = request.GET.get("order","-id")
+        start_evento = request.GET.get("startdate",None)
+        end_evento = request.GET.get("enddate",None)
         
-        data = None
-        if mine:
-            data = EventosSerializersView(
-                Eventos.objects.defer("tipo__userCreate_id","tipo__userUpdate_id","subArea__userCreate_id","subArea__userUpdate_id","area__userUpdate_id",
-                                      "area__userCreate_id","userUpdate","updateAt").select_related("area", "subArea", "userCreate", 
-                                                                            "tipo").filter(visible=True, userCreate__id=request.user.id).order_by("-id"), many=True,
-                                      meta=True,excludes=["userUpdate","updateAt"])
+        rol = request.user.groups.filter(name="admin").exists()
+        
+        if rol:
+            results = Eventos.objects.defer("userCreate", "userUpdate", "area__userCreate",
+                                            "area__userUpdate", "subArea__userCreate",
+                                            "subArea__userUpdate", "tipo__userCreate",
+                                            "tipo__userUpdate").filter(visible=True).select_related("area", "subArea", "tipo").order_by(order_evento)
         else:
-            data = EventosSerializersView(
-                Eventos.objects.defer("tipo__userCreate_id","tipo__userUpdate_id","subArea__userCreate_id","subArea__userUpdate_id",
-                                      "area__userUpdate_id","area__userCreate_id","userUpdate","updateAt").select_related("area",
-                                               "subArea", "userCreate", 
-                                                "tipo").filter(visible=True).order_by("-id"), many=True, meta=True,excludes=["userUpdate","updateAt"])
+            if start_evento and end_evento:
+                results = self.get_eventos_date(start_date=start_evento,end_date=end_evento,order=order_evento)
+            else:
+                results = Eventos.objects.defer("userCreate", "userUpdate", "area__userCreate",
+                                            "area__userUpdate", "subArea__userCreate",
+                                            "subArea__userUpdate", "tipo__userCreate",
+                                            "tipo__userUpdate").filter(inscripcion__user=request.user.id,
+                                                                    visible=True).select_related("area", "subArea", "tipo").order_by(order_evento)
+        
+        
+        eventos_asistencia = results.annotate(confirm_asistencia=models.Exists(
+            Asistencia.objects.filter(evento=models.OuterRef(
+                'pk'), user=request.user.id, confirm=True)
+        ), fecha_pasada=models.Case(
+            models.When(fecha__lt=timezone.now().date(), then=True), default=False,
+            output_field=models.BooleanField()
+        ))
+        
+        if status_evento:
+            eventos_asistencia = eventos_asistencia.filter(fecha_pasada=status_evento)
 
-        return Response(data.data, status.HTTP_200_OK)
+        resulstSerializers = EventosAsistenciaSerializersView(
+            results, many=True)
+
+        return Response(resulstSerializers.data, status.HTTP_200_OK)
 
 
 class SaveEventosView(APIView):

@@ -25,10 +25,10 @@ class PersonView(ListAPIView):
 
 class PersonCreateView(CreateAPIView):
     queryset = Persons.objects.all()
-    serializer_class = PersonsSerializers
+    serializer_class = PersonsSimpleSerializers
 
     def post(self, request, *args, **kwargs):
-        personSerializers = PersonsSerializers(data=request.data)
+        personSerializers = PersonsSimpleSerializers(data=request.data)
         if personSerializers.is_valid():
             personSerializers.save()
             return Response(personSerializers.data, status.HTTP_200_OK)
