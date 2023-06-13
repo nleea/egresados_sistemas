@@ -606,450 +606,450 @@
 
 
 resources = [
-  {
-    "path": "/admin/",
-    "method": "GET",
-    "id_padre": 0,
-    "icono": "pi pi-home",
-    "link": "/admin/",
-    "titulo": "Admin",
-    "items": [
-      {
-        "path": "/admin/roles-recursos/",
+    {
+        "path": "/admin/",
         "method": "GET",
+        "id_padre": 0,
         "icono": "pi pi-home",
-        "link": "/admin/roles-recursos/",
-        "titulo": "Roles Y Recursos",
+        "link": "/admin/",
+        "titulo": "Admin",
         "items": [
-          {
-            "path": "/admin/roles-recursos/ver-crear/",
-            "method": "POST",
-            "icono": "icon",
-            "link": "/admin/roles-recursos/ver-editar/",
-            "titulo": "Ver Editar"
-          },
-          {
-            "path": "/admin/roles-recursos/ver/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/admin/roles-recursos/crear/",
-            "titulo": "Crear"
-          }
-        ]
-      },
-      {
-        "path": "/admin/roles/",
+            {
+                "path": "/admin/roles-recursos/",
+                "method": "GET",
+                "icono": "pi pi-home",
+                "link": "/admin/roles-recursos/",
+                "titulo": "Roles Y Recursos",
+                "items": [
+                    {
+                        "path": "/admin/roles-recursos/ver-crear/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/admin/roles-recursos/ver-editar/",
+                        "titulo": "Ver Editar",
+                    },
+                    {
+                        "path": "/admin/roles-recursos/ver/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/admin/roles-recursos/crear/",
+                        "titulo": "Crear",
+                    },
+                ],
+            },
+            {
+                "path": "/admin/roles/",
+                "method": "GET",
+                "icono": "pi pi-user-minus",
+                "link": "/admin/roles/",
+                "titulo": "Roles",
+                "items": [
+                    {
+                        "path": "/admin/roles/ver/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/admin/roles/ver/",
+                        "titulo": "Ver",
+                    }
+                ],
+            },
+        ],
+    },
+    {
+        "path": "/persona/",
+        "id_padre": 0,
         "method": "GET",
-        "icono": "pi pi-user-minus",
-        "link": "/admin/roles/",
-        "titulo": "Roles",
+        "icono": "pi pi-user",
+        "link": "/persona/",
+        "titulo": "Persona",
         "items": [
-          {
-            "path": "/admin/roles/ver/",
-            "method": "POST",
-            "icono": "icon",
-            "link": "/admin/roles/ver/",
-            "titulo": "Ver"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "path": "/persona/",
-    "id_padre": 0,
-    "method": "GET",
-    "icono": "pi pi-user",
-    "link": "/persona/",
-    "titulo": "Persona",
-    "items": [
-      {
-        "path": "/persona/datos-personales/",
+            {
+                "path": "/persona/datos-personales/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/persona/datos-personales/",
+                "titulo": "Datos Personales",
+                "items": [
+                    {
+                        "path": "/persona/datos-personales/ver/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/persona/datos-personales/ver/",
+                        "titulo": "Ver",
+                    },
+                    {
+                        "path": "/persona/datos-personales/crear/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/persona/datos-personales/crear/",
+                        "titulo": "Crear",
+                    },
+                    {
+                        "path": "/persona/datos-personales/editar/",
+                        "method": "PUT",
+                        "icono": "icon",
+                        "link": "/persona/datos-personales/editar/",
+                        "titulo": "Editar",
+                    },
+                    {
+                        "path": "/persona/datos-personales/eliminar",
+                        "method": "DELETE",
+                        "icono": "icon",
+                        "link": "/persona/datos-personales/eliminar",
+                        "titulo": "Eliminar",
+                    },
+                ],
+            }
+        ],
+    },
+    {
+        "path": "/encuestas/",
+        "id_padre": 0,
         "method": "GET",
-        "icono": "icon",
-        "link": "/persona/datos-personales/",
-        "titulo": "Datos Personales",
+        "icono": "pi pi-book",
+        "link": "/encuestas/",
+        "titulo": "Encuestas",
         "items": [
-          {
-            "path": "/persona/datos-personales/ver/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/persona/datos-personales/ver/",
-            "titulo": "Ver"
-          },
-          {
-            "path": "/persona/datos-personales/crear/",
-            "method": "POST",
-            "icono": "icon",
-            "link": "/persona/datos-personales/crear/",
-            "titulo": "Crear"
-          },
-          {
-            "path": "/persona/datos-personales/editar/",
-            "method": "PUT",
-            "icono": "icon",
-            "link": "/persona/datos-personales/editar/",
-            "titulo": "Editar"
-          },
-          {
-            "path": "/persona/datos-personales/eliminar",
-            "method": "DELETE",
-            "icono": "icon",
-            "link": "/persona/datos-personales/eliminar",
-            "titulo": "Eliminar"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "path": "/encuestas/",
-    "id_padre": 0,
-    "method": "GET",
-    "icono": "pi pi-book",
-    "link": "/encuestas/",
-    "titulo": "Encuestas",
-    "items": [
-      {
-        "path": "/encuestas/preguntas/",
+            {
+                "path": "/encuestas/preguntas/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/encuestas/preguntas/",
+                "titulo": "Preguntas",
+                "items": [
+                    {
+                        "path": "/encuestas/preguntas/gestionar/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/encuestas/preguntas/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/encuestas/momentos/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/encuestas/momentos/",
+                "titulo": "Momentos",
+                "items": [
+                    {
+                        "path": "/encuestas/momentos/gestionar/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/encuestas/momentos/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+        ],
+    },
+    {
+        "path": "/pqrs/",
+        "id_padre": 0,
         "method": "GET",
-        "icono": "icon",
-        "link": "/encuestas/preguntas/",
-        "titulo": "Preguntas",
+        "icono": "pi pi-folder",
+        "link": "/pqrs/",
+        "titulo": "PQRS",
         "items": [
-          {
-            "path": "/encuestas/preguntas/gestionar/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/encuestas/preguntas/gestionar/",
-            "titulo": "Gestionar"
-          }
-        ]
-      },
-      {
-        "path": "/encuestas/momentos/",
+            {
+                "path": "/pqrs/solicitud/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/pqrs/solicitud/",
+                "titulo": "Solicitud",
+                "items": [
+                    {
+                        "path": "/pqrs/solicitud/ver/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/pqrs/solicitud/ver/",
+                        "titulo": "Ver",
+                    },
+                    {
+                        "path": "/pqrs/solicitud/crear/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/pqrs/solicitud/crear/",
+                        "titulo": "Crear",
+                    },
+                    {
+                        "path": "/pqrs/solicitud/editar/",
+                        "method": "PUT",
+                        "icono": "icon",
+                        "link": "/pqrs/solicitud/editar/",
+                        "titulo": "Editar",
+                    },
+                    {
+                        "path": "/pqrs/solicitud/eliminar/",
+                        "method": "DELETE",
+                        "icono": "icon",
+                        "link": "/pqrs/solicitud/eliminar/",
+                        "titulo": "Eliminar",
+                    },
+                ],
+            },
+            {
+                "path": "/pqrs/tipo/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/pqrs/tipo/",
+                "titulo": "Tipo de solicitud",
+                "items": [
+                    {
+                        "path": "/pqrs/tipo/gestionar/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/pqrs/tipo/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/pqrs/asignacion/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/pqrs/asignacion/",
+                "titulo": "Asignacion",
+                "items": [
+                    {
+                        "path": "/pqrs/asignacion/mis-solicitudes",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/pqrs/asignacion/mis-solicitudes",
+                        "titulo": "Mis Solicitudes",
+                    },
+                    {
+                        "path": "/pqrs/asignacion/solicitudes",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/pqrs/asignacion/solicitudes",
+                        "titulo": "Solicitudes",
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        "path": "/clasificados/",
+        "id_padre": 0,
         "method": "GET",
-        "icono": "icon",
-        "link": "/encuestas/momentos/",
-        "titulo": "Momentos",
+        "icono": "pi pi-briefcase",
+        "link": "/clasificados/",
+        "titulo": "Clasificados",
         "items": [
-          {
-            "path": "/encuestas/momentos/gestionar/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/encuestas/momentos/gestionar/",
-            "titulo": "Gestionar"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "path": "/pqrs/",
-    "id_padre": 0,
-    "method": "GET",
-    "icono": "pi pi-folder",
-    "link": "/pqrs/",
-    "titulo": "PQRS",
-    "items": [
-      {
-        "path": "/pqrs/solicitud/",
+            {
+                "path": "/clasificados/emprendimientos/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/clasificados/emprendimientos/",
+                "titulo": "Emprendimientos",
+                "items": [
+                    {
+                        "path": "/clasificados/emprendimientos/crear",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/clasificados/emprendimientos/crear",
+                        "titulo": "Crear",
+                    },
+                    {
+                        "path": "/clasificados/emprendimientos/ver",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/clasificados/emprendimientos/ver",
+                        "titulo": "Ver",
+                    },
+                    {
+                        "path": "/clasificados/emprendimientos/editar",
+                        "method": "PUT",
+                        "icono": "icon",
+                        "link": "/clasificados/emprendimientos/editar",
+                        "titulo": "Editar",
+                    },
+                    {
+                        "path": "/clasificados/emprendimientos/eliminar",
+                        "method": "DELETE",
+                        "icono": "icon",
+                        "link": "/clasificados/emprendimientos/eliminar",
+                        "titulo": "Eliminar",
+                    },
+                ],
+            },
+            {
+                "path": "/clasificados/categoria/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/clasificados/categoria/",
+                "titulo": "Categorias",
+                "items": [
+                    {
+                        "path": "/clasificados/categoria/gestionar",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/clasificados/categoria/gestionar",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/clasificados/sub-categoria/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/clasificados/sub-categoria/",
+                "titulo": "Sub Categoria",
+                "items": [
+                    {
+                        "path": "/clasificados/sub-categoria/gestionar",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/clasificados/sub-categoria/gestionar",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+        ],
+    },
+    {
+        "path": "/eventos/",
+        "id_padre": 0,
         "method": "GET",
-        "icono": "icon",
-        "link": "/pqrs/solicitud/",
-        "titulo": "Solicitud",
+        "icono": "pi pi-ticket",
+        "link": "/eventos/",
+        "titulo": "Eventos",
         "items": [
-          {
-            "path": "/pqrs/solicitud/ver/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/pqrs/solicitud/ver/",
-            "titulo": "Ver"
-          },
-          {
-            "path": "/pqrs/solicitud/crear/",
-            "method": "POST",
-            "icono": "icon",
-            "link": "/pqrs/solicitud/crear/",
-            "titulo": "Crear"
-          },
-          {
-            "path": "/pqrs/solicitud/editar/",
-            "method": "PUT",
-            "icono": "icon",
-            "link": "/pqrs/solicitud/editar/",
-            "titulo": "Editar"
-          },
-          {
-            "path": "/pqrs/solicitud/eliminar/",
-            "method": "DELETE",
-            "icono": "icon",
-            "link": "/pqrs/solicitud/eliminar/",
-            "titulo": "Eliminar"
-          }
-        ]
-      },
-      {
-        "path": "/pqrs/tipo/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/pqrs/tipo/",
-        "titulo": "Tipo de solicitud",
-        "items": [
-          {
-            "path": "/pqrs/tipo/gestionar/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/pqrs/tipo/gestionar/",
-            "titulo": "Gestionar"
-          }
-        ]
-      },
-      {
-        "path": "/pqrs/asignacion/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/pqrs/asignacion/",
-        "titulo": "Asignacion",
-        "items": [
-          {
-            "path": "/pqrs/asignacion/mis-solicitudes",
-            "method": "POST",
-            "icono": "icon",
-            "link": "/pqrs/asignacion/mis-solicitudes",
-            "titulo": "Mis Solicitudes"
-          },
-          {
-            "path": "/pqrs/asignacion/solicitudes",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/pqrs/asignacion/solicitudes",
-            "titulo": "Solicitudes"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "path": "/clasificados/",
-    "id_padre": 0,
-    "method": "GET",
-    "icono": "pi pi-briefcase",
-    "link": "/clasificados/",
-    "titulo": "Clasificados",
-    "items": [
-      {
-        "path": "/clasificados/emprendimientos/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/clasificados/emprendimientos/",
-        "titulo": "Emprendimientos",
-        "items": [
-          {
-            "path": "/clasificados/emprendimientos/crear",
-            "method": "POST",
-            "icono": "icon",
-            "link": "/clasificados/emprendimientos/crear",
-            "titulo": "Crear"
-          },
-          {
-            "path": "/clasificados/emprendimientos/ver",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/clasificados/emprendimientos/ver",
-            "titulo": "Ver"
-          },
-          {
-            "path": "/clasificados/emprendimientos/editar",
-            "method": "PUT",
-            "icono": "icon",
-            "link": "/clasificados/emprendimientos/editar",
-            "titulo": "Editar"
-          },
-          {
-            "path": "/clasificados/emprendimientos/eliminar",
-            "method": "DELETE",
-            "icono": "icon",
-            "link": "/clasificados/emprendimientos/eliminar",
-            "titulo": "Eliminar"
-          }
-        ]
-      },
-      {
-        "path": "/clasificados/categoria/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/clasificados/categoria/",
-        "titulo": "Categorias",
-        "items": [
-          {
-            "path": "/clasificados/categoria/gestionar",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/clasificados/categoria/gestionar",
-            "titulo": "Gestionar"
-          }
-        ]
-      },
-      {
-        "path": "/clasificados/sub-categoria/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/clasificados/sub-categoria/",
-        "titulo": "Sub Categoria",
-        "items": [
-          {
-            "path": "/clasificados/sub-categoria/gestionar",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/clasificados/sub-categoria/gestionar",
-            "titulo": "Gestionar"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "path": "/eventos/",
-    "id_padre": 0,
-    "method": "GET",
-    "icono": "pi pi-ticket",
-    "link": "/eventos/",
-    "titulo": "Eventos",
-    "items": [
-      {
-        "path": "/eventos/actividades/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/eventos/actividades/",
-        "titulo": "Actividades",
-        "items": [
-          {
-            "path": "/eventos/actividades/ver/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/eventos/actividades/ver/",
-            "titulo": "Ver"
-          },
-          {
-            "path": "/eventos/actividades/crear/",
-            "method": "POST",
-            "icono": "icon",
-            "link": "/eventos/actividades/crear/",
-            "titulo": "Crear"
-          },
-          {
-            "path": "/eventos/actividades/editar/",
-            "method": "PUT",
-            "icono": "icon",
-            "link": "/eventos/actividades/editar/",
-            "titulo": "Editar"
-          },
-          {
-            "path": "/eventos/actividades/eliminar",
-            "method": "DELETE",
-            "icono": "icon",
-            "link": "/eventos/actividades/eliminar",
-            "titulo": "Eliminar"
-          }
-        ]
-      },
-      {
-        "path": "/eventos/areas/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/eventos/areas/",
-        "titulo": "Areas",
-        "items": [
-          {
-            "path": "/eventos/areas/gestionar/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/eventos/areas/gestionar/",
-            "titulo": "Gestionar"
-          }
-        ]
-      },
-      {
-        "path": "/eventos/subareas/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/eventos/subareas/",
-        "titulo": "Sub-areas",
-        "items": [
-          {
-            "path": "/eventos/subareas/gestionar/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/eventos/subareas/gestionar/",
-            "titulo": "Gestionar"
-          }
-        ]
-      },
-      {
-        "path": "/eventos/tipo-actividad/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/eventos/tipo-actividad/",
-        "titulo": "Tipo Actividad",
-        "items": [
-          {
-            "path": "/eventos/tipo-actividad/gestionar/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/eventos/tipo-actividad/gestionar/",
-            "titulo": "Gestionar"
-          }
-        ]
-      },
-      {
-        "path": "/eventos/progrma/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/eventos/programa/",
-        "titulo": "Programas",
-        "items": [
-          {
-            "path": "/eventos/programa/gestionar/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/eventos/programa/gestionar/",
-            "titulo": "Gestionar"
-          }
-        ]
-      },
-      {
-        "path": "/eventos/sede/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/eventos/sede/",
-        "titulo": "Sede",
-        "items": [
-          {
-            "path": "/eventos/sede/gestionar/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/eventos/sede/gestionar/",
-            "titulo": "Sede"
-          }
-        ]
-      },
-      {
-        "path": "/eventos/facultad/",
-        "method": "GET",
-        "icono": "icon",
-        "link": "/eventos/facultad/",
-        "titulo": "Facultad",
-        "items": [
-          {
-            "path": "/eventos/faculta/gestionar/",
-            "method": "GET",
-            "icono": "icon",
-            "link": "/eventos/faculta/gestionar/",
-            "titulo": "Gestionar"
-          }
-        ]
-      }
-    ]
-  }
+            {
+                "path": "/eventos/actividades/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/eventos/actividades/",
+                "titulo": "Actividades",
+                "items": [
+                    {
+                        "path": "/eventos/actividades/ver/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/actividades/ver/",
+                        "titulo": "Ver",
+                    },
+                    {
+                        "path": "/eventos/actividades/crear/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/eventos/actividades/crear/",
+                        "titulo": "Crear",
+                    },
+                    {
+                        "path": "/eventos/actividades/editar/",
+                        "method": "PUT",
+                        "icono": "icon",
+                        "link": "/eventos/actividades/editar/",
+                        "titulo": "Editar",
+                    },
+                    {
+                        "path": "/eventos/actividades/eliminar",
+                        "method": "DELETE",
+                        "icono": "icon",
+                        "link": "/eventos/actividades/eliminar",
+                        "titulo": "Eliminar",
+                    },
+                ],
+            },
+            {
+                "path": "/eventos/areas/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/eventos/areas/",
+                "titulo": "Areas",
+                "items": [
+                    {
+                        "path": "/eventos/areas/gestionar/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/areas/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/eventos/subareas/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/eventos/subareas/",
+                "titulo": "Sub-areas",
+                "items": [
+                    {
+                        "path": "/eventos/subareas/gestionar/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/subareas/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/eventos/tipo-actividad/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/eventos/tipo-actividad/",
+                "titulo": "Tipo Actividad",
+                "items": [
+                    {
+                        "path": "/eventos/tipo-actividad/gestionar/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/tipo-actividad/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/eventos/progrma/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/eventos/programa/",
+                "titulo": "Programas",
+                "items": [
+                    {
+                        "path": "/eventos/programa/gestionar/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/programa/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/eventos/sede/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/eventos/sede/",
+                "titulo": "Sede",
+                "items": [
+                    {
+                        "path": "/eventos/sede/gestionar/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/sede/gestionar/",
+                        "titulo": "Sede",
+                    }
+                ],
+            },
+            {
+                "path": "/eventos/facultad/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/eventos/facultad/",
+                "titulo": "Facultad",
+                "items": [
+                    {
+                        "path": "/eventos/faculta/gestionar/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/faculta/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+        ],
+    },
 ]

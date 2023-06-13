@@ -7,7 +7,7 @@ from configs.helpers.menu_resources import menuResources
 from configs.helpers.menu import resources as menu_resources
 import re
 from django.contrib.auth.hashers import make_password
-
+from django.contrib.auth.models import Group
 
 class Migration(migrations.Migration):
     initial = True
@@ -18,6 +18,7 @@ class Migration(migrations.Migration):
 
     def insert_init_data(apps, schema_editor):
         User = apps.get_model("auth_module", "User")
+        Person = apps.get_model("auth_module", "Persons")
         User.objects.bulk_create(
             [
                 User(
@@ -34,22 +35,40 @@ class Migration(migrations.Migration):
             ]
         )
 
-        Roles = apps.get_model("auth_module", "groups")
-        Roles.objects.bulk_create(
-            [Roles(name="Admin"), Roles(name="Egresado"), Roles(name="General")]
+        Group.objects.bulk_create(
+            [Group(name="Admin"), Group(name="Egresado"), Group(name="General")]
+        )
+
+        User_roles = apps.get_model("auth_module", "user_groups")
+        User_documents = apps.get_model("auth_module", "document_types")
+        User_genders = apps.get_model("auth_module", "genders")
+        
+        User_documents.objects.bulk_create([
+            User_documents(name="CC"),
+            User_documents(name="DC")
+        ])
+        
+        User_genders.objects.bulk_create([
+            User_genders(name="MASCULINO"),
+            User_genders(name="FEMENINO")
+        ])
+        
+        Person.objects.bulk_create(
+            [
+                Person(name="Nelson",surname="De castro",identification="11188725845",address="Cll 15# 21-89",document_type_id=1,gender_type_id=1,user_id=1),
+                Person(name="Oscar",surname="Arregoces",identification="11188725946",address="Cll 15# 21-89",document_type_id=1,gender_type_id=1,user_id=2),
+            ]
         )
         
-
-        User_roles = apps.get_model("auth_module", "User_roles")
         user = User.objects.all()
-        roles = Roles.objects.all()
+        roles = Group.objects.all()
         list_user_roles = []
         for u in user:
             for r in roles:
                 if u.username == "egresado" and r.name == "Admin":
                     continue
                 list_user_roles.append(
-                    User_roles(userId=u, rolesId=r),
+                    User_roles(user_id=u.id, group_id=r.id),
                 )
         User_roles.objects.bulk_create(list_user_roles)
 
@@ -60,7 +79,7 @@ class Migration(migrations.Migration):
 
         Resources_roles = apps.get_model("auth_module", "Resources_roles")  # type: ignore
         list_resources_roles = []
-        rol = Roles.objects.all()
+        rol = Group.objects.all()
 
         for rl in rol:
             for r in resources:
@@ -68,7 +87,7 @@ class Migration(migrations.Migration):
                     continue
                 else:
                     list_resources_roles.append(
-                        Resources_roles(rolesId=rl, resourcesId=r)
+                        Resources_roles(rolesId_id=rl.id, resourcesId=r)
                     )
 
         Resources_roles.objects.bulk_create(list_resources_roles)
@@ -76,8 +95,8 @@ class Migration(migrations.Migration):
     def undo_insert_data(apps, schema_editor):
         User_roles = apps.get_model("auth_module", "User_roles")
         User_roles.objects.all().delete()
-        Roles = apps.get_model("auth_module", "Roles")
-        Roles.objects.all().delete()
+        # Roles = apps.get_model("auth_module", "Roles")
+        Group.objects.all().delete()
         User = apps.get_model("auth_module", "User")
         User.objects.all().delete()
         Resources_roles = apps.get_model("auth_module", "Resources_roles")
@@ -196,7 +215,7 @@ class Migration(migrations.Migration):
                 "verbose_name_plural": "Asignacions",
             },
         ),
-        # migrations.RunPython(
-        #     insert_init_data, reverse_code=undo_insert_data, atomic=True
-        # ),
+        migrations.RunPython(
+            insert_init_data, reverse_code=undo_insert_data, atomic=True
+        ),
     ]
