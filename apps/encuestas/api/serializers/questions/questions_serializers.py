@@ -13,6 +13,7 @@ class QuestionSerializersView(BaseSerializers):
     momento = MomentSerializers(read_only=True)
     tipo_pregunta = serializers.CharField(read_only=True)
     depende_respuesta = serializers.PrimaryKeyRelatedField(read_only=True)
+    componente = serializers.CharField(read_only=True)
 
     answer_set = AswerSerialzersView(many=True)
 

@@ -41,7 +41,10 @@ class Question(BaseModel):
     pregunta_nombre = models.CharField(max_length=500)
     momento = models.ForeignKey(TipoMomento, on_delete=models.CASCADE, db_index=True)
     tipo_pregunta = models.CharField(max_length=100, blank=True, null=True)
-    depende_respuesta = models.ForeignKey("Answer",on_delete=models.CASCADE,blank=True, null=True)
+    depende_respuesta = models.ForeignKey(
+        "Answer", on_delete=models.CASCADE, blank=True, null=True
+    )
+    componente = models.CharField(max_length=256, blank=True, null=True)
 
     class Meta:
         verbose_name = "Question"
@@ -56,11 +59,3 @@ class Answer(BaseModel):
     class Meta:
         verbose_name = "Answers"
         verbose_name_plural = "Answers"
-
-
-class Options(models.Model):
-    depende = models.ForeignKey(Question, on_delete=models.CASCADE)
-    texto = models.CharField(max_length=500)
-    respuesta = models.ForeignKey(
-        Answer, on_delete=models.CASCADE, null=True, blank=True
-    )
