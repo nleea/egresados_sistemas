@@ -7,12 +7,18 @@ from ..momento.momento_serializers import MomentSerializers
 class AswerSerialzersView(BaseSerializers):
     respuesta = serializers.CharField(read_only=True)
 
+class QuestionSerializersViewDepende(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+
+class AswerSerialzersViewDepende(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    pregunta = QuestionSerializersViewDepende(read_only=True)
 
 class QuestionSerializersView(BaseSerializers):
     pregunta_nombre = serializers.CharField(read_only=True)
     momento = MomentSerializers(read_only=True)
     tipo_pregunta = serializers.CharField(read_only=True)
-    depende_respuesta = serializers.PrimaryKeyRelatedField(read_only=True)
+    depende_respuesta = AswerSerialzersViewDepende(read_only=True)
     componente = serializers.CharField(read_only=True)
 
     answer_set = AswerSerialzersView(many=True)

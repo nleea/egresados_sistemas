@@ -18,19 +18,10 @@ CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class QuestionsView(APIView):
     def get(self, request, *args, **kwargs):
-        componente = request.GET.get("componente", None)
 
-        resulst = []
-
-        if componente:
-            resulst = (
+        resulst = (
                 Question.objects.defer("momento")
-                .prefetch_related("answer_set")
-                .filter(Q(componente=componente), visible=True)
-            )
-        else:
-            resulst = (
-                Question.objects.defer("momento")
+                .select_related("depende_respuesta","depende_respuesta__pregunta")
                 .prefetch_related("answer_set")
                 .filter(visible=True)
             )
