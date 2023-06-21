@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
+from django.core.exceptions import ValidationError
+from datetime import date
 
 User = get_user_model()
 
@@ -10,9 +12,21 @@ class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True)
     updateAt = models.DateField(auto_now=True, blank=True, null=True)
     userCreate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
+        User,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="+",
+        db_index=True,
+    )
     userUpdate = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True, related_name="+", db_index=True)
+        User,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+        related_name="+",
+        db_index=True,
+    )
     visible = models.BooleanField(default=True)
 
     class Meta:
@@ -20,7 +34,6 @@ class BaseModel(models.Model):
 
 
 class EventosArea(BaseModel):
-
     def __str__(self) -> str:
         return self.name  # type: ignore
 
@@ -31,7 +44,8 @@ class EventosArea(BaseModel):
 
 class SubAreaEventos(BaseModel):
     area = models.ForeignKey(
-        EventosArea, on_delete=models.CASCADE, related_name="areas", db_index=True)
+        EventosArea, on_delete=models.CASCADE, related_name="areas", db_index=True
+    )
 
     class Meta:
         verbose_name = "Sub Area Evento"
@@ -46,15 +60,18 @@ class TipoEvento(BaseModel):
 
 class Eventos(BaseModel):
     area = models.ForeignKey(
-        EventosArea, on_delete=models.CASCADE, related_name="+", db_index=True)
+        EventosArea, on_delete=models.CASCADE, related_name="+", db_index=True
+    )
     subArea = models.ForeignKey(
-        SubAreaEventos, on_delete=models.CASCADE, related_name="+", db_index=True)
+        SubAreaEventos, on_delete=models.CASCADE, related_name="+", db_index=True
+    )
     nombre_actividad = models.CharField(max_length=256)
     tipo_actividad = models.CharField(max_length=256)
     responsable = models.CharField(max_length=256)
     tipo = models.ForeignKey(
-        TipoEvento, on_delete=models.CASCADE, blank=True, null=True, db_index=True)
-    fecha = models.DateField(blank=False, null=False,default=timezone.now().date())
+        TipoEvento, on_delete=models.CASCADE, blank=True, null=True, db_index=True
+    )
+    fecha = models.DateField(blank=False, null=False, default=timezone.now().date())
     hora = models.CharField(max_length=10)
     lugar = models.CharField(max_length=256)
     cupos = models.IntegerField()
@@ -62,18 +79,24 @@ class Eventos(BaseModel):
     objectivo = models.CharField(max_length=300)
 
     class Meta:
-        verbose_name = 'Evento'
-        verbose_name_plural = 'Eventos'
+        verbose_name = "Evento"
+        verbose_name_plural = "Eventos"
 
 
 class Inscripcion(models.Model):
-    evento = models.ForeignKey(
-        Eventos, on_delete=models.CASCADE, db_index=True)
+    evento = models.ForeignKey(Eventos, on_delete=models.CASCADE, db_index=True)
     user = models.ManyToManyField(User, related_name="evento_inscripcion")
 
 
 class Asistencia(BaseModel):
-    evento = models.ForeignKey(
-        Eventos, on_delete=models.CASCADE, db_index=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
+    evento = models.ForeignKey(Eventos, on_delete=models.CASCADE, db_index=True,unique=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+",unique=False)
     confirm = models.BooleanField(default=True)
+
+    def clean(self):
+        if self.evento.fecha < date.today():
+            raise ValidationError("No se puede crear la asistencia para un evento vencido.")
+
+
+    class Meta:
+        unique_together = ("evento", "user")

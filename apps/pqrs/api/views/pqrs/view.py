@@ -26,7 +26,7 @@ class PqrsView(APIView):
 
 
     def get(self, request, *args, **kwargs):
-        roles = request.user.groups.get(name="Admin")
+        roles = request.user.groups.filter(name="Admin")
 
         status_pqrs = request.GET.get("status","AC")
         order_pqrs = request.GET.get("order","-id")

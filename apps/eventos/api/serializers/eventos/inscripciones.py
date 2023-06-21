@@ -64,9 +64,12 @@ class AsistenciaSerializer(BaseSerializers):
         if evento_create_user and evento_create_user.pk != validated_data["user_session"].pk:
             raise Exception("Invalid")
 
-        asistencia = Asistencia.objects.create(
+        try:
+            asistencia = Asistencia.objects.create(
             evento_id=validated_data["evento"], user_id=validated_data["user"], userCreate_id=validated_data["user_session"].pk)
-        return asistencia
+            return asistencia
+        except Exception as e:
+            raise serializers.ValidationError(e.args)
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get(

@@ -58,7 +58,7 @@ class CustomMiddleware(MiddlewareMixin):
         # If token Exists
         if jwt_token:
             try:
-                tokenUser, _ = JWTAuthentication.authenticate(JWTAuthentication(),request)       
+                tokenUser, _ = JWTAuthentication.authenticate(JWTAuthentication(),request)
                 user = tokenUser
 
                 if not tokenUser.is_authenticated:
