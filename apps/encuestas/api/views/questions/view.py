@@ -3,14 +3,13 @@ from ...serializers.questions.questions_serializers import (
     QuestionSerializers,
     QuestionSerializersView,
 )
-from ....models.models import Question
+from ....models.models import Question, AnswerUser
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.db.models import Q
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
@@ -18,13 +17,12 @@ CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class QuestionsView(APIView):
     def get(self, request, *args, **kwargs):
-
         resulst = (
-                Question.objects.defer("momento")
-                .select_related("depende_respuesta","depende_respuesta__pregunta")
-                .prefetch_related("answer_set")
-                .filter(visible=True)
-            )
+            Question.objects.defer("momento")
+            .select_related("depende_respuesta", "depende_respuesta__pregunta")
+            .prefetch_related("answer_set")
+            .filter(visible=True)
+        )
 
         data = QuestionSerializersView(resulst, many=True, excludes=["momento"])
 
@@ -39,6 +37,32 @@ class SaveQuestionsView(APIView):
             data.save(momento=request.data["momento"], userCreate=request.user)
             return Response("Sucess", status.HTTP_200_OK)
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class SaveQuestionsResponse(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            aswer_create = []
+            for i in request.data["respuestas"]:
+                if i["type"] == "unica respuesta":
+                    aswer_create.append(
+                        AnswerUser(respuesta_id=i["respuesta"], user=request.user)
+                    )
+                elif i["type"] == "pregunta corta":
+                    aswer_create.append(
+                        AnswerUser(respuesta_id=i["respuesta"], user=request.user)
+                    )
+                elif i["type"] == "multiple":
+                    for x in i["respuesta"]:
+                        aswer_create.append(
+                            AnswerUser(respuesta_id=x, user=request.user)
+                        )
+            
+            AnswerUser.objects.bulk_create(aswer_create)
+
+            return Response("Exitoso", status.HTTP_200_OK)
+        except Exception as e:
+            return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteQuestionsView(APIView):

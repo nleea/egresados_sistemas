@@ -53,9 +53,14 @@ class Question(BaseModel):
 
 class Answer(BaseModel):
     respuesta = models.CharField(max_length=256)
-    usuario = models.ForeignKey(User, on_delete=models.CASCADE, db_index=True)
     pregunta = models.ForeignKey(Question, on_delete=models.CASCADE, db_index=True)
 
     class Meta:
         verbose_name = "Answers"
         verbose_name_plural = "Answers"
+
+
+class AnswerUser(BaseModel):
+    respuesta = models.ForeignKey(Answer, on_delete=models.CASCADE, db_index=True,null=True,blank=True)
+    texto = models.CharField(max_length=500, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
