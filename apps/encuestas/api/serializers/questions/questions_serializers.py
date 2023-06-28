@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ....models.models import Question, TipoMomento, Answer
+from ....models.models import Question, TipoMomento, AnswerUser
 from ..BaseSerializers import BaseSerializers
 from ..momento.momento_serializers import MomentSerializers
 
@@ -7,12 +7,15 @@ from ..momento.momento_serializers import MomentSerializers
 class AswerSerialzersView(BaseSerializers):
     respuesta = serializers.CharField(read_only=True)
 
+
 class QuestionSerializersViewDepende(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
+
 
 class AswerSerialzersViewDepende(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     pregunta = QuestionSerializersViewDepende(read_only=True)
+
 
 class QuestionSerializersView(BaseSerializers):
     pregunta_nombre = serializers.CharField(read_only=True)
@@ -56,3 +59,12 @@ class QuestionSerializers(BaseSerializers):
         instance.visible = validated_data.get("visible", instance.visible)
         instance.save()
         return instance
+
+
+class AswerUserSerializers(BaseSerializers):
+    respuesta = serializers.IntegerField()
+    texto = serializers.CharField()
+    user = serializers.IntegerField()
+
+    def create(self, validated_data):
+        return super().create(validated_data)
