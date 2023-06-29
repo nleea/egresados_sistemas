@@ -49,6 +49,7 @@ class Question(BaseModel):
     class Meta:
         verbose_name = "Question"
         verbose_name_plural = "Question"
+        unique_together = (("pregunta_nombre","momento"),)
 
 
 class Answer(BaseModel):
