@@ -84,9 +84,7 @@ class QuestionCreateSerializers(BaseSerializers):
                 pregunta_nombre=validated_data["question"],
                 momento_id=validated_data["momento"],
                 tipo_pregunta=validated_data["type"].lower(),
-                depende_respuesta_id=validated_data["depend"]
-                if "depend" in validated_data
-                else None,
+                depende_respuesta_id=validated_data["depend"],
                 userCreate=validated_data["userCreate"]
             )
                 if validated_data["options"]:

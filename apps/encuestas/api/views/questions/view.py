@@ -52,7 +52,7 @@ class SaveQuestionsResponse(APIView):
                     )
                 elif i["type"] == "pregunta corta":
                     aswer_create.append(
-                        AnswerUser(respuesta_id=i["respuesta"], user=request.user)
+                        AnswerUser(pregunta=i["pregunta"],texto=i["respuesta"], user=request.user)
                     )
                 elif i["type"] == "multiple":
                     for x in i["respuesta"]:

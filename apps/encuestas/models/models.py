@@ -63,5 +63,6 @@ class Answer(BaseModel):
 
 class AnswerUser(BaseModel):
     respuesta = models.ForeignKey(Answer, on_delete=models.CASCADE, db_index=True,null=True,blank=True)
+    pregunta = models.ForeignKey(Question, on_delete=models.CASCADE, db_index=True,null=True,blank=True)
     texto = models.CharField(max_length=500, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
