@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from ...serializers.questions.questions_serializers import (
     QuestionSerializers,
     QuestionSerializersView,
+    QuestionCreateSerializers
 )
 from ....models.models import Question, AnswerUser
 from rest_framework.response import Response
@@ -31,11 +32,12 @@ class QuestionsView(APIView):
 
 class SaveQuestionsView(APIView):
     def post(self, request, *args, **kwargs):
-        data = QuestionSerializers(data=request.data)
-
+        data = QuestionCreateSerializers(data=request.data)
+        
         if data.is_valid():
-            data.save(momento=request.data["momento"], userCreate=request.user)
+            data.save(userCreate=request.user)
             return Response("Sucess", status.HTTP_200_OK)
+       
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
 

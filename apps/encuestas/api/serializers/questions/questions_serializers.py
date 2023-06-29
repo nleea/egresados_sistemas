@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from ....models.models import Question, TipoMomento, AnswerUser
+from ....models.models import Question, TipoMomento, Answer
 from ..BaseSerializers import BaseSerializers
 from ..momento.momento_serializers import MomentSerializers
-
+from django.db import transaction
 
 class AswerSerialzersView(BaseSerializers):
     respuesta = serializers.CharField(read_only=True)
@@ -68,3 +68,36 @@ class AswerUserSerializers(BaseSerializers):
 
     def create(self, validated_data):
         return super().create(validated_data)
+
+
+class QuestionCreateSerializers(BaseSerializers):
+    question = serializers.CharField()
+    depend = serializers.IntegerField(required=False,allow_null=True)
+    type = serializers.CharField()
+    options = serializers.ListField(required=False)
+    momento = serializers.IntegerField()
+
+    def create(self, validated_data):
+        try:
+            with transaction.atomic():
+                pregunta = Question.objects.create(
+                pregunta_nombre=validated_data["question"],
+                momento_id=validated_data["momento"],
+                tipo_pregunta=validated_data["type"].lower(),
+                depende_respuesta_id=validated_data["depend"]
+                if "depend" in validated_data
+                else None,
+                userCreate=validated_data["userCreate"]
+            )
+                if validated_data["options"]:
+                    answers = []
+                    options = validated_data["options"]
+
+                    for i in options:
+                        answers.append(Answer(respuesta=i["answer"], pregunta_id=pregunta.pk,userCreate=validated_data["userCreate"]))
+
+                    Answer.objects.bulk_create(answers)
+                return pregunta
+        except Exception as e:
+            transaction.rollback()
+            raise serializers.ValidationError(e.args)
