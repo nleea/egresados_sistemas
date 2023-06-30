@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils.translation import gettext_lazy as _
 
 User = get_user_model()
 
@@ -38,9 +39,16 @@ class TipoMomento(BaseModel):
 
 
 class Question(BaseModel):
+    
+    class TYPE(models.TextChoices):
+        UNICA = 1, _("unica respuesta")
+        MULTIPLE = 2, _("multiple respuesta")
+        CORTA = 3, _("respuesta corta")
+        ESPERLARGA = 4, _("respuesta larga")
+    
     pregunta_nombre = models.CharField(max_length=500)
     momento = models.ForeignKey(TipoMomento, on_delete=models.CASCADE, db_index=True)
-    tipo_pregunta = models.CharField(max_length=100, blank=True, null=True)
+    tipo_pregunta = models.CharField(max_length=100, choices=TYPE.choices,blank=True, null=True)
     depende_respuesta = models.ForeignKey(
         "Answer", on_delete=models.CASCADE, blank=True, null=True
     )
