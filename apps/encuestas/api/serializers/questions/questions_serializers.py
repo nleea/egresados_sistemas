@@ -56,7 +56,7 @@ class QuestionSerializers(BaseSerializers):
         instance.pregunta_nombre = validated_data.get(
             "pregunta_nombre", instance.pregunta_nombre
         )
-        instance.momento_id = validated_data.get("momento", instance.momento)
+        instance.momento_id = validated_data.get("momento", instance.momento.id)
         instance.tipo_pregunta = validated_data.get("tipo_pregunta", instance.tipo_pregunta)
         instance.userUpdate = validated_data.get("userUpdate", instance.userUpdate)
         instance.visible = validated_data.get("visible", instance.visible)
