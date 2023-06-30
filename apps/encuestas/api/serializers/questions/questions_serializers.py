@@ -21,7 +21,7 @@ class AswerSerialzersViewDepende(BaseSerializers):
 class QuestionSerializersView(BaseSerializers):
     pregunta_nombre = serializers.CharField(read_only=True)
     momento = MomentSerializers(read_only=True)
-    tipo_pregunta = serializers.CharField(read_only=True)
+    tipo_pregunta = serializers.CharField(read_only=True,source="get_tipo_pregunta_display")
     depende_respuesta = AswerSerialzersViewDepende(read_only=True)
     componente = serializers.CharField(read_only=True)
 
