@@ -21,11 +21,12 @@ class AswerSerialzersViewDepende(BaseSerializers):
 class QuestionSerializersView(BaseSerializers):
     pregunta_nombre = serializers.CharField(read_only=True)
     momento = MomentSerializers(read_only=True)
-    tipo_pregunta = serializers.CharField(read_only=True,source="get_tipo_pregunta_display")
+    tipo_pregunta = serializers.CharField(read_only=True)
     depende_respuesta = AswerSerialzersViewDepende(read_only=True)
     componente = serializers.CharField(read_only=True)
 
     answer_set = AswerSerialzersView(many=True)
+    
 
     class Meta:
         fields = "__all__"
@@ -55,7 +56,7 @@ class QuestionSerializers(BaseSerializers):
             "pregunta_nombre", instance.pregunta_nombre
         )
         instance.momento_id = validated_data.get("momento", instance.momento)
-
+        instance.type = validated_data.get("tipo_pre", instance.momento)
         instance.userUpdate = validated_data.get("userUpdate", instance.userUpdate)
         instance.visible = validated_data.get("visible", instance.visible)
         instance.save()
