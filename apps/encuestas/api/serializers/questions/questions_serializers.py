@@ -4,6 +4,7 @@ from ..BaseSerializers import BaseSerializers
 from ..momento.momento_serializers import MomentSerializers
 from django.db import transaction
 
+
 class AswerSerialzersView(BaseSerializers):
     respuesta = serializers.CharField(read_only=True)
 
@@ -20,7 +21,7 @@ class AswerSerialzersViewDepende(BaseSerializers):
 class QuestionSerializersView(BaseSerializers):
     pregunta_nombre = serializers.CharField(read_only=True)
     momento = MomentSerializers(read_only=True)
-    tipo_pregunta = serializers.CharField(read_only=True)
+    tipo_pregunta = serializers.CharField(read_only=True,source="get_tipo_pregunta_display")
     depende_respuesta = AswerSerialzersViewDepende(read_only=True)
     componente = serializers.CharField(read_only=True)
 
@@ -71,28 +72,45 @@ class AswerUserSerializers(BaseSerializers):
 
 
 class QuestionCreateSerializers(BaseSerializers):
+    TYPE = (
+        (1, "unica respuesta"),
+        (2, "multiple"),
+        (3, "respuesta corta"),
+        (4, "respuesta larga"),
+    )
+
     question = serializers.CharField()
-    depend = serializers.IntegerField(required=False,allow_null=True)
-    type = serializers.CharField()
+    depend = serializers.IntegerField(required=False, allow_null=True)
+    type = serializers.ChoiceField(choices=TYPE)
     options = serializers.ListField(required=False)
     momento = serializers.IntegerField()
+    
+    
+    def to_representation(self, instance):
+        return super().to_representation(instance)
 
     def create(self, validated_data):
         try:
             with transaction.atomic():
                 pregunta = Question.objects.create(
-                pregunta_nombre=validated_data["question"],
-                momento_id=validated_data["momento"],
-                tipo_pregunta=validated_data["type"].lower(),
-                depende_respuesta_id=validated_data["depend"],
-                userCreate=validated_data["userCreate"]
-            )
+                    pregunta_nombre=validated_data["question"],
+                    momento_id=validated_data["momento"],
+                    tipo_pregunta=validated_data["type"],
+                    depende_respuesta_id=validated_data["depend"],
+                    userCreate=validated_data["userCreate"],
+                )
                 if validated_data["options"]:
                     answers = []
                     options = validated_data["options"]
 
                     for i in options:
-                        answers.append(Answer(respuesta=i["answer"], pregunta_id=pregunta.pk,userCreate=validated_data["userCreate"]))
+                        answers.append(
+                            Answer(
+                                respuesta=i["answer"],
+                                pregunta_id=pregunta.pk,
+                                userCreate=validated_data["userCreate"],
+                            )
+                        )
 
                     Answer.objects.bulk_create(answers)
                 return pregunta
