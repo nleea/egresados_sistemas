@@ -36,6 +36,7 @@ class QuestionSerializers(BaseSerializers):
     pregunta_nombre = serializers.CharField()
     momento = serializers.IntegerField()
     visible = serializers.BooleanField(required=False, write_only=True)
+    tipo_pregunta = serializers.CharField()
 
     class Meta:
         fields = "__all__"
@@ -56,7 +57,7 @@ class QuestionSerializers(BaseSerializers):
             "pregunta_nombre", instance.pregunta_nombre
         )
         instance.momento_id = validated_data.get("momento", instance.momento)
-        instance.type = validated_data.get("tipo_pre", instance.momento)
+        instance.tipo_pregunta = validated_data.get("tipo_pregunta", instance.tipo_pregunta)
         instance.userUpdate = validated_data.get("userUpdate", instance.userUpdate)
         instance.visible = validated_data.get("visible", instance.visible)
         instance.save()
