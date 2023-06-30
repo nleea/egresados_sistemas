@@ -19,13 +19,13 @@ CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 class QuestionsView(APIView):
     def get(self, request, *args, **kwargs):
         resulst = (
-            Question.objects.defer("momento")
-            .select_related("depende_respuesta", "depende_respuesta__pregunta")
+            Question.objects
+            .select_related("depende_respuesta", "depende_respuesta__pregunta","momento")
             .prefetch_related("answer_set")
             .filter(visible=True)
         )
 
-        data = QuestionSerializersView(resulst, many=True, excludes=["momento"])
+        data = QuestionSerializersView(resulst, many=True)
 
         return Response(data.data, status.HTTP_200_OK)
 
