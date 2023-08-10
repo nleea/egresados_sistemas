@@ -4,10 +4,11 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 from configs.helpers.menu_resources import menuResources
-from configs.helpers.menu import resources as menu_resources
+from configs.helpers.menu import resources as menu_resources, resources_egresado
 import re
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
+
 
 class Migration(migrations.Migration):
     initial = True
@@ -42,50 +43,78 @@ class Migration(migrations.Migration):
         User_roles = apps.get_model("auth_module", "user_groups")
         User_documents = apps.get_model("auth_module", "document_types")
         User_genders = apps.get_model("auth_module", "genders")
-        
-        User_documents.objects.bulk_create([
-            User_documents(name="CC"),
-            User_documents(name="DC")
-        ])
-        
-        User_genders.objects.bulk_create([
-            User_genders(name="MASCULINO"),
-            User_genders(name="FEMENINO")
-        ])
-        
+
+        User_documents.objects.bulk_create(
+            [User_documents(name="CC"), User_documents(name="DC")]
+        )
+
+        User_genders.objects.bulk_create(
+            [User_genders(name="MASCULINO"), User_genders(name="FEMENINO")]
+        )
+
         Person.objects.bulk_create(
             [
-                Person(name="Nelson",surname="De castro",identification="11188725845",address="Cll 15# 21-89",document_type_id=1,gender_type_id=1,user_id=1),
-                Person(name="Oscar",surname="Arregoces",identification="11188725946",address="Cll 15# 21-89",document_type_id=1,gender_type_id=1,user_id=2),
+                Person(
+                    name="Nelson",
+                    surname="De castro",
+                    identification="11188725845",
+                    address="Cll 15# 21-89",
+                    document_type_id=1,
+                    gender_type_id=1,
+                    user_id=1,
+                    phone="000000000",
+                ),
+                Person(
+                    name="Oscar",
+                    surname="Arregoces",
+                    identification="11188725946",
+                    address="Cll 15# 21-89",
+                    document_type_id=1,
+                    gender_type_id=1,
+                    user_id=2,
+                    phone="000000000",
+                ),
             ]
         )
-        
+
         user = User.objects.all()
         roles = Group.objects.all()
         list_user_roles = []
         for u in user:
             for r in roles:
-                if u.username == "egresado" and r.name == "Admin":
-                    continue
-                list_user_roles.append(
-                    User_roles(user_id=u.id, group_id=r.id),
-                )
+                if u.username == "egresado" and r.name == "Egresado":
+                    list_user_roles.append(
+                        User_roles(user_id=u.id, group_id=r.id),
+                    )
+                elif u.username == "admin" and r.name == "Admin":
+                    list_user_roles.append(
+                        User_roles(user_id=u.id, group_id=r.id),
+                    )
+
         User_roles.objects.bulk_create(list_user_roles)
 
         Resources = apps.get_model("auth_module", "Resources")  # type: ignore
         resources = []
+        resources_egresado_bulk = []
         menuResources(menu_resources, resources, Resources, 1)
+        menuResources(
+            resources_egresado, resources_egresado_bulk, Resources, len(resources) + 1
+        )
         resources = Resources.objects.bulk_create(resources)
+        resources_egresado_bulk = Resources.objects.bulk_create(resources_egresado_bulk)
 
         Resources_roles = apps.get_model("auth_module", "Resources_roles")  # type: ignore
         list_resources_roles = []
         rol = Group.objects.all()
 
         for rl in rol:
-            for r in resources:
-                if rl.name != "Admin" and re.search("admin", r.link) is not None:
-                    continue
-                else:
+            if rl.name == "Egresado" or rl.name == "General":
+                for r in resources_egresado_bulk:
+                    list_resources_roles.append(
+                        Resources_roles(rolesId_id=rl.id, resourcesId=r)
+                    )
+            if rl.name == "Admin":
+                for r in resources:
                     list_resources_roles.append(
                         Resources_roles(rolesId_id=rl.id, resourcesId=r)
                     )
