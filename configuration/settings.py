@@ -30,7 +30,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_OR_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 ALLOWED_HOSTS = ["*"]
 
 # CORS_ALLOWED_ORIGINS = []
@@ -248,8 +248,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
+EMAIL_HOST_USER = "egresados398@gmail.com"
+EMAIL_HOST_PASSWORD = "aatgckiovgzkpihg"
 
 LOGGING = {
     "version": 1,
@@ -288,7 +288,7 @@ LOGGING = {
     },
     "loggers": {
         "django.request": {
-            "handlers": ["log_file"],
+            "handlers": ["log_file","mail_admins"],
             "level": "DEBUG",
             "propagate": True,
         },

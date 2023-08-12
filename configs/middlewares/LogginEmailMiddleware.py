@@ -8,7 +8,7 @@ logger = logging.Logger(__name__)
 
 ADMINS = [
     ("Nelson", "egresados398@gmail.com"),
-    ("Oscar", "oiarregoces@uniguajira.edu.co"),
+    # ("Oscar", "oiarregoces@uniguajira.edu.co"),
 ]
 
 

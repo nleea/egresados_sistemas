@@ -45,7 +45,7 @@ class CustomMiddleware(MiddlewareMixin):
         :return: HTTP Response if authorization fails, else None
         """
         routes_free = ['/auth/login/', '/auth/register/',
-                       '/redoc/', '/admin/','/__debug__/',"/media/"]
+                       '/redoc/', '/admin/','/__debug__/',"/media/","/confirmar/asistencia/"]
         
         match = re.search('|'.join(routes_free), request.path)
         if match:

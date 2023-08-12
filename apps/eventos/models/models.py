@@ -85,18 +85,28 @@ class Eventos(BaseModel):
 
 class Inscripcion(models.Model):
     evento = models.ForeignKey(Eventos, on_delete=models.CASCADE, db_index=True)
-    user = models.ManyToManyField(User, related_name="evento_inscripcion")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
+    
+    
+    class Meta:
+        unique_together = ("evento","user")
 
 
 class Asistencia(BaseModel):
-    evento = models.ForeignKey(Eventos, on_delete=models.CASCADE, db_index=True,unique=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+",unique=False)
-    confirm = models.BooleanField(default=True)
+    evento = models.ForeignKey(
+        Eventos, on_delete=models.CASCADE, db_index=True, unique=False
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="+", unique=False
+    )
+    confirm = models.BooleanField(default=False)
+    asistencia = models.BooleanField(default=False)
 
     def clean(self):
         if self.evento.fecha < date.today():
-            raise ValidationError("No se puede crear la asistencia para un evento vencido.")
-
+            raise ValidationError(
+                "No se puede crear la asistencia para un evento vencido."
+            )
 
     class Meta:
         unique_together = ("evento", "user")

@@ -1,8 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from ...serializers.eventos.eventos_serialziers import EventosSerializers,EventosAsistenciaSerializersView
+from ...serializers.eventos.eventos_serialziers import (
+    EventosSerializers,
+    EventosAsistenciaSerializersView,
+)
 from ...serializers.eventos.inscripciones import InscripcionesSerializers
-from ....models.models import Eventos,Asistencia
+from ....models.models import Eventos, Asistencia
 from rest_framework import status
 from ....models.models import User
 from django.db import models
@@ -15,90 +18,121 @@ import threading
 from django.utils import timezone
 
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
 # @method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class EventosView(APIView):
-    
-    def get_eventos_date(self,order,start_date,end_date):
-        results = Eventos.objects.defer("userCreate", "userUpdate", "area__userCreate",
-                                        "area__userUpdate", "subArea__userCreate",
-                                        "subArea__userUpdate", "tipo__userCreate",
-                                        "tipo__userUpdate").select_related("area", "subArea", "tipo").filter(inscripcion__user=self.request.user.id,
-                                                                   fecha__range=[start_date,end_date],
-                                                                   visible=True).order_by(order)
+    def get_eventos_date(self, order, start_date, end_date):
+        results = (
+            Eventos.objects.defer(
+                "userCreate",
+                "userUpdate",
+                "area__userCreate",
+                "area__userUpdate",
+                "subArea__userCreate",
+                "subArea__userUpdate",
+                "tipo__userCreate",
+                "tipo__userUpdate",
+            )
+            .select_related("area", "subArea", "tipo")
+            .filter(
+                inscripcion__user=self.request.user.id,  # type:ignore
+                fecha__range=[start_date, end_date],
+                visible=True,
+            )
+            .order_by(order)
+        )
 
         return results
-    
 
     def get(self, request, *args, **kwargs):
         mine = request.GET.get("mine", None)
-        status_evento = request.GET.get("status",None)
-        order_evento = request.GET.get("order","-id")
-        start_evento = request.GET.get("startdate",None)
-        end_evento = request.GET.get("enddate",None)
-        
+        status_evento = request.GET.get("status", None)
+        order_evento = request.GET.get("order", "-id")
+        start_evento = request.GET.get("startdate", None)
+        end_evento = request.GET.get("enddate", None)
+
         rol = request.user.groups.filter(name="admin").exists()
-        
+
         if rol:
-            results = Eventos.objects.defer("userCreate", "userUpdate", "area__userCreate",
-                                            "area__userUpdate", "subArea__userCreate",
-                                            "subArea__userUpdate", "tipo__userCreate",
-                                            "tipo__userUpdate").filter(visible=True).select_related("area", "subArea", "tipo").order_by(order_evento)
+            results = (
+                Eventos.objects.defer(
+                    "userCreate",
+                    "userUpdate",
+                    "area__userCreate",
+                    "area__userUpdate",
+                    "subArea__userCreate",
+                    "subArea__userUpdate",
+                    "tipo__userCreate",
+                    "tipo__userUpdate",
+                )
+                .filter(visible=True)
+                .select_related("area", "subArea", "tipo")
+                .order_by(order_evento)
+            )
         else:
             if start_evento and end_evento:
-                results = self.get_eventos_date(start_date=start_evento,end_date=end_evento,order=order_evento)
+                results = self.get_eventos_date(
+                    start_date=start_evento, end_date=end_evento, order=order_evento
+                )
             else:
-                results = Eventos.objects.defer("userCreate", "userUpdate", "area__userCreate",
-                                            "area__userUpdate", "subArea__userCreate",
-                                            "subArea__userUpdate", "tipo__userCreate",
-                                            "tipo__userUpdate").filter(inscripcion__user=request.user.id,
-                                                                    visible=True).select_related("area", "subArea", "tipo").order_by(order_evento)
-        
-        
-        eventos_asistencia = results.annotate(confirm_asistencia=models.Exists(
-            Asistencia.objects.filter(evento=models.OuterRef(
-                'pk'), user=request.user.id, confirm=True)
-        ), fecha_pasada=models.Case(
-            models.When(fecha__lt=timezone.now().date(), then=True), default=False,
-            output_field=models.BooleanField()
-        ))
-        
+                results = (
+                    Eventos.objects.defer(
+                        "userCreate",
+                        "userUpdate",
+                        "area__userCreate",
+                        "area__userUpdate",
+                        "subArea__userCreate",
+                        "subArea__userUpdate",
+                        "tipo__userCreate",
+                        "tipo__userUpdate",
+                    )
+                    .filter(inscripcion__user=request.user.id, visible=True)
+                    .select_related("area", "subArea", "tipo")
+                    .order_by(order_evento)
+                )
+
+        eventos_asistencia = results.annotate(
+            confirm_asistencia=models.Exists(
+                Asistencia.objects.filter(
+                    evento=models.OuterRef("pk"), user=request.user.id, confirm=True
+                )
+            ),
+            fecha_pasada=models.Case(
+                models.When(fecha__lt=timezone.now().date(), then=True),
+                default=False,
+                output_field=models.BooleanField(),
+            ),
+        )
+
         if status_evento:
             eventos_asistencia = eventos_asistencia.filter(fecha_pasada=status_evento)
 
-        resulstSerializers = EventosAsistenciaSerializersView(
-            results, many=True)
+        resulstSerializers = EventosAsistenciaSerializersView(results, many=True)
 
         return Response(resulstSerializers.data, status.HTTP_200_OK)
 
 
 class SaveEventosView(APIView):
-
     def post(self, request, *args, **kwargs):
-
         data = EventosSerializers(data=request.data)
         if data.is_valid():
             evento = data.save(userCreate=request.user)
             user = User.objects.all().defer("groups")
-            inscripcionesResulst = InscripcionesSerializers(
-                data={"evento": evento.pk})
-            if inscripcionesResulst.is_valid():
-                try:
-                    evento = inscripcionesResulst.validated_data["evento"] # type: ignore
-                    threading_emails = threading.Thread(
-                        target=send_email_list, args=(user, evento))
-                    threading_emails.start()
-                    inscripcionesResulst.save(user=user)
-                except Exception as e:
-                    return Response(e, status.HTTP_400_BAD_REQUEST)
+            try:
+                threading_emails = threading.Thread(
+                    target=send_email_list, args=(user, evento.id)
+                )
+                threading_emails.start()
+
+            except Exception as e:
+                return Response(e, status.HTTP_400_BAD_REQUEST)
             return Response("Success", status.HTTP_200_OK)
         return Response(data.errors, status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateEventosView(APIView):
-
     def _allowed_methods(self):
         self.http_method_names.append("put")  # type: ignore
         return [m.upper() for m in self.http_method_names if hasattr(self, m)]
@@ -112,13 +146,14 @@ class UpdateEventosView(APIView):
             return None
 
     def put(self, request, *args, **kwargs):
-
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            return Response("Evento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Evento {} not exist".format(self.kwargs.get("pk")),
+                status.HTTP_400_BAD_REQUEST,
+            )
 
-        instance = EventosSerializers(
-            instanceOrNone, data=request.data, partial=True)
+        instance = EventosSerializers(instanceOrNone, data=request.data, partial=True)
         if instance.is_valid():
             instance.save(userUpdate=request.user)
             return Response("Success", status.HTTP_200_OK)
@@ -127,7 +162,6 @@ class UpdateEventosView(APIView):
 
 
 class DeleteEventosView(APIView):
-
     def _allowed_methods(self):
         self.http_method_names.append("delete")
         return [m.upper() for m in self.http_method_names if hasattr(self, m)]
@@ -153,17 +187,20 @@ class DeleteEventosView(APIView):
             return Response(e.args, 400)
 
     def delete(self, request, *args, **kwargs):
-
         if "ids" in request.data:
             return self.bulk_delete(request.data["ids"])
 
         instanceOrNone = self.get_object()
         if instanceOrNone is None:
-            return Response("Evento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+            return Response(
+                "Evento {} not exist".format(self.kwargs.get("pk")),
+                status.HTTP_400_BAD_REQUEST,
+            )
 
         try:
             instance = EventosSerializers(
-                instanceOrNone, data={"visible": False}, partial=True)
+                instanceOrNone, data={"visible": False}, partial=True
+            )
             if instance.is_valid():
                 instance.save(userUpdate=request.user)
             else:
