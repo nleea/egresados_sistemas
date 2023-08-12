@@ -38,4 +38,4 @@ class CustomResponseMiddleware(object):
             return HttpResponse("Unexpected error", status=400)
 
     def process_exception(self, request, exception):
-        return HttpResponse(exception)
+        return HttpResponse(exception,status=500)

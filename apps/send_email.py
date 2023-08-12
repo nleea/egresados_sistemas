@@ -14,7 +14,7 @@ def send_notification_mail(self, target_mail, id, evento):
     try:
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
         # La información que se desea codificar en el código QR
-        data = f"http://3.144.134.184/eventos/inscripciones/asistencia/?evento={evento}&user={id}"
+        data = f"http://44.203.185.252/eventos/inscripciones/asistencia/?evento={evento}&user={id}"
         qr.add_data(data)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
@@ -53,3 +53,4 @@ def send_notification_mail(self, target_mail, id, evento):
 def send_email_list(userList,evento):
     for _, x in enumerate(userList):
         send_notification_mail.delay([x.email], x.pk, evento)#type: ignore
+
