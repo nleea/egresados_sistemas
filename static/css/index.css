@@ -9,3 +9,11 @@
   font-family: "Courier New", Courier, monospace;
   font-weight: bold;
 }
+
+.button_confirm {
+  height: 30px;
+  width: 30px;
+  background-color: red;
+  border-radius: 10px;
+  color: white;
+}

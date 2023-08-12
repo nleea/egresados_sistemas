@@ -6,14 +6,14 @@ from ...serializers.eventos.inscripciones import (
     InscripcionesSerializersView,
     InscripcionesSerializers,
     AsistenciaSerializer,
+    ConfirmAsistenciaSerializer,
 )
 from ...serializers.eventos.eventos_serialziers import EventosAsistenciaSerializersView
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
-from apps.send_email import send_email_list
+from apps.send_email import send_notification_mail
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-import threading
 from django.utils import timezone
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
@@ -122,24 +122,19 @@ class InscripcionEventosView(APIView):
         return Response(resulstSerializers.data, 200)
 
 
-class IncripcionSave(APIView):
-    def post(self, request, *args, **kwargs):
-        if "evento" in request.data:
-            user = User.objects.all().defer("groups")
-            inscripcionesResulst = InscripcionesSerializers(data=request.data)
-            if inscripcionesResulst.is_valid():
-                try:
-                    evento = inscripcionesResulst.data["evento"]
-                    threading_emails = threading.Thread(
-                        target=send_email_list, args=(user, evento)
-                    )
-                    threading_emails.start()
-                    inscripcionesResulst.save(user=user)
-                    return Response("Inscripciones creadas", 200)
-                except Exception as e:
-                    return Response(e, 400)
-            return Response(inscripcionesResulst.errors, 404)
-        return Response("Evento Not found", 404)
+class IncripcionSaveView(APIView):
+    def get(self, request, *args, **kwargs):
+        user = request.GET.get("user", None)
+        evento = request.GET.get("evento", None)
+
+        resulst = InscripcionesSerializers(data={"user": user, "evento": evento})
+
+        if resulst.is_valid():
+            inscripcion = resulst.save()
+            send_notification_mail.delay([inscripcion.user.email], user, evento)  # type: ignore
+            return Response({"message": "Ok"}, status=200)
+
+        return Response(resulst.error_messages, status=400)
 
 
 class AsistenciaView(APIView):
@@ -148,10 +143,12 @@ class AsistenciaView(APIView):
         evento = request.GET.get("evento", None)
         user_session = request.user
 
-        resulst = AsistenciaSerializer(data={"user": user, "evento": evento})
+        resulst = AsistenciaSerializer(
+            data={"user": user, "evento": evento}, partial=True
+        )
 
         if resulst.is_valid():
-            resulst.save(user_session=user_session)
+            resulst.save(user_session=user_session, asistencia=True)
             return Response({"message": "Ok"}, status=200)
 
         return Response(resulst.error_messages, status=400)

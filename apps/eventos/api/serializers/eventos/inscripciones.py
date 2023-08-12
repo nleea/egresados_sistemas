@@ -2,7 +2,9 @@ from rest_framework import serializers
 from ....models import Inscripcion, Asistencia, Eventos
 from ..BaseSerializers import BaseSerializers
 from ...serializers.eventos.eventos_serialziers import EventosSerializersView
-from .....auth_module.api.serializers.user.users_serializers import UserSerializersSimple
+from .....auth_module.api.serializers.user.users_serializers import (
+    UserSerializersSimple,
+)
 
 
 class InscripcionesSerializersView(BaseSerializers):
@@ -20,7 +22,8 @@ class InscripcionesSerializersView(BaseSerializers):
 
 
 class InscripcionesSerializers(BaseSerializers):
-    evento = serializers.IntegerField()
+    evento = serializers.IntegerField(write_only=True)
+    user = serializers.IntegerField(write_only=True)
     visible = serializers.BooleanField(required=False, write_only=True)
 
     class Meta:
@@ -28,14 +31,13 @@ class InscripcionesSerializers(BaseSerializers):
 
     def create(self, validated_data):
         inscripcion = Inscripcion.objects.create(
-            evento_id=validated_data["evento"])
-        inscripcion.user.set(validated_data["user"])
+            evento_id=validated_data["evento"], user_id=validated_data["user"]
+        )
         return inscripcion
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get(
-            'name', instance.name)
-        instance.visible = validated_data.get('visible', instance.visible)
+        instance.name = validated_data.get("name", instance.name)
+        instance.visible = validated_data.get("visible", instance.visible)
         instance.save()
         return instance
 
@@ -48,32 +50,72 @@ class AsistenciaSerializerView(BaseSerializers):
         fields = "__all__"
 
 
-class AsistenciaSerializer(BaseSerializers):
+class ConfirmAsistenciaSerializer(BaseSerializers):
     evento = serializers.IntegerField()
     user = serializers.IntegerField()
     visible = serializers.BooleanField(required=False, write_only=True)
+    asistencia = serializers.BooleanField(required=False, write_only=True)
 
     class Meta:
         fields = "__all__"
 
     def create(self, validated_data):
-
-        evento_create_user = Eventos.objects.get(
-            id=validated_data["evento"]).userCreate
-
-        if evento_create_user and evento_create_user.pk != validated_data["user_session"].pk:
-            raise Exception("Invalid")
-
         try:
             asistencia = Asistencia.objects.create(
-            evento_id=validated_data["evento"], user_id=validated_data["user"], userCreate_id=validated_data["user_session"].pk)
+                evento_id=validated_data["evento"],
+                user_id=validated_data["user"],
+                confirm=True,
+            )
             return asistencia
         except Exception as e:
             raise serializers.ValidationError(e.args)
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get(
-            'name', instance.name)
-        instance.visible = validated_data.get('visible', instance.visible)
+        instance.name = validated_data.get("name", instance.name)
+        instance.visible = validated_data.get("visible", instance.visible)
+        instance.save()
+        return instance
+
+
+class AsistenciaSerializer(BaseSerializers):
+    evento = serializers.IntegerField()
+    user = serializers.IntegerField()
+    visible = serializers.BooleanField(required=False, write_only=True)
+    asistencia = serializers.BooleanField(required=False, write_only=True)
+
+    class Meta:
+        fields = "__all__"
+
+    def create(self, validated_data):
+        evento_create_user = Eventos.objects.get(id=validated_data["evento"]).userCreate
+
+        if (
+            evento_create_user
+            and evento_create_user.pk != validated_data["user_session"].pk
+        ):
+            raise Exception("Invalid")
+
+        try:
+            asistencia = Asistencia.objects.create(
+                evento_id=validated_data["evento"],
+                user_id=validated_data["user"],
+                userCreate_id=validated_data["user_session"].pk,
+            )
+            return asistencia
+        except Exception as e:
+            raise serializers.ValidationError(e.args)
+
+    def update(self, instance, validated_data):
+        evento_create_user = Eventos.objects.get(id=validated_data["evento"]).userCreate
+
+        if (
+            evento_create_user
+            and evento_create_user.pk != validated_data["user_session"].pk
+        ):
+            raise Exception("Invalid")
+
+        instance.name = validated_data.get("name", instance.name)
+        instance.visible = validated_data.get("visible", instance.visible)
+        instance.asistencia = validated_data.get("asistencia", instance.asistencia)
         instance.save()
         return instance

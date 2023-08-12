@@ -1657,45 +1657,19 @@ resources_egresado = [
             {
                 "path": "/pqrs/solicitud/",
                 "icono": "icon",
-                "method": "GET",
                 "link": "/pqrs/solicitud/",
                 "titulo": "Solicitudes",
                 "items": [
                     {
                         "path": "/pqrs/solicitud/crear/",
                         "icono": "icon",
-                        "method": "GET",
                         "link": "/pqrs/solicitud/crear/",
                         "titulo": "Crear",
                     },
                     {
                         "path": "/pqrs/solicitud/mis-solicitudes/",
                         "icono": "icon",
-                        "method": "GET",
                         "link": "/pqrs/solicitud/mis-solicitudes/",
-                        "titulo": "Mis Solicitudes",
-                    },
-                ],
-            },
-            {
-                "path": "/pqrs/tipo/gestionar/",
-                "icono": "icon",
-                "method": "GET",
-                "link": "/pqrs/tipo/gestionar/",
-                "titulo": "Gestionar",
-            },
-            {
-                "path": "/pqrs/asignacion/solicitudes/",
-                "icono": "icon",
-                "method": "GET",
-                "link": "/pqrs/asignacion/solicitudes/",
-                "titulo": "Solicitudes",
-                "items": [
-                    {
-                        "path": "/pqrs/asignacion/mis-solicitudes/",
-                        "icono": "icon",
-                        "method": "GET",
-                        "link": "/pqrs/asignacion/mis-solicitudes/",
                         "titulo": "Mis Solicitudes",
                     },
                 ],
@@ -1731,21 +1705,13 @@ resources_egresado = [
                         "link": "/clasificados/emprendimientos/crear",
                         "titulo": "Crear",
                     },
+                    {
+                        "path": "/clasificados/emprendimientos/mis-emprendimientos/",
+                        "icono": "icon",
+                        "link": "/clasificados/emprendimientos/mis-emprendimientos/",
+                        "titulo": "Mis Emprendimientos",
+                    },
                 ],
-            },
-            {
-                "path": "/clasificados/categoria/gestionar",
-                "icono": "icon",
-                "method": "GET",
-                "link": "/clasificados/categoria/gestionar",
-                "titulo": "Gestionar",
-            },
-            {
-                "path": "/clasificados/sub-categoria/gestionar",
-                "icono": "icon",
-                "method": "GET",
-                "link": "/clasificados/sub-categoria/gestionar",
-                "titulo": "Gestionar",
             },
         ],
     },
@@ -1776,3 +1742,150 @@ resources_egresado = [
         ],
     },
 ]
+
+# [
+#     {
+#         "id": 54,
+#         "id_padre": 0,
+#         "path": "/inicio/",
+#         "icono": "pi pi-home",
+#         "link": "/inicio/",
+#         "titulo": "Inicio"
+#     },
+#     {
+#         "id": 55,
+#         "id_padre": 54,
+#         "path": "/inicio/datos-personales/",
+#         "icono": "icon",
+#         "link": "/inicio/datos-personales/",
+#         "titulo": "Datos Personales"
+#     },
+#     {
+#         "id": 56,
+#         "id_padre": 55,
+#         "path": "/inicio/datos-personales/actualizar-datos/",
+#         "icono": "icon",
+#         "link": "/inicio/datos-personales/actualizar-datos/",
+#         "titulo": "Actualizar Datos"
+#     },
+#     {
+#         "id": 57,
+#         "id_padre": 0,
+#         "path": "/encuestas/",
+#         "icono": "pi pi-book",
+#         "link": "/encuestas/",
+#         "titulo": "Encuestas"
+#     },
+#     {
+#         "id": 58,
+#         "id_padre": 57,
+#         "path": "/encuestas/mis-encuestas/",
+#         "icono": "icon",
+#         "link": "/encuestas/mis-encuestas/",
+#         "titulo": "Mis Encuestas"
+#     },
+#     {
+#         "id": 59,
+#         "id_padre": 58,
+#         "path": "/encuestas/mis-encuestas/llenar-encuestas/",
+#         "icono": "icon",
+#         "link": "/encuestas/mis-encuestas/llenar-encuestas/",
+#         "titulo": "LLenar encuestas"
+#     },
+#     {
+#         "id": 60,
+#         "id_padre": 0,
+#         "path": "/pqrs/",
+#         "icono": "pi pi-folder",
+#         "link": "/pqrs/",
+#         "titulo": "PQRS"
+#     },
+#     {
+#         "id": 61,
+#         "id_padre": 60,
+#         "path": "/pqrs/solicitud/",
+#         "icono": "icon",
+#         "link": "/pqrs/solicitud/",
+#         "titulo": "Solicitudes"
+#     },
+#     {
+#         "id": 62,
+#         "id_padre": 61,
+#         "path": "/pqrs/solicitud/crear/",
+#         "icono": "icon",
+#         "link": "/pqrs/solicitud/crear/",
+#         "titulo": "Crear"
+#     },
+#     {
+#         "id": 63,
+#         "id_padre": 61,
+#         "path": "/pqrs/solicitud/mis-solicitudes/",
+#         "icono": "icon",
+#         "link": "/pqrs/solicitud/mis-solicitudes/",
+#         "titulo": "Mis Solicitudes"
+#     },
+#     {
+#         "id": 67,
+#         "id_padre": 0,
+#         "path": "/clasificados/",
+#         "icono": "pi pi-briefcase",
+#         "link": "/clasificados/",
+#         "titulo": "Clasificados"
+#     },
+#     {
+#         "id": 68,
+#         "id_padre": 67,
+#         "path": "/clasificados/emprendimientos/",
+#         "icono": "icon",
+#         "link": "/clasificados/emprendimientos/",
+#         "titulo": "Emprendimientos"
+#     },
+#     {
+#         "id": 69,
+#         "id_padre": 68,
+#         "path": "/clasificados/emprendimientos/ver",
+#         "icono": "icon",
+#         "link": "/clasificados/emprendimientos/ver",
+#         "titulo": "Mostrar"
+#     },
+#     {
+#         "id": 70,
+#         "id_padre": 68,
+#         "path": "/clasificados/emprendimientos/crear",
+#         "icono": "icon",
+#         "link": "/clasificados/emprendimientos/crear",
+#         "titulo": "Crear"
+#     },
+#     {
+#         "id": 73,
+#         "id_padre": 0,
+#         "path": "/eventos/",
+#         "icono": "pi pi-ticket",
+#         "link": "/eventos/",
+#         "titulo": "Eventos"
+#     },
+#     {
+#         "id": 74,
+#         "id_padre": 73,
+#         "path": "/eventos/actividades/",
+#         "icono": "icon",
+#         "link": "/eventos/actividades/",
+#         "titulo": "Actividades"
+#     },
+#     {
+#         "id": 75,
+#         "id_padre": 74,
+#         "path": "/eventos/actividades/mis-actividades/",
+#         "icono": "icon",
+#         "link": "/eventos/actividades/mis-actividades/",
+#         "titulo": "Mis Actividades"
+#     },
+#     {
+#         "id": 76,
+#         "id_padre": 68,
+#         "path": "/clasificados/emprendimientos/mis-emprendimientos/",
+#         "icono": "icon",
+#         "link": "/clasificados/emprendimientos/mis-emprendimientos/",
+#         "titulo": "Mis Emprendimientos"
+#     }
+# ]
