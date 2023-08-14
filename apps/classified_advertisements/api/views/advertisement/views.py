@@ -89,7 +89,7 @@ class AdvertisementView(ViewPagination):
                     "tipo_capacitacion",
                     TiposCapacitaciones.objects.all().only("id", "name"),
                 ),
-                models.Prefetch("mensajes", Mensajes.objects.all().only("id","mensaje")),
+                models.Prefetch("mensajes", Mensajes.objects.all().only("id","mensaje","createdAt","updateAt")),
             )
             .filter(visible=True)
             .order_by("-id")
