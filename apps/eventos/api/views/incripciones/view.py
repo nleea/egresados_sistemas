@@ -6,7 +6,6 @@ from ...serializers.eventos.inscripciones import (
     InscripcionesSerializersView,
     InscripcionesSerializers,
     AsistenciaSerializer,
-    ConfirmAsistenciaSerializer,
 )
 from ...serializers.eventos.eventos_serialziers import EventosAsistenciaSerializersView
 from django.views.decorators.cache import cache_page

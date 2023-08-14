@@ -119,10 +119,13 @@ class SaveEventosView(APIView):
         data = EventosSerializers(data=request.data)
         if data.is_valid():
             evento = data.save(userCreate=request.user)
+
+            custom_email = request.data.get("customEmails", [])
+
             user = User.objects.all().defer("groups")
             try:
                 threading_emails = threading.Thread(
-                    target=send_email_list, args=(user, evento.id)
+                    target=send_email_list, args=([*custom_email, *user], evento.id)
                 )
                 threading_emails.start()
 

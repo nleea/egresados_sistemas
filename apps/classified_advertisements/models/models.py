@@ -75,14 +75,22 @@ class RedesSociales(BaseModel):
     link = models.CharField(max_length=500, blank=False, null=False)
 
 
+class Mensajes(BaseModel):
+    mensaje = models.CharField(max_length=500, default="")
+
+    class Meta:
+        verbose_name = "Mensaje"
+        verbose_name_plural = "Mensajes"
+
+
 class Anuncio(BaseModel):
-    nombre_emprendimiento = models.CharField(max_length=256, null=False, blank=False)
-    descripcion = models.CharField(max_length=600, blank=False, null=False)
-    telefono_emprendimiento = models.CharField(max_length=11, blank=False, null=False)
-    correo_emprendimiento = models.EmailField(null=False, blank=False)
-    corregimiento = models.CharField(max_length=50, null=False, blank=False)
-    municipio = models.CharField(max_length=50, null=False, blank=False)
-    direccion = models.CharField(max_length=50, null=False, blank=False)
+    nombre_emprendimiento = models.CharField(max_length=256, null=False)
+    descripcion = models.CharField(max_length=600, null=False)
+    telefono_emprendimiento = models.CharField(max_length=11, null=False)
+    correo_emprendimiento = models.EmailField(null=False)
+    corregimiento = models.CharField(max_length=50, null=False)
+    municipio = models.CharField(max_length=50, null=False)
+    direccion = models.CharField(max_length=50, null=False)
     subCategoria = models.ForeignKey(
         SubCategoria, on_delete=models.CASCADE, db_index=True
     )
@@ -98,8 +106,14 @@ class Anuncio(BaseModel):
         null=True,
         validators=[validate_image, extension_type],
     )
+    state = models.BooleanField(default=False)
+    mensajes = models.ManyToManyField(Mensajes, null=True)
 
     objects = AdvertisementsManagers()
+
+    def change_state(self, state):
+        self.state = state
+        self.save()
 
     class Meta:
         verbose_name = "Anuncio"

@@ -22,11 +22,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.core.cache import cache
 from django.http import HttpResponse
+import debug_toolbar
 
 schema_view = get_schema_view(
     openapi.Info(
         title="Snippets API",
-        default_version='v1',
+        default_version="v1",
         description="Test description",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="contact@snippets.local"),
@@ -43,16 +44,19 @@ def clear_cache(request):
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('apps.auth_module.api.urls')),
-    path('advertisements/', include('apps.classified_advertisements.api.urls')),
-    path("eventos/", include('apps.eventos.api.urls')),
-    re_path("poll/", include('apps.encuestas.api.urls')),
+    path("admin/", admin.site.urls),
+    path("", include("apps.auth_module.api.urls")),
+    path("advertisements/", include("apps.classified_advertisements.api.urls")),
+    path("eventos/", include("apps.eventos.api.urls")),
+    re_path("poll/", include("apps.encuestas.api.urls")),
     path("pqrs/", include("apps.pqrs.api.urls")),
     path("clear/cache", clear_cache),
-    re_path(r'^redoc/$', schema_view.with_ui('redoc',
-            cache_timeout=0), name='schema-redoc'),
+    re_path(
+        r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
+    ),
 ]
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL,
-                          document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [
+        path(r"^__debug__/", include(debug_toolbar.urls)),
+    ]
