@@ -19,7 +19,7 @@ def send_notification_mail(self, target_mail, id, evento):
     try:
         qr = qrcode.QRCode(version=1, box_size=10, border=5)  # type:ignore
         # La información que se desea codificar en el código QR
-        data = f"http://3.144.134.184/eventos/inscripciones/asistencia/?evento={evento}&user={id}"
+        data = f"http://44.203.185.252/eventos/inscripciones/asistencia/?evento={evento}&user={id}"
         qr.add_data(data)
         qr.make(fit=True)
         img = qr.make_image(fill_color="black", back_color="white")
@@ -65,7 +65,7 @@ def send_confirm_mail(self, target_mail, id, evento):
     try:
         subject = "Correo electrónico con código QR"
         from_email = settings.EMAIL_HOST_USER
-        url = f"http://127.0.0.1:8000/eventos/inscripciones/confirmar/asistencia/?evento={evento}&user={id}"
+        url = f"http://44.203.185.252/eventos/inscripciones/confirmar/asistencia/?evento={evento}&user={id}"
         htmly = render_to_string("confirm_mensaje.html", context={"url":url})
         text_content = strip_tags(htmly)
         msg = EmailMultiAlternatives(subject, text_content, from_email, target_mail)

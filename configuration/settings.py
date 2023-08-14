@@ -226,16 +226,16 @@ SIMPLE_JWT = {
 
 CACHE_TTL = 60 * 15
 
-# CACHES = {
-#     'default': {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379/1",
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-#         },
-#         "KEY_PREFIX": "cache"
-#     }
-# }
+CACHES = {
+    'default': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        "KEY_PREFIX": "cache"
+    }
+}
 
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
@@ -275,7 +275,7 @@ LOGGING = {
         "log_file": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "example.log",
+            "filename": BASE_DIR / "log_file.log",
             "formatter": "verbose",
             "maxBytes": 16777216,
         },
@@ -321,6 +321,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
+COMPRESS_ENABLED = True
+COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
 
 # sentry_sdk.init(
 #     dsn="https://933151f4971b4e20a0d864b46a2ee8cc@o4505058180399104.ingest.sentry.io/4505058181840896",

@@ -21,7 +21,7 @@ from django.utils import timezone
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-# @method_decorator(cache_page(CACHE_TTL), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class EventosView(APIView):
     def get_eventos_date(self, order, start_date, end_date):
         results = (
