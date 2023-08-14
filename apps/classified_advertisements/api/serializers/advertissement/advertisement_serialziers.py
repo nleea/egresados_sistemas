@@ -71,7 +71,7 @@ class AdvertisementSerializersView(BaseSerializers):
     nun_votos = serializers.IntegerField(read_only=True)
     logo = serializers.CharField(read_only=True)
     state = serializers.BooleanField(read_only=True)
-    mensajes = AdvertisementsMensajesView(read_only=True, many=True)
+    mensajes = AdvertisementsMensajesView(read_only=True, many=True,meta=True,excludes=["userCreate","userUpdate"])
     state_value = serializers.CharField(read_only=True)
 
     def to_representation(self, instance):
