@@ -209,7 +209,7 @@ class AdvertisementMostVoteView(ViewPagination):
         return advertisements_serializers.data
 
 
-# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class MyAdvertisementView(ViewPagination):
     @DecoratorPaginateView
     def get(self, request, *args, **kwargs):
@@ -229,7 +229,7 @@ class MyAdvertisementView(ViewPagination):
             .select_related("subCategoria", "subCategoria__categoriaId")
             .prefetch_related("redes", "tipo_capacitacion", "mensajes")
             .filter(visible=True, userCreate=request.user.id)
-            .order_by("id")
+            .order_by("-id")
         )
 
         advertisements_serializers = AdvertisementSerializersView(anuncios, many=True)

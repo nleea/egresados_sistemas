@@ -1,3 +1,4 @@
 example.log
 db.py
 *.log
+.env
