@@ -1,6 +1,6 @@
 import tempfile
 from celery import shared_task
-from django.core.mail import EmailMultiAlternatives, send_mail
+from django.core.mail import EmailMultiAlternatives, send_mail, send_mass_mail
 from configuration import settings
 from django.template.loader import render_to_string
 import qrcode
@@ -66,11 +66,9 @@ def send_confirm_mail(self, target_mail, id, evento):
         subject = "Correo electrónico con código QR"
         from_email = settings.EMAIL_HOST_USER
         url = f"http://44.203.185.252/eventos/inscripciones/confirmar/asistencia/?evento={evento}&user={id}"
-        htmly = render_to_string("confirm_mensaje.html", context={"url":url})
+        htmly = render_to_string("confirm_mensaje.html", context={"url": url})
         text_content = strip_tags(htmly)
-        msg = EmailMultiAlternatives(subject, text_content, from_email, target_mail)
-        msg.attach_alternative(htmly, "text/html")
-        msg.send()
+        send_mail(subject, text_content, from_email, target_mail, html_message=htmly)
         return "Done"
 
     except Exception as e:
@@ -78,5 +76,4 @@ def send_confirm_mail(self, target_mail, id, evento):
 
 
 def send_email_list(userList, evento):
-    for _, x in enumerate(userList):
-        send_confirm_mail.delay([x.email], x.pk, evento)  # type: ignore
+    send_confirm_mail.delay([x.email for x in userList], x.pk, evento)  # type: ignore
