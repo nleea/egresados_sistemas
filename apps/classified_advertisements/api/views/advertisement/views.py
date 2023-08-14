@@ -108,42 +108,6 @@ class AdvertisementView(ViewPagination):
         return advertisements_serializers.data
 
 
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
-class AdvertisementStateView(ViewPagination):
-    @DecoratorPaginateView
-    def get(self, request, *args, **kwargs):
-        anuncios = (
-            Anuncio.objects.defer(
-                "tipo_capacitacion__userCreate_id",
-                "redes__userUpdate_id",
-                "redes__userCreate_id",
-                "subCategoria__userCreate_id",
-                "subCategoria__userUpdate_id",
-                "userCreate",
-                "userUpdate",
-                "subCategoria__categoriaId__userUpdate_id",
-                "subCategoria__categoriaId__userCreate_id",
-            )
-            .select_related("subCategoria", "subCategoria__categoriaId")
-            .prefetch_related(
-                models.Prefetch(
-                    "redes", RedesSociales.objects.all().only("id", "name", "link")
-                ),
-                models.Prefetch(
-                    "tipo_capacitacion",
-                    TiposCapacitaciones.objects.all().only("id", "name"),
-                ),
-            )
-            .filter(visible=True, state=False)
-            .order_by("-id")
-        )
-
-        advertisements_serializers = AdvertisementSerializersView(
-            anuncios, many=True, excludes=["mensajes"]
-        )
-
-        return advertisements_serializers.data
-
 
 class AdvertisementStateChangeView(ViewPagination):
     def get_object(self) -> Anuncio | None:

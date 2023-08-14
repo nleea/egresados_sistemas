@@ -107,12 +107,14 @@ class Anuncio(BaseModel):
         validators=[validate_image, extension_type],
     )
     state = models.BooleanField(default=False)
+    state_value = models.CharField(max_length=50,default="Pendiente")
     mensajes = models.ManyToManyField(Mensajes, null=True)
 
     objects = AdvertisementsManagers()
 
     def change_state(self, state):
         self.state = state
+        self.state_value = "Verificado" if state else "Pendiente"
         self.save()
 
     class Meta:

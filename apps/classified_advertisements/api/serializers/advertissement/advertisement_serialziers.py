@@ -72,6 +72,7 @@ class AdvertisementSerializersView(BaseSerializers):
     logo = serializers.CharField(read_only=True)
     state = serializers.BooleanField(read_only=True)
     mensajes = AdvertisementsMensajesView(read_only=True, many=True)
+    state_value = serializers.CharField(read_only=True)
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
