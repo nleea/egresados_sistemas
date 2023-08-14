@@ -14,6 +14,7 @@ from ....models.models import (
     VotoAnuncio,
     RedesSociales,
     TiposCapacitaciones,
+    Mensajes,
 )
 from rest_framework.response import Response
 from rest_framework import status
@@ -76,7 +77,6 @@ class AdvertisementView(ViewPagination):
                 "userUpdate",
                 "subCategoria__categoriaId__userUpdate_id",
                 "subCategoria__categoriaId__userCreate_id",
-                "mensajes",
             )
             .select_related("subCategoria", "subCategoria__categoriaId")
             .prefetch_related(
@@ -87,6 +87,7 @@ class AdvertisementView(ViewPagination):
                     "tipo_capacitacion",
                     TiposCapacitaciones.objects.all().only("id", "name"),
                 ),
+                models.Prefetch("mensajes", Mensajes.objects.all().only("id","mensaje")),
             )
             .filter(visible=True, state=True)
             .order_by("-id")
@@ -101,7 +102,7 @@ class AdvertisementView(ViewPagination):
         )
 
         advertisements_serializers = AdvertisementSerializersView(
-            anuncio_resulst, many=True, excludes=["mensajes"]
+            anuncio_resulst, many=True
         )
 
         return advertisements_serializers.data

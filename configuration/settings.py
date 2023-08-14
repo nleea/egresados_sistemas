@@ -30,7 +30,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_OR_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 # CORS_ALLOWED_ORIGINS = []
@@ -79,7 +79,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "configs.middlewares.auth.CustomMiddleware",
+    # "configs.middlewares.auth.CustomMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "configs.middlewares.view_responses.CustomResponseMiddleware",
@@ -226,16 +226,16 @@ SIMPLE_JWT = {
 
 CACHE_TTL = 60 * 15
 
-CACHES = {
-    'default': {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        },
-        "KEY_PREFIX": "cache"
-    }
-}
+# CACHES = {
+#     'default': {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#         },
+#         "KEY_PREFIX": "cache"
+#     }
+# }
 
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
@@ -275,7 +275,7 @@ LOGGING = {
         "log_file": {
             "level": "DEBUG",
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": BASE_DIR / "log_file.log",
+            "filename": BASE_DIR / "example.log",
             "formatter": "verbose",
             "maxBytes": 16777216,
         },
@@ -321,8 +321,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-COMPRESS_ENABLED = True
-COMPRESS_STORAGE = 'compressor.storage.GzipCompressorFileStorage'
 
 # sentry_sdk.init(
 #     dsn="https://933151f4971b4e20a0d864b46a2ee8cc@o4505058180399104.ingest.sentry.io/4505058181840896",
