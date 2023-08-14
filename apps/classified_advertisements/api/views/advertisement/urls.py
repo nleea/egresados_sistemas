@@ -8,7 +8,6 @@ from .views import (
     MyAdvertisementView,
     SaveAdvertisementVoto,
     AdvertisementMostVoteView,
-    AdvertisementStateView,
     AdvertisementStateChangeView
 )
 
@@ -22,6 +21,5 @@ urlpatterns = [
     path("query/", AdvertisementsQueryView.as_view()),
     path("recomendar/", SaveAdvertisementVoto.as_view()),
     path("valorados/", AdvertisementMostVoteView.as_view()),
-    path("state/", AdvertisementStateView.as_view()),
     path("<int:pk>/change/state/",AdvertisementStateChangeView.as_view())
 ]

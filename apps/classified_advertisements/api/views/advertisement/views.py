@@ -89,7 +89,7 @@ class AdvertisementView(ViewPagination):
                 ),
                 models.Prefetch("mensajes", Mensajes.objects.all().only("id","mensaje")),
             )
-            .filter(visible=True, state=True)
+            .filter(visible=True)
             .order_by("-id")
         )
 
