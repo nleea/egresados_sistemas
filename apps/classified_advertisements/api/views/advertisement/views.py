@@ -120,7 +120,7 @@ class AdvertisementStateChangeView(ViewPagination):
 
     def post(self, request, *args, **kwargs):
         state = request.data.get("state", False)
-        mensajes = request.data.get("mensaje", "")
+        mensajes = request.data.get("mensaje", None)
 
         instance = self.get_object()
 
@@ -132,7 +132,7 @@ class AdvertisementStateChangeView(ViewPagination):
 
         instance.change_state(state)
 
-        if state == False:
+        if state == False and mensajes:
             mensajesSerializers = AdvertisementsMensajes(data={"mensaje": mensajes})
             if mensajesSerializers.is_valid():
                 mensajes_save = mensajesSerializers.save()
