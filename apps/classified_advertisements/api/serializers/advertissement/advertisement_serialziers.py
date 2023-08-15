@@ -40,7 +40,7 @@ class AdvertisementsMensajes(BaseSerializers):
 
     def create(self, validated_data):
         try:
-            mensajes = validated_data.get("mensaje","")
+            mensajes = validated_data.get("mensaje", "")
             return Mensajes.objects.create(mensaje=mensajes)
         except Exception as e:
             raise e
@@ -48,9 +48,14 @@ class AdvertisementsMensajes(BaseSerializers):
     class Meta:
         fields = "__all__"
 
+
 class AdvertisementsMensajesView(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     mensaje = serializers.CharField(read_only=True)
+
+    class Meta:
+        fields = "__all__"
+
 
 class AdvertisementSerializersView(BaseSerializers):
     id = serializers.IntegerField(read_only=True)
@@ -71,7 +76,9 @@ class AdvertisementSerializersView(BaseSerializers):
     nun_votos = serializers.IntegerField(read_only=True)
     logo = serializers.CharField(read_only=True)
     state = serializers.BooleanField(read_only=True)
-    mensajes = AdvertisementsMensajesView(read_only=True, many=True,meta=True,excludes=["userCreate","userUpdate"])
+    mensajes = AdvertisementsMensajesView(
+        read_only=True, many=True, meta=True, excludes=["userCreate", "userUpdate"]
+    )
     state_value = serializers.CharField(read_only=True)
 
     def to_representation(self, instance):

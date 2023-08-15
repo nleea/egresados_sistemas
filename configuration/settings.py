@@ -148,7 +148,7 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 
 db = "mysql-"
 db += env("MYSQL_DATABASE").strip()
-DATABASES = DBS["mysql-docker"]
+DATABASES = DBS["sqlite"]
 
 
 # Password validation
