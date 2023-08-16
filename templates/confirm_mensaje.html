@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,24 +6,133 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invitado al evento</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Roboto:ital,wght@0,300;1,300;1,400;1,500&display=swap"
+        rel="stylesheet">
+
+    <!-- {
+        "id": 104,
+        "area": {
+            "id": 1,
+            "name": "Desarrollo"
+        },
+        "subArea": {
+            "id": 1,
+            "name": "Como crear una Startup",
+            "area": {
+                "id": 1,
+                "name": "Desarrollo"
+            }
+        },
+        "nombre_actividad": "Crear un software",
+        "responsable": "Nadie",
+        "fecha": "2022-10-13",
+        "hora": "3:00 PM",
+        "lugar": "riohacha",
+        "cupos": 100,
+        "descripcion": "ssss",
+        "objectivo": "Es un hecho establecido hace demasiado tiemp los años, algunas veces por accidente, otras veces a propósito (por ejemplo insertándole humor y cosas por el estilo).",
+        "tipo_actividad": {
+            "id": 1,
+            "name": "Charla"
+        }
+    } -->
 
     <style>
-        .button_confirm {
-            display: block;
-            height: 30px !important;
-            width: 30px !important;
-            background-color: red;
-            border-radius: 10px;
-            color: white;
-            padding: 20px;
+        .container {
+            display: grid;
+            grid-template-areas:
+                "header header header"
+                "titulo titulo titulo"
+                "actividad actividad actividad"
+                "informacion informacion informacion"
+                "footer footer footer";
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 0.5fr 0.7fr repeat(2, 1fr) 0.5fr;
+            width: 50%;
+            margin: auto;
+        }
+
+        .header {
+            grid-area: header;
+            background-image: url("../static/img/header.png");
+            background-repeat: no-repeat;
+        }
+
+        .titulo {
+            grid-area: titulo;
+            text-align: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .actividad {
+            grid-area: actividad;
+            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .informacion {
+            grid-area: informacion;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', sans-serif;
+            align-items: center;
+        }
+
+        .informacion a {
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid orange;
             text-decoration: none;
+            color: black;
+        }
+
+        .informacion a:hover {
+            background: orange;
+        }
+
+        .footer {
+            grid-area: footer;
+            background-image: url("../static/img/footer.png");
+            background-repeat: no-repeat;
         }
     </style>
 </head>
 
 <body>
+    <div class="container">
 
-    <a class="button_confirm" href="{{url}}">Comfirm</a>
+        <div class="header"></div>
+
+        <h1 class="titulo">Confirmacion de asistencia</h1>
+
+        <h2 class="actividad">Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido
+            del texto de un
+            sitio
+            mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal
+            de
+            las letras, al contrario de usar textos como por ejemplo
+        </h2>
+
+        <div class="informacion">
+            <h2>
+                Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de
+                un
+                sitio
+                mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos
+                normal
+                de
+                las letras, al contrario de usar textos como por ejemplo
+            </h2>
+
+            <a href="..." class="button">Asistire</a>
+        </div>
+
+        <div class="footer"></div>
+    </div>
 
 </body>
 

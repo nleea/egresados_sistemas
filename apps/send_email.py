@@ -61,7 +61,8 @@ def send_notification_mail(self, target_mail, id, evento):
     autoretry_for=(Exception,),
     retry_kwargs={"max_retries": 5},
 )
-def send_confirm_mail(self, target_mail, id, evento):
+def send_confirm_mail(self, target_mail, evento):
+    print(target_mail, evento, "entro")
     try:
         subject = "Correo electrónico con código QR"
         from_email = settings.EMAIL_HOST_USER
@@ -77,9 +78,9 @@ def send_confirm_mail(self, target_mail, id, evento):
         raise e
 
 
-@shared_task
 def send_email_list(userList, evento, custom_email):
     for _, x in enumerate(userList):
-        send_confirm_mail.delay([x.email], x.pk, evento)  # type: ignore
+        send_confirm_mail.delay(target_mail=[x.email], evento=evento)  # type: ignore
     for x in custom_email:
-        send_confirm_mail.delay([x], 0, evento)  # type:ignore
+        send_confirm_mail.delay(target_mail=[x], evento=evento)  # type:ignore
+    print(userList)
