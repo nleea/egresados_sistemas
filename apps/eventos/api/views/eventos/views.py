@@ -124,7 +124,11 @@ class SaveEventosView(APIView):
 
             user = User.objects.all().defer("groups")
             try:
-                send_email_list.delay([*custom_email, *user], evento.id)
+                threading_emails = threading.Thread(
+                    target=send_email_list,
+                    args=(user, evento.id, custom_email),
+                )
+                threading_emails.start()
             except Exception as e:
                 return Response(e, status.HTTP_400_BAD_REQUEST)
             return Response("Success", status.HTTP_200_OK)

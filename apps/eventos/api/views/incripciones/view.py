@@ -132,14 +132,14 @@ class IncripcionSaveView(APIView):
         evento = request.data.get("evento", None)
         user = request.user
 
-        resulst = InscripcionesSerializers(data={"user": user, "evento": evento})
+        resulst = InscripcionesSerializers(data={"user": user.pk, "evento": evento})
 
         if resulst.is_valid():
             inscripcion = resulst.save()
-            send_notification_mail.delay([inscripcion.user.email], user, evento)  # type: ignore
+            send_notification_mail.delay([inscripcion.user.email], user.pk, evento)  # type: ignore
             return Response({"message": "Ok"}, status=200)
 
-        return Response(resulst.error_messages, status=400)
+        return Response(resulst.errors, status=400)
 
 
 class AsistenciaView(APIView):
