@@ -63,7 +63,7 @@ class InscripcionEventosView(APIView):
             )
             .select_related("area", "subArea", "tipo")
             .filter(
-                inscripcion__user=self.request.user.pk,
+                # inscripcion__user=self.request.user.pk,
                 fecha__range=[start_date, end_date],
                 visible=True,
             )
@@ -94,7 +94,10 @@ class InscripcionEventosView(APIView):
                     "tipo__userCreate",
                     "tipo__userUpdate",
                 )
-                .filter(inscripcion__user=request.user.id, visible=True)
+                .filter(
+                    # inscripcion__user=request.user,
+                    visible=True
+                )
                 .select_related("area", "subArea", "tipo")
                 .order_by(order_evento)
             )

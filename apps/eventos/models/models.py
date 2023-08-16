@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from datetime import date
+from apps.auth_module.models import Programs
 
 User = get_user_model()
 
@@ -77,6 +78,7 @@ class Eventos(BaseModel):
     cupos = models.IntegerField()
     descripcion = models.CharField(max_length=600)
     objectivo = models.CharField(max_length=300)
+    dirigido = models.ForeignKey(Programs, on_delete=models.CASCADE, null=True)
 
     class Meta:
         verbose_name = "Evento"
@@ -86,10 +88,9 @@ class Eventos(BaseModel):
 class Inscripcion(models.Model):
     evento = models.ForeignKey(Eventos, on_delete=models.CASCADE, db_index=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="+")
-    
-    
+
     class Meta:
-        unique_together = ("evento","user")
+        unique_together = ("evento", "user")
 
 
 class Asistencia(BaseModel):
