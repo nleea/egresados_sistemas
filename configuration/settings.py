@@ -30,7 +30,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_OR_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 # CORS_ALLOWED_ORIGINS = []
@@ -148,7 +148,7 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 
 db = "mysql-"
 db += env("MYSQL_DATABASE").strip()
-DATABASES = DBS["sqlite"]
+DATABASES = DBS["mysql-docker"]
 
 
 # Password validation
@@ -226,16 +226,16 @@ SIMPLE_JWT = {
 
 CACHE_TTL = 60 * 15
 
-# CACHES = {
-#     'default': {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379/1",
-#         'OPTIONS': {
-#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-#         },
-#         "KEY_PREFIX": "cache"
-#     }
-# }
+CACHES = {
+    'default': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+        "KEY_PREFIX": "cache"
+    }
+}
 
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"

@@ -110,6 +110,11 @@ class InscripcionEventosView(APIView):
                 default=False,
                 output_field=models.BooleanField(),
             ),
+            asistire=models.Exists(
+                Asistencia.objects.filter(
+                    evento=models.OuterRef("pk"), user=request.user.id
+                )
+            ),
         )
 
         if status_evento:
@@ -118,13 +123,14 @@ class InscripcionEventosView(APIView):
         resulstSerializers = EventosAsistenciaSerializersView(
             eventos_asistencia, many=True
         )
+
         return Response(resulstSerializers.data, 200)
 
 
 class IncripcionSaveView(APIView):
-    def get(self, request, *args, **kwargs):
-        user = request.GET.get("user", None)
-        evento = request.GET.get("evento", None)
+    def post(self, request, *args, **kwargs):
+        evento = request.data.get("evento", None)
+        user = request.user
 
         resulst = InscripcionesSerializers(data={"user": user, "evento": evento})
 

@@ -21,7 +21,7 @@ from django.utils import timezone
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class EventosView(APIView):
     def get_eventos_date(self, order, start_date, end_date):
         results = (
@@ -124,11 +124,7 @@ class SaveEventosView(APIView):
 
             user = User.objects.all().defer("groups")
             try:
-                threading_emails = threading.Thread(
-                    target=send_email_list, args=([*custom_email, *user], evento.id)
-                )
-                threading_emails.start()
-
+                send_email_list.delay([*custom_email, *user], evento.id)
             except Exception as e:
                 return Response(e, status.HTTP_400_BAD_REQUEST)
             return Response("Success", status.HTTP_200_OK)

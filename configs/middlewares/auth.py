@@ -47,6 +47,7 @@ class CustomMiddleware(MiddlewareMixin):
         routes_free = ['/auth/login/', '/auth/register/',
                        '/redoc/', '/admin/','/__debug__/',"/media/","/confirmar/asistencia/"]
         
+        
         match = re.search('|'.join(routes_free), request.path)
         if match:
             return None
