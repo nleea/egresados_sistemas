@@ -80,6 +80,12 @@ class Eventos(BaseModel):
     objectivo = models.CharField(max_length=300)
     dirigido = models.ForeignKey(Programs, on_delete=models.CASCADE, null=True)
 
+    def save(self,*args,**kwargs):
+        if self.fecha < date.today():
+            raise Exception("No se puede crear un evento para una fecha pasada")
+        else:
+            super().save(*args,**kwargs)
+
     class Meta:
         verbose_name = "Evento"
         verbose_name_plural = "Eventos"
@@ -106,7 +112,7 @@ class Asistencia(BaseModel):
     def clean(self):
         if self.evento.fecha < date.today():
             raise ValidationError(
-                "No se puede crear la asistencia para un evento vencido."
+                "No se puede crear la asistencia para un evento que ha pasado."
             )
 
     class Meta:
