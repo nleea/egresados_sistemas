@@ -111,7 +111,7 @@ class InscripcionEventosView(APIView):
                 output_field=models.BooleanField(),
             ),
             asistire=models.Exists(
-                Asistencia.objects.filter(
+                Inscripcion.objects.filter(
                     evento=models.OuterRef("pk"), user=request.user.id
                 )
             ),
