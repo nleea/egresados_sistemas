@@ -16,7 +16,7 @@ from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 import threading
 from django.utils import timezone
-
+from configs.helpers.hour import readeable_hour
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 

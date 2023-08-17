@@ -83,9 +83,7 @@ class Eventos(BaseModel):
     dirigido = models.ForeignKey(Programs, on_delete=models.CASCADE, null=True)
 
     def save(self, *args, **kwargs):
-        if self.fecha < date.today() or readeable_hour(
-            self.hora
-        ) < datetime.datetime.now().strftime("%H:%M"):
+        if readeable_hour(self.hora, self.fecha):
             raise Exception("No se puede crear un evento para una fecha pasada")
         else:
             super().save(*args, **kwargs)
