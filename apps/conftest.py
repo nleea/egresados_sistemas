@@ -1,4 +1,5 @@
 import pytest
+import requests
 from django.test.client import Client
 from rest_framework_simplejwt.tokens import RefreshToken
 from apps.pqrs.models.models import Pqrs, TipoPqrs
@@ -13,6 +14,18 @@ def user_token(client, django_user_model):
     user = django_user_model.objects.get(username=username)
     refresh = RefreshToken.for_user(user=user)
     return str(refresh.access_token)
+
+
+@pytest.fixture
+def user_token_request(client, django_user_model):
+    response = requests.post(
+        "http://44.203.185.252/auth/login/",
+        data={"username": username, "password": password},
+    )
+
+    response_content = response.json()
+    token = response_content["data"]["token"]["access"]
+    return token
 
 
 @pytest.fixture

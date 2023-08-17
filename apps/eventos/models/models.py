@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.core.exceptions import ValidationError
 from datetime import date
 from apps.auth_module.models import Programs
+from configs.helpers.hour import readeable_hour
+import datetime
 
 User = get_user_model()
 
@@ -80,11 +82,13 @@ class Eventos(BaseModel):
     objectivo = models.CharField(max_length=300)
     dirigido = models.ForeignKey(Programs, on_delete=models.CASCADE, null=True)
 
-    def save(self,*args,**kwargs):
-        if self.fecha < date.today():
+    def save(self, *args, **kwargs):
+        if self.fecha < date.today() or readeable_hour(
+            self.hora
+        ) < datetime.datetime.now().strftime("%H:%M"):
             raise Exception("No se puede crear un evento para una fecha pasada")
         else:
-            super().save(*args,**kwargs)
+            super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Evento"

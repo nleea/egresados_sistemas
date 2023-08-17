@@ -1,8 +1,10 @@
 import pytest
+import requests
 from django.urls import reverse
 from django.test.client import Client
-from apps.conftest import user_token, create_pqrs, create_pqrs_list
+from apps.conftest import user_token, create_pqrs, create_pqrs_list, user_token_request
 from apps.pqrs.models.models import Pqrs, TipoPqrs
+from django.db.utils import IntegrityError
 
 pytestmark = pytest.mark.django_db
 reverse_url = reverse("pqrs:asignacion:asignacion-view")
@@ -71,7 +73,9 @@ def test_asignacion_solicitudes_list_parameters_should_ok(
     assert response.status_code == 200
     response_content = response.json()
     assert len(response_content["data"]) == len(create_pqrs_list)
-    assert pqrs_description == set(map(lambda x: x.get("description"), response_content["data"]))
+    assert pqrs_description == set(
+        map(lambda x: x.get("description"), response_content["data"])
+    )
 
 
 # ----------  Test POST ----------- #
@@ -110,3 +114,18 @@ def test_asignacion_solicitudes_should_ok_post(
     response_content = response.json()
 
     assert response_content["data"] == '"Sucess"'
+
+
+def test_asignacion_solicitudes_should_faild(user_token_request):
+    try:
+        response = requests.post(
+            "http://44.203.185.252/pqrs/asignacion/create/",
+            data={"pqrs": 1000},
+            headers={"Authorization": f"Bearer {user_token_request}"},
+        )
+        response_content = response.json()
+        assert response_content["ok"] == False
+        assert "pqrs_id" in response_content["errors"]
+
+    except IntegrityError as f:
+        print(f)
