@@ -83,4 +83,3 @@ def send_email_list(userList, evento, custom_email):
         send_confirm_mail.delay(target_mail=[x.email], evento=evento)  # type: ignore
     for x in custom_email:
         send_confirm_mail.delay(target_mail=[x], evento=evento)  # type:ignore
-    print(userList)
