@@ -17,8 +17,26 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 import threading
 from django.utils import timezone
 from configs.helpers.hour import readeable_hour
+from django.shortcuts import render
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
+
+
+class EventosTe(APIView):
+    def get(self, request, *args, **kwargs):
+        evento = Eventos.objects.last()
+
+        if not evento:
+            return None
+
+        context = {
+            "nombre_actividad": evento.nombre_actividad,
+            "objectivo": evento.objectivo,
+            "fecha": evento.fecha,
+            "hora": evento.hora,
+            "lugar": evento.lugar,
+        }
+        return render(request, "confirm_mensaje.html", context)
 
 
 @method_decorator(cache_page(CACHE_TTL), name="dispatch")
@@ -122,9 +140,17 @@ class SaveEventosView(APIView):
             custom_email = request.data.get("customEmails", [])
             user = User.objects.all().defer("groups")
             try:
+                evento_data = {
+                    "nombre_actividad": evento.nombre_actividad,
+                    "objectivo": evento.objectivo,
+                    "fecha": evento.fecha,
+                    "hora": evento.hora,
+                    "lugar": evento.lugar,
+                    "id": evento.id,
+                }
                 threading_emails = threading.Thread(
                     target=send_email_list,
-                    args=(user, evento.id, custom_email),
+                    args=(user, evento_data, custom_email),
                 )
                 threading_emails.start()
             except Exception as e:

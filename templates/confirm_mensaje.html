@@ -20,7 +20,7 @@
                 "informacion informacion informacion"
                 "footer footer footer";
             grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: 0.1fr 0.1fr 1fr 0.1fr 0.1fr;
+            grid-template-rows: 0.1fr 0.1fr 0.58fr 1fr 0.1fr;
             width: 50%;
             margin: auto;
             height: fit-content;
@@ -38,6 +38,7 @@
             justify-content: center;
             font-family: 'Inter', sans-serif;
             font-family: 'Roboto', sans-serif;
+            font-size: 2rem;
         }
 
         .actividad {
@@ -45,6 +46,8 @@
             font-family: 'Inter', sans-serif;
             font-family: 'Roboto', sans-serif;
             font-size: 14px;
+            text-align: center;
+            border-bottom: 1px solid orange;
         }
 
         .informacion {
@@ -54,11 +57,16 @@
             font-family: 'Inter', sans-serif;
             font-family: 'Roboto', sans-serif;
             align-items: center;
+            min-width: 300px;
         }
 
         .informacion .fecha {
             display: flex;
-
+            height: 100px;
+            width: 100%;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
         }
 
         .informacion .fecha .img {
@@ -66,12 +74,26 @@
             height: auto;
             border: 0;
             max-width: 90px;
-            width: 100%
+            width: 100%;
+        }
+
+        .informacion .fecha span {
+            padding: 10px;
+            font-size: 1.3rem;
         }
 
         .informacion .hora {
             display: flex;
+            height: 100px;
+            width: 100%;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
 
+        .informacion .hora span {
+            padding: 10px;
+            font-size: 1.3rem;
         }
 
         .informacion .hora .img {
@@ -84,6 +106,18 @@
 
         .informacion .lugar {
             display: flex;
+            height: 100px;
+            width: 100%;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 1px solid orange;
+        }
+
+        .informacion .lugar span {
+            padding: 10px;
+            font-size: 1.3rem;
+            text-transform: capitalize;
         }
 
         .informacion .lugar .img {
@@ -94,13 +128,13 @@
             width: 100%
         }
 
-
         .informacion a {
             padding: 15px;
             border-radius: 15px;
             border: 1px solid orange;
             text-decoration: none;
             color: black;
+            margin-top: 10px;
         }
 
         .informacion a:hover {
@@ -157,20 +191,21 @@
 
         <div class="informacion">
             <div class="fecha">
-                <img src="http://44.203.185.252/media/img/fecha.png" alt="">
+                <img src="http://44.203.185.252/media/img/fecha.png" alt="Fecha" width="90" data-bit="fit">
+                <span>{{fecha}}</span>
             </div>
 
             <div class="hora">
-                <img src="http://44.203.185.252/media/img/hora.png" alt="">
-
+                <img src="http://44.203.185.252/media/img/hora.png" alt="Hora" width="90" data-bit="fit">
+                <span>{{hora}}</span>
             </div>
 
             <div class="lugar">
-                <img src="http://44.203.185.252/media/img/lugar.png" alt="">
-
+                <img src="http://44.203.185.252/media/img/lugar.png" alt="Lugar" width="90" data-bit="fit">
+                <span>{{lugar}}</span>
             </div>
 
-            <a href="..." class="button">Asistire</a>
+            <a href="{{url}}" class="button">Asistire</a>
         </div>
 
         <img class="footer" src="http://44.203.185.252/media/img/footer.png" />

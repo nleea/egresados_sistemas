@@ -148,7 +148,7 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 
 db = "mysql-"
 db += env("MYSQL_DATABASE").strip()
-DATABASES = DBS["sqlite"]
+DATABASES = DBS["mysql-docker"]
 
 
 # Password validation
@@ -249,7 +249,7 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "egresados398@gmail.com"
-EMAIL_HOST_PASSWORD = "aatgckiovgzkpihg"
+EMAIL_HOST_PASSWORD = "xgwikaqhiknhockj"
 
 LOGGING = {
     "version": 1,
