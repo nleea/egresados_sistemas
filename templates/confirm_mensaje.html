@@ -10,7 +10,113 @@
         href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500&family=Roboto:ital,wght@0,300;1,300;1,400;1,500&display=swap"
         rel="stylesheet">
 
-    <!-- {
+    <style>
+        .container {
+            display: grid;
+            grid-template-areas:
+                "header header header"
+                "titulo titulo titulo"
+                "actividad actividad actividad"
+                "informacion informacion informacion"
+                "footer footer footer";
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: 0.1fr 0.1fr 1fr 0.1fr 0.1fr;
+            width: 50%;
+            margin: auto;
+            height: fit-content;
+        }
+
+        .header {
+            grid-area: header;
+            background-repeat: no-repeat;
+            width: 100%;
+        }
+
+        .titulo {
+            grid-area: titulo;
+            text-align: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .actividad {
+            grid-area: actividad;
+            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+        }
+
+        .informacion {
+            grid-area: informacion;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Inter', sans-serif;
+            font-family: 'Roboto', sans-serif;
+            align-items: center;
+        }
+
+        .informacion .fecha {
+            display: flex;
+
+        }
+
+        .informacion .fecha .img {
+            display: block;
+            height: auto;
+            border: 0;
+            max-width: 90px;
+            width: 100%
+        }
+
+        .informacion .hora {
+            display: flex;
+
+        }
+
+        .informacion .hora .img {
+            display: block;
+            height: auto;
+            border: 0;
+            max-width: 90px;
+            width: 100%
+        }
+
+        .informacion .lugar {
+            display: flex;
+        }
+
+        .informacion .lugar .img {
+            display: block;
+            height: auto;
+            border: 0;
+            max-width: 90px;
+            width: 100%
+        }
+
+
+        .informacion a {
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid orange;
+            text-decoration: none;
+            color: black;
+        }
+
+        .informacion a:hover {
+            background: orange;
+        }
+
+        .footer {
+            grid-area: footer;
+            background-repeat: no-repeat;
+            width: 100%;
+        }
+    </style>
+</head>
+
+
+<!-- {
         "id": 104,
         "area": {
             "id": 1,
@@ -38,94 +144,31 @@
         }
     } -->
 
-    <style>
-        .container {
-            display: grid;
-            grid-template-areas:
-                "header header header"
-                "titulo titulo titulo"
-                "actividad actividad actividad"
-                "informacion informacion informacion"
-                "footer footer footer";
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: 0.5fr 0.7fr repeat(2, 1fr) 0.5fr;
-            width: 50%;
-            margin: auto;
-            height: fit-content;
-        }
-
-        .header {
-            grid-area: header;
-            background-repeat: no-repeat;
-        }
-
-        .titulo {
-            grid-area: titulo;
-            text-align: center;
-            justify-content: center;
-            font-family: 'Inter', sans-serif;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .actividad {
-            grid-area: actividad;
-            font-family: 'Inter', sans-serif;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .informacion {
-            grid-area: informacion;
-            display: flex;
-            flex-direction: column;
-            font-family: 'Inter', sans-serif;
-            font-family: 'Roboto', sans-serif;
-            align-items: center;
-        }
-
-        .informacion a {
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px solid orange;
-            text-decoration: none;
-            color: black;
-        }
-
-        .informacion a:hover {
-            background: orange;
-        }
-
-        .footer {
-            grid-area: footer;
-            background-repeat: no-repeat;
-        }
-    </style>
-</head>
-
 <body>
     <div class="container">
 
         <img class="header" src="http://44.203.185.252/media/img/header.png" />
 
-        <h1 class="titulo">Confirmacion de asistencia</h1>
+        <h1 class="titulo">{{nombre_actividad}} </h1>
 
-        <h2 class="actividad">Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido
-            del texto de un
-            sitio
-            mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos normal
-            de
-            las letras, al contrario de usar textos como por ejemplo
-        </h2>
+        <span class="actividad">
+            {{objectivo}}
+        </span>
 
         <div class="informacion">
-            <h2>
-                Es un hecho establecido hace demasiado tiempo que un lector se distraerá con el contenido del texto de
-                un
-                sitio
-                mientras que mira su diseño. El punto de usar Lorem Ipsum es que tiene una distribución más o menos
-                normal
-                de
-                las letras, al contrario de usar textos como por ejemplo
-            </h2>
+            <div class="fecha">
+                <img src="http://44.203.185.252/media/img/fecha.png" alt="">
+            </div>
+
+            <div class="hora">
+                <img src="http://44.203.185.252/media/img/hora.png" alt="">
+
+            </div>
+
+            <div class="lugar">
+                <img src="http://44.203.185.252/media/img/lugar.png" alt="">
+
+            </div>
 
             <a href="..." class="button">Asistire</a>
         </div>

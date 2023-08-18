@@ -1,6 +1,6 @@
 import pytest
 
-pytestmark = pytest.mark.djago_db
+pytestmark = pytest.mark.django_db
 
 
 def test_pqrs_should_ok(client):
