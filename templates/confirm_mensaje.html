@@ -53,11 +53,18 @@
         .informacion {
             grid-area: informacion;
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             font-family: 'Inter', sans-serif;
             font-family: 'Roboto', sans-serif;
             align-items: center;
             min-width: 300px;
+            border-bottom: 1px solid orange;
+        }
+
+        .informacion .info {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
         }
 
         .informacion .fecha {
@@ -111,7 +118,6 @@
             justify-content: center;
             flex-direction: column;
             align-items: center;
-            border-bottom: 1px solid orange;
         }
 
         .informacion .lugar span {
@@ -190,23 +196,27 @@
         </span>
 
         <div class="informacion">
-            <div class="fecha">
-                <img src="http://44.203.185.252/media/img/fecha.png" alt="Fecha" width="90" data-bit="fit">
-                <span>{{fecha}}</span>
-            </div>
+            <div class="info">
+                <div class="fecha">
+                    <img src="http://44.203.185.252/media/img/fecha.png" alt="Fecha" width="90" data-bit="fit">
+                    <span>{{fecha}}</span>
+                </div>
 
-            <div class="hora">
-                <img src="http://44.203.185.252/media/img/hora.png" alt="Hora" width="90" data-bit="fit">
-                <span>{{hora}}</span>
-            </div>
+                <div class="hora">
+                    <img src="http://44.203.185.252/media/img/hora.png" alt="Hora" width="90" data-bit="fit">
+                    <span>{{hora}}</span>
+                </div>
 
-            <div class="lugar">
-                <img src="http://44.203.185.252/media/img/lugar.png" alt="Lugar" width="90" data-bit="fit">
-                <span>{{lugar}}</span>
+                <div class="lugar">
+                    <img src="http://44.203.185.252/media/img/lugar.png" alt="Lugar" width="90" data-bit="fit">
+                    <span>{{lugar}}</span>
+                </div>
             </div>
-
-            <a href="{{url}}" class="button">Asistire</a>
+            <!-- <a href="{{url}}" class="button">Asistire</a> -->
         </div>
+
+        <img src="" alt="">
+
 
         <img class="footer" src="http://44.203.185.252/media/img/footer.png" />
     </div>

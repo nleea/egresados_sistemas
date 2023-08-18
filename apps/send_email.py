@@ -62,20 +62,13 @@ def send_notification_mail(self, target_mail, id, evento):
     retry_kwargs={"max_retries": 5},
 )
 def send_confirm_mail(self, target_mail, evento):
-    print(target_mail, evento, "entro")
+    # print(target_mail, evento, "entro")
     try:
         subject = "Correo electrónico con código QR"
         from_email = settings.EMAIL_HOST_USER
         evento_id = evento.get("id")
         url = f"http://44.203.185.252/eventos/inscripciones/confirmar/asistencia/?evento={evento_id}"
-        evento_data = {
-            "nombre_actividad": evento.nombre_actividad,
-            "objectivo": evento.objectivo,
-            "fecha": evento.fecha,
-            "hora": evento.hora,
-            "lugar": evento.lugar,
-            "url":url
-        }
+        evento_data = {**evento, "url": url}
         htmly = render_to_string("confirm_mensaje.html", context=evento_data)
         text_content = strip_tags(htmly)
         msg = EmailMultiAlternatives(subject, text_content, from_email, target_mail)
@@ -88,6 +81,7 @@ def send_confirm_mail(self, target_mail, evento):
 
 
 def send_email_list(userList, evento, custom_email):
+    print(userList)
     for _, x in enumerate(userList):
         send_confirm_mail.delay(target_mail=[x.email], evento=evento)  # type: ignore
     for x in custom_email:
