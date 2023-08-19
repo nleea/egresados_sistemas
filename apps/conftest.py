@@ -40,6 +40,7 @@ def create_pqrs(create_tipo):
         persona_id=1,
         description="description",
         titulo="titulo",
+        userCreate_id=1,
     )
 
 
@@ -56,6 +57,7 @@ def PQRS_Creatre(**kwargs):
             description=description,
             titulo=titulo,
             tipopqrs_id=tipopqrs_id,
+            userCreate_id=1,
         )
 
     return _factory_create
@@ -73,6 +75,7 @@ def create_pqrs_list(request, PQRS_Creatre, create_tipo):
                 description=i[0],
                 titulo=[2],
                 tipopqrs_id=create_tipo.pk,
+                userCreate_id=1,
             )
         )
     return PQRS_LIST

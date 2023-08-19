@@ -115,6 +115,7 @@ def test_asignacion_solicitudes_should_ok_post(
 
     assert response_content["data"] == '"Sucess"'
 
+
 @pytest.mark.request
 def test_asignacion_solicitudes_should_faild(user_token_request):
     try:

@@ -79,7 +79,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    # "configs.middlewares.auth.CustomMiddleware",
+    "configs.middlewares.auth.CustomMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "configs.middlewares.view_responses.CustomResponseMiddleware",
@@ -148,7 +148,7 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 
 db = "mysql-"
 db += env("MYSQL_DATABASE").strip()
-DATABASES = DBS["mysql-docker"]
+DATABASES = DBS["sqlite"]
 
 
 # Password validation
