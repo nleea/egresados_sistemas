@@ -14,7 +14,8 @@ from pathlib import Path
 from datetime import timedelta
 import os
 import environ
-from .db import DBS
+from configuration.db import DBS
+
 
 env = environ.Env(DEBUG=(bool, False))
 
@@ -227,13 +228,13 @@ SIMPLE_JWT = {
 CACHE_TTL = 60 * 15
 
 CACHES = {
-    'default': {
+    "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": "redis://127.0.0.1:6379/1",
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
-        "KEY_PREFIX": "cache"
+        "KEY_PREFIX": "cache",
     }
 }
 
@@ -288,7 +289,7 @@ LOGGING = {
     },
     "loggers": {
         "django.request": {
-            "handlers": ["log_file","mail_admins"],
+            "handlers": ["log_file", "mail_admins"],
             "level": "DEBUG",
             "propagate": True,
         },
@@ -300,7 +301,7 @@ LOGGING = {
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'America/Bogota'
+TIME_ZONE = "America/Bogota"
 
 USE_I18N = True
 
