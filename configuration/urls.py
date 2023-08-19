@@ -42,6 +42,7 @@ def clear_cache(request):
     cache.clear()
     return HttpResponse("Clear Cache", content_type="application/json", status=200)
 
+app_name = "root"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -50,7 +51,7 @@ urlpatterns = [
     path("eventos/", include("apps.eventos.api.urls")),
     re_path("poll/", include("apps.encuestas.api.urls")),
     path("pqrs/", include("apps.pqrs.api.urls")),
-    path("clear/cache", clear_cache),
+    path("clear/cache", clear_cache,name="clear-cache"),
     re_path(
         r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
     ),

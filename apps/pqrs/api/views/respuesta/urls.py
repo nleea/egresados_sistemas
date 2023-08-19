@@ -1,11 +1,19 @@
 from django.urls import path
-from .view import RespuestaView,SaveRespuestaView,UpdateRespuestaView,DeleteRespuestaView,RespuestasQuery
+from .view import (
+    RespuestaView,
+    SaveRespuestaView,
+    UpdateRespuestaView,
+    DeleteRespuestaView,
+    RespuestasQuery,
+)
+
+app_name = "respuesta"
 
 urlpatterns = [
-    path("",RespuestaView.as_view()),
-    path("create/",SaveRespuestaView.as_view()),
-    path("update/<int:pk>/",UpdateRespuestaView.as_view()),
-    path("delete/<int:pk>/",DeleteRespuestaView.as_view()),
-    path("delete/",DeleteRespuestaView.as_view()),
-    path("query/",RespuestasQuery.as_view())
+    path("", RespuestaView.as_view(), name="respuesta-list"),
+    path("create/", SaveRespuestaView.as_view(), name="respuesta-create"),
+    path("update/<int:pk>/", UpdateRespuestaView.as_view()),
+    path("delete/<int:pk>/", DeleteRespuestaView.as_view()),
+    path("delete/", DeleteRespuestaView.as_view()),
+    path("query/", RespuestasQuery.as_view()),
 ]

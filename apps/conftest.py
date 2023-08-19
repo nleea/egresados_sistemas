@@ -3,6 +3,8 @@ import requests
 from django.test.client import Client
 from rest_framework_simplejwt.tokens import RefreshToken
 from apps.pqrs.models.models import Pqrs, TipoPqrs
+from apps.eventos.models.models import EventosArea
+from django.urls import reverse
 
 username = "admin"
 password = "12345678"
@@ -79,3 +81,40 @@ def create_pqrs_list(request, PQRS_Creatre, create_tipo):
             )
         )
     return PQRS_LIST
+
+
+@pytest.fixture
+def create_areas_factory(**kwargs):
+    def _create_factory(**kwargs):
+        name = kwargs.get("name")
+        return EventosArea.objects.create(name=name)
+
+    return _create_factory
+
+
+@pytest.fixture
+def areas(request, create_areas_factory):
+    areas = request.param
+    list_areas = []
+    for i in areas:
+        list_areas.append(create_areas_factory(name=i))
+    return list_areas
+
+
+@pytest.fixture
+def respuesta_create(client, create_pqrs, user_token):
+    client.post(
+        reverse("pqrs:respuesta:respuesta-create"),
+        data={"pqrs": create_pqrs.pk, "descripcion": "descripcion"},
+        HTTP_AUTHORIZATION=f"Bearer {user_token}",
+    )
+
+    return create_pqrs.titulo
+
+
+@pytest.fixture
+def clear_cache(client, user_token):
+    client.get(
+        reverse("clear-cache"),
+        HTTP_AUTHORIZATION=f"Bearer {user_token}",
+    )
