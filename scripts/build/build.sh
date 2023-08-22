@@ -1,6 +1,2 @@
-# pip install -r requirements.txt
-
-python3 --version
-
-
-# new comment
+pipenv shell
+pip install -r requirements.txt
