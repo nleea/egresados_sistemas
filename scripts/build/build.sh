@@ -1,1 +1,1 @@
-echo "TEST"
+pip install -r requirements.txt
