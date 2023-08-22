@@ -1,7 +1,5 @@
 pipeline {
-    agent any
-
-    tools {nodejs "NodeJs"}
+    agent { docker { image 'python:3.10' } }
 
     stages {
         stage('Build') {
