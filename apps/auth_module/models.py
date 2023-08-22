@@ -3,7 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import UserManager
 from django.contrib.auth.models import Group
+from .managers.users.managers import UserManagers
+
 # Create your models here.
+
 
 class BaseModel(models.Model):
     createdAt = models.DateField(auto_now_add=True)
@@ -22,7 +25,7 @@ class Document_types(BaseModel):
         return self.name
 
     class Meta:
-        verbose_name = 'Document_types'
+        verbose_name = "Document_types"
         verbose_name_plural = "Document_types"
 
 
@@ -34,26 +37,25 @@ class Genders(BaseModel):
         return self.name
 
     class Meta:
-        verbose_name = 'Genders'
-        verbose_name_plural = 'Genders'
+        verbose_name = "Genders"
+        verbose_name_plural = "Genders"
 
 
 class User(AbstractUser, BaseModel):
-    username = models.CharField(blank=False, null=False, unique=True,max_length=256)
-    email = models.EmailField(
-        _("email address"), blank=False, null=False, unique=True)
+    username = models.CharField(blank=False, null=False, unique=True, max_length=256)
+    email = models.EmailField(_("email address"), blank=False, null=False, unique=True)
     password = models.CharField(max_length=100)
     resetToken = models.CharField(max_length=256, blank=True, null=True)
     avatar = models.CharField(max_length=256, blank=True, null=True)
-    roles = models.ManyToManyField(
-        Group, related_name='user_roles',db_index=True)
+    roles = models.ManyToManyField(Group, related_name="user_roles", db_index=True)
 
-    objects = UserManager()
+    # objects = UserManager()
+    objects = UserManagers()
 
     class Meta:
-        #unique_together = (('username', 'email'))
-        verbose_name = 'Users'
-        verbose_name_plural = 'Users'
+        # unique_together = (('username', 'email'))
+        verbose_name = "Users"
+        verbose_name_plural = "Users"
 
     def __str__(self) -> str:
         return self.username
@@ -77,29 +79,37 @@ class User(AbstractUser, BaseModel):
 
 class Persons(BaseModel):
     name = models.CharField(max_length=150, unique=True, blank=True, null=True)
-    surname = models.CharField(
-        max_length=150, unique=True, blank=True, null=True)
-    identification = models.CharField(
-        max_length=40, unique=True, blank=True, null=True)
+    surname = models.CharField(max_length=150, unique=True, blank=True, null=True)
+    identification = models.CharField(max_length=40, unique=True, blank=True, null=True)
     address = models.CharField(max_length=50, blank=True, null=True)
     nationality = models.CharField(max_length=100, blank=True, null=True)
     date_of_birth = models.CharField(max_length=30, blank=True, null=True)
     phone = models.CharField(max_length=11, blank=True, null=True)
     status = models.BooleanField(default=True)
     document_type = models.ForeignKey(
-        Document_types, on_delete=models.SET_NULL, blank=True, null=True)
+        Document_types, on_delete=models.SET_NULL, blank=True, null=True
+    )
     gender_type = models.ForeignKey(
-        Genders, related_name='gender_types', on_delete=models.SET_NULL, blank=True, null=True)
-    user = models.ForeignKey(User,
-                             on_delete=models.SET_NULL, blank=True, null=True,db_index=True)
+        Genders,
+        related_name="gender_types",
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.SET_NULL, blank=True, null=True, db_index=True
+    )
+    program = models.ForeignKey(
+        "Programs", on_delete=models.CASCADE, null=True, db_index=True
+    )
 
     def __str__(self) -> str:
         return self.name  # type: ignore
 
     class Meta:
-        unique_together = (('name', 'identification'))
-        verbose_name = 'Persons'
-        verbose_name_plural = 'Persons'
+        unique_together = ("name", "identification")
+        verbose_name = "Persons"
+        verbose_name_plural = "Persons"
 
 
 # class User_roles(BaseModel):
@@ -126,29 +136,33 @@ class Resources(BaseModel):
     link = models.CharField(max_length=256)
     titulo = models.CharField(max_length=100)
     roles = models.ManyToManyField(
-        Group, through='Resources_roles', related_name='resources_roles',db_index=True)
+        Group, through="Resources_roles", related_name="resources_roles", db_index=True
+    )
 
     class Meta:
-        verbose_name = 'Resources'
-        verbose_name_plural = 'Resources'
+        verbose_name = "Resources"
+        verbose_name_plural = "Resources"
 
 
 class Resources_roles(BaseModel):
     resourcesId = models.ForeignKey(
-        Resources, on_delete=models.CASCADE, related_name='resources')
+        Resources, on_delete=models.CASCADE, related_name="resources"
+    )
     rolesId = models.ForeignKey(
-        Group, on_delete=models.CASCADE, related_name='resouces_roles')
+        Group, on_delete=models.CASCADE, related_name="resouces_roles"
+    )
 
     def __str__(self) -> str:
-        return self.resourcesId.path + '' + self.rolesId.name
+        return self.resourcesId.path + "" + self.rolesId.name
 
     class Meta:
-        verbose_name = 'Resources_roles'
-        verbose_name_plural = 'Resources_roles'
+        verbose_name = "Resources_roles"
+        verbose_name_plural = "Resources_roles"
 
 
 class Headquarters(BaseModel):
     name = models.CharField(max_length=256)
+
     class Meta:
         verbose_name = "Headquarter"
         verbose_name_plural = "Headquarters"

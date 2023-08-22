@@ -67,6 +67,7 @@ THIRDS_APPS = [
     "apps.pqrs",
     "apps.encuestas",
     "apps.eventos",
+    "apps.reportes"
 ]
 
 INSTALLED_APPS = COMMONS_APPS + INSTALLS_APPS + THIRDS_APPS
@@ -145,7 +146,7 @@ DATABASES = {
 
 # db = "mysql-"
 # db += env("MYSQL_DATABASE").strip()
-# DATABASES = DBS["sqlite"]
+# DATABASES = DBS["mysql-docker"]
 
 
 # Password validation

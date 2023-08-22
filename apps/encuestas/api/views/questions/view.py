@@ -48,7 +48,7 @@ class SaveQuestionsResponse(APIView):
             for i in request.data["respuestas"]:
                 if i["type"] == "unica respuesta":
                     aswer_create.append(
-                        AnswerUser(respuesta_id=i["respuesta"], user=request.user)
+                        AnswerUser(pregunta_id=i["pregunta"],respuesta_id=i["respuesta"], user=request.user)
                     )
                 elif i["type"] == "pregunta corta" or i["type"] == "pregunta larga":
                     aswer_create.append(
@@ -57,7 +57,7 @@ class SaveQuestionsResponse(APIView):
                 elif i["type"] == "multiple":
                     for x in i["respuesta"]:
                         aswer_create.append(
-                            AnswerUser(respuesta_id=x, user=request.user)
+                            AnswerUser(pregunta_id=i["pregunta"],respuesta_id=x, user=request.user)
                         )
             
             AnswerUser.objects.bulk_create(aswer_create)
