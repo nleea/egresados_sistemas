@@ -1,0 +1,6 @@
+
+cd /home/remote_user/pipelines-test && 
+npm install
+pm2 stop index
+pm2 start index.js 
+echo "Task Finalized"
