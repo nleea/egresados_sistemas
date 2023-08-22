@@ -1,5 +1,9 @@
 pipeline {
-    agent { dockerContainer { image 'python:3.10' } }
+    agent any
+
+    tools {
+        python3 'python3'
+    }
 
     stages {
         stage('Build') {
