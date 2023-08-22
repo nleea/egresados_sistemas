@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        python3 'python3'
-    }
-
     stages {
         stage('Build') {
             steps {
