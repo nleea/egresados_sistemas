@@ -18,15 +18,24 @@ class AswerSerialzersViewDepende(BaseSerializers):
     pregunta = QuestionSerializersViewDepende(read_only=True)
 
 
+class QuestionRSerializersView(BaseSerializers):
+    pregunta_nombre = serializers.PrimaryKeyRelatedField(read_only=True)
+    # pregunta_nombre = serializers.CharField(read_only=True)
+
+    class Meta:
+        fields = "__all__"
+
+
 class QuestionSerializersView(BaseSerializers):
     pregunta_nombre = serializers.CharField(read_only=True)
     momento = MomentSerializers(read_only=True)
-    tipo_pregunta = serializers.CharField(read_only=True,source="get_tipo_pregunta_display")
+    tipo_pregunta = serializers.CharField(
+        read_only=True, source="get_tipo_pregunta_display"
+    )
     depende_respuesta = AswerSerialzersViewDepende(read_only=True)
     componente = serializers.CharField(read_only=True)
 
     answer_set = AswerSerialzersView(many=True)
-    
 
     class Meta:
         fields = "__all__"
@@ -57,7 +66,9 @@ class QuestionSerializers(BaseSerializers):
             "pregunta_nombre", instance.pregunta_nombre
         )
         instance.momento_id = validated_data.get("momento", instance.momento.id)
-        instance.tipo_pregunta = validated_data.get("tipo_pregunta", instance.tipo_pregunta)
+        instance.tipo_pregunta = validated_data.get(
+            "tipo_pregunta", instance.tipo_pregunta
+        )
         instance.userUpdate = validated_data.get("userUpdate", instance.userUpdate)
         instance.visible = validated_data.get("visible", instance.visible)
         instance.save()
@@ -86,8 +97,7 @@ class QuestionCreateSerializers(BaseSerializers):
     type = serializers.ChoiceField(choices=TYPE)
     options = serializers.ListField(required=False)
     momento = serializers.IntegerField()
-    
-    
+
     def to_representation(self, instance):
         return super().to_representation(instance)
 
