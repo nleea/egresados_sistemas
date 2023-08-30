@@ -24,7 +24,12 @@ jobs:
             ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
             ${{ runner.os }}-pip-
       - name: Install Dependencies
-        if: steps.caches-dependencies.outputs.cache-hit != 'true'
         run: pip install -r requirements.txt
       - name: Execute Test
         run: pytest
+  deploy:
+    runs-on: self-hosted
+    needs: execute
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
