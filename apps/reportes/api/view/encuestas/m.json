@@ -1,0 +1,31 @@
+{
+    "pregunta": "la prgunta",
+    "respuestas": [
+        {
+            "respuesta": "valor",
+            "facultades": [
+                {
+                    "name": "facultad x",
+                    "porcentaje": "50%"
+                },
+                {
+                    "name": "facultad xx",
+                    "porcentaje": "50%"
+                }
+            ]
+        },
+        {
+            "respuesta": "valor",
+            "facultades": [
+                {
+                    "name": "facultad x",
+                    "porcentaje": "50%"
+                },
+                {
+                    "name": "facultad xx",
+                    "porcentaje": "50%"
+                }
+            ]
+        }
+    ]
+}

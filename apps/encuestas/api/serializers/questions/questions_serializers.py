@@ -26,6 +26,7 @@ class QuestionRSerializersView(BaseSerializers):
         fields = "__all__"
 
 
+
 class QuestionSerializersView(BaseSerializers):
     pregunta_nombre = serializers.CharField(read_only=True)
     momento = MomentSerializers(read_only=True)
