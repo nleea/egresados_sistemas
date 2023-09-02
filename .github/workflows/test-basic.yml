@@ -47,4 +47,7 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             whoami
-            ls -al
+            cd main/egresados_sistemas
+            git add .
+            git commit -m"."
+            git pull
