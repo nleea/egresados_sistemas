@@ -1,12 +1,18 @@
 import tempfile
 from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
-from configuration.settings.prod import *
+
 from django.template.loader import render_to_string
 import qrcode
 import qrcode.image.svg
 import base64
 from django.utils.html import strip_tags
+import os
+
+if os.environ.get("DEBUG"):
+    from configuration.settings.dev import *
+else:
+    from configuration.settings.prod import *
 
 
 @shared_task(

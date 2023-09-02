@@ -13,14 +13,11 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
-import environ
 from configuration.db import DBS
-
-
-env = environ.Env(DEBUG=(bool, False))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+print("PRO")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -114,7 +111,6 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = DBS["mysql-docker"]
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

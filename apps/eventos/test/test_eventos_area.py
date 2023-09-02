@@ -2,7 +2,6 @@ import pytest
 from apps.conftest import user_token, areas, clear_cache
 from django.test.client import Client
 from django.urls import reverse
-from apps.eventos.models.models import EventosArea
 
 pytestmark = pytest.mark.django_db
 

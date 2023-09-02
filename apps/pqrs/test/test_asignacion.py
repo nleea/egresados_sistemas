@@ -7,7 +7,6 @@ from apps.pqrs.models.models import Pqrs, TipoPqrs
 from django.db.utils import IntegrityError
 
 pytestmark = pytest.mark.django_db
-reverse_url = reverse("pqrs:asignacion:asignacion-view")
 
 
 # ----------  Test get ----------- #
