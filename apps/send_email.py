@@ -1,7 +1,7 @@
 import tempfile
 from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
-from configuration import a
+from configuration.settings.prod import *
 from django.template.loader import render_to_string
 import qrcode
 import qrcode.image.svg
@@ -36,7 +36,7 @@ def send_notification_mail(self, target_mail, id, evento):
 
         # Datos para el correo
         subject = "Correo electrónico con código QR"
-        from_email = a.EMAIL_HOST_USER
+        from_email = EMAIL_HOST_USER
         msg = EmailMultiAlternatives(subject, text_content, from_email, target_mail)
 
         # Adjuntar la imagen del código QR al correo electrónico
@@ -65,7 +65,7 @@ def send_confirm_mail(self, target_mail, evento):
     # print(target_mail, evento, "entro")
     try:
         subject = "Correo electrónico con código QR"
-        from_email = a.EMAIL_HOST_USER
+        from_email = EMAIL_HOST_USER
         evento_id = evento.get("id")
         url = f"http://44.203.185.252/eventos/inscripciones/confirmar/asistencia/?evento={evento_id}"
         evento_data = {**evento, "url": url}
