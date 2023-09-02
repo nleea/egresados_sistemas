@@ -5,6 +5,7 @@ on:
     branches: main
 jobs:
   execute:
+    if: failure()
     environment: dev
     env:
       SECRET_OR_KEY: ${{ secrets.SECRET_KEY }}
