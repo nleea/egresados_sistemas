@@ -34,7 +34,7 @@ jobs:
   build:
     environment: dev
     runs-on: ubuntu-latest
-    needs: execute
+    # needs: execute
     env:
       USERNAME: ubuntu
     steps:
