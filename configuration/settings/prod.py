@@ -21,7 +21,7 @@ env = environ.Env(DEBUG=(bool, False))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -47,7 +47,6 @@ COMMONS_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "debug_toolbar",
 ]
 
 INSTALLS_APPS = [
@@ -67,13 +66,12 @@ THIRDS_APPS = [
     "apps.pqrs",
     "apps.encuestas",
     "apps.eventos",
-    "apps.reportes"
+    "apps.reportes",
 ]
 
 INSTALLED_APPS = COMMONS_APPS + INSTALLS_APPS + THIRDS_APPS
 MIDDLEWARE = [
     "django.middleware.gzip.GZipMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
@@ -87,25 +85,6 @@ MIDDLEWARE = [
     "configs.middlewares.view_responses.CustomResponseMiddleware",
 ]
 
-DEBUG_TOOLBAR_PANELS = [
-    "debug_toolbar.panels.history.HistoryPanel",
-    "debug_toolbar.panels.versions.VersionsPanel",
-    "debug_toolbar.panels.timer.TimerPanel",
-    "debug_toolbar.panels.settings.SettingsPanel",
-    "debug_toolbar.panels.headers.HeadersPanel",
-    "debug_toolbar.panels.request.RequestPanel",
-    "debug_toolbar.panels.sql.SQLPanel",
-    "debug_toolbar.panels.staticfiles.StaticFilesPanel",
-    "debug_toolbar.panels.templates.TemplatesPanel",
-    "debug_toolbar.panels.cache.CachePanel",
-    "debug_toolbar.panels.signals.SignalsPanel",
-    "debug_toolbar.panels.redirects.RedirectsPanel",
-    "debug_toolbar.panels.profiling.ProfilingPanel",
-]
-
-RENDER_PANELS = True
-
-INTERNAL_IPS = ["127.0.0.1"]
 
 CACHE_MIDDLEWARE_ALIAS = "default"
 CACHE_MIDDLEWARE_KEY_PREFIX = ""
@@ -136,16 +115,6 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     },
-# }
-
-# db = "mysql-"
-# db += env("MYSQL_DATABASE").strip()
 DATABASES = DBS["mysql-docker"]
 
 
@@ -224,16 +193,16 @@ SIMPLE_JWT = {
 
 CACHE_TTL = 60 * 15
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379/1",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#         },
-#         "KEY_PREFIX": "cache",
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "KEY_PREFIX": "cache",
+    }
+}
 
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379"
@@ -320,20 +289,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-
-# sentry_sdk.init(
-#     dsn="https://933151f4971b4e20a0d864b46a2ee8cc@o4505058180399104.ingest.sentry.io/4505058181840896",
-#     integrations=[
-#         DjangoIntegration(),
-#     ],
-
-#     # Set traces_sample_rate to 1.0 to capture 100%
-#     # of transactions for performance monitoring.
-#     # We recommend adjusting this value in production.
-#     traces_sample_rate=1.0,
-
-#     # If you wish to associate users to errors (assuming you are using
-#     # django.contrib.auth) you may enable sending PII data.
-#     send_default_pii=True
-# )

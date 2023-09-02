@@ -2,7 +2,7 @@ from __future__ import absolute_import, unicode_literals
 import os
 from celery import Celery
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'configuration.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'configuration')
 
 app = Celery('sistema_egresados')
 
