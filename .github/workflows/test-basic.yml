@@ -31,9 +31,19 @@ jobs:
         run: pip install -r requirements.txt
       - name: Execute Test
         run: pytest
-  # deploy:
-  #   runs-on: self-hosted
-  #   needs: execute
-  #   steps:
-  #     - name: Get code
-  #       uses: actions/checkout@v3
+  build:
+    environment: dev
+    runs-on: ubuntu-latest
+    needs: execute
+    env:
+      USERNAME: ubuntu
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ env.USERNAME }}
+          key: ${{ env.KEY }}
+          script: |
+            whoami
+            ls -al
