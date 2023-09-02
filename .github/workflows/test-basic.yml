@@ -7,7 +7,7 @@ jobs:
   execute:
     environment: dev
     env:
-      SECRET_OR_KEY: ${{ secrets.SECRET_OR_KEY }}
+      SECRET_OR_KEY: ${{ secrets.SECRET_KEY }}
       DEBUG: True
     runs-on: ubuntu-latest
     steps:
