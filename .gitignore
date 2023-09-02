@@ -1,7 +1,7 @@
 example.log
 db.py
 *.log
-.env
+*env
 db.*
 dump.*
 *.txt
