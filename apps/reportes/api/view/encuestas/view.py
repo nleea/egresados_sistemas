@@ -1,200 +1,129 @@
 from rest_framework.views import APIView
-from apps.auth_module.models import User, Faculties, Programs
 from rest_framework.response import Response
 from rest_framework import status
 from apps.encuestas.models import Question, AnswerUser, Answer
 from django.db.models import (
     Count,
-    Avg,
     F,
     ExpressionWrapper,
     FloatField,
-    Prefetch,
-    Subquery,
-    OuterRef,
     Q,
 )
-from apps.reportes.api.serializers.questions_serializers import (
-    AswerSerialzersViewa,
-    ReporteSerializersViewa,
-    QuestionSerializersViewda,
-)
-
-import numpy as np
-import pandas as pd
 
 
 class ReportesUserFaculta(APIView):
-    def get_faculty_percentage(self, answer, faculty, count):
-        total_answer_users = (
-            AnswerUser.objects.filter(
-                respuesta=answer,
-                pregunta=answer.pregunta,
-                user__persons__program__faculty__id=faculty,
+    def get_question_info(self, question_pk):
+        try:
+            question = Question.objects.defer(
+                "momento", "depende_respuesta", "userCreate", "userUpdate"
+            ).annotate(total_users=Count("answeruser",filter=Q(answeruser__pregunta=question_pk ))).get(pk=question_pk)
+            
+            F_SUB = "answeruser__user__persons__program__faculty__name"
+
+            answers = Answer.objects.filter(pregunta=question.pk).annotate(
+                num_users=Count("answeruser"),
+                faculty_name=F(F_SUB),
+                faculty_total_users=Count(
+                    "answeruser",
+                    filter=Q(faculty_name=F(F_SUB)),
+                ),
+                faculty_percentage=ExpressionWrapper(
+                    (F("num_users") / question.total_users) * 100, output_field=FloatField()
+                ),
             )
-            .defer("userCreate", "userUpdate")
-            .select_related(
-                "respuesta", "pregunta", "user", "user__persons__program__faculty"
-            )
-            .count()
-        )
 
-        if total_answer_users == 0:
-            return 0, 0
+            response_info = []
 
-        faculty_percentage = (total_answer_users / count) * 100
-        return faculty_percentage, total_answer_users
+            for answer in answers:
+                faculty_info = {
+                    "name": answer.faculty_name,
+                    "porcentaje": answer.faculty_percentage,
+                    "cantidad_usuarios": answer.faculty_total_users,
+                }
 
-    def get_question_with_answers(self, question_id):
-        question = Question.objects.get(id=question_id)
-        answers = (
-            Answer.objects.filter(pregunta__pk=question.pk)
-            .defer("userCreate", "userUpdate")
-            .select_related("pregunta")
-        )
+                answer_info = {
+                    "respuestas": answer.respuesta,
+                    "facultades": [faculty_info],
+                }
 
-        response_data = {"pregunta": question.pregunta_nombre, "respuestas": []}
-        faculties = Faculties.objects.all().values("id", "name")
-
-        for answer in answers:
-            answer_data = {"respuesta": answer.respuesta, "facultades": []}
-            count = (
-                AnswerUser.objects.filter(pregunta=answer.pregunta)
-                .defer("userCreate", "userUpdate", "user")
-                .select_related("respuesta", "pregunta")
-                .count()
-            )
-            for faculty in faculties:
-                porcentaje, count_facultad = self.get_faculty_percentage(
-                    answer, faculty["id"], count
-                )
-                answer_data["facultades"].append(
-                    {
-                        "name": faculty["name"],
-                        "porcentaje": porcentaje,
-                        "count": count_facultad,
-                    }
+                existing_answer_info = next(
+                    (
+                        item
+                        for item in response_info
+                        if item["respuestas"] == answer_info["respuestas"]
+                    ),
+                    None,
                 )
 
-            response_data["respuestas"].append(answer_data)
+                if existing_answer_info:
+                    existing_answer_info["facultades"].append(faculty_info)
+                else:
+                    response_info.append(answer_info)
 
-        return response_data
+            result = {
+                "pregunta": question.pregunta_nombre,
+                "total": question.total_users,
+                "respuestas": response_info,
+            }
+
+            return result
+
+        except Question.DoesNotExist:
+            return None
 
     def get(self, request, *args, **kwargs):
-        data = self.get_question_with_answers(1)
+        data = self.get_question_info(1)
 
         return Response(data, status=status.HTTP_200_OK)
 
 
 class ReportesUser(APIView):
-    def get_faculty_percentage(self, answer, count):
-        total_answer_users = (
-            AnswerUser.objects.filter(
-                respuesta=answer,
-                pregunta=answer.pregunta,
-            )
-            .defer("userCreate", "userUpdate", "user__persons__program__faculty")
-            .select_related(
-                "respuesta",
-                "pregunta",
-                "user",
-            )
-            .count()
-        )
-
-        if total_answer_users == 0:
-            return 0, 0
-
-        faculty_percentage = (total_answer_users / count) * 100
-        return faculty_percentage, total_answer_users
-
-    def get_question_with_answers(self, question_id):
-        question = Question.objects.get(id=question_id)
-        answers = (
-            Answer.objects.filter(pregunta__pk=question.pk)
-            .defer("userCreate", "userUpdate")
-            .select_related("pregunta")
-        )
-
-        response_data = {"pregunta": question.pregunta_nombre, "respuestas": []}
-
-        for answer in answers:
-            answer_data = {"respuesta": answer.respuesta, "porcentaje": 0, "count": 0}
-            count = (
-                AnswerUser.objects.filter(pregunta=answer.pregunta)
-                .defer("userCreate", "userUpdate", "user")
-                .select_related("respuesta", "pregunta")
-                .count()
-            )
-            porcentaje, count_facultad = self.get_faculty_percentage(answer, count)
-            answer_data["porcentaje"] = porcentaje
-            answer_data["count"] = count_facultad
-
-            response_data["respuestas"].append(answer_data)
-
-        return response_data
-
     def get(self, request, *args, **kwargs):
-        
-        
-        # results_dict = self.get_question_with_answers(1)
-        a = QuestionSerializersViewda(Question.objects.all(), many=True).data
-        b = AswerSerialzersViewa(Answer.objects.all(), many=True).data
-        c = ReporteSerializersViewa(AnswerUser.objects.all(), many=True).data
+        try:
+            question = (
+                Question.objects.defer(
+                    "momento", "depende_respuesta", "userCreate", "userUpdate"
+                )
+                .annotate(total_users=Count("answeruser"))
+                .get(pk=1)
+            )
 
-        question_df = pd.DataFrame(a)
-        answer_df = pd.DataFrame(b)
-        answer_user_df = pd.DataFrame(c)
+            answers = (
+                Answer.objects.filter(pregunta=question)
+                .defer(
+                    "userCreate",
+                    "userUpdate",
+                    "pregunta__momento",
+                    "pregunta__userCreate",
+                    "pregunta__userUpdate",
+                    "pregunta__depende_respuesta",
+                )
+                .select_related("pregunta")
+                .annotate(num_users=Count("answeruser"))
+            )
+            response_info = []
 
-        # Merge DataFrames to create a comprehensive dataset
-        merged_df = answer_user_df.merge(
-            answer_df, left_on="respuesta_id", right_on="id", how="left"
-        )
-        merged_df = merged_df.merge(
-            question_df, left_on="pregunta_id_x", right_on="id", how="left"
-        )
+            for answer in answers:
+                users_for_answer = answer.num_users
 
-        # Calculate the total number of users who answered each question
-        total_users_per_question = (
-            merged_df.groupby("pregunta_nombre")["user_id"].nunique().reset_index()
-        )
-        total_users_per_question.rename(
-            columns={"user_id": "Total Users"}, inplace=True
-        )
-
-        # Calculate the count of each answer for each question
-        answer_counts = (
-            merged_df.groupby(["pregunta_nombre", "respuesta"])["id_x"]
-            .count()
-            .reset_index()
-        )
-        answer_counts.rename(columns={"id_x": "Answer Count"}, inplace=True)
-
-        # Create a dictionary to store the results
-        results_dict = []
-
-        # Iterate through questions and organize the data
-        for question_name, group in answer_counts.groupby("pregunta_nombre"):
-            question_result = {
-                "pregunta": question_name,
-                "Total Users": total_users_per_question.loc[
-                    total_users_per_question["pregunta_nombre"] == question_name,
-                    "Total Users",
-                ].values[0],
-                "Answers": group[["respuesta", "Answer Count"]]
-                .set_index("respuesta")
-                .to_dict()["Answer Count"],
-            }
-            # Calculate and add percentages for each answer
-            total_users = question_result["Total Users"]
-            answers = question_result["Answers"]
-            percentages = {
-                answer: (count / total_users) * 100 for answer, count in answers.items()
+                percentage = (
+                    (users_for_answer / question.total_users) * 100
+                    if question.total_users > 0
+                    else 0
+                )
+                answer_info = {
+                    "respuesta": answer.respuesta,
+                    "cantidad_usuarios": users_for_answer,
+                    "porcentaje": percentage,
+                }
+                response_info.append(answer_info)
+            result = {
+                "pregunta": question.pregunta_nombre,
+                "total": question.total_users,
+                "respuestas": response_info,
             }
 
-            question_result["Percentages"] = percentages
-            results_dict.append(question_result)
+            return Response(result)
 
-        # Print the result as a dictionary
-
-        return Response(results_dict, status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return None

@@ -13,8 +13,10 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
+from configuration.db import DBS
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+print("DEV")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -73,10 +75,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "configs.middlewares.auth.CustomMiddleware",
+    # "configs.middlewares.auth.CustomMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "configs.middlewares.view_responses.CustomResponseMiddleware",
+    # "configs.middlewares.view_responses.CustomResponseMiddleware",
 ]
 
 DEBUG_TOOLBAR_PANELS = [
@@ -129,12 +131,14 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    },
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     },
+# }
+
+DATABASES = DBS["mysql-docker"]
 
 
 # Password validation
