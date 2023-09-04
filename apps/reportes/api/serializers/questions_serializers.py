@@ -52,3 +52,46 @@ class ReporteSerializersView(BaseSerializers):
 
     class Meta:
         fields = "__all__"
+
+
+class AswerSerialzersViewa(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    respuesta = serializers.CharField(read_only=True)
+    pregunta = serializers.SlugRelatedField("pk", read_only=True)
+    
+    
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["pregunta_id"] = instance.pregunta.pk
+
+        return data
+
+    class Meta:
+        fields = "__all__"
+
+
+class ReporteSerializersViewa(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    repuesta = serializers.SlugRelatedField("pk", read_only=True)
+    pregunta = serializers.SlugRelatedField("pk", read_only=True)
+    user = serializers.SlugRelatedField("pk", read_only=True)
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["respuesta_id"] = instance.respuesta.pk
+        data["pregunta_id"] = instance.pregunta.pk
+        data["user_id"] = instance.user.pk
+
+        return data
+
+    class Meta:
+        fields = "__all__"
+
+
+class QuestionSerializersViewda(BaseSerializers):
+    id = serializers.PrimaryKeyRelatedField(read_only=True)
+    pregunta_nombre = serializers.CharField(read_only=True)
+
+    class Meta:
+        fields = "__all__"
