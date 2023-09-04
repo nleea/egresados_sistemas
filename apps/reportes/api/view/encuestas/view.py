@@ -3,6 +3,25 @@ from apps.auth_module.models import User, Faculties, Programs
 from rest_framework.response import Response
 from rest_framework import status
 from apps.encuestas.models import Question, AnswerUser, Answer
+from django.db.models import (
+    Count,
+    Avg,
+    F,
+    ExpressionWrapper,
+    FloatField,
+    Prefetch,
+    Subquery,
+    OuterRef,
+    Q,
+)
+from apps.reportes.api.serializers.questions_serializers import (
+    AswerSerialzersViewa,
+    ReporteSerializersViewa,
+    QuestionSerializersViewda,
+)
+
+import numpy as np
+import pandas as pd
 
 
 class ReportesUserFaculta(APIView):
@@ -116,6 +135,66 @@ class ReportesUser(APIView):
         return response_data
 
     def get(self, request, *args, **kwargs):
-        results_dict = self.get_question_with_answers(1)
+        
+        
+        # results_dict = self.get_question_with_answers(1)
+        a = QuestionSerializersViewda(Question.objects.all(), many=True).data
+        b = AswerSerialzersViewa(Answer.objects.all(), many=True).data
+        c = ReporteSerializersViewa(AnswerUser.objects.all(), many=True).data
+
+        question_df = pd.DataFrame(a)
+        answer_df = pd.DataFrame(b)
+        answer_user_df = pd.DataFrame(c)
+
+        # Merge DataFrames to create a comprehensive dataset
+        merged_df = answer_user_df.merge(
+            answer_df, left_on="respuesta_id", right_on="id", how="left"
+        )
+        merged_df = merged_df.merge(
+            question_df, left_on="pregunta_id_x", right_on="id", how="left"
+        )
+
+        # Calculate the total number of users who answered each question
+        total_users_per_question = (
+            merged_df.groupby("pregunta_nombre")["user_id"].nunique().reset_index()
+        )
+        total_users_per_question.rename(
+            columns={"user_id": "Total Users"}, inplace=True
+        )
+
+        # Calculate the count of each answer for each question
+        answer_counts = (
+            merged_df.groupby(["pregunta_nombre", "respuesta"])["id_x"]
+            .count()
+            .reset_index()
+        )
+        answer_counts.rename(columns={"id_x": "Answer Count"}, inplace=True)
+
+        # Create a dictionary to store the results
+        results_dict = []
+
+        # Iterate through questions and organize the data
+        for question_name, group in answer_counts.groupby("pregunta_nombre"):
+            question_result = {
+                "pregunta": question_name,
+                "Total Users": total_users_per_question.loc[
+                    total_users_per_question["pregunta_nombre"] == question_name,
+                    "Total Users",
+                ].values[0],
+                "Answers": group[["respuesta", "Answer Count"]]
+                .set_index("respuesta")
+                .to_dict()["Answer Count"],
+            }
+            # Calculate and add percentages for each answer
+            total_users = question_result["Total Users"]
+            answers = question_result["Answers"]
+            percentages = {
+                answer: (count / total_users) * 100 for answer, count in answers.items()
+            }
+
+            question_result["Percentages"] = percentages
+            results_dict.append(question_result)
+
+        # Print the result as a dictionary
 
         return Response(results_dict, status=status.HTTP_200_OK)
