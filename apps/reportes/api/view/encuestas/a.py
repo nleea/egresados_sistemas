@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from apps.encuestas.models import Question, Answer
+from apps.encuestas.models import Question, AnswerUser, Answer
 from django.db.models import (
     Count,
     F,
@@ -12,16 +12,20 @@ from django.db.models import (
 
 
 class ReportesUserFaculta(APIView):
-    def get(self, request, *args, **kwargs):
-        questions = Question.objects.defer(
-            "momento", "depende_respuesta", "userCreate", "userUpdate"
-        ).annotate(
-            total_users=Count("answeruser", filter=Q(answeruser__pregunta=F("pk")))
-        )
+    def get_question_info(self, question_pk):
+        try:
+            question = (
+                Question.objects.defer(
+                    "momento", "depende_respuesta", "userCreate", "userUpdate"
+                )
+                .annotate(
+                    total_users=Count(
+                        "answeruser", filter=Q(answeruser__pregunta=question_pk)
+                    )
+                )
+                .get(pk=question_pk)
+            )
 
-        response_info = []
-
-        for question in questions:
             F_SUB = "answeruser__user__persons__program__faculty__name"
 
             answers = (
@@ -41,7 +45,7 @@ class ReportesUserFaculta(APIView):
                 )
             )
 
-            response_info_question = []
+            response_info = []
 
             for answer in answers:
                 faculty_info = {
@@ -58,7 +62,7 @@ class ReportesUserFaculta(APIView):
                 existing_answer_info = next(
                     (
                         item
-                        for item in response_info_question
+                        for item in response_info
                         if item["respuestas"] == answer_info["respuestas"]
                     ),
                     None,
@@ -67,32 +71,39 @@ class ReportesUserFaculta(APIView):
                 if existing_answer_info:
                     existing_answer_info["facultades"].append(faculty_info)
                 else:
-                    response_info_question.append(answer_info)
+                    response_info.append(answer_info)
 
-            question_info = {
+            result = {
                 "pregunta": question.pregunta_nombre,
                 "total": question.total_users,
-                "respuestas": response_info_question,
+                "respuestas": response_info,
             }
 
-            response_info.append(question_info)
+            return result
 
-        return Response(response_info, status=status.HTTP_200_OK)
+        except Question.DoesNotExist:
+            return None
+
+    def get(self, request, *args, **kwargs):
+        data = self.get_question_info(1)
+
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class ReportesUser(APIView):
     def get(self, request, *args, **kwargs):
         try:
-            questions = (
+            question = (
                 Question.objects.defer(
                     "momento", "depende_respuesta", "userCreate", "userUpdate"
                 )
                 .annotate(total_users=Count("answeruser"))
-                .all()
+                .get(pk=1)
             )
 
             answers = (
-                Answer.objects.defer(
+                Answer.objects.filter(pregunta=question)
+                .defer(
                     "userCreate",
                     "userUpdate",
                     "pregunta__momento",
@@ -102,39 +113,30 @@ class ReportesUser(APIView):
                 )
                 .select_related("pregunta")
                 .annotate(num_users=Count("answeruser"))
-                .all()
             )
-
             response_info = []
 
-            for question in questions:
-                question_info = {
-                    "pregunta": question.pregunta_nombre,
-                    "total": question.total_users,
-                    "respuestas": [],
+            for answer in answers:
+                users_for_answer = answer.num_users
+
+                percentage = (
+                    (users_for_answer / question.total_users) * 100
+                    if question.total_users > 0
+                    else 0
+                )
+                answer_info = {
+                    "respuesta": answer.respuesta,
+                    "cantidad_usuarios": users_for_answer,
+                    "porcentaje": percentage,
                 }
+                response_info.append(answer_info)
+            result = {
+                "pregunta": question.pregunta_nombre,
+                "total": question.total_users,
+                "respuestas": response_info,
+            }
 
-                for answer in answers:
-                    if answer.pregunta == question:
-                        users_for_answer = answer.num_users
-
-                        percentage = (
-                            (users_for_answer / question.total_users) * 100
-                            if question.total_users > 0
-                            else 0
-                        )
-                        answer_info = {
-                            "respuesta": answer.respuesta,
-                            "cantidad_usuarios": users_for_answer,
-                            "porcentaje": percentage,
-                        }
-                        question_info["respuestas"].append(answer_info)
-
-                response_info.append(question_info)
-
-            return Response(response_info)
+            return Response(result)
 
         except Question.DoesNotExist:
-            return Response(
-                {"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND
-            )
+            return None
