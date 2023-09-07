@@ -82,66 +82,6 @@ class ReportesUserFaculta(APIView):
         return Response(response_info, status=status.HTTP_200_OK)
 
 
-class ReportesUser(APIView):
-    def get(self, request, *args, **kwargs):
-        try:
-            questions = (
-                Question.objects.defer(
-                    "momento", "depende_respuesta", "userCreate", "userUpdate"
-                )
-                .annotate(total_users=Count("answeruser"))
-                .all()
-            )
-
-            answers = (
-                Answer.objects.defer(
-                    "userCreate",
-                    "userUpdate",
-                    "pregunta__momento",
-                    "pregunta__userCreate",
-                    "pregunta__userUpdate",
-                    "pregunta__depende_respuesta",
-                )
-                .select_related("pregunta")
-                .annotate(num_users=Count("answeruser"))
-                .all()
-            )
-
-            response_info = []
-
-            for question in questions:
-                question_info = {
-                    "pregunta": question.pregunta_nombre,
-                    "total": question.total_users,
-                    "respuestas": [],
-                }
-
-                for answer in answers:
-                    if answer.pregunta == question:
-                        users_for_answer = answer.num_users
-
-                        percentage = (
-                            (users_for_answer / question.total_users) * 100
-                            if question.total_users > 0
-                            else 0
-                        )
-                        answer_info = {
-                            "respuesta": answer.respuesta,
-                            "cantidad_usuarios": users_for_answer,
-                            "porcentaje": percentage,
-                        }
-                        question_info["respuestas"].append(answer_info)
-
-                response_info.append(question_info)
-
-            return Response(response_info)
-
-        except Question.DoesNotExist:
-            return Response(
-                {"error": "Question not found"}, status=status.HTTP_404_NOT_FOUND
-            )
-
-
 class ReportesUserFacultaWith(APIView):
     def get_facultad(self):
         questions = (
@@ -301,9 +241,96 @@ class ReportesUserFacultaWith(APIView):
             response_info.append(question_info)
         return response_info
 
+    def get_programa_facultad(self, facultad):
+        questions = (
+            Question.objects.defer(
+                "momento", "depende_respuesta", "userCreate", "userUpdate"
+            )
+            .filter(answeruser__user__persons__program__faculty=facultad)
+            .distinct()
+            .annotate(total_users=Count("answeruser"))
+            .all()
+        )
+        F_SUB = "answeruser__user__persons__program__name"
+
+        answers = (
+            Answer.objects.defer(
+                "userCreate",
+                "userUpdate",
+                "pregunta__momento",
+                "pregunta__userCreate",
+                "pregunta__userUpdate",
+                "pregunta__depende_respuesta",
+            )
+            .select_related("pregunta")
+            .filter(answeruser__user__persons__program__faculty=facultad)
+            .distinct()
+            .annotate(
+                num_users=Count("answeruser"),
+                program__name=F(F_SUB),
+                program_total_users=Count(
+                    "answeruser",
+                    filter=Q(program__name=F(F_SUB)),
+                ),
+                total_users=Count(
+                    "answeruser", filter=Q(answeruser__pregunta=F("pregunta__pk"))
+                ),
+            )
+        )
+
+        response_info = []
+
+        for question in questions:
+            question_info = {
+                "pregunta": question.pregunta_nombre,
+                "total": question.total_users,
+                "respuestas": [],
+            }
+
+            answer_question = list(
+                filter(lambda x: x.pregunta_id == question.pk, answers)
+            )
+
+            for i in answer_question:
+                answer_info = {
+                    "programa": i.program__name,
+                    "total": i.program_total_users,
+                    "porcentaje": (i.program_total_users / question.total_users) * 100
+                    if question.total_users != 0
+                    else 0,
+                }
+                valid = True
+                for index, x in enumerate(question_info["respuestas"]):
+                    if x["programa"] == i.program__name:
+                        info_dict = question_info["respuestas"][index]
+                        answer_info_update = {
+                            "programa": x["programa"],
+                            "total": info_dict["total"] + i.program_total_users,
+                            "porcentaje": (
+                                (info_dict["total"] + i.program_total_users)
+                                / question.total_users
+                            )
+                            * 100
+                            if question.total_users != 0
+                            else 0,
+                        }
+
+                        question_info["respuestas"][index] = answer_info_update
+                        valid = False
+                if valid:
+                    question_info["respuestas"].append(answer_info)
+
+            response_info.append(question_info)
+        return response_info
+
     def get(self, request, *args, **kwargs):
         try:
-            if kwargs.get("filter") == "faculta":
+            if kwargs.get("filter") == "facultad":
+                f2 = kwargs.get("facultad", None)
+                if f2:
+                    response_info = self.get_programa_facultad(int(f2))
+                    return Response(response_info)
+
                 response_info = self.get_facultad()
                 return Response(response_info)
             else:
