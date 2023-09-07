@@ -247,9 +247,7 @@ class ReportesUserFacultaWith(APIView):
                 "momento", "depende_respuesta", "userCreate", "userUpdate"
             )
             .filter(answeruser__user__persons__program__faculty=facultad)
-            .distinct()
             .annotate(total_users=Count("answeruser"))
-            .all()
         )
         F_SUB = "answeruser__user__persons__program__name"
 
@@ -264,7 +262,6 @@ class ReportesUserFacultaWith(APIView):
             )
             .select_related("pregunta")
             .filter(answeruser__user__persons__program__faculty=facultad)
-            .distinct()
             .annotate(
                 num_users=Count("answeruser"),
                 program__name=F(F_SUB),
