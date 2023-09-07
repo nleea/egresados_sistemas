@@ -246,8 +246,8 @@ class ReportesUserFacultaWith(APIView):
             Question.objects.defer(
                 "momento", "depende_respuesta", "userCreate", "userUpdate"
             )
-            .filter(answeruser__user__persons__program__faculty=facultad)
-            .annotate(total_users=Count("answeruser"))
+            .annotate(total_users=Count("answeruser",filter=Q(answeruser__user__persons__program__faculty = facultad)))
+            .all()
         )
         F_SUB = "answeruser__user__persons__program__name"
 
