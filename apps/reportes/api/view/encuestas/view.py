@@ -341,7 +341,7 @@ class ReportesUserFacultaWith(APIView):
 
             for i in answer_question:
                 answer_info = {
-                    "faculta": i.faculty_name,
+                    "name": i.faculty_name,
                     "total": i.faculty_total_users,
                     "porcentaje": (i.faculty_total_users / question.total_users) * 100
                     if question.total_users != 0
@@ -349,10 +349,10 @@ class ReportesUserFacultaWith(APIView):
                 }
                 valid = True
                 for index, x in enumerate(question_info["respuestas"]):
-                    if x["faculta"] == i.faculty_name:
+                    if x["name"] == i.faculty_name:
                         info_dict = question_info["respuestas"][index]
                         answer_info_update = {
-                            "faculta": x["faculta"],
+                            "name": x["name"],
                             "total": info_dict["total"] + i.faculty_total_users,
                             "porcentaje": (
                                 (info_dict["total"] + i.faculty_total_users)
@@ -420,7 +420,7 @@ class ReportesUserFacultaWith(APIView):
 
             for i in answer_question:
                 answer_info = {
-                    "programa": i.program__name,
+                    "name": i.program__name,
                     "total": i.program_total_users,
                     "porcentaje": (i.program_total_users / question.total_users) * 100
                     if question.total_users != 0
@@ -428,10 +428,10 @@ class ReportesUserFacultaWith(APIView):
                 }
                 valid = True
                 for index, x in enumerate(question_info["respuestas"]):
-                    if x["programa"] == i.program__name:
+                    if x["name"] == i.program__name:
                         info_dict = question_info["respuestas"][index]
                         answer_info_update = {
-                            "programa": x["programa"],
+                            "name": x["name"],
                             "total": info_dict["total"] + i.program_total_users,
                             "porcentaje": (
                                 (info_dict["total"] + i.program_total_users)
@@ -504,7 +504,7 @@ class ReportesUserFacultaWith(APIView):
 
             for i in answer_question:
                 answer_info = {
-                    "programa": i.program__name,
+                    "name": i.program__name,
                     "total": i.program_total_users,
                     "porcentaje": (i.program_total_users / question.total_users) * 100
                     if question.total_users != 0
@@ -512,10 +512,10 @@ class ReportesUserFacultaWith(APIView):
                 }
                 valid = True
                 for index, x in enumerate(question_info["respuestas"]):
-                    if x["programa"] == i.program__name:
+                    if x["name"] == i.program__name:
                         info_dict = question_info["respuestas"][index]
                         answer_info_update = {
-                            "programa": x["programa"],
+                            "name": x["name"],
                             "total": info_dict["total"] + i.program_total_users,
                             "porcentaje": (
                                 (info_dict["total"] + i.program_total_users)
