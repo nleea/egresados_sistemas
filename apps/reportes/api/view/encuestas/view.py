@@ -53,6 +53,7 @@ class ReportesUserFaculta(APIView):
                 answer_info = {
                     "respuestas": answer.respuesta,
                     "porcentaje": answer.faculty_percentage,
+                    "num_usuarios": answer.num_users,
                     "facultades": [faculty_info],
                 }
 
@@ -67,6 +68,7 @@ class ReportesUserFaculta(APIView):
 
                 if existing_answer_info:
                     existing_answer_info["porcentaje"] += faculty_info["porcentaje"]
+                    existing_answer_info["num_usuarios"] += answer.num_users
                     existing_answer_info["facultades"].append(faculty_info)
                 else:
                     response_info_question.append(answer_info)
