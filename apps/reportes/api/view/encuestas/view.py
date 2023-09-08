@@ -5,8 +5,6 @@ from apps.encuestas.models import Question, Answer
 from django.db.models import (
     Count,
     F,
-    ExpressionWrapper,
-    FloatField,
     Q,
 )
 
