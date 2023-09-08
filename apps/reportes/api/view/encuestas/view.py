@@ -68,11 +68,11 @@ class ReportesUserFacultaAndPrograma(APIView):
                     if question.total_users != 0
                     else 0,
                     "num_usuarios": answer.num_users,
-                    "facultades": [],
+                    "data": [],
                 }
 
                 if faculty_info["name"] != None:
-                    answer_info["facultades"] = [faculty_info]
+                    answer_info["data"] = [faculty_info]
 
                 existing_answer_info = next(
                     (
@@ -86,7 +86,7 @@ class ReportesUserFacultaAndPrograma(APIView):
                 if existing_answer_info:
                     existing_answer_info["porcentaje"] += faculty_info["porcentaje"]
                     existing_answer_info["num_usuarios"] += answer.num_users
-                    existing_answer_info["facultades"].append(faculty_info)
+                    existing_answer_info["data"].append(faculty_info)
                 else:
                     response_info_question.append(answer_info)
 
@@ -159,11 +159,11 @@ class ReportesUserFacultaAndPrograma(APIView):
                     if question.total_users != 0
                     else 0,
                     "num_usuarios": answer.num_users,
-                    "programas": [],
+                    "data": [],
                 }
 
                 if faculty_info["name"] != None:
-                    answer_info["programas"] = [faculty_info]
+                    answer_info["data"] = [faculty_info]
 
                 existing_answer_info = next(
                     (
@@ -177,7 +177,7 @@ class ReportesUserFacultaAndPrograma(APIView):
                 if existing_answer_info:
                     existing_answer_info["porcentaje"] += faculty_info["porcentaje"]
                     existing_answer_info["num_usuarios"] += answer.num_users
-                    existing_answer_info["programas"].append(faculty_info)
+                    existing_answer_info["data"].append(faculty_info)
                 else:
                     response_info_question.append(answer_info)
 
@@ -247,11 +247,11 @@ class ReportesUserFacultaAndPrograma(APIView):
                     if question.total_users != 0
                     else 0,
                     "num_usuarios": answer.num_users,
-                    "programas": [],
+                    "data": [],
                 }
 
                 if faculty_info["name"] != None:
-                    answer_info["programas"] = [faculty_info]
+                    answer_info["data"] = [faculty_info]
 
                 existing_answer_info = next(
                     (
@@ -265,7 +265,7 @@ class ReportesUserFacultaAndPrograma(APIView):
                 if existing_answer_info:
                     existing_answer_info["porcentaje"] += faculty_info["porcentaje"]
                     existing_answer_info["num_usuarios"] += answer.num_users
-                    existing_answer_info["programas"].append(faculty_info)
+                    existing_answer_info["data"].append(faculty_info)
                 else:
                     response_info_question.append(answer_info)
 
