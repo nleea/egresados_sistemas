@@ -50,28 +50,30 @@ class ReportesUserFaculta(APIView):
                     "cantidad_usuarios": answer.faculty_total_users,
                 }
 
-                answer_info = {
-                    "respuestas": answer.respuesta,
-                    "porcentaje": answer.faculty_percentage,
-                    "num_usuarios": answer.num_users,
-                    "facultades": [faculty_info],
-                }
+                if faculty_info["name"] != None:
 
-                existing_answer_info = next(
-                    (
-                        item
-                        for item in response_info_question
-                        if item["respuestas"] == answer_info["respuestas"]
-                    ),
-                    None,
-                )
+                    answer_info = {
+                        "respuestas": answer.respuesta,
+                        "porcentaje": 0 if answer.faculty_percentage == None else answer.faculty_percentage,
+                        "num_usuarios": answer.num_users,
+                        "facultades": [faculty_info],
+                    }
 
-                if existing_answer_info:
-                    existing_answer_info["porcentaje"] += faculty_info["porcentaje"]
-                    existing_answer_info["num_usuarios"] += answer.num_users
-                    existing_answer_info["facultades"].append(faculty_info)
-                else:
-                    response_info_question.append(answer_info)
+                    existing_answer_info = next(
+                        (
+                            item
+                            for item in response_info_question
+                            if item["respuestas"] == answer_info["respuestas"]
+                        ),
+                        None,
+                    )
+
+                    if existing_answer_info:
+                        existing_answer_info["porcentaje"] += faculty_info["porcentaje"]
+                        existing_answer_info["num_usuarios"] += answer.num_users
+                        existing_answer_info["facultades"].append(faculty_info)
+                    else:
+                        response_info_question.append(answer_info)
 
             question_info = {
                 "pregunta": question.pregunta_nombre,
