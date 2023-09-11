@@ -51,6 +51,7 @@ class CustomMiddleware(MiddlewareMixin):
             "/__debug__/",
             "/media/",
             "/confirmar/asistencia/",
+            "/generar/"
         ]
 
         match = re.search("|".join(routes_free), request.path)
