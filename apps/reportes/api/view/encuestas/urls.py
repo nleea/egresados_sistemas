@@ -6,4 +6,5 @@ urlpatterns = [
     path("respuesta/<slug:filter>/<int:facultad>/", ReportesUserFacultaAndPrograma.as_view()),
     path("<slug:filter>/", ReportesUserFacultaWith.as_view()),
     path("<slug:filter>/<int:facultad>/", ReportesUserFacultaWith.as_view()),
+    path("<slug:filter>/<int:facultad>/<slug:generar>/", ReportesUserFacultaWith.as_view()),
 ]

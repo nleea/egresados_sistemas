@@ -7,6 +7,10 @@ from django.db.models import (
     F,
     Q,
 )
+import pandas as pd
+import io
+import xlsxwriter
+from django.http import HttpResponse
 
 
 class ReportesUserFacultaAndPrograma(APIView):
@@ -534,14 +538,55 @@ class ReportesUserFacultaWith(APIView):
             response_info.append(question_info)
         return response_info
 
+    def get_response_excel(self, data):
+        new_data = {"pregunta": [], "total": [], "respuestas": []}
+
+        for i in data:
+            new_data["pregunta"].append(i["pregunta"])
+            new_data["total"].append(i["total"])
+            new_data["respuestas"].append(
+                i["respuestas"] if len(i["respuestas"]) else []
+            )
+
+        df = pd.DataFrame(new_data)
+        for i in range(df["respuestas"].apply(len).max()):
+            df[f"respuesta_{i+1}_programa"] = None
+            df[f"respuesta_{i+1}_total"] = None
+
+        for i, row in df.iterrows():
+            respuestas = row["respuestas"]
+            if respuestas:
+                for j, respuesta in enumerate(respuestas):
+                    df.at[i, f"respuesta_{j+1}_programa"] = respuesta.get("name")
+                    df.at[i, f"respuesta_{j+1}_total"] = respuesta.get("total")
+
+        df = df.drop(columns=["respuestas"])
+        excel_buffer = io.BytesIO()
+
+        writter = pd.ExcelWriter(excel_buffer, engine="xlsxwriter")
+        df.to_excel(writter, sheet_name="Hoja1", index=False)
+
+        writter.close()
+        excel_buffer.seek(0)
+        archivo = excel_buffer.getvalue()
+        response = HttpResponse(
+            archivo,
+            content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        )
+        response["Content-Disposition"] = "attachment; filename=report.xlsx"
+        return response
+
     def get(self, request, *args, **kwargs):
         try:
             if kwargs.get("filter") == "facultad":
                 f2 = kwargs.get("facultad", None)
-                if f2:
+                generar = kwargs.get("generar", None)
+                if f2 and not generar:
                     response_info = self.get_programa_facultad(int(f2))
                     return Response(response_info)
-
+                elif f2 and generar:
+                    response_info = self.get_programa_facultad(int(f2))
+                    return self.get_response_excel(response_info)
                 response_info = self.get_facultad()
                 return Response(response_info)
             else:
