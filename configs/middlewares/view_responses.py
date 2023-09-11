@@ -1,4 +1,4 @@
-from django.http import HttpResponse,JsonResponse
+from django.http import HttpResponse, JsonResponse
 from ..helpers.create_response import create_response
 import json
 from django.db.utils import IntegrityError
@@ -21,12 +21,14 @@ class CustomResponseMiddleware(object):
 
     def __call__(self, request):
         response = self.get_response(request)
-        if re.match(r"[/media/|/reporte/]", request.path):
+        # match = re.search("|".join(routes_free), request.path)
+        routes_media = ["/media/", ".*/generar/"]
+
+        if re.match("|".join(routes_media), request.path):
             return HttpResponse(
                 response, content_type=response.headers["Content-type"], status=200
             )
         try:
-            print("entro")
             decode = response.getvalue().decode()
 
             match = re.search(r"^[\d+]\s(.+)", decode)
