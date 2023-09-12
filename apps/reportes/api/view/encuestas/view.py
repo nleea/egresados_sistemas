@@ -602,7 +602,7 @@ class ReportesUserFacultaWith(APIView):
     def post(self, request, *args, **kwargs):
         data = request.data["data"]
         labels = request.data["labels"]
-        colors = request.data["colors"]
+        colors = ["#42A5F5", "#66BB6A", "#FFA726", "#26C6DA", "#7E57C2"]
 
         _, ax = plt.subplots()
         ax.pie(data, labels=labels, colors=colors)

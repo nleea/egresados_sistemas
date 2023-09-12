@@ -14,7 +14,7 @@ urlpatterns = [
         ReportesUserFacultaWith.as_view(),
     ),
     path(
-        "<slug:filter>/<int:facultad>/<slug:grafica>/",
+        "<slug:filter>/<slug:grafica>/",
         ReportesUserFacultaWith.as_view(),
     ),
 ]
