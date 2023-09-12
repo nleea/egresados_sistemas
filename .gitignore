@@ -5,3 +5,4 @@ db.py
 db.*
 dump.*
 *.txt
+*.profile

@@ -30,3 +30,5 @@ def email_deliveri(self, subject, message):
 class CustomEmailHandler(AdminEmailHandler):
     def send_mail(self, subject, message, *args, **kwargs):
         email_deliveri.delay(subject, message)  # type:ignore
+
+

@@ -11,6 +11,8 @@ import pandas as pd
 import io
 import xlsxwriter
 from django.http import HttpResponse
+import matplotlib.pyplot as plt
+import io, base64
 
 
 class ReportesUserFacultaAndPrograma(APIView):
@@ -581,10 +583,11 @@ class ReportesUserFacultaWith(APIView):
             if kwargs.get("filter") == "facultad":
                 f2 = kwargs.get("facultad", None)
                 generar = kwargs.get("generar", None)
+
                 if f2 and not generar:
                     response_info = self.get_programa_facultad(int(f2))
                     return Response(response_info)
-                elif f2 and generar:
+                elif f2 and generar == "generar":
                     response_info = self.get_programa_facultad(int(f2))
                     return self.get_response_excel(response_info)
                 response_info = self.get_facultad()
@@ -595,3 +598,18 @@ class ReportesUserFacultaWith(APIView):
 
         except Exception as e:
             return Response({"error": e.args}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, *args, **kwargs):
+        data = request.data["data"]
+        labels = request.data["labels"]
+        colors = request.data["colors"]
+
+        _, ax = plt.subplots()
+        ax.pie(data, labels=labels, colors=colors)
+        temp_image = "temp_plot.png"
+        plt.savefig(temp_image)
+        plt.close()
+        with open(temp_image, "rb") as image_file:
+            response = HttpResponse(image_file.read(), content_type="image/png")
+        response["Content-Disposition"] = "attachment; filename=report.png"
+        return response
