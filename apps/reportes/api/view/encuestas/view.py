@@ -10,7 +10,7 @@ from django.db.models import (
 import pandas as pd
 import io
 import xlsxwriter
-from django.http import HttpResponse
+from django.http import HttpResponse,StreamingHttpResponse
 import matplotlib.pyplot as plt
 import io, base64
 
