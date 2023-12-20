@@ -13,10 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
-# from configuration.db import DBS
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-print("DEV")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -134,8 +132,12 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("DB_DEVELOP_NAME"),
+        "USER": os.environ.get("DB_DEVELOP_USER"),
+        "PASSWORD": os.environ.get("DB_DEVELOP_PASSWORD"),
+        "HOST": os.environ.get("DB_DEVELOP_HOST"),
+        "PORT": os.environ.get("DB_DEVELOP_PORT"),
     },
 }
 

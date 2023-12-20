@@ -13,7 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 import os
-from configuration.db import DBS
+
+# from configuration.db import DBS
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 print("PRO")
@@ -109,7 +110,16 @@ WSGI_APPLICATION = "configuration.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = DBS["mysql-docker"]
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("DB_DEVELOP_NAME"),
+        "USER": os.environ.get("DB_DEVELOP_USER"),
+        "PASSWORD": os.environ.get("DB_DEVELOP_PASSWORD"),
+        "HOST": os.environ.get("DB_DEVELOP_HOST"),
+        "PORT": os.environ.get("DB_DEVELOP_PORT"),
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
