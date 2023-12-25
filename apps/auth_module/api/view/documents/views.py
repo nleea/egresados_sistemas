@@ -1,87 +1,53 @@
-from ..modules import ListAPIView, CreateAPIView, Response, status, UpdateAPIView, IsAdminRole, DestroyAPIView
+from ..modules import Response
+from rest_framework.viewsets import GenericViewSet
 from ....models import Document_types
-from ...serializers.document.document_serializers import DocumentSerializers,DocumentSerializersView
-from rest_framework.views import APIView
+from ...serializers.document.document_serializers import (
+    DocumentSerializers,
+    DocumentSerializersView,
+)
+from typing import Optional
+from rest_framework.request import Request
+from rest_framework.response import Response
 
-class DocumentListView(APIView):
-
-    def get(self, request, *args, **kwargs):
-        data = Document_types.objects.filter(visible=True)
-        serializers = DocumentSerializersView(data, many=True)
-        return Response(serializers.data, status.HTTP_200_OK)
+from apps.factory.base_interactor import BaseViewSetFactory
 
 
-class DocumentCreateView(CreateAPIView):
-    queryset = Document_types.objects.all()
+class MessageViewSet(GenericViewSet):
+    viewset_factory: BaseViewSetFactory = None
+    http_method_names: Optional[list[str]] = []
+
     serializer_class = DocumentSerializers
 
-    def post(self, request, *args, **kwargs):
-        documentSerializers = DocumentSerializers(data=request.data)
-        if documentSerializers.is_valid():
-            documentSerializers.save()
-            return Response(documentSerializers.data,  status.HTTP_200_OK)
-        return Response(documentSerializers.errors, status.HTTP_400_BAD_REQUEST)
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return DocumentSerializersView
+        return DocumentSerializers
 
+    @property
+    def controller(self):
+        return self.viewset_factory.create(Document_types, self.serializer_class)
 
-class DocumentUpdateView(UpdateAPIView):
-    queryset = Document_types.objects.all()
-    serializer_class = DocumentSerializers
+    def get(self, request: Request, *args, **kwargs):
+        payload, status = self.controller.get()
+        return Response(data=payload, status=status)
 
-    def get_object(self):
+    def post(self, request: Request, *args, **kwargs):
+        payload, status = self.controller.post(request.data)
+        return Response(data=payload, status=status)
 
-        try:
-            pk = self.kwargs.get('pk')
-            return Document_types.objects.get(pk=pk)
-        except Document_types.DoesNotExist:
-            return None
-
-    def put(self, request, *args, **kwargs):
-        document = self.get_object()
-
-        if document is None:
-            return Response(documentSerializers.errors, status.HTTP_400_BAD_REQUEST) #type: ignore
-
-        try:
-            documentSerializers = DocumentSerializers(
-                document, data=request.data)
-            if documentSerializers.is_valid():
-                documentSerializers.save()
-                return Response("Success", status.HTTP_200_OK)
-            return Response(documentSerializers.errors, status.HTTP_400_BAD_REQUEST)
-        except (AttributeError, Exception) as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
-
-class DocumentDestroyView(APIView):
-    permission_classes = [IsAdminRole]
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get('pk')
-            return Document_types.objects.get(id=pk)
-        except Document_types.DoesNotExist:
-            return None
-    
-    def bulk_delete(self, ids):
-        try:
-            resulstForDelete = Document_types.objects.filter(pk__in=ids)
-            for _,instance in enumerate(resulstForDelete):
-                instance.visible = False 
-
-            Document_types.objects.bulk_update(resulstForDelete,["visible"])
-
-            return Response("Success", 200)
-        except Exception as e:
-            return Response(e.args, 400)
+    def put(self, request: Request, *args, **kwargs):
+        message_id = kwargs.get("id", "")
+        payload, status = self.controller.put(int(message_id), request.data)
+        return Response(data=payload, status=status)
 
     def delete(self, request, *args, **kwargs):
+        document_id = kwargs.get("id", "")
 
         if "ids" in request.data:
-            return self.bulk_delete(request.data["ids"])
+            payload, status = self.controller.delete(
+                None, request.data.get("ids", None)
+            )
+            return Response(data=payload, status=status)
 
-        document = self.get_object()
-        if document is None:
-            return Response('Type document Not Exist', status.HTTP_200_OK)
-        document.delete()
-
-        return Response('Ok', status.HTTP_200_OK)
+        payload, status = self.controller.delete(int(document_id), request.data)
+        return Response(data=payload, status=status)

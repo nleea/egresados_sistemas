@@ -1,5 +1,4 @@
 from django.urls import path, include
-import debug_toolbar
 
 app_name = "auth"
 
@@ -13,5 +12,4 @@ urlpatterns = [
     path("documents/", include("apps.auth_module.api.view.documents.urls")),
     path("security/", include("apps.auth_module.api.view.security.urls")),
     path("university/", include("apps.auth_module.api.view.university.urls")),
-    path("__debug__/", include(debug_toolbar.urls)),
 ]

@@ -1192,6 +1192,70 @@ resources = [
                     }
                 ],
             },
+            {
+                "path": "/admin/usuarios/",
+                "method": "GET",
+                "icono": "pi pi-user-minus",
+                "link": "/admin/usuarios/",
+                "titulo": "Usuarios",
+                "items": [
+                    {
+                        "path": "/admin/usuarios/gestionar/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/admin/usuarios/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/admin/genero/",
+                "method": "GET",
+                "icono": "pi pi-user-minus",
+                "link": "/admin/genero/",
+                "titulo": "Genero",
+                "items": [
+                    {
+                        "path": "/admin/gemero/gestionar/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/admin/genero/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/admin/tipo-identificacion/",
+                "method": "GET",
+                "icono": "pi pi-user-minus",
+                "link": "/admin/tipo-identificacion/",
+                "titulo": "Identificacion",
+                "items": [
+                    {
+                        "path": "/admin/tipo-identificacion/gestionar/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/admin/tipo-identificacion/gestionar/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/admin/reportes/",
+                "method": "GET",
+                "icono": "pi pi-user-minus",
+                "link": "/admin/reportes/",
+                "titulo": "Reportes",
+                "items": [
+                    {
+                        "path": "/admin/reportes/ver/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/admin/reportes/ver/",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
         ],
     },
     # {
@@ -1281,6 +1345,22 @@ resources = [
                     }
                 ],
             },
+            {
+                "path": "/encuestas/mis-encuestas/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/encuestas/mis-encuestas/",
+                "titulo": "Momentos",
+                "items": [
+                    {
+                        "path": "/encuestas/mis-encuestas/llenar-encuestas/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/encuestas/mis-encuestas/llenar-encuestas/",
+                        "titulo": "Llenar Encuestas",
+                    }
+                ],
+            },
         ],
     },
     {
@@ -1326,6 +1406,13 @@ resources = [
                         "link": "/pqrs/solicitud/eliminar/",
                         "titulo": "Eliminar",
                     },
+                    {
+                        "path": "/pqrs/solicitud/mis-solicitudes/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/pqrs/solicitud/mis-solicitudes/",
+                        "titulo": "Mis Solicitudes",
+                    },
                 ],
             },
             {
@@ -1367,6 +1454,22 @@ resources = [
                     },
                 ],
             },
+            {
+                "path": "/pqrs/respuesta/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/pqrs/respuesta/",
+                "titulo": "Respuesta",
+                "items": [
+                    {
+                        "path": "/pqrs/respuesta/verDetalles/",
+                        "method": "POST",
+                        "icono": "icon",
+                        "link": "/pqrs/respuesta/verDetalles/",
+                        "titulo": "Ver Detalles",
+                    }
+                ],
+            },
         ],
     },
     {
@@ -1385,32 +1488,46 @@ resources = [
                 "titulo": "Emprendimientos",
                 "items": [
                     {
-                        "path": "/clasificados/emprendimientos/crear",
+                        "path": "/clasificados/emprendimientos/crear/",
                         "method": "POST",
                         "icono": "icon",
-                        "link": "/clasificados/emprendimientos/crear",
+                        "link": "/clasificados/emprendimientos/crear/",
                         "titulo": "Crear",
                     },
                     {
-                        "path": "/clasificados/emprendimientos/ver",
+                        "path": "/clasificados/emprendimientos/ver/",
                         "method": "GET",
                         "icono": "icon",
-                        "link": "/clasificados/emprendimientos/ver",
+                        "link": "/clasificados/emprendimientos/ver/",
                         "titulo": "Ver",
                     },
                     {
-                        "path": "/clasificados/emprendimientos/editar",
+                        "path": "/clasificados/emprendimientos/editar/",
                         "method": "PUT",
                         "icono": "icon",
-                        "link": "/clasificados/emprendimientos/editar",
+                        "link": "/clasificados/emprendimientos/editar/",
                         "titulo": "Editar",
                     },
                     {
-                        "path": "/clasificados/emprendimientos/eliminar",
+                        "path": "/clasificados/emprendimientos/eliminar/",
                         "method": "DELETE",
                         "icono": "icon",
-                        "link": "/clasificados/emprendimientos/eliminar",
+                        "link": "/clasificados/emprendimientos/eliminar/",
                         "titulo": "Eliminar",
+                    },
+                    {
+                        "path": "/clasificados/emprendimientos/mis-emprendimientos/",
+                        "method": "DELETE",
+                        "icono": "icon",
+                        "link": "/clasificados/emprendimientos/mis-emprendimientos/",
+                        "titulo": "Mis Emprendimientos",
+                    },
+                    {
+                        "path": "/clasificados/emprendimientos/detalles/",
+                        "method": "DELETE",
+                        "icono": "icon",
+                        "link": "/clasificados/emprendimientos/detalles/",
+                        "titulo": "Detalles",
                     },
                 ],
             },
@@ -1442,6 +1559,22 @@ resources = [
                         "method": "GET",
                         "icono": "icon",
                         "link": "/clasificados/sub-categoria/gestionar",
+                        "titulo": "Gestionar",
+                    }
+                ],
+            },
+            {
+                "path": "/clasificados/capacitaciones/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/clasificados/capacitaciones/",
+                "titulo": "Capacitaciones",
+                "items": [
+                    {
+                        "path": "/clasificados/capacitaciones/gestionar",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/clasificados/capacitaciones/gestionar",
                         "titulo": "Gestionar",
                     }
                 ],
@@ -1485,11 +1618,18 @@ resources = [
                         "titulo": "Editar",
                     },
                     {
-                        "path": "/eventos/actividades/eliminar",
+                        "path": "/eventos/actividades/eliminar/",
                         "method": "DELETE",
                         "icono": "icon",
-                        "link": "/eventos/actividades/eliminar",
+                        "link": "/eventos/actividades/eliminar/",
                         "titulo": "Eliminar",
+                    },
+                    {
+                        "path": "/eventos/actividades/mis-actividades/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/actividades/mis-actividades/",
+                        "titulo": "Mis Actividades",
                     },
                 ],
             },
@@ -1581,12 +1721,35 @@ resources = [
                 "titulo": "Facultad",
                 "items": [
                     {
-                        "path": "/eventos/faculta/gestionar/",
+                        "path": "/eventos/facultad/gestionar/",
                         "method": "GET",
                         "icono": "icon",
-                        "link": "/eventos/faculta/gestionar/",
+                        "link": "/eventos/facultad/gestionar/",
                         "titulo": "Gestionar",
                     }
+                ],
+            },
+            {
+                "path": "/eventos/asistencias/",
+                "method": "GET",
+                "icono": "icon",
+                "link": "/eventos/asistencias/",
+                "titulo": "asistencia",
+                "items": [
+                    {
+                        "path": "/eventos/asistencias/ver-asistencias/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/asistencias/ver-asistencias/",
+                        "titulo": "Ver asistencias",
+                    },
+                    {
+                        "path": "/eventos/asistencias/llenar-asistencias/",
+                        "method": "GET",
+                        "icono": "icon",
+                        "link": "/eventos/asistencias/llenar-asistencias/",
+                        "titulo": "LLenar Asistencias",
+                    },
                 ],
             },
         ],

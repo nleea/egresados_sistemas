@@ -1,88 +1,50 @@
-from ..modules import CreateAPIView, UpdateAPIView, status, Response,IsAdminRole,DestroyAPIView
-from rest_framework.views import APIView
-from ....models import Genders
-from ...serializers.gender.gender_Serializers import GenderSerializers,GenderSerializersView
+from ..modules import Response
+from ...serializers.gender.gender_Serializers import (
+    GenderSerializers,
+    GenderSerializersView,
+)
+from rest_framework.viewsets import GenericViewSet
+from typing import Optional
+from apps.factory.base_interactor import BaseViewSetFactory
 
 
-class GenderListView(APIView):
+class GenderViewSet(GenericViewSet):
+    viewset_factory: BaseViewSetFactory = None
+    http_method_names: Optional[list[str]] = []
+    model = None
+
+    serializer_class = GenderSerializers
+
+    def get_serializer_class(self):
+        if self.action in ["list", "retrieve"]:
+            return GenderSerializersView
+        return GenderSerializers
+
+    @property
+    def controller(self):
+        return self.viewset_factory.create(self.model, self.serializer_class)
 
     def get(self, request, *args, **kwargs):
-        data = Genders.objects.filter(visible=True)
-        serializers = GenderSerializersView(data, many=True)
-        return Response(serializers.data, status.HTTP_200_OK)
-
-
-class GenderCreateView(CreateAPIView):
-    queryset = Genders.objects.all()
-    serializer_class = GenderSerializers
+        payload, status = self.controller.get()
+        return Response(data=payload, status=status)
 
     def post(self, request, *args, **kwargs):
-        genderSerializers = GenderSerializers(data=request.data)
-        if genderSerializers.is_valid():
-            genderSerializers.save()
-            return Response("Success", status.HTTP_200_OK)
-        return Response(genderSerializers.errors, status.HTTP_400_BAD_REQUEST)
-
-
-class GenderUpdateView(UpdateAPIView):
-    queryset = Genders.objects.all()
-    serializer_class = GenderSerializers
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get('pk')
-            return Genders.objects.get(pk=pk)
-        except Genders.DoesNotExist:
-            return None
+        payload, status = self.controller.post(request.data)
+        return Response(data=payload, status=status)
 
     def put(self, request, *args, **kwargs):
-        gender = self.get_object()
-
-        if gender is None:
-            return Response('Gender Not Found', status.HTTP_400_BAD_REQUEST)
-
-        try:
-            genderSerializers = GenderSerializers(gender, data=request.data)
-            if genderSerializers.is_valid():
-                genderSerializers.update(
-                    gender, genderSerializers.validated_data)
-                return Response("Success", status.HTTP_200_OK)
-            return Response(genderSerializers.errors, status.HTTP_400_BAD_REQUEST)
-        except (AttributeError, Exception) as e:
-            return Response( e.args, status.HTTP_400_BAD_REQUEST)
-
-class GendersDestroyView(DestroyAPIView):
-    queryset = Genders.objects.all()
-    serializer_class = GenderSerializers
-    permission_classes = [IsAdminRole]
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get('pk')
-            return Genders.objects.get(id=pk)
-        except Genders.DoesNotExist:
-            return None
-
-
-    def bulk_delete(self, ids):
-        try:
-            resulstForDelete = Genders.objects.filter(pk__in=ids)
-            for _,instance in enumerate(resulstForDelete):
-                instance.visible = False 
-
-            Genders.objects.bulk_update(resulstForDelete,["visible"])
-
-            return Response("Success", 200)
-        except Exception as e:
-            return Response(e.args, 400)
+        instance_id = kwargs.get("id", "")
+        payload, status = self.controller.put(int(instance_id), request.data)
+        return Response(data=payload, status=status)
 
     def delete(self, request, *args, **kwargs):
+        document_id = kwargs.get("id", "")
 
         if "ids" in request.data:
-            return self.bulk_delete(request.data["ids"])
+            payload, status = self.controller.delete(
+                None, request.data.get("ids", None)
+            )
+            return Response(data=payload, status=status)
 
-        gender = self.get_object()
-        if gender is None:
-            return Response('Gender Not Exist', status.HTTP_200_OK)
-        gender.delete()
-        return Response('Ok', status.HTTP_200_OK)
+        payload, status = self.controller.delete(int(document_id), request.data)
+        return Response(data=payload, status=status)

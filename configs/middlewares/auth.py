@@ -15,7 +15,6 @@ from rest_framework_simplejwt.exceptions import (
     exceptions,
 )
 from django.contrib.auth import get_user_model
-from pathlib import Path
 import os
 import re
 
@@ -26,8 +25,6 @@ logger = logging.getLogger(__name__)
 # Get JWT secret key
 
 SECRET_KEY = os.environ.get("SECRET_OR_KEY")
-
-
 
 
 class CustomMiddleware(MiddlewareMixin):
@@ -52,7 +49,7 @@ class CustomMiddleware(MiddlewareMixin):
             "/media/",
             "/confirmar/asistencia/",
             ".*/generar/",
-            ".*/grafica/"
+            ".*/grafica/",
         ]
 
         match = re.search("|".join(routes_free), request.path)

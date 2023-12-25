@@ -1,11 +1,13 @@
 from ..modules import path
-from .views import GenderCreateView, GenderListView, GenderUpdateView, GendersDestroyView
 
-urlpatterns = [
-    path('', GenderListView.as_view()),
-    path('update/<int:pk>/', GenderUpdateView.as_view()),
-    path('create/', GenderCreateView.as_view()),
-    path('delete/<int:pk>/', GendersDestroyView.as_view()),
-    path('delete/', GendersDestroyView.as_view()),
 
-]
+from django.conf.urls import include
+from django.urls import path
+
+
+from apps.auth_module.api.view.genders.routers import GenderRouter
+from apps.auth_module.api.view.genders.views import GenderViewSet
+
+router = GenderRouter()
+router.register("", viewset=GenderViewSet, basename="gender")
+urlpatterns = [path("", include(router.urls))]

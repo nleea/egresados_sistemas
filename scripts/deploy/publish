@@ -1,6 +1,0 @@
-cd /home/ubuntu/main/egresados_sistemas
-git add .
-git commit -m"."
-git pull
-
-/home/ubuntu/.local/share/virtualenvs/egresados_sistemas-d1e6dp48/bin/supervisorctl restart egresado

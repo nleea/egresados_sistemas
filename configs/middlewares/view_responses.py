@@ -2,7 +2,6 @@ from django.http import HttpResponse, JsonResponse
 from ..helpers.create_response import create_response
 import json
 from django.db.utils import IntegrityError
-from rest_framework.renderers import JSONRenderer
 import re
 from django.core.cache import cache
 import logging

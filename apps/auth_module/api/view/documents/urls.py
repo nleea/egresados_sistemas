@@ -1,10 +1,14 @@
 from ..modules import path
-from .views import DocumentListView, DocumentUpdateView, DocumentCreateView, DocumentDestroyView
 
-urlpatterns = [
-    path('', DocumentListView.as_view()),
-    path('update/<int:pk>/', DocumentUpdateView.as_view()),
-    path('create/', DocumentCreateView.as_view()),
-    path('delete/<int:pk>/', DocumentDestroyView.as_view()),
-    path('delete/', DocumentDestroyView.as_view()),
-]
+
+from django.conf.urls import include
+from django.urls import path
+
+
+from apps.auth_module.api.view.documents.routes import DocumentRouter
+from apps.auth_module.api.view.documents.views import MessageViewSet
+
+router = DocumentRouter()
+router.register("", viewset=MessageViewSet, basename="documents")
+urlpatterns = [path("", include(router.urls))]
+

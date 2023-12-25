@@ -1,18 +1,12 @@
 import tempfile
 from celery import shared_task
 from django.core.mail import EmailMultiAlternatives
-
+from django.conf.global_settings import EMAIL_HOST_USER
 from django.template.loader import render_to_string
 import qrcode
 import qrcode.image.svg
 import base64
 from django.utils.html import strip_tags
-import os
-
-if os.environ.get("DEBUG"):
-    from configuration.settings.dev import *
-else:
-    from configuration.settings.prod import *
 
 
 @shared_task(
@@ -87,7 +81,6 @@ def send_confirm_mail(self, target_mail, evento):
 
 
 def send_email_list(userList, evento, custom_email):
-    print(userList)
     for _, x in enumerate(userList):
         send_confirm_mail.delay(target_mail=[x.email], evento=evento)  # type: ignore
     for x in custom_email:
