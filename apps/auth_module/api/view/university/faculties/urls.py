@@ -1,10 +1,13 @@
 from django.urls import path
-from .views import DeleteFacultiesView,SaveFacultiesView,UpdateFacultiesAreaView,FacultiesView
 
-urlpatterns = [
-    path("", FacultiesView.as_view()),
-    path("create/", SaveFacultiesView.as_view()),
-    path("update/<int:pk>/", UpdateFacultiesAreaView.as_view()),
-    path("delete/<int:pk>/", DeleteFacultiesView.as_view()),
-    path("delete/", DeleteFacultiesView.as_view())
-]
+
+from django.conf.urls import include
+from django.urls import path
+
+
+from apps.auth_module.api.view.university.faculties.route import Router
+from apps.auth_module.api.view.university.faculties.views import FacultyViewSet
+
+router = Router()
+router.register("", viewset=FacultyViewSet, basename="facultad")
+urlpatterns = [path("", include(router.urls))]

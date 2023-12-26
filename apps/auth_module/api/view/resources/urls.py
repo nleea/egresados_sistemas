@@ -1,8 +1,13 @@
 from ..modules import path
-from .views import  ResourcesListView, ResourcesUpdateView,ResourcesDestroyView
 
-urlpatterns = [
-    path('roles/', ResourcesListView.as_view()),
-    path('update/<int:pk>', ResourcesUpdateView.as_view()),
-    path('delete/<int:pk>', ResourcesDestroyView.as_view()),
-]
+
+from django.conf.urls import include
+from django.urls import path
+
+
+from apps.auth_module.api.view.resources.route import Router
+from apps.auth_module.api.view.resources.views import ResourcesViewSet
+
+router = Router()
+router.register("", viewset=ResourcesViewSet, basename="resources")
+urlpatterns = [path("", include(router.urls))]

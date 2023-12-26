@@ -27,6 +27,14 @@ class BaseRepository(ABC):
     def get(self):
         return self.model.objects.filter(visible=True)
 
+    def get_filter_related(self, filter_param=None, related=None):
+        if filter_param and related:
+            return self.model.objects.filter(filter_param).select_related(*related)
+        elif filter_param:
+            return self.model.objects.filter(filter_param)
+        elif related:
+            return self.model.objects.all().select_related(*related)
+
     def post(self):
         return None
 

@@ -1,5 +1,4 @@
 from rest_framework import status
-from typing import Any
 
 
 class BaseController:
@@ -7,7 +6,12 @@ class BaseController:
         self.repo = repo
         self.serializer = serializer
 
-    def get(self) -> Any:
+    def get_filter_related(self, filter_param=None, related=None):
+        resp = self.repo.get_filter_related(filter_param, related)
+        serializer = self.serializer(resp, many=True)
+        return serializer.data, status.HTTP_200_OK
+
+    def get(self):
         resp = self.repo.get()
         serializer = self.serializer(resp, many=True)
         return serializer.data, status.HTTP_200_OK

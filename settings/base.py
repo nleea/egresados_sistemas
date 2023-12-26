@@ -74,8 +74,8 @@ MIDDLEWARE = [
     # "configs.middlewares.auth.CustomMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "configs.middlewares.loggin_middleware.LoggingMiddleware",
-    "configs.middlewares.view_responses.CustomResponseMiddleware",
+    # "configs.middlewares.loggin_middleware.LoggingMiddleware",
+    # "configs.middlewares.view_responses.CustomResponseMiddleware",
 ]
 
 

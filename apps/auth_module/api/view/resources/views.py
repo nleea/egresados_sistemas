@@ -1,57 +1,43 @@
-from ..modules import ListAPIView, Response, UpdateAPIView, status,  DestroyAPIView, IsAdminRole
-from ....models import Resources
+from ..modules import Response
 from ...serializers.resources.resources_serializers import ResourcesSerializers
+from rest_framework.viewsets import ViewSet
+from typing import Optional
+from apps.factory.base_interactor import BaseViewSetFactory
 
 
-class ResourcesListView(ListAPIView):
-    queryset = Resources.objects.all()
-    serializer_class = ResourcesSerializers
+class ResourcesViewSet(ViewSet):
+    viewset_factory: BaseViewSetFactory = None
+    http_method_names: Optional[list[str]] = []
+    model = None
+
+    def get_serializer_class(self):
+        return ResourcesSerializers
+
+    @property
+    def controller(self):
+        return self.viewset_factory.create(self.model, self.get_serializer_class())
 
     def get(self, request, *args, **kwargs):
-        data = self.get_queryset()
-        serializers = ResourcesSerializers(data, many=True)
-        return Response(serializers.data, status.HTTP_200_OK)
+        payload, status = self.controller.get()
+        return Response(data=payload, status=status)
 
+    def post(self, request, *args, **kwargs):
+        payload, status = self.controller.post(request.data)
+        return Response(data=payload, status=status)
 
-class ResourcesUpdateView(UpdateAPIView):
-    queryset = Resources.objects.all()
-    serializer_class = ResourcesSerializers
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get('pk')
-            return Resources.objects.get(pk=pk)
-        except Resources.DoesNotExist:
-            return {'response': 'Not Found', 'code': status.HTTP_400_BAD_REQUEST}
-
-    def path(self, request, *args, **kwargs):
-        resources = self.get_object()
-        if type(resources) is dict:
-            return Response(resources['response'], resources['code'])
-        resourcesSerializers = ResourcesSerializers(
-            resources, data=request.data)
-        if resourcesSerializers.is_valid():
-            resourcesSerializers.save()
-            return Response(resourcesSerializers.data, status.HTTP_200_OK)
-        return Response(resourcesSerializers.errors, status.HTTP_400_BAD_REQUEST)
-
-
-class ResourcesDestroyView(DestroyAPIView):
-    queryset = Resources.objects.all()
-    serializer_class = ResourcesSerializers
-    permission_classes = [IsAdminRole]
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get('pk')
-            return Resources.objects.get(id=pk)
-        except Resources.DoesNotExist:
-            return None
+    def put(self, request, *args, **kwargs):
+        instance_id = kwargs.get("id", "")
+        payload, status = self.controller.put(int(instance_id), request.data)
+        return Response(data=payload, status=status)
 
     def delete(self, request, *args, **kwargs):
-        resources = self.get_object()
-        if resources is None:
-            return Response('Resources Not Exist', status.HTTP_200_OK)
-        resources.delete()
+        instance_id = kwargs.get("id", "")
 
-        return Response('Ok', status.HTTP_200_OK)
+        if "ids" in request.data:
+            payload, status = self.controller.delete(
+                None, request.data.get("ids", None)
+            )
+            return Response(data=payload, status=status)
+
+        payload, status = self.controller.delete(int(instance_id), request.data)
+        return Response(data=payload, status=status)

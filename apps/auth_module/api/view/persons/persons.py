@@ -1,61 +1,52 @@
-from ...serializers.person.persons_serializers import PersonsSerializers, PersonsSimpleSerializers
-from ....models import Persons
-from rest_framework import status
-from ..modules import ListAPIView, CreateAPIView, UpdateAPIView, Response
-from rest_framework.views import APIView
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.conf import settings
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import cache_page
-
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+from ..modules import Response
+from ...serializers.person.persons_serializers import (
+    PersonsSerializers,
+    PersonsSimpleSerializersView,
+)
+from rest_framework.viewsets import ViewSet
+from typing import Optional
+from apps.factory.base_interactor import BaseViewSetFactory
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
-class PersonView(ListAPIView):
-    queryset = Persons.objects.all()
+class PersonViewSet(ViewSet):
+    viewset_factory: BaseViewSetFactory = None
+    http_method_names: Optional[list[str]] = []
+    model = None
+
     serializer_class = PersonsSerializers
 
+    def get_serializer_class(self):
+        if self.action in ["get"]:
+            return PersonsSimpleSerializersView
+        return PersonsSerializers
+
+    @property
+    def controller(self):
+        return self.viewset_factory.create(self.model, self.get_serializer_class())
+
     def get(self, request, *args, **kwargs):
-        data = Persons.objects.select_related(
-            "user").get(user__id=request.user.id)
-        serializers = PersonsSerializers([data], many=True)
-        return Response(serializers.data, status.HTTP_200_OK)
-
-
-class PersonCreateView(CreateAPIView):
-    queryset = Persons.objects.all()
-    serializer_class = PersonsSimpleSerializers
+        payload, status = self.controller.get_filter_related(
+            None, ["document_type", "gender_type"]
+        )
+        return Response(data=payload, status=status)
 
     def post(self, request, *args, **kwargs):
-        personSerializers = PersonsSimpleSerializers(data=request.data)
-        if personSerializers.is_valid():
-            personSerializers.save()
-            return Response(personSerializers.data, status.HTTP_200_OK)
-        return Response(personSerializers.errors, status.HTTP_400_BAD_REQUEST)
-
-
-class PersonUpdateView(APIView):
-
-    def get_object(self):
-        try:
-            pk = self.request.user.pk
-            return Persons.objects.get(user__id=pk)
-        except Persons.DoesNotExist:
-            return None
+        payload, status = self.controller.post(request.data)
+        return Response(data=payload, status=status)
 
     def put(self, request, *args, **kwargs):
-        person = self.get_object()
+        instance_id = kwargs.get("id", "")
+        payload, status = self.controller.put(int(instance_id), request.data)
+        return Response(data=payload, status=status)
 
-        if person is None:
-            # type: ignore
-            return Response("person {} don't exist", status.HTTP_400_BAD_REQUEST)
-        try:
-            personSerializers = PersonsSimpleSerializers(
-                person, data=request.data, partial=True)
-            if personSerializers.is_valid():
-                personSerializers.save()
-                return Response("Success", status.HTTP_200_OK)
-            return Response(personSerializers.error_messages, status.HTTP_400_BAD_REQUEST)
-        except (AttributeError, Exception) as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, *args, **kwargs):
+        instance_id = kwargs.get("id", "")
+
+        if "ids" in request.data:
+            payload, status = self.controller.delete(
+                None, request.data.get("ids", None)
+            )
+            return Response(data=payload, status=status)
+
+        payload, status = self.controller.delete(int(instance_id), request.data)
+        return Response(data=payload, status=status)

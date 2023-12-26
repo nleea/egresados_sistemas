@@ -1,10 +1,14 @@
-from django.urls import path
-from .views import DeleteProgramsView,ProgramsView,SaveProgramsView,UpdateProgramsView
 
-urlpatterns = [
-    path("", ProgramsView.as_view()),
-    path("create/", SaveProgramsView.as_view()),
-    path("update/<int:pk>/", UpdateProgramsView.as_view()),
-    path("delete/<int:pk>/", DeleteProgramsView.as_view()),
-    path("delete/", DeleteProgramsView.as_view())
-]
+from django.urls import path
+
+
+from django.conf.urls import include
+from django.urls import path
+
+
+from apps.auth_module.api.view.university.programs.route import Router
+from apps.auth_module.api.view.university.programs.views import ProgramaViewSet
+
+router = Router()
+router.register("", viewset=ProgramaViewSet, basename="programa")
+urlpatterns = [path("", include(router.urls))]

@@ -2,6 +2,9 @@ class BaseInteractor:
     def __init__(self, repo) -> None:
         self.repo = repo
 
+    def get_filter_related(self, filter_param=None, related=None):
+        return self.repo.get_filter_related(filter_param, related)
+
     def get_instance(self, data):
         return self.repo.get_instance(data)
 

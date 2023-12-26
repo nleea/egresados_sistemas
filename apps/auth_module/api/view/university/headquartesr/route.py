@@ -1,11 +1,13 @@
 from rest_framework.routers import Route, SimpleRouter
 from apps.factory.base_interactor import BaseViewSetFactory
-from apps.interfaces.routes.auth_module.document_route import document_router
+from apps.interfaces.routes.auth_module.university import router
+from apps.auth_module.models import Headquarters
 
 
-class DocumentRouter(SimpleRouter):
-    router_base = document_router
-    name_base = "document"
+class Router(SimpleRouter):
+    router_base = router
+    name_base = "sede"
+    model = Headquarters
 
     routes = [
         Route(
@@ -14,6 +16,7 @@ class DocumentRouter(SimpleRouter):
             initkwargs={
                 "viewset_factory": BaseViewSetFactory,
                 "http_method_names": ["get"],
+                "model": model,
             },
             name="{basename}-list",
             detail=True,
@@ -24,6 +27,7 @@ class DocumentRouter(SimpleRouter):
             initkwargs={
                 "viewset_factory": BaseViewSetFactory,
                 "http_method_names": ["post"],
+                "model": model,
             },
             name="{basename}-create",
             detail=True,
@@ -34,6 +38,7 @@ class DocumentRouter(SimpleRouter):
             initkwargs={
                 "viewset_factory": BaseViewSetFactory,
                 "http_method_names": ["put"],
+                "model": model,
             },
             name="{basename}-update",
             detail=True,
@@ -44,6 +49,7 @@ class DocumentRouter(SimpleRouter):
             initkwargs={
                 "viewset_factory": BaseViewSetFactory,
                 "http_method_names": ["delete"],
+                "model": model,
             },
             name="{basename}-delete",
             detail=True,

@@ -1,5 +1,5 @@
 from ..modules import Response
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ViewSet
 from ....models import Document_types
 from ...serializers.document.document_serializers import (
     DocumentSerializers,
@@ -10,22 +10,21 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from apps.factory.base_interactor import BaseViewSetFactory
+from apps.auth_module.models import Document_types
 
 
-class MessageViewSet(GenericViewSet):
+class MessageViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []
 
-    serializer_class = DocumentSerializers
-
     def get_serializer_class(self):
-        if self.action in ["list", "retrieve"]:
+        if self.action in ["get"]:
             return DocumentSerializersView
         return DocumentSerializers
 
     @property
     def controller(self):
-        return self.viewset_factory.create(Document_types, self.serializer_class)
+        return self.viewset_factory.create(Document_types, self.get_serializer_class())
 
     def get(self, request: Request, *args, **kwargs):
         payload, status = self.controller.get()

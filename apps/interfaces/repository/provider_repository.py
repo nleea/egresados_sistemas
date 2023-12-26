@@ -8,6 +8,9 @@ class ProviderRepository(ABC):
     def get_instance(self, id):
         return self.repo.get_instance(id)
 
+    def get_filter_related(self, filter_param=None, related=None):
+        return self.repo.get_filter_related(filter_param, related)
+
     def bulk_delete(self, ids):
         return self.repo.bulk_delete(ids)
 

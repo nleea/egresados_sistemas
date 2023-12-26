@@ -1,6 +1,6 @@
 from rest_framework.routers import Route, SimpleRouter
 from apps.factory.base_interactor import BaseViewSetFactory
-from apps.interfaces.routes.gender_route import gender_router
+from apps.interfaces.routes.auth_module.gender_route import gender_router
 from apps.auth_module.models import Genders
 
 

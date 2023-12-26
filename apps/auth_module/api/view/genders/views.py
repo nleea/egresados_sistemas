@@ -3,12 +3,12 @@ from ...serializers.gender.gender_Serializers import (
     GenderSerializers,
     GenderSerializersView,
 )
-from rest_framework.viewsets import GenericViewSet
+from rest_framework.viewsets import ViewSet
 from typing import Optional
 from apps.factory.base_interactor import BaseViewSetFactory
 
 
-class GenderViewSet(GenericViewSet):
+class GenderViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []
     model = None
@@ -16,13 +16,13 @@ class GenderViewSet(GenericViewSet):
     serializer_class = GenderSerializers
 
     def get_serializer_class(self):
-        if self.action in ["list", "retrieve"]:
+        if self.action in ["get"]:
             return GenderSerializersView
         return GenderSerializers
 
     @property
     def controller(self):
-        return self.viewset_factory.create(self.model, self.serializer_class)
+        return self.viewset_factory.create(self.model, self.get_serializer_class())
 
     def get(self, request, *args, **kwargs):
         payload, status = self.controller.get()
