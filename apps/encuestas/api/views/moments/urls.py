@@ -1,10 +1,8 @@
 from django.urls import path
-from .view import MomentView,SaveMomentsView,UpdateMomentsView,DeleteMomentsView
+from django.conf.urls import include
+from apps.encuestas.api.views.moments.router import Router
+from apps.encuestas.api.views.moments.view import MomentsViewSet
 
-urlpatterns = [
-    path("",MomentView.as_view()),
-    path("create/",SaveMomentsView.as_view()),
-    path("update/<int:pk>/",UpdateMomentsView.as_view()),
-    path("delete/<int:pk>/",DeleteMomentsView.as_view()),   
-    path("delete/",DeleteMomentsView.as_view()),    
-]
+router = Router()
+router.register("", viewset=MomentsViewSet, basename="moments")
+urlpatterns = [path("", include(router.urls))]

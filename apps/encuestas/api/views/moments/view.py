@@ -1,110 +1,55 @@
-from rest_framework.views import APIView
-from ...serializers.momento.momento_serializers import MomentSerializers
-from ....models.models import TipoMomento
+from apps.encuestas.api.serializers.momento.momento_serializers import (
+    MomentSerializers,
+    MomentSerializersVIew,
+)
 from rest_framework.response import Response
-from rest_framework import status
-from ..BaseView import BaseView
-
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
-from django.conf import settings
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
-
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+from rest_framework.viewsets import ViewSet
+from typing import Optional
+from apps.factory.base_interactor import BaseViewSetFactory
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
-class MomentView(APIView):
+class MomentsViewSet(ViewSet):
+    viewset_factory: BaseViewSetFactory = None
+    http_method_names: Optional[list[str]] = []
+    model = None
 
-    def get_meta(self):
-        if "meta" in self.request.headers:
-            return self.request.headers["meta"]
-        return None
+    def get_serializer_class(self):
+        if self.action == "get":
+            return MomentSerializersVIew
+        return MomentSerializers
 
-    def get(self, request, *args, **kwargs):
-        data = MomentSerializers(
-            TipoMomento.objects.filter(visible=True), many=True, meta=self.get_meta())
-        return Response(data.data, status.HTTP_200_OK)
-
-
-class SaveMomentsView(APIView):
+    @property
+    def controller(self):
+        return self.viewset_factory.create(self.model, self.get_serializer_class())
 
     def post(self, request, *args, **kwargs):
-        data = MomentSerializers(data=request.data)
-
-        if data.is_valid():
-            data.save(userCreate=request.user)
-            return Response("Sucess", status.HTTP_200_OK,)
-        return Response(data.errors, "Bad Request")
-
-
-class DeleteMomentsView(BaseView):
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get("pk")
-            seccionId = TipoMomento.objects.get(pk=pk)
-            return seccionId
-        except TipoMomento.DoesNotExist:
-            return None
-
-    def bulk_delete(self, ids):
-        try:
-            resulstForDelete = TipoMomento.objects.filter(pk__in=ids)
-            for _, instance in enumerate(resulstForDelete):
-                instance.visible = False
-
-            TipoMomento.objects.bulk_update(resulstForDelete, ["visible"])
-
-            return Response("Success", 200)
-        except Exception as e:
-            return Response(e.args, 400)
-
-    def delete(self, request, *args, **kwargs):
-
-        if "ids" in request.data:
-            return self.bulk_delete(request.data["ids"])
-
-        instanceOrNone = self.get_object()
-        if instanceOrNone is None:
-            return Response("Momento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
-
-        try:
-            instance = MomentSerializers(
-                instanceOrNone, data={"visible": False}, partial=True)
-            if instance.is_valid():
-                instance.save(userUpdate=request.user)
-            else:
-                return Response("Invalid Delete", status.HTTP_400_BAD_REQUEST)
-
-            return Response("Delete", status.HTTP_200_OK)
-        except BaseException as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
-
-class UpdateMomentsView(BaseView):
-
-    def _allowed_methods(self):
-        self.http_method_names.append("put")
-        return [m.upper() for m in self.http_method_names if hasattr(self, m)]
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get("pk")
-            seccionId = TipoMomento.objects.get(pk=pk)
-            return seccionId
-        except TipoMomento.DoesNotExist:
-            return None
+        payload, status = self.controller.post(
+            request.data, extra={"userCreate": request.user}
+        )
+        return Response(data=payload, status=status)
 
     def put(self, request, *args, **kwargs):
+        instance_id = kwargs.get("id", "")
+        payload, status = self.controller.put(int(instance_id), request.data)
+        return Response(data=payload, status=status)
 
-        instanceOrNone = self.get_object()
-        if instanceOrNone is None:
-            return Response("Momento {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, *args, **kwargs):
+        instance_id = kwargs.get("id", "")
 
-        instance = MomentSerializers(
-            instanceOrNone, data=request.data, partial=True)
-        if instance.is_valid():
-            instance.save(userUpdate=request.user)
-            return Response("Success", status.HTTP_200_OK)
-        return Response(instance.errors, status.HTTP_400_BAD_REQUEST)
+        if "ids" in request.data:
+            payload, status = self.controller.delete(
+                None, request.data.get("ids", None)
+            )
+            return Response(data=payload, status=status)
+
+        payload, status = self.controller.delete(int(instance_id), request.data)
+        return Response(data=payload, status=status)
+
+    def get(self, request, *args, **kwargs):
+        payload, status = self.controller.get_filter_related(
+            filter_param=[{"visible": True}],
+            related=["userCreate", "userUpdate"],
+            order=["-id"],
+        )
+
+        return Response(data=payload, status=status)

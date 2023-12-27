@@ -26,7 +26,6 @@ class QuestionRSerializersView(BaseSerializers):
         fields = "__all__"
 
 
-
 class QuestionSerializersView(BaseSerializers):
     pregunta_nombre = serializers.CharField(read_only=True)
     momento = MomentSerializers(read_only=True)
@@ -109,7 +108,7 @@ class QuestionCreateSerializers(BaseSerializers):
                     pregunta_nombre=validated_data["question"],
                     momento_id=validated_data["momento"],
                     tipo_pregunta=validated_data["type"],
-                    depende_respuesta_id=validated_data["depend"],
+                    depende_respuesta_id=validated_data.get("depend", None),
                     userCreate=validated_data["userCreate"],
                 )
                 if validated_data["options"]:

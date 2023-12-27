@@ -2,8 +2,15 @@ class BaseInteractor:
     def __init__(self, repo) -> None:
         self.repo = repo
 
-    def get_filter_related(self, filter_param=None, related=None, prefetch=None):
-        return self.repo.get_filter_related(filter_param, related, prefetch)
+    def get_filter_related(
+        self, filter_param=None, related=None, prefetch=None, **kwargs
+    ):
+        reps = self.repo.get_filter_related(filter_param, related, prefetch)
+
+        order = kwargs.get("order", None)
+        if order:
+            return reps.order_by(*order)
+        return reps
 
     def complex_filters(self, **kwargs):
         reps = self.repo.complex_filters(**kwargs)

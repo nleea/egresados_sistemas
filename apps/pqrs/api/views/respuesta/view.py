@@ -1,148 +1,63 @@
-from rest_framework.views import APIView
-from ...serializers.respuesta.respuesta_serializers import RespuestaSerializers, RespuestaSerializersView
-from ...serializers.pqrs.pqrs_serialziers import PqrsSerializers
-from ....models.models import Respuesta, Pqrs
+from apps.pqrs.api.serializers.respuesta.respuesta_serializers import (
+    RespuestaSerializers,
+    RespuestaSerializersView,
+)
 from rest_framework.response import Response
-from rest_framework import status
-from ...serializers.pqrs.pqrs_serialziers import PqrsSerializersView
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
-from django.db.models import Prefetch
-
-from django.conf import settings
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
-
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+from rest_framework.response import Response
+from rest_framework.viewsets import ViewSet
+from typing import Optional
+from apps.factory.pqrs_interactor import BaseViewSetFactory
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
-class RespuestaView(APIView):
+class RespuestaViewSet(ViewSet):
+    viewset_factory: BaseViewSetFactory = None
+    http_method_names: Optional[list[str]] = []
+    model = None
 
-    def get(self, request, *args, **kwargs):
-        meta = None
-        if 'meta' in request.headers:
-            meta = request.headers["meta"]
-        data = RespuestaSerializersView(
-            Respuesta.objects.select_related("pqrs").filter(visible=True).order_by("-id"), many=True, meta=True)
-        return Response(data.data, status.HTTP_200_OK,)
+    def get_serializer_class(self):
+        if self.action in ["get", "query"]:
+            return RespuestaSerializersView
+        return RespuestaSerializers
 
-
-class SaveRespuestaView(APIView):
+    @property
+    def controller(self):
+        return self.viewset_factory.create(self.model, self.get_serializer_class())
 
     def post(self, request, *args, **kwargs):
-        data = RespuestaSerializers(data=request.data)
-        if data.is_valid():
-            data.save(userCreate=request.user)
-            if "status" in request.data:
-                pqrsResulst = Pqrs.objects.get(pk=request.data["pqrs"])
-                resulst = PqrsSerializers(
-                    pqrsResulst, {"status": request.data["status"]}, partial=True)
-                if resulst.is_valid():
-                    resulst.save()
-            return Response("Sucess", status.HTTP_200_OK)
-        return Response(data.errors, status.HTTP_400_BAD_REQUEST)
-
-
-class DeleteRespuestaView(APIView):
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get("pk")
-            seccionId = Respuesta.objects.get(pk=pk)
-            return seccionId
-        except Respuesta.DoesNotExist:
-            return None
-    
-    def bulk_delete(self, ids):
-        try:
-            resulstForDelete = Respuesta.objects.filter(pk__in=ids)
-            for _,instance in enumerate(resulstForDelete):
-                instance.visible = False 
-
-            Respuesta.objects.bulk_update(resulstForDelete,["visible"])
-
-            return Response("Success", 200)
-        except Exception as e:
-            return Response(e.args, 400)
-
-    def delete(self, request, *args, **kwargs):
-
-        if "ids" in request.data:
-            return self.bulk_delete(request.data["ids"])
-        
-        instanceOrNone = self.get_object()
-        if instanceOrNone is None:
-            return Response("Respuesta {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
-
-        try:
-            instance = RespuestaSerializers(
-                instanceOrNone, data={"visible": False}, partial=True)  # type: ignore
-            if instance.is_valid():
-                instance.save(userUpdate=request.user)
-            else:
-                return Response("Success", status.HTTP_200_OK)
-            return Response("Delete", status.HTTP_200_OK)
-        except BaseException as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
-
-class UpdateRespuestaView(APIView):
-
-    def _allowed_methods(self):
-        self.http_method_names.append("put")
-        return [m.upper() for m in self.http_method_names if hasattr(self, m)]
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get("pk")
-            seccionId = Respuesta.objects.get(pk=pk)
-            return seccionId
-        except Respuesta.DoesNotExist:
-            return None
+        payload, status = self.controller.post_respuesta(
+            request.data, extra={"userCreate": request.user}
+        )
+        return Response(data=payload, status=status)
 
     def put(self, request, *args, **kwargs):
+        instance_id = kwargs.get("id", "")
+        payload, status = self.controller.put(int(instance_id), request.data)
+        return Response(data=payload, status=status)
 
-        instanceOrNone = self.get_object()
-        if instanceOrNone is None:
-            return Response("Respuesta {} not exist".format(self.kwargs.get('pk')), status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, *args, **kwargs):
+        instance_id = kwargs.get("id", "")
 
-        instance = RespuestaSerializers(
-            instanceOrNone, data=request.data)  # type: ignore
-        if instance.is_valid():
-            instance.save(anexo=request.data["anexo"], userUpdate=request.user)
-            return Response("Success", status.HTTP_200_OK)
+        if "ids" in request.data:
+            payload, status = self.controller.delete(
+                None, request.data.get("ids", None)
+            )
+            return Response(data=payload, status=status)
 
-        return Response(instance.errors, status.HTTP_400_BAD_REQUEST)
+        payload, status = self.controller.delete(int(instance_id), request.data)
+        return Response(data=payload, status=status)
 
+    def get(self, request, *args, **kwargs):
+        payload, status = self.controller.get_filter_related(
+            filter_param=[{"visible": True}],
+            related=["pqrs", "pqrs__tipopqrs", "pqrs__persona"],
+            order=["-id"],
+        )
 
-@method_decorator(cache_page(60 * 5), name='dispatch')
-class RespuestasQuery(APIView):
+        return Response(data=payload, status=status)
 
-    def query(self, pk):
-        try:
-            pqrs = Pqrs.objects.defer("userCreate", "userUpdate", "tipopqrs__userCreate", "tipopqrs__userUpdate").prefetch_related(
-                Prefetch("respuesta_pqrs", queryset=Respuesta.objects.defer("userCreate", "userUpdate").all())).select_related("tipopqrs", "persona").get(pk=pk)
-            # type:ignore
-            respuestas = pqrs._prefetched_objects_cache["respuesta_pqrs"]#type:ignore
-            return pqrs, respuestas
-        except (Pqrs.DoesNotExist):
-            return None, None
+    def query(self, request, *args, **kwargs):
+        pqrs_id = request.data["pqrs"]
 
-    def post(self, request, *args, **kwargs):
+        payload, status = self.controller.query(pqrs_id)
 
-        pqrsId = request.data["pqrs"]
-        pqrs, respuesta = self.query(pqrsId)
-
-        if pqrs is None:
-            return Response("PQRS with id {} not exist".format(pqrsId), status.HTTP_400_BAD_REQUEST)
-
-        resulst = PqrsSerializersView([pqrs], many=True)
-        resulst_respuestas = RespuestaSerializersView(
-            respuesta, many=True, extra=False)
-
-        response = {
-            "pqrs": resulst.data,
-            "respuestas": resulst_respuestas.data
-        }
-
-        return Response(response, status.HTTP_200_OK)
+        return Response(payload, status)

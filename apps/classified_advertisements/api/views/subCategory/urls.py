@@ -1,10 +1,8 @@
 from django.urls import path
-from .view import SaveSubCategoryView,UpdateSubCategoryView,SubCategoryView,DeleteSubCategoryView
+from django.conf.urls import include
+from apps.classified_advertisements.api.views.subCategory.router import Router
+from apps.classified_advertisements.api.views.subCategory.view import SubCategoryViewSet
 
-urlpatterns = [
-    path("",SubCategoryView.as_view()),
-    path("create/",SaveSubCategoryView.as_view()),
-    path("update/<int:pk>/",UpdateSubCategoryView.as_view()),
-    path("delete/<int:pk>/",DeleteSubCategoryView.as_view()),
-    path("delete/",DeleteSubCategoryView.as_view())
-]
+router = Router()
+router.register("", viewset=SubCategoryViewSet, basename="sub-categoria")
+urlpatterns = [path("", include(router.urls))]

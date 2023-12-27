@@ -13,8 +13,10 @@ class BaseController:
         self.repo = repo
         self.serializer = serializer
 
-    def get_filter_related(self, filter_param=None, related=None, prefetch=None):
-        resp = self.repo.get_filter_related(filter_param, related, prefetch)
+    def get_filter_related(
+        self, filter_param=None, related=None, prefetch=None, **kwargs
+    ):
+        resp = self.repo.get_filter_related(filter_param, related, prefetch, **kwargs)
         serializer = self.serializer(resp, many=True)
         return serializer.data, status.HTTP_200_OK
 
@@ -57,7 +59,7 @@ class BaseController:
         if not instance:
             return "NOT FOUND", status.HTTP_400_BAD_REQUEST
 
-        serializers = self.serializer(instance, data=data)
+        serializers = self.serializer(instance, data=data, partial=True)
         if serializers.is_valid():
             serializers.save()
             return "Ok", status.HTTP_200_OK
