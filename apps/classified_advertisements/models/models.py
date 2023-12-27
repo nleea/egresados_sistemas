@@ -110,7 +110,8 @@ class Anuncio(BaseModel):
     state_value = models.CharField(max_length=50,default="Pendiente")
     mensajes = models.ManyToManyField(Mensajes, null=True)
 
-    objects = AdvertisementsManagers()
+    objects_subCategory = AdvertisementsManagers()
+    objects = models.Manager()
 
     def change_state(self, state):
         self.state = state

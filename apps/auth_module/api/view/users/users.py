@@ -1,94 +1,65 @@
 from django.contrib.auth.hashers import make_password
 from rest_framework.response import Response
-from rest_framework.generics import CreateAPIView, UpdateAPIView
-from rest_framework.views import APIView
+from rest_framework.generics import UpdateAPIView
 from rest_framework import status
-from ...serializers.user.users_serializers import UserSerializers, CreateUserSerializers, UserChangePassword
+from ...serializers.user.users_serializers import (
+    UserSerializers,
+    CreateUserSerializers,
+    UserChangePassword,
+)
 from ....models import User
+from rest_framework.response import Response
+from rest_framework.viewsets import ViewSet
+from typing import Optional
+from apps.factory.base_interactor import BaseViewSetFactory
 
 
-class UsersView(APIView):
+class UserViewSet(ViewSet):
+    viewset_factory: BaseViewSetFactory = None
+    http_method_names: Optional[list[str]] = []
+    model = None
 
-    def get_object(self):
-        try:
-            request_user = self.request.user.id # type: ignore
-            user = User.objects.prefetch_related("groups").get(pk=request_user)
-            return user
-        except User.DoesNotExist:
-            return None
-        except Exception as e:
-            return None
+    def get_serializer_class(self):
+        if self.action in ["get"]:
+            return UserSerializers
+        return CreateUserSerializers
+
+    @property
+    def controller(self):
+        return self.viewset_factory.create(self.model, self.get_serializer_class())
 
     def get(self, request, *args, **kwargs):
-
-        all_user = request.GET.get("all",None)
+        all_user = request.GET.get("all", None)
 
         if request.user.is_staff and all_user:
-            users = User.objects.prefetch_related("groups").all()
-            serializers = UserSerializers(
-                users, context={'request': request}, many=True)
-            return Response(serializers.data, status.HTTP_200_OK)
+            payload, status = self.controller.get_filter_related(prefetch=["groups"])
+            return Response(data=payload, status=status)
 
-        data = self.get_object()
-
-        if data is None:
-            return Response('User Not found',  status.HTTP_400_BAD_REQUEST)
-
-        try:
-            serializers = UserSerializers(data)
-            return Response(serializers.data, status.HTTP_200_OK)
-        except (AttributeError, Exception) as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
-class UserCreateView(CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = CreateUserSerializers
-
-    def perform_create(self, serializer):
-        password = make_password(self.request.data['password']) # type: ignore
-        serializer.save(password=password)
+        payload, status = self.controller.get_object(
+            request.user.id, prefetch=["groups"]
+        )
+        return Response(data=payload, status=status)
 
     def post(self, request, *args, **kwargs):
-        userSerializers = self.get_serializer(data=request.data)
-        if userSerializers.is_valid():
-            self.perform_create(userSerializers)
-            return Response(userSerializers.data, status.HTTP_200_OK)
-        return Response(userSerializers.dat, status.HTTP_200_OK)
-
-
-class UserUpdateView(UpdateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializers
-
-    def get_object(self):
-        try:
-            request_user = self.kwargs['pk']
-            user = User.objects.get(pk=request_user)
-            return user
-        except User.DoesNotExist:
-            return None
-        except Exception as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
-
-    def perform_update(self, serializer):
-        serializer.save()
+        payload, status = self.controller.post(request.data)
+        return Response(data=payload, status=status)
 
     def put(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        user = self.get_object()
+        instance_id = kwargs.get("id", "")
+        payload, status = self.controller.put(int(instance_id), request.data)
+        return Response(data=payload, status=status)
 
-        if user is None:
-            return Response('Password Error', status.HTTP_400_BAD_REQUEST)
+    def delete(self, request, *args, **kwargs):
+        instance_id = kwargs.get("id", "")
 
-        try:
-            userSerializers = UserSerializers(
-                user, data=request.data, partial=partial)
-            if userSerializers.is_valid():
-                self.perform_update(userSerializers)
-                return Response('Password Error', status.HTTP_400_BAD_REQUEST)
-            return Response(userSerializers.errors, 'Error', status=status.HTTP_400_BAD_REQUEST) # type: ignore
-        except (AttributeError, Exception) as e:
-            return Response(e.args, status.HTTP_400_BAD_REQUEST)
+        if "ids" in request.data:
+            payload, status = self.controller.delete(
+                None, request.data.get("ids", None)
+            )
+            return Response(data=payload, status=status)
+
+        payload, status = self.controller.delete(int(instance_id), request.data)
+        return Response(data=payload, status=status)
 
 
 class UserChangePasswordView(UpdateAPIView):
@@ -97,7 +68,7 @@ class UserChangePasswordView(UpdateAPIView):
 
     def get_object(self):
         try:
-            request_user = self.kwargs['pk']
+            request_user = self.kwargs["pk"]
             user = User.objects.get(pk=request_user)
             return user
         except (User.DoesNotExist, TypeError):
@@ -106,32 +77,33 @@ class UserChangePasswordView(UpdateAPIView):
             return None
 
     def perform_update(self, serializer):
-        if 'original-password' in self.request.data: # type: ignore
-            password = make_password(self.request.data['password']) # type: ignore
+        if "original-password" in self.request.data:  # type: ignore
+            password = make_password(self.request.data["password"])  # type: ignore
             serializer.save(password=password)
         else:
             serializer.save()
 
     def patch(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
+        partial = kwargs.pop("partial", False)
         user = request.user
 
         if user is None:
-            return Response("User don't exist", status.HTTP_400_BAD_REQUEST)# type: ignore
+            return Response("User don't exist", status.HTTP_400_BAD_REQUEST)  # type: ignore
 
-        if 'original-password' not in self.request.data: # type: ignore
-            return Response('Password Error', status.HTTP_400_BAD_REQUEST)
+        if "original-password" not in self.request.data:  # type: ignore
+            return Response("Password Error", status.HTTP_400_BAD_REQUEST)
 
-        if not user.check_password(request.data['original-password']):
-            return Response('Password is not correct.', status.HTTP_400_BAD_REQUEST)
+        if not user.check_password(request.data["original-password"]):
+            return Response("Password is not correct.", status.HTTP_400_BAD_REQUEST)
 
         userSerializers = UserChangePassword(
-            user, data=request.data, partial=partial, context={'context': request})
+            user, data=request.data, partial=partial, context={"context": request}
+        )
 
         try:
             if userSerializers.is_valid():
                 self.perform_update(userSerializers)
-                return Response('Password Change', status.HTTP_200_OK)
+                return Response("Password Change", status.HTTP_200_OK)
             return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
         except (AttributeError, Exception) as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)

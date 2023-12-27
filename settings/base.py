@@ -38,7 +38,6 @@ COMMONS_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "debug_toolbar",
 ]
 
 INSTALLS_APPS = [
@@ -63,19 +62,14 @@ THIRDS_APPS = [
 INSTALLED_APPS = COMMONS_APPS + INSTALLS_APPS + THIRDS_APPS
 MIDDLEWARE = [
     "django.middleware.gzip.GZipMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    # "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    # "configs.middlewares.auth.CustomMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    # "configs.middlewares.loggin_middleware.LoggingMiddleware",
-    # "configs.middlewares.view_responses.CustomResponseMiddleware",
 ]
 
 

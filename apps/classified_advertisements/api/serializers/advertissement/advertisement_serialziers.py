@@ -162,12 +162,14 @@ class AdvertisementSerializers(BaseSerializers):
         if tipo_capacitacion != None:
             if len(tipo_capacitacion):
                 capacitaciones = TiposCapacitaciones.objects.filter(
-                    pk__in=list(map(int, tipo_capacitacion[0].split(",")))
+                    # pk__in=list(map(int, tipo_capacitacion[0].split(",")))
+                    pk__in=tipo_capacitacion
                 )
                 for capacitacion in capacitaciones:
                     anuncio.tipo_capacitacion.add(capacitacion)
 
-        redes = json.loads(validated_data.pop("redes", None)[0])
+        # redes = json.loads(validated_data.pop("redes", None)[0])
+        redes = validated_data.pop("redes", None)
 
         for red in redes:
             anuncio.redes.add(

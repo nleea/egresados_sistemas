@@ -1,73 +1,134 @@
-from rest_framework.views import APIView
 from ...serializers.advertissement.advertisement_serialziers import (
     AdvertisementSerializers,
     AdvertisementSerializersView,
     AdvertisementVotoSerializers,
     AdvertisementsMensajes,
 )
-from ...serializers.subCategory.subCategory_serializers import (
-    SubCategorySerializersView,
-)
 from ....models.models import (
-    Anuncio,
-    SubCategoria,
-    VotoAnuncio,
     RedesSociales,
     TiposCapacitaciones,
     Mensajes,
 )
 from rest_framework.response import Response
-from rest_framework import status
-from ..Base.BaseView import ViewPagination, DecoratorPaginateView
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
-from django.conf import settings
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.db import models
+from rest_framework.viewsets import ViewSet
+from typing import Optional
+from apps.factory.classified_interactor import BaseViewSetFactory
 
-CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
+class AdvertisementViewSet(ViewSet):
+    viewset_factory: BaseViewSetFactory = None
+    http_method_names: Optional[list[str]] = []
+    model = None
 
-class AdvertisementsQueryView(APIView):
+    def get_serializer_class(self):
+        print(self.action)
+
+        if self.action in ["get", "mine", "most_view", "query"]:
+            return AdvertisementSerializersView
+        elif self.action == "save_voto":
+            return AdvertisementVotoSerializers
+        elif self.action == "state_changes":
+            return AdvertisementsMensajes
+        return AdvertisementSerializers
+
+    @property
+    def controller(self):
+        return self.viewset_factory.create(self.model, self.get_serializer_class())
+
     def post(self, request, *args, **kwargs):
-        results = []
-        if "categoryId" in request.data:
-            results = SubCategorySerializersView(
-                SubCategoria.objects.filter_subcategory_has_category(
-                    request.data["categoryId"]
-                ).order_by("-id"),
-                many=True,
-            ).data
+        payload, status = self.controller.post(
+            request.data, extra={"userCreate": request.user}
+        )
+        return Response(data=payload, status=status)
 
-        return Response(
-            results,
-            status.HTTP_200_OK,
+    def put(self, request, *args, **kwargs):
+        instance_id = kwargs.get("id", "")
+        payload, status = self.controller.put(int(instance_id), request.data)
+        return Response(data=payload, status=status)
+
+    def delete(self, request, *args, **kwargs):
+        instance_id = kwargs.get("id", "")
+
+        if "ids" in request.data:
+            payload, status = self.controller.delete(
+                None, request.data.get("ids", None)
+            )
+            return Response(data=payload, status=status)
+
+        payload, status = self.controller.delete(int(instance_id), request.data)
+        return Response(data=payload, status=status)
+
+    def mine(self, request, *args, **kwargs):
+        payload, status = self.controller.complex_filters(
+            defer=[
+                "tipo_capacitacion__userCreate_id",
+                "redes__userUpdate_id",
+                "redes__userCreate_id",
+                "subCategoria__userCreate_id",
+                "userCreate",
+                "userUpdate",
+            ],
+            related=["subCategoria", "subCategoria__categoriaId"],
+            prefetch=["redes", "tipo_capacitacion", "mensajes"],
+            filter=[{"visible": True, "userCreate": request.user.id}],
+            order=["-id"],
         )
 
+        return Response(data=payload, status=status)
 
-# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
-class AdvertisementView(ViewPagination):
-    @DecoratorPaginateView
+    def save_voto(self, request, *args, **kwargs):
+        emprendimiento: int = request.data.get("emprendimiento")
+        payload, status = self.controller.save_voto(
+            data={"emprendimiento": emprendimiento, "user": request.user.id}
+        )
+        return Response(data=payload, status=status)
+
+    def most_view(self, request, *args, **kwargs):
+        payload, status = self.controller.complex_filters(
+            defer=[
+                "tipo_capacitacion__userCreate_id",
+                "redes__userUpdate_id",
+                "redes__userCreate_id",
+                "subCategoria__userCreate_id",
+            ],
+            related=[
+                "subCategoria",
+                "userCreate",
+                "userUpdate",
+                "subCategoria__categoriaId",
+            ],
+            prefetch=["redes", "tipo_capacitacion"],
+            annotate=[{"nun_votos": models.Count("votoanuncio")}],
+            order=["-nun_votos"],
+            filter=[{"visible": True, "state": True}],
+        )
+
+        return Response(data=payload[:10], status=status)
+
+    def state_changes(self, request, *args, **kwargs):
+        state = request.data.get("state", False)
+        mensajes = request.data.get("mensaje", None)
+
+        pk = kwargs.get("id")
+        i, s = self.controller.state_changes(
+            id=pk, data={"mensajes": mensajes, "state": state}
+        )
+
+        return Response(i, status=s)
+
     def get(self, request, *args, **kwargs):
-        meta = None
-        subCategory = request.GET.get("subCategoryId", None)
-        if "meta" in request.headers:
-            meta = request.headers["meta"]
+        sub_category = request.GET.get("subCategoryId", None)
 
-        if subCategory:
-            anuncios = Anuncio.objects.filter_Advertisement_subCategory(subCategory)
-            anuncio_resulst = anuncios.annotate(
-                user_voted=models.Exists(
-                    VotoAnuncio.objects.filter(
-                        emprendimiento=models.OuterRef("pk"), user=request.user.id
-                    )
-                )
+        if sub_category:
+            payload, status = self.controller.anuncio_subCategory(
+                sub_category=sub_category, user_id=request.user.id
             )
-            results = AdvertisementSerializersView(anuncio_resulst, many=True)
-            return results.data
 
-        anuncios = (
-            Anuncio.objects.defer(
+            return Response(data=payload, status=status)
+
+        payload, status = self.controller.complex_filters(
+            defer=[
                 "tipo_capacitacion__userCreate_id",
                 "redes__userUpdate_id",
                 "redes__userCreate_id",
@@ -78,10 +139,10 @@ class AdvertisementView(ViewPagination):
                 "subCategoria__categoriaId__userUpdate_id",
                 "subCategoria__categoriaId__userCreate_id",
                 "mensajes__userCreate_id",
-                "mensajes__userUpdate_id"
-            )
-            .select_related("subCategoria", "subCategoria__categoriaId")
-            .prefetch_related(
+                "mensajes__userUpdate_id",
+            ],
+            related=["subCategoria", "subCategoria__categoriaId"],
+            prefetch=[
                 models.Prefetch(
                     "redes", RedesSociales.objects.all().only("id", "name", "link")
                 ),
@@ -89,218 +150,24 @@ class AdvertisementView(ViewPagination):
                     "tipo_capacitacion",
                     TiposCapacitaciones.objects.all().only("id", "name"),
                 ),
-                models.Prefetch("mensajes", Mensajes.objects.all().only("id","mensaje","createdAt","updateAt")),
-            )
-            .filter(visible=True)
-            .order_by("-id")
+                models.Prefetch(
+                    "mensajes",
+                    Mensajes.objects.all().only(
+                        "id", "mensaje", "createdAt", "updateAt"
+                    ),
+                ),
+            ],
+            filter=[{"visible": True}],
+            order=["-id"],
         )
+        return Response(data=payload, status=status)
 
-        anuncio_resulst = anuncios.annotate(
-            user_voted=models.Exists(
-                VotoAnuncio.objects.filter(
-                    emprendimiento=models.OuterRef("pk"), user=request.user.id
-                )
+    def query(self, request, *args, **kwargs):
+        if "categoryId" in request.data:
+            payload, status = self.controller.query(
+                sub_category=request.data.get("categoryId"),
+                user_id=request.user.id,
+                excludes=["mensajes"],
             )
-        )
-
-        advertisements_serializers = AdvertisementSerializersView(
-            anuncio_resulst, many=True
-        )
-
-        return advertisements_serializers.data
-
-
-
-class AdvertisementStateChangeView(ViewPagination):
-    def get_object(self) -> Anuncio | None:
-        try:
-            pk = self.kwargs.get("pk")
-            anuncio = Anuncio.objects.get(pk=pk)
-            return anuncio
-        except Anuncio.DoesNotExist:
-            return None
-
-    def post(self, request, *args, **kwargs):
-        state = request.data.get("state", False)
-        mensajes = request.data.get("mensaje", None)
-
-        instance = self.get_object()
-
-        if instance is None:
-            return Response(
-                "No existe el clasificado con ese id",
-                status=status.HTTP_400_BAD_REQUEST,
-            )
-
-        instance.change_state(state)
-
-        if state == False and mensajes:
-            mensajesSerializers = AdvertisementsMensajes(data={"mensaje": mensajes})
-            if mensajesSerializers.is_valid():
-                mensajes_save = mensajesSerializers.save()
-                instance.mensajes.add(mensajes_save.id)
-            return Response(mensajesSerializers.errors)
-
-        return Response("Success")
-
-
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
-class AdvertisementMostVoteView(ViewPagination):
-    @DecoratorPaginateView
-    def get(self, request, *args, **kwargs):
-        meta = None
-        if "meta" in request.headers:
-            meta = request.headers["meta"]
-
-        anuncios = (
-            Anuncio.objects.defer(
-                "tipo_capacitacion__userCreate_id",
-                "redes__userUpdate_id",
-                "redes__userCreate_id",
-                "subCategoria__userCreate_id",
-            )
-            .select_related(
-                "subCategoria", "userCreate", "userUpdate", "subCategoria__categoriaId"
-            )
-            .prefetch_related("redes", "tipo_capacitacion")
-            .filter(visible=True, state=True)
-            .annotate(nun_votos=models.Count("votoanuncio"))
-            .order_by("-nun_votos")[:10]
-        )
-
-        advertisements_serializers = AdvertisementSerializersView(
-            anuncios, many=True, excludes=["mensajes"]
-        )
-
-        return advertisements_serializers.data
-
-
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
-class MyAdvertisementView(ViewPagination):
-    @DecoratorPaginateView
-    def get(self, request, *args, **kwargs):
-        meta = None
-        if "meta" in request.headers:
-            meta = request.headers["meta"]
-
-        anuncios = (
-            Anuncio.objects.defer(
-                "tipo_capacitacion__userCreate_id",
-                "redes__userUpdate_id",
-                "redes__userCreate_id",
-                "subCategoria__userCreate_id",
-                "userCreate",
-                "userUpdate",
-            )
-            .select_related("subCategoria", "subCategoria__categoriaId")
-            .prefetch_related("redes", "tipo_capacitacion", "mensajes")
-            .filter(visible=True, userCreate=request.user.id)
-            .order_by("-id")
-        )
-
-        advertisements_serializers = AdvertisementSerializersView(anuncios, many=True)
-
-        return advertisements_serializers.data
-
-
-class SaveAdvertisementView(APIView):
-    def post(self, request, *args, **kwargs):
-        data = AdvertisementSerializers(data=request.data)
-        if data.is_valid():
-            data.save(userCreate=request.user)
-            return Response("Success", status.HTTP_200_OK)
-
-        return Response(data.errors, status.HTTP_400_BAD_REQUEST)
-
-
-class SaveAdvertisementVoto(APIView):
-    def post(self, request, *args, **kwargs):
-        emprendimiento: int = request.data.get("emprendimiento")
-        serializers = AdvertisementVotoSerializers(
-            data={"emprendimiento": emprendimiento, "user": request.user.id}
-        )
-
-        if serializers.is_valid():
-            serializers.save()
-            return Response("Success", status=status.HTTP_200_OK)
-        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class UpdateCategoryView(APIView):
-    def _allowed_methods(self):
-        self.http_method_names.append("put")
-        return [m.upper() for m in self.http_method_names if hasattr(self, m)]
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get("pk")
-            seccionId = Anuncio.objects.get(pk=pk)
-            return seccionId
-        except Anuncio.DoesNotExist:
-            return None
-
-    def put(self, request, *args, **kwargs):
-        instanceOrNone = self.get_object()
-        if instanceOrNone is None:
-            return Response(
-                "Anuncio {} not exist".format(self.kwargs.get("pk")),
-                status.HTTP_400_BAD_REQUEST,
-            )
-
-        instance = AdvertisementSerializers(
-            instanceOrNone, data=request.data, partial=True
-        )
-        if instance.is_valid():
-            instance.save(userUpdate=request.user)
-            return Response("Success", status.HTTP_200_OK)
-
-        return Response(instance.errors, status.HTTP_400_BAD_REQUEST)
-
-
-class DeleteCategoryView(APIView):
-    def _allowed_methods(self):
-        self.http_method_names.append("delete")
-        return [m.upper() for m in self.http_method_names if hasattr(self, m)]
-
-    def get_object(self):
-        try:
-            pk = self.kwargs.get("pk")
-            subCategoria = Anuncio.objects.get(pk=pk)
-            return subCategoria
-        except Anuncio.DoesNotExist:
-            return None
-
-    def bulk_delete(self, ids):
-        try:
-            resulstForDelete = Anuncio.objects.filter(pk__in=ids)
-            for _, instance in enumerate(resulstForDelete):
-                instance.visible = False
-
-            Anuncio.objects.bulk_update(resulstForDelete, ["visible"])
-
-            return Response("Success", 200)
-        except Exception as e:
-            return Response(e.args, 400)
-
-    def delete(self, request, *args, **kwargs):
-        if "ids" in request.data:
-            return self.bulk_delete(request.data["ids"])
-
-        instanceOrNone = self.get_object()
-        if instanceOrNone is None:
-            return Response(
-                "Anuncio {} not exist".format(self.kwargs.get("pk")),
-                status.HTTP_400_BAD_REQUEST,
-            )
-
-        try:
-            instance = AdvertisementSerializers(
-                instanceOrNone, data={"visible": False}, partial=True
-            )
-            if instance.is_valid():
-                instance.save(userUpdate=request.user)
-            else:
-                return Response("Invalid Delete", status.HTTP_400_BAD_REQUEST)
-        except instanceOrNone.DoesNotExist:
-            return Response("Error", status.HTTP_400_BAD_REQUEST)
-        return Response("Delete Success", status.HTTP_200_OK)
+            return Response(data=payload, status=status)
+        return Response("NOT_FOUND", status=404)

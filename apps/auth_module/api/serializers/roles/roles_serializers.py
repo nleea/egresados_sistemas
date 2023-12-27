@@ -4,9 +4,8 @@ from django.contrib.auth.models import Group
 
 
 class UserSerilizers(serializers.Serializer):
-
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
 
 
 class RolesSerializers(serializers.Serializer):
@@ -14,7 +13,16 @@ class RolesSerializers(serializers.Serializer):
     name = serializers.CharField(read_only=True)
 
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
+
+    def create(self, validated_data):
+        try:
+            return Group.objects.create(**validated_data)
+        except Exception as e:
+            return e.args
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
 
 
 # class RolesUserSerializers(ModelSerializer):

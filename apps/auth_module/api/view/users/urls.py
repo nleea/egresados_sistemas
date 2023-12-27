@@ -1,9 +1,15 @@
-from django.urls import path,re_path
-from .users import UsersView, UserCreateView, UserUpdateView, UserChangePasswordView
+from django.urls import path, re_path
+from .users import UserChangePasswordView
 
+from django.conf.urls import include
+
+
+from apps.auth_module.api.view.users.route import Router
+from apps.auth_module.api.view.users.users import UserViewSet
+
+router = Router()
+router.register("", viewset=UserViewSet, basename="users")
 urlpatterns = [
-    re_path(r'(?P<all>)$', UsersView.as_view()),
-    path('create/', UserCreateView.as_view()),
-    path('update/<int:pk>/', UserUpdateView.as_view()),
-    path('change/password/', UserChangePasswordView.as_view())
+    path("", include(router.urls)),
+    path("change/password/", UserChangePasswordView.as_view()),
 ]

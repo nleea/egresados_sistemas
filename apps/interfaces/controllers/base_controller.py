@@ -1,14 +1,31 @@
 from rest_framework import status
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
+# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class BaseController:
     def __init__(self, repo, serializer) -> None:
         self.repo = repo
         self.serializer = serializer
 
-    def get_filter_related(self, filter_param=None, related=None):
-        resp = self.repo.get_filter_related(filter_param, related)
+    def get_filter_related(self, filter_param=None, related=None, prefetch=None):
+        resp = self.repo.get_filter_related(filter_param, related, prefetch)
         serializer = self.serializer(resp, many=True)
+        return serializer.data, status.HTTP_200_OK
+
+    def complex_filters(self, excludes: list = [], **kwargs):
+        resp = self.repo.complex_filters(**kwargs)
+        serializer = self.serializer(resp, many=True, excludes=excludes)
+        return serializer.data, status.HTTP_200_OK
+
+    def get_object(self, id, prefetch=None, related=None):
+        resp = self.repo.get_instance(id, prefetch, related)
+        serializer = self.serializer(resp)
         return serializer.data, status.HTTP_200_OK
 
     def get(self):
@@ -16,12 +33,23 @@ class BaseController:
         serializer = self.serializer(resp, many=True)
         return serializer.data, status.HTTP_200_OK
 
-    def post(self, data):
-        serializers = self.serializer(data=data)
-        if serializers.is_valid():
-            serializers.save()
-            return "Ok", status.HTTP_201_CREATED
-        return serializers.errors, status.HTTP_400_BAD_REQUEST
+    def get_all(self, related=None, prefetch=None):
+        resp = self.repo.get_all(related, prefetch)
+        serializer = self.serializer(resp, many=True)
+        return serializer.data, status.HTTP_200_OK
+
+    def post(self, data, extra={}):
+        try:
+            serializers = self.serializer(data=data)
+            if serializers.is_valid():
+                instance = serializers.save(**extra)
+                return {
+                    "message": "Success",
+                    "id": instance.id,
+                }, status.HTTP_201_CREATED
+            return serializers.errors, status.HTTP_400_BAD_REQUEST
+        except Exception as e:
+            return e.args, status.HTTP_400_BAD_REQUEST
 
     def put(self, id: int, data):
         instance = self.repo.get_instance(id)
