@@ -51,12 +51,13 @@ INSTALLS_APPS = [
 ]
 
 THIRDS_APPS = [
-    "apps.auth_module",
-    "apps.classified_advertisements",
-    "apps.pqrs",
-    "apps.encuestas",
-    "apps.eventos",
-    "apps.reportes",
+    "src.application.auth_module",
+    "src.application.default",
+    "src.application.classified_advertisements",
+    "src.application.pqrs",
+    "src.application.encuestas",
+    "src.application.eventos",
+    "src.application.reportes",
 ]
 
 INSTALLED_APPS = COMMONS_APPS + INSTALLS_APPS + THIRDS_APPS

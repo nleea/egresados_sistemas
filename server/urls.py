@@ -45,14 +45,16 @@ def clear_cache(request):
 
 app_name = "root"
 
+PATH_APP = "src.application"
+
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", include("apps.auth_module.api.urls")),
-    path("advertisements/", include("apps.classified_advertisements.api.urls")),
-    path("eventos/", include("apps.eventos.api.urls")),
-    re_path("poll/", include("apps.encuestas.api.urls")),
-    path("pqrs/", include("apps.pqrs.api.urls")),
-    path("reportes/", include("apps.reportes.api.urls")),
+    path("", include(f"{PATH_APP}.auth_module.api.urls")),
+    path("advertisements/", include(f"{PATH_APP}.classified_advertisements.api.urls")),
+    path("eventos/", include(f"{PATH_APP}.eventos.api.urls")),
+    re_path("poll/", include(f"{PATH_APP}.encuestas.api.urls")),
+    path("pqrs/", include(f"{PATH_APP}.pqrs.api.urls")),
+    path("reportes/", include(f"{PATH_APP}.reportes.api.urls")),
     path("clear/cache", clear_cache, name="clear-cache"),
     re_path(
         r"^redoc/$", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"
