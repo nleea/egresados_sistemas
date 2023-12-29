@@ -179,16 +179,16 @@ SIMPLE_JWT = {
 
 CACHE_TTL = 60 * 15
 
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379/1",
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#         },
-#         "KEY_PREFIX": "cache",
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "rediss://red-cm7ipd6d3nmc73cgme7g:1WhZOV9Gjrn6USBLovn4hb3ZMprfNAv8@oregon-redis.render.com:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "KEY_PREFIX": "cache",
+    }
+}
 
 
 # CELERY_BROKER_URL = "redis://127.0.0.1:6379"

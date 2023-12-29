@@ -20,6 +20,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "configs.middlewares.cache_middleware.MyCacheMiddleware"
     # "configs.middlewares.view_responses.CustomResponseMiddleware",
 ]
 

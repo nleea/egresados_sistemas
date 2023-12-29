@@ -22,8 +22,6 @@ class AdvertisementViewSet(ViewSet):
     model = None
 
     def get_serializer_class(self):
-        print(self.action)
-
         if self.action in ["get", "mine", "most_view", "query"]:
             return AdvertisementSerializersView
         elif self.action == "save_voto":

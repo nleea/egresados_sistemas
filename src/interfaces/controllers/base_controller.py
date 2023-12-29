@@ -3,12 +3,11 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-import json
+from django.core.cache import cache
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class BaseController:
     def __init__(self, repo, serializer) -> None:
         self.repo = repo
