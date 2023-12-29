@@ -74,8 +74,8 @@ class BaseRepository(ABC):
             if k == "filter":
                 filtro = models.Q()
 
-                for fk in v[0].keys():
-                    filtro &= models.Q(**{fk: v[0].get(fk, None)})
+                for fk in v.keys():
+                    filtro &= models.Q(**{fk: v.get(fk, None)})
 
                 model = model.filter(filtro)
             elif k == "related":

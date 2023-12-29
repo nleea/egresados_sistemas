@@ -3,15 +3,18 @@
 import os
 import sys
 import environ
+from pathlib import Path
 
 
 env = environ.Env()
-environ.Env.read_env(".env", overwrite=True)
+BASE_DIR = Path(__file__).resolve().parent
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"), overwrite=True)
 
 
 def main():
     """Run administrative tasks."""
-    ENV = os.environ.get("ENV", None)
+
+    ENV = env("ENV")
     APPS = f"settings.{ENV}"
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", APPS)
     try:

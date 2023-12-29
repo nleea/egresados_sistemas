@@ -1,4 +1,5 @@
 from settings.base import *
+import environ
 
 import os
 
@@ -41,6 +42,14 @@ DEBUG_TOOLBAR_PANELS = [
 RENDER_PANELS = True
 
 INTERNAL_IPS = ["127.0.0.1"]
+
+
+env = environ.Env()
+DB_DEVELOP_NAME = env("DB_DEVELOP_NAME")
+DB_DEVELOP_USER = env("DB_DEVELOP_USER")
+DB_DEVELOP_PASSWORD = env("DB_DEVELOP_PASSWORD")
+DB_DEVELOP_HOST = env("DB_DEVELOP_HOST")
+DB_DEVELOP_PORT = env("DB_DEVELOP_PORT")
 
 
 DATABASES = {

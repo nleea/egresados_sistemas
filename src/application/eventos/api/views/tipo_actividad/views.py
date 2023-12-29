@@ -47,7 +47,7 @@ class TipoViewSet(ViewSet):
 
     def get(self, request, *args, **kwargs):
         payload, status = self.controller.get_filter_related(
-            filter_param=[{"visible": True}],
+            filter_param={"visible": True},
             related=["userCreate", "userUpdate"],
             order=["-id"],
         )

@@ -11,10 +11,13 @@ import os
 from whitenoise import WhiteNoise
 from django.core.wsgi import get_wsgi_application
 from django.conf import settings
+import environ
 
-ENV = os.environ.get("ENV", None)
+env = environ.Env()
+
+ENV = env("ENV")
 APPS = f"settings.{ENV}"
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', APPS)
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", APPS)
 
 application = get_wsgi_application()
 application = WhiteNoise(application, root=settings.MEDIA_ROOT)

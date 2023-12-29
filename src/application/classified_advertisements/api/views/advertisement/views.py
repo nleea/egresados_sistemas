@@ -71,7 +71,7 @@ class AdvertisementViewSet(ViewSet):
             ],
             related=["subCategoria", "subCategoria__categoriaId"],
             prefetch=["redes", "tipo_capacitacion", "mensajes"],
-            filter=[{"visible": True, "userCreate": request.user.id}],
+            filter={"visible": True, "userCreate": request.user.id},
             order=["-id"],
         )
 
@@ -101,7 +101,7 @@ class AdvertisementViewSet(ViewSet):
             prefetch=["redes", "tipo_capacitacion"],
             annotate=[{"nun_votos": models.Count("votoanuncio")}],
             order=["-nun_votos"],
-            filter=[{"visible": True, "state": True}],
+            filter={"visible": True, "state": True},
         )
 
         return Response(data=payload[:10], status=status)
@@ -157,7 +157,7 @@ class AdvertisementViewSet(ViewSet):
                     ),
                 ),
             ],
-            filter=[{"visible": True}],
+            filter={"visible": True},
             order=["-id"],
         )
         return Response(data=payload, status=status)

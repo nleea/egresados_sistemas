@@ -3,7 +3,7 @@ from django.apps import AppConfig
 AUTO_FIELD = "django.db.models.BigAutoField"
 
 
-PATH_APP = "apps.application"
+PATH_APP = "src.application"
 
 
 class DefaultConfig(AppConfig):

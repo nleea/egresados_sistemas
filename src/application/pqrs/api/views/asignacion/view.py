@@ -76,7 +76,7 @@ class AsignacionViewSet(ViewSet):
                 "pqrs__tipopqrs__userCreate_id",
                 "pqrs__tipopqrs__userUpdate_id",
             ],
-            filter=[{"funcionarioId": request.user.id, "pqrs__visible": True}],
+            filter={"funcionarioId": request.user.id, "pqrs__visible": True},
             related=["pqrs", "pqrs__tipopqrs", "pqrs__persona"],
             order=["-id"],
         )

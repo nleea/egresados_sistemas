@@ -9,7 +9,6 @@ class EventosController(BaseController):
         super().__init__(repo, serializer)
 
     def get_eventos(self, admin, user, **kwargs):
-        status_evento = kwargs.get("status", None)
         order_evento = kwargs.get("order", "-id")
         start = kwargs.get("start", None)
         end = kwargs.get("end", None)
@@ -24,7 +23,7 @@ class EventosController(BaseController):
             "tipo__userCreate",
             "tipo__userUpdate",
         ]
-        filters = [{"visible": True}]
+        filters = {"visible": True}
         related = ["area", "subArea", "tipo"]
 
         annotate = [
@@ -46,7 +45,7 @@ class EventosController(BaseController):
             return self.complex_filters(
                 defer=defer,
                 related=related,
-                filter=[*filters],
+                filter=filters,
                 order=[order_evento],
                 annotate=annotate,
             )
@@ -55,13 +54,11 @@ class EventosController(BaseController):
                 return self.complex_filters(
                     defer=defer,
                     related=related,
-                    filter=[
-                        {
-                            **filters,
-                            "inscripcion__user": user.id,
-                            "fecha__range": [start, end],
-                        }
-                    ],
+                    filter={
+                        **filters,
+                        "inscripcion__user": user.id,
+                        "fecha__range": [start, end],
+                    },
                     order=[order_evento],
                     annotate=annotate,
                 )
@@ -69,12 +66,10 @@ class EventosController(BaseController):
                 return self.complex_filters(
                     defer=defer,
                     related=related,
-                    filter=[
-                        {
-                            **filters,
-                            "inscripcion__user": user.id,
-                        }
-                    ],
+                    filter={
+                        **filters,
+                        "inscripcion__user": user.id,
+                    },
                     order=[order_evento],
                     annotate=annotate,
                 )
@@ -88,6 +83,6 @@ class EventosController(BaseController):
                 "area__userUpdate_id",
             ],
             related=["area"],
-            filter=[{"area": area}],
+            filter={"area": area},
             order=["-id"],
         )

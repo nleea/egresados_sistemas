@@ -1,4 +1,5 @@
 from settings.base import *
+import environ
 
 import os
 
@@ -19,6 +20,14 @@ MIDDLEWARE = [
     "configs.middlewares.loggin_middleware.LoggingMiddleware",
     "configs.middlewares.view_responses.CustomResponseMiddleware",
 ]
+
+env = environ.Env()
+DB_DEVELOP_NAME = env("DB_DEVELOP_NAME")
+DB_DEVELOP_USER = env("DB_DEVELOP_USER")
+DB_DEVELOP_PASSWORD = env("DB_DEVELOP_PASSWORD")
+DB_DEVELOP_HOST = env("DB_DEVELOP_HOST")
+DB_DEVELOP_PORT = env("DB_DEVELOP_PORT")
+
 
 DATABASES = {
     "default": {

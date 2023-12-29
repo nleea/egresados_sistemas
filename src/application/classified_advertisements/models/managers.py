@@ -2,9 +2,9 @@ from django.db import models
 
 
 class SubCategoryManagers(models.Manager):
-    def filter_subcategory_has_category(self, categoriId):
-        subCategory = (
-            self.filter(categoriaId=int(categoriId))
+    def filter_subcategory_has_category(self, categoria_id):
+        sub_category = (
+            self.filter(categoriaId=int(categoria_id))
             .defer(
                 "userCreate",
                 "userUpdate",
@@ -13,13 +13,13 @@ class SubCategoryManagers(models.Manager):
             )
             .select_related("categoriaId")
         )
-        return subCategory
+        return sub_category
 
 
 class AdvertisementsManagers(models.Manager):
-    def filter_Advertisement_subCategory(self, subCategoryId):
+    def filter_Advertisement_subCategory(self, subcategory_id):
         advertisements = (
-            self.filter(subCategoria=int(subCategoryId), visible=True)
+            self.filter(subCategoria=int(subcategory_id), visible=True)
             .prefetch_related("redes", "tipo_capacitacion")
             .defer(
                 "subCategoria__userCreate",

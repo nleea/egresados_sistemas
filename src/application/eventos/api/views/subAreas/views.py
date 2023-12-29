@@ -47,7 +47,7 @@ class SubAreaViewSet(ViewSet):
 
     def get(self, request, *args, **kwargs):
         payload, status = self.controller.complex_filters(
-            filter=[{"visible": True}],
+            filter={"visible": True},
             related=["area"],
             defer=[
                 "userCreate",

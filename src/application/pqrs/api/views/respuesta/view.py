@@ -56,7 +56,5 @@ class RespuestaViewSet(ViewSet):
 
     def query(self, request, *args, **kwargs):
         pqrs_id = request.data["pqrs"]
-
         payload, status = self.controller.query(pqrs_id)
-
         return Response(payload, status)

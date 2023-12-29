@@ -85,9 +85,11 @@ class PqrsController(BaseController):
                 defer=defer,
                 related=["persona", "tipopqrs", "userCreate"],
                 prefetch=prefetch,
-                filter=[
-                    {"userCreate": user.id, "createdAt__range": [start, end], **filters}
-                ],
+                filter={
+                    "userCreate": user.id,
+                    "createdAt__range": [start, end],
+                    **filters,
+                },
                 order=[order],
             )
 
@@ -100,7 +102,7 @@ class PqrsController(BaseController):
                 defer=[*defer, "userCreate"],
                 related=["persona", "tipopqrs"],
                 prefetch=prefetch,
-                filter=[filters],
+                filter=filters,
                 order=[order],
             )
             return resp, status
@@ -109,7 +111,7 @@ class PqrsController(BaseController):
                 defer=[*defer],
                 related=["persona", "tipopqrs"],
                 prefetch=prefetch,
-                filter=[{**filters, "userCreate": user.id}],
+                filter={**filters, "userCreate": user.id},
                 order=[order],
             )
 

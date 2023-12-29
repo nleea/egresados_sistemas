@@ -23,30 +23,39 @@ class ResourcesRolesSerializers(Serializer):
 
     def create(self, validated_data):
         try:
-            merge = validated_data.get("merge",False)
+            merge = validated_data.get("merge", False)
             new_resources = []
-            resources = []
+            resources_new = []
             list_resources_roles = []
 
             id_last_resources = 0
             last = Resources.objects.last()
 
+            resources = validated_data.get("resources", [{"path": "", "items": []}])[0]
             if merge:
-                for _, resource in enumerate(validated_data["resources"]):
-                    id_padre = Resources.objects.get(path=resource["path"]).pk
-                    new_resources = [{**x, "id_padre": id_padre}
-                                     for x in resource["items"]]
+                id_padre = Resources.objects.get(path=resources["path"]).pk
+                new_resources = [
+                    {**x, "id_padre": id_padre} for x in resources["items"]
+                ]
 
             if last:
                 id_last_resources = last.id + 1  # type: ignore
 
-            menuResources(new_resources if merge else validated_data["resources"],
-                          resources, Resources, id_last_resources)
+            menuResources(
+                new_resources if merge else resources,
+                resources_new,
+                Resources,
+                id_last_resources,
+            )
 
-            resources = Resources.objects.bulk_create(resources)
+            resources_new = Resources.objects.bulk_create(resources)
 
-            list_resources_roles = [Resources_roles(
-                rolesId_id=validated_data['rolesId'], resourcesId=resource) for resource in resources]
+            list_resources_roles = [
+                Resources_roles(
+                    rolesId_id=validated_data["rolesId"], resourcesId=resource
+                )
+                for resource in resources_new
+            ]
 
             Resources_roles.objects.bulk_create(list_resources_roles)
             return None
