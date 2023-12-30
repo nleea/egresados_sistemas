@@ -9,7 +9,10 @@ class MyCacheMiddleware(CacheMiddleware):
         self.key_prefix = cache_key
 
         if self.should_cache_request(request):
-            return super().process_request(request)
+            # return super().process_request(request)
+            cache.set(cache_key,request)
+        elif request.method in ["PUT", "DELETE", "POST"]:
+            cache.delete(cache_key)
         return None
 
     def should_cache_request(self, request: HttpRequest):

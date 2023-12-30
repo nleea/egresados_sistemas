@@ -1,13 +1,13 @@
 from rest_framework.routers import Route, SimpleRouter
-from src.factory.pqrs_interactor import BaseViewSetFactory
-from src.interfaces.routes.pqrs.pqrs_route import router
-from src.application.pqrs.models import Pqrs
+from src.factory.eventos_interactor import BaseViewSetFactory
+from src.interfaces.routes.eventos.areas_route import router
+from src.application.eventos.models import EventosArea
 
 
 class Router(SimpleRouter):
     router_base = router
-    name_base = "pqrs"
-    model = Pqrs
+    name_base = "areas"
+    model = EventosArea
 
     routes = [
         Route(
@@ -44,14 +44,14 @@ class Router(SimpleRouter):
             detail=True,
         ),
         Route(
-            url=router_base.get_url(f"{name_base}_asignacion"),
-            mapping=router_base.map(f"{name_base}_asignacion"),
+            url=router_base.get_url(f"{name_base}_delete"),
+            mapping=router_base.map(f"{name_base}_delete"),
             initkwargs={
                 "viewset_factory": BaseViewSetFactory,
-                "http_method_names": ["get"],
+                "http_method_names": ["delete"],
                 "model": model,
             },
-            name="{basename}-asignacion",
+            name="{basename}-delete",
             detail=True,
         ),
     ]

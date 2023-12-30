@@ -55,6 +55,13 @@ class PqrsController(BaseController):
 
         return response, status.HTTP_200_OK
 
+    def asignacion(self, **kwargs):
+        return self.get_filter_related(
+            related=["persona", "tipopqrs"],
+            filter_param=[{"status": "AC", "visible": True}],
+            order=["-id"],
+        )
+
     def pqrs_filter(self, start, end, user, **kwargs):
         order = kwargs.get("order", "-id")
         status_pqrs = kwargs.get("status", "-id")

@@ -6,31 +6,22 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from typing import Optional
 from src.factory.pqrs_interactor import BaseViewSetFactory
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-# class AsignacionPqrsView(APIView):
-#     def get(self, request, *args, **kwargs):
-#         roles = request.user.groups.get(name="Admin")
-
-#         if roles:
-#             pqrs_filter = (
-#                 Pqrs.objects.select_related("persona", "tipopqrs")
-#                 .filter(status="AC", visible=True)
-#                 .order_by("-id")
-#             )
-#             data = PqrsSerializersView(pqrs_filter, many=True, meta=True)
-#             return Response(data.data, status.HTTP_200_OK)
-
-# from ...serializers.pqrs.pqrs_serialziers import PqrsSerializersView
-
-
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class AsignacionViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []
     model = None
 
     def get_serializer_class(self):
-        if self.action == "get":
+        if self.action in ["get", "asinacion"]:
             return AsignacionSerializerView
         return AsignacionSerializers
 

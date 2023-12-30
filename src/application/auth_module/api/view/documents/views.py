@@ -8,11 +8,17 @@ from ...serializers.document.document_serializers import (
 from typing import Optional
 from rest_framework.request import Request
 from rest_framework.response import Response
-
 from src.factory.base_interactor import BaseViewSetFactory
 from src.application.auth_module.models import Document_types
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class MessageViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []

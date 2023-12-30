@@ -65,7 +65,15 @@ from rest_framework.viewsets import ViewSet
 from typing import Optional
 from src.factory.eventos_interactor import BaseViewSetFactory
 
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
+
+
+@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class EventosViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []

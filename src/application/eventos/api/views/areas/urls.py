@@ -1,17 +1,11 @@
 from django.urls import path
-from .views import (
-    DeleteEventosAreaView,
-    EventosAreaView,
-    SaveEventosAreaView,
-    UpdateEventosAreaView,
-)
+from django.conf.urls import include
 
-app_name = "areas"
+from src.application.eventos.api.views.areas.router import Router
+from src.application.eventos.api.views.areas.views import AreasViewSet
 
+router = Router()
+router.register("", viewset=AreasViewSet, basename="areas")
 urlpatterns = [
-    path("", EventosAreaView.as_view(), name="areas-list"),
-    path("create/", SaveEventosAreaView.as_view(), name="areas-create"),
-    path("update/<int:pk>/", UpdateEventosAreaView.as_view()),
-    path("delete/<int:pk>/", DeleteEventosAreaView.as_view()),
-    path("delete/", DeleteEventosAreaView.as_view()),
+    path("", include(router.urls)),
 ]
