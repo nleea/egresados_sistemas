@@ -32,10 +32,10 @@ DB_DEVELOP_PORT = env("DB_DEVELOP_PORT")
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_DEVELOP_NAME"),
-        "USER": os.environ.get("DB_DEVELOP_USER"),
-        "PASSWORD": os.environ.get("DB_DEVELOP_PASSWORD"),
-        "HOST": os.environ.get("DB_DEVELOP_HOST"),
-        "PORT": os.environ.get("DB_DEVELOP_PORT"),
+        "NAME": DB_DEVELOP_NAME,
+        "USER": DB_DEVELOP_USER,
+        "PASSWORD": DB_DEVELOP_PASSWORD,
+        "HOST": DB_DEVELOP_HOST,
+        "PORT": DB_DEVELOP_PORT,
     },
 }

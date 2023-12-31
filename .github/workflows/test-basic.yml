@@ -2,13 +2,13 @@ name: egresado_test_jobs
 on:
   workflow_dispatch:
   push:
-    branches: main
+    branches: dev
 jobs:
   execute:
     environment: dev
     env:
       SECRET_OR_KEY: ${{ secrets.SECRET_KEY }}
-      DEBUG: "True"
+      DEBUG: True
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
       # - name: Execute Test
-        # run: pytest
+      # run: pytest
   # build:
   #   environment: dev
   #   runs-on: ubuntu-latest
