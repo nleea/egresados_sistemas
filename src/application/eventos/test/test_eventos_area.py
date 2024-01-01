@@ -2,7 +2,6 @@ import pytest
 from src.conftest import user_token, areas, clear_cache
 from django.test.client import Client
 from django.urls import reverse
-
 pytestmark = pytest.mark.django_db
 
 

@@ -5,6 +5,8 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from src.application.pqrs.models.models import Pqrs, TipoPqrs
 from src.application.eventos.models.models import EventosArea
 from django.urls import reverse
+import environ
+env = environ.Env()
 
 username = "admin"
 password = "12345678"

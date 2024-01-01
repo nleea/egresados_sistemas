@@ -3,7 +3,6 @@ from django.test.client import Client
 from django.urls import reverse
 from src.conftest import user_token, create_pqrs
 from src.application.pqrs.models.models import Pqrs
-
 pytestmark = pytest.mark.django_db
 
 

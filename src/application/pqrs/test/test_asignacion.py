@@ -5,7 +5,6 @@ from django.test.client import Client
 from src.conftest import user_token, create_pqrs, create_pqrs_list, user_token_request
 from src.application.pqrs.models.models import Pqrs, TipoPqrs
 from django.db.utils import IntegrityError
-
 pytestmark = pytest.mark.django_db
 
 

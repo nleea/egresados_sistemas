@@ -30,7 +30,7 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt
       # - name: Execute Test
-      # run: pytest
+      #   run: pytest
   # build:
   #   environment: dev
   #   runs-on: ubuntu-latest

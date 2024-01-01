@@ -2,7 +2,6 @@ import pytest
 from src.conftest import user_token, respuesta_create
 from django.urls import reverse
 from django.test.client import Client
-
 pytestmark = pytest.mark.django_db
 
 
