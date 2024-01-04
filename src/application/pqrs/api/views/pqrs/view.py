@@ -22,7 +22,7 @@ class PqrsViewSet(ViewSet):
     model = None
 
     def get_serializer_class(self):
-        if self.action == "get":
+        if self.action in ["get", "asignacion"]:
             return PqrsSerializersView
         return PqrsSerializers
 

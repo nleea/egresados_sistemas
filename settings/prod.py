@@ -1,7 +1,7 @@
 from settings.base import *
 import environ
 
-import os
+
 
 DEBUG = False
 
