@@ -15,7 +15,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class AreasViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []
@@ -59,10 +59,4 @@ class AreasViewSet(ViewSet):
         )
 
         response = Response(data=payload, status=status)
-
-        if hasattr(response, "from_cache") and response.from_cache:
-            print("La respuesta proviene de la caché.")
-        else:
-            print("La respuesta no proviene de la caché.")
-
         return response
