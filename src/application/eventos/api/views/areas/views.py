@@ -3,7 +3,6 @@ from ...serializers.eventos.eventos_cate_serializers import (
     EventosCategorySerializers,
     EventosCategorySerializersView,
 )
-from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from typing import Optional
 from src.factory.eventos_interactor import BaseViewSetFactory

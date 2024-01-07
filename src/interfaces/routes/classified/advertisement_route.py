@@ -38,7 +38,7 @@ router.register(
         ),
         Route(
             http_verb=HTTP_VERB_DELETE,
-            path="delete/$",
+            path="delete/(?P<id>[0-9]+)/$",
             controller=ClassifiedController,
             method="delete",
             name=f"{name_base}_delete",

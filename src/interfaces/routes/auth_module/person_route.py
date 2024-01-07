@@ -34,7 +34,7 @@ router.register(
         ),
         Route(
             http_verb=HTTP_VERB_DELETE,
-            path=r"delete/$",
+            path=r"delete/(?P<id>[0-9]+)/$",
             controller=BaseController,
             method="delete",
             name="person_delete",
