@@ -2,7 +2,6 @@ from src.domain.routing import Route, Router
 from src.domain.constants import (
     HTTP_VERB_GET,
     HTTP_VERB_POST,
-    HTTP_VERB_DELETE,
     HTTP_VERB_PUT,
 )
 from src.interfaces.controllers.base_controller import BaseController

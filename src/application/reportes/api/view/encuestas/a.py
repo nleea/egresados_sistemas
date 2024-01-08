@@ -1,7 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from src.encuestas.models import Question, AnswerUser, Answer
+from src.application.encuestas.models import Question, AnswerUser, Answer
 from django.db.models import (
     Count,
     F,
