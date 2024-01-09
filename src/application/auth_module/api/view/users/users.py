@@ -85,13 +85,13 @@ class UserChangePasswordView(UpdateAPIView):
             return None
 
     def perform_update(self, serializer):
-        if "original-password" in self.request.data:  # type: ignore
+        if "original_password" in self.request.data:  # type: ignore
             password = make_password(self.request.data["password"])  # type: ignore
             serializer.save(password=password)
         else:
             serializer.save()
 
-    def patch(self, request, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         partial = kwargs.pop("partial", False)
         user = request.user
 

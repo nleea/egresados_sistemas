@@ -70,5 +70,5 @@ class UserChangePassword(serializers.Serializer):
 
     def update(self, instance, validated_data):
         instance.password = validated_data.get("password", instance.password)
-
+        instance.save()
         return instance
