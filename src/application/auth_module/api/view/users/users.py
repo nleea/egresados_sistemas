@@ -21,7 +21,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class UserViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []
@@ -98,20 +98,18 @@ class UserChangePasswordView(UpdateAPIView):
         if user is None:
             return Response("User don't exist", status.HTTP_400_BAD_REQUEST)  # type: ignore
 
-        if "original-password" not in self.request.data:  # type: ignore
+        if "original_password" not in self.request.data:  # type: ignore
             return Response("Password Error", status.HTTP_400_BAD_REQUEST)
 
-        if not user.check_password(request.data["original-password"]):
+        if not user.check_password(request.data["original_password"]):
             return Response("Password is not correct.", status.HTTP_400_BAD_REQUEST)
 
-        userSerializers = UserChangePassword(
-            user, data=request.data, partial=partial, context={"context": request}
-        )
+        user_serializers = UserChangePassword(user, data=request.data, partial=partial)
 
         try:
-            if userSerializers.is_valid():
-                self.perform_update(userSerializers)
+            if user_serializers.is_valid():
+                self.perform_update(user_serializers)
                 return Response("Password Change", status.HTTP_200_OK)
-            return Response(userSerializers.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(user_serializers.errors, status=status.HTTP_400_BAD_REQUEST)
         except (AttributeError, Exception) as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)

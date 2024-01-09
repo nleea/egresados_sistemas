@@ -61,10 +61,14 @@ class UserSerializersSimpleRegister(serializers.ModelSerializer):
         validators = [UserValidatorBefore()]
 
 
-class UserChangePassword(serializers.ModelSerializer):
+class UserChangePassword(serializers.Serializer):
     password = serializers.CharField()
+    original_password = serializers.CharField()
 
-    class Meta:
-        model = User
-        fields = ("password", "id")
-        validators = [UserValidatorBefore()]
+    def create(self, validated_data):
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        instance.password = validated_data.get("password", instance.password)
+
+        return instance
