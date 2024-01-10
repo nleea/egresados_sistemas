@@ -29,7 +29,7 @@ router.register(
         ),
         Route(
             http_verb=HTTP_VERB_PUT,
-            path="update/(?P<id>[0-9]+)/$",
+            path=r"update/?(?P<id>[0-9]+)?/$",
             controller=BaseController,
             method="put",
             name=f"{name_base}_put",

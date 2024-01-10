@@ -75,6 +75,11 @@ class BaseController:
             return "Ok", status.HTTP_200_OK
 
         instance = self.repo.get_instance(id)
-        instance.delete()
+
+        if not instance:
+            return "NOT FOUND", status.HTTP_400_BAD_REQUEST
+
+        instance.visible = False
+        instance.save()
 
         return "Ok", status.HTTP_200_OK

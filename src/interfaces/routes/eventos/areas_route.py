@@ -36,7 +36,7 @@ router.register(
         ),
         Route(
             http_verb=HTTP_VERB_DELETE,
-            path="delete/(?P<id>[0-9]+)/$",
+            path=r"delete/?(?P<id>[0-9]+)?/$",
             controller=EventosController,
             method="delete",
             name=f"{name_base}_delete",

@@ -2,7 +2,7 @@ name: egresado_test_jobs
 on:
   workflow_dispatch:
   push:
-    branches: dev
+    branches: main
 jobs:
   execute:
     environment: dev
@@ -31,23 +31,23 @@ jobs:
       #   run: pip install -r requirements.txt
       # - name: Execute Test
       #   run: pytest
-  # build:
-  #   environment: dev
-  #   runs-on: ubuntu-latest
-  #   needs: execute
-  #   env:
-  #     USERNAME: ubuntu
-  #   steps:
-  #     - name: executing remote ssh commands using password
-  #       uses: appleboy/ssh-action@v1.0.0
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ env.USERNAME }}
-  #         key: ${{ secrets.KEY }}
-  #         script: |
-  #           whoami
-  #           cd main/egresados_sistemas
-  #           git add .
-  #           git commit -m"."
-  #           git pull
-  #           /home/ubuntu/.local/share/virtualenvs/egresados_sistemas-d1e6dp48/bin/supervisorctl restart egresado
+  build:
+    environment: dev
+    runs-on: ubuntu-latest
+    needs: execute
+    env:
+      USERNAME: ubuntu
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ env.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            whoami
+            cd main/egresados_sistemas
+            git add .
+            git commit -m"."
+            git pull
+            /home/ubuntu/.local/share/virtualenvs/egresados_sistemas-d1e6dp48/bin/supervisorctl restart egresado
