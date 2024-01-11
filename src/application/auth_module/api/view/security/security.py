@@ -1,3 +1,4 @@
+import json
 from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from ...serializers.resources.resources_serializers import (
@@ -9,6 +10,7 @@ from ....models import Resources, User
 from rest_framework.response import Response
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 
 class SecurityResourcesCreate(CreateAPIView):
@@ -41,11 +43,24 @@ class SecurityRolesUser(APIView):
 
 class PermissionsView(APIView):
     def get(self, request, *args, **kwargs):
-        permission = Permission.objects.all()
+        contentypes = ContentType.objects.all()
 
-        print(permission)
+        all_contentypes = {}
+        for content in contentypes:
+            
+            
+            if content.app_label in ["admin", "auth", "contenttypes", "sessions", "authtoken", "token_blacklist"]:
+                continue
+            
+            if content.app_label not in all_contentypes:
+                all_contentypes[content.app_label] = {}
 
-        return Response({"Message": "Ok"}, status=status.HTTP_200_OK)
+            all_contentypes[content.app_label][content.model] = [
+                x.name
+                for x in Permission.objects.filter(content_type__model=content.model)
+            ]
+
+        return Response({"Message": all_contentypes}, status=status.HTTP_200_OK)
 
 
 class CheckPermissions(APIView):
