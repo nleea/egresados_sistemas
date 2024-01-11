@@ -1,4 +1,3 @@
-import json
 from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from ...serializers.resources.resources_serializers import (
@@ -43,24 +42,58 @@ class SecurityRolesUser(APIView):
 
 class PermissionsView(APIView):
     def get(self, request, *args, **kwargs):
-        contentypes = ContentType.objects.all()
+        excluded_apps = {
+            "admin",
+            "auth",
+            "contenttypes",
+            "sessions",
+            "authtoken",
+            "token_blacklist",
+        }
 
-        all_contentypes = {}
-        for content in contentypes:
-            
-            
-            if content.app_label in ["admin", "auth", "contenttypes", "sessions", "authtoken", "token_blacklist"]:
-                continue
-            
-            if content.app_label not in all_contentypes:
-                all_contentypes[content.app_label] = {}
+        content_types = ContentType.objects.exclude(app_label__in=excluded_apps).values(
+            "app_label", "model"
+        )
+        permissions_data = {}
 
-            all_contentypes[content.app_label][content.model] = [
-                x.name
-                for x in Permission.objects.filter(content_type__model=content.model)
-            ]
+        model_gestionar = [
+            "eventosarea",
+            "subareaeventos",
+            "tipoevento",
+            "inscripcion",
+            "asistencia",
+            "tipomomento",
+            "answeruser",
+            "tipopqrs",
+            "tipopqrs",
+            "asignacion",
+            "votoanuncio",
+            "tiposcapacitaciones",
+            "subcategoria",
+            "redessociales",
+            "mensajes",
+            "genders",
+            "faculties",
+            "document_types",
+            "programs",
+            "headquarters"
+        ]
 
-        return Response({"Message": all_contentypes}, status=status.HTTP_200_OK)
+        for content_type in content_types:
+            app_label = content_type["app_label"]
+            model = content_type["model"]
+
+            if model in model_gestionar:
+                permissions_data.setdefault(app_label, {})[model] = ["gestionar"]
+            else:
+                permissions_data.setdefault(app_label, {})[model] = [
+                    permission.name
+                    for permission in Permission.objects.filter(
+                        content_type__model=model
+                    )
+                ]
+
+        return Response(permissions_data, status=status.HTTP_200_OK)
 
 
 class CheckPermissions(APIView):
