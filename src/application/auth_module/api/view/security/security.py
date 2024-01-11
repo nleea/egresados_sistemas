@@ -49,6 +49,11 @@ class PermissionsView(APIView):
             "sessions",
             "authtoken",
             "token_blacklist",
+            "resources_roles",
+            "person",
+            "resources",
+            "respuesta",
+            "answeruser",
         }
 
         content_types = ContentType.objects.exclude(app_label__in=excluded_apps).values(
@@ -76,7 +81,7 @@ class PermissionsView(APIView):
             "faculties",
             "document_types",
             "programs",
-            "headquarters"
+            "headquarters",
         ]
 
         for content_type in content_types:
@@ -108,7 +113,28 @@ class CheckPermissions(APIView):
 
 class ResourcesView(APIView):
     def get(self, request, *args, **kwargs):
-        resources = Resources.objects.all()
-        serializer = ResourcesSerializers(resources, many=True)
+        resources = Resources.objects.all().order_by("id_padre", "id")
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        arbol = {}
+        padres = {}
+
+        items = [
+            {"id_padre": x.id_padre, "pk": x.pk, "titulo": x.titulo, "path": x.path}
+            for x in resources
+        ]
+
+        for item in items:
+            if item["id_padre"] == 0:
+                arbol[item["pk"]] = item
+            else:
+                padre_id = item["id_padre"]
+                if padre_id not in padres:
+                    padres[padre_id] = []
+                padres[padre_id].append(item)
+
+        for item in items:
+            item_id = item["pk"]
+            if item_id in padres:
+                item["children"] = padres[item_id]
+
+        return Response(arbol, status=status.HTTP_200_OK)
