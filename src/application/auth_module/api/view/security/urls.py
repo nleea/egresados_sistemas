@@ -5,7 +5,8 @@ from .security import (
     SecurityRolesUser,
     CheckPermissions,
     PermissionsView,
-    ResourcesView
+    ResourcesView,
+    RolePermissionView,
 )
 
 urlpatterns = [
@@ -14,4 +15,5 @@ urlpatterns = [
     path("check/roles/permission/", CheckPermissions.as_view()),
     path("roles/permission/", PermissionsView.as_view()),
     path("roles/resources/", ResourcesView.as_view()),
+    path("roles/permission/create/", RolePermissionView.as_view()),
 ]

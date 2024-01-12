@@ -101,6 +101,37 @@ class PermissionsView(APIView):
         return Response(permissions_data, status=status.HTTP_200_OK)
 
 
+class RolePermissionView(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            data_permissions = request.data.get("permissions", [])
+            role = request.data.get("role", None)
+
+            if role is None:
+                return Response("Fields Required", status=status.HTTP_400_BAD_REQUEST)
+
+            role, _ = Group.objects.get_or_create(name=role)
+
+            for i in data_permissions:
+                name = list(i.keys())[0]
+                permissions = i[name]
+
+                if permissions[0] == "gestionar":
+                    instance_permission = Permission.objects.filter(
+                        content_type__model=name
+                    )
+                else:
+                    instance_permission = Permission.objects.filter(
+                        content_type__model=name, name__in=permissions
+                    )
+
+                role.permissions.add(*[x for x in instance_permission])
+
+            return Response("Ok", status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
+
+
 class CheckPermissions(APIView):
     def post(self, request, *args, **kwargs):
         user = request.user
@@ -137,4 +168,6 @@ class ResourcesView(APIView):
             if item_id in padres:
                 item["children"] = padres[item_id]
 
-        return Response(arbol, status=status.HTTP_200_OK)
+        arbol_list = [x for x in arbol.values()]
+
+        return Response(arbol_list, status=status.HTTP_200_OK)
