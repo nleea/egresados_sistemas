@@ -54,10 +54,11 @@ class PermissionsView(APIView):
             "persons",
             "resources",
             "respuesta",
-            "answeruser",
             "redessociales",
             "votoanuncio",
             "mensajes",
+            "answeruser",
+            "inscripcion"
         }
 
         content_types = ContentType.objects.exclude(
@@ -69,10 +70,8 @@ class PermissionsView(APIView):
             "eventosarea",
             "subareaeventos",
             "tipoevento",
-            "inscripcion",
             "asistencia",
             "tipomomento",
-            "answeruser",
             "tipopqrs",
             "tipopqrs",
             "asignacion",
@@ -80,13 +79,15 @@ class PermissionsView(APIView):
             "tiposcapacitaciones",
             "subcategoria",
             "redessociales",
-            "mensajes",
             "genders",
             "faculties",
             "document_types",
             "programs",
             "headquarters",
             "user",
+            "categoria",
+            "question",
+            "answer",
         ]
 
         for content_type in content_types:
@@ -133,8 +134,9 @@ class RolePermissionView(APIView):
                         )
                     elif name == "detalles":
                         instance_permission = Permission.objects.filter(
-                            Q(content_type__app_label="anuncio")
-                            | Q(content_type__app_label="mensajes")
+                            Q(content_type__app_label=name)
+                            | Q(content_type__model="anuncio")
+                            | Q(content_type__model="mensajes")
                         )
                     else:
                         instance_permission = Permission.objects.filter(
