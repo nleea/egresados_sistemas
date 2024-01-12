@@ -57,8 +57,7 @@ class PermissionsView(APIView):
             "answeruser",
             "redessociales",
             "votoanuncio",
-            "anuncio",
-            "mensajes"
+            "mensajes",
         }
 
         content_types = ContentType.objects.exclude(
@@ -105,7 +104,9 @@ class PermissionsView(APIView):
                 ]
 
         permissions_data.setdefault("admin", {})["roles"] = ["gestionar"]
-        permissions_data.setdefault("classified_advertisements", {})["detalles"] = ["gestionar"]
+        permissions_data.setdefault("classified_advertisements", {})["detalles"] = [
+            "gestionar"
+        ]
 
         return Response(permissions_data, status=status.HTTP_200_OK)
 
@@ -129,6 +130,11 @@ class RolePermissionView(APIView):
                     if name == "roles":
                         instance_permission = Permission.objects.filter(
                             content_type__app_label="auth"
+                        )
+                    elif name == "detalles":
+                        instance_permission = Permission.objects.filter(
+                            Q(content_type__app_label="anuncio")
+                            | Q(content_type__app_label="mensajes")
                         )
                     else:
                         instance_permission = Permission.objects.filter(
