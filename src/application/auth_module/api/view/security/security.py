@@ -57,6 +57,8 @@ class PermissionsView(APIView):
             "answeruser",
             "redessociales",
             "votoanuncio",
+            "anuncio",
+            "mensajes"
         }
 
         content_types = ContentType.objects.exclude(
