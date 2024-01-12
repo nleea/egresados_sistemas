@@ -51,15 +51,15 @@ class PermissionsView(APIView):
             "authtoken",
             "token_blacklist",
             "resources_roles",
-            "person",
+            "persons",
             "resources",
             "respuesta",
             "answeruser",
         }
 
-        content_types = ContentType.objects.exclude(Q(model__in=excluded_apps) | Q(app_label__in=excluded_apps)).values(
-            "app_label", "model"
-        )
+        content_types = ContentType.objects.exclude(
+            Q(model__in=excluded_apps) | Q(app_label__in=excluded_apps)
+        ).values("app_label", "model")
         permissions_data = {}
 
         model_gestionar = [
@@ -83,6 +83,7 @@ class PermissionsView(APIView):
             "document_types",
             "programs",
             "headquarters",
+            "users",
         ]
 
         for content_type in content_types:
@@ -98,6 +99,8 @@ class PermissionsView(APIView):
                         content_type__model=model
                     )
                 ]
+
+        permissions_data.setdefault("auth", {})["roles"] = ["gestionar"]
 
         return Response(permissions_data, status=status.HTTP_200_OK)
 
