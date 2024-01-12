@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 
 
 class SecurityResourcesCreate(CreateAPIView):
@@ -56,7 +57,7 @@ class PermissionsView(APIView):
             "answeruser",
         }
 
-        content_types = ContentType.objects.exclude(app_label__in=excluded_apps).values(
+        content_types = ContentType.objects.exclude(Q(model__in=excluded_apps) | Q(app_label__in=excluded_apps)).values(
             "app_label", "model"
         )
         permissions_data = {}
