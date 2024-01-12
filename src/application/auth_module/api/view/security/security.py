@@ -55,6 +55,8 @@ class PermissionsView(APIView):
             "resources",
             "respuesta",
             "answeruser",
+            "redessociales",
+            "votoanuncio",
         }
 
         content_types = ContentType.objects.exclude(
@@ -83,7 +85,7 @@ class PermissionsView(APIView):
             "document_types",
             "programs",
             "headquarters",
-            "users",
+            "user",
         ]
 
         for content_type in content_types:
@@ -100,7 +102,8 @@ class PermissionsView(APIView):
                     )
                 ]
 
-        permissions_data.setdefault("auth", {})["roles"] = ["gestionar"]
+        permissions_data.setdefault("admin", {})["roles"] = ["gestionar"]
+        permissions_data.setdefault("classified_advertisements", {})["detalles"] = ["gestionar"]
 
         return Response(permissions_data, status=status.HTTP_200_OK)
 
@@ -121,9 +124,14 @@ class RolePermissionView(APIView):
                 permissions = i[name]
 
                 if permissions[0] == "gestionar":
-                    instance_permission = Permission.objects.filter(
-                        content_type__model=name
-                    )
+                    if name == "roles":
+                        instance_permission = Permission.objects.filter(
+                            content_type__app_label="auth"
+                        )
+                    else:
+                        instance_permission = Permission.objects.filter(
+                            content_type__model=name
+                        )
                 else:
                     instance_permission = Permission.objects.filter(
                         content_type__model=name, name__in=permissions
