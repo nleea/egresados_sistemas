@@ -2,7 +2,6 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from ...serializers.resources.resources_serializers import (
     ResourcesRolesSerializers,
-    ResourcesSerializers,
 )
 from rest_framework import status
 from ....models import Resources, User
@@ -23,7 +22,7 @@ class SecurityResourcesCreate(CreateAPIView):
             resources.is_valid(raise_exception=True)
             resources.create(request.data)
             return Response("Resources Create", status.HTTP_200_OK)
-        except BaseException as e:
+        except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
@@ -58,7 +57,7 @@ class PermissionsView(APIView):
             "votoanuncio",
             "mensajes",
             "answeruser",
-            "inscripcion"
+            "inscripcion",
         }
 
         content_types = ContentType.objects.exclude(
@@ -134,8 +133,7 @@ class RolePermissionView(APIView):
                         )
                     elif name == "detalles":
                         instance_permission = Permission.objects.filter(
-                            Q(content_type__app_label=name)
-                            | Q(content_type__model="anuncio")
+                            Q(content_type__model="anuncio")
                             | Q(content_type__model="mensajes")
                         )
                     else:
