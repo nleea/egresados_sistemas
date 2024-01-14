@@ -10,6 +10,12 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.conf import settings
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
 class SecurityResourcesCreate(CreateAPIView):
@@ -40,6 +46,7 @@ class SecurityRolesUser(APIView):
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class PermissionsView(APIView):
     def get(self, request, *args, **kwargs):
         excluded_apps = {
@@ -162,6 +169,7 @@ class CheckPermissions(APIView):
         return Response({"valid": check_resulst}, status=status.HTTP_200_OK)
 
 
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class ResourcesView(APIView):
     def get(self, request, *args, **kwargs):
         resources = Resources.objects.all().order_by("id_padre", "id")
