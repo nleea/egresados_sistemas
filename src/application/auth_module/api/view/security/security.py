@@ -2,7 +2,6 @@ from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from ...serializers.resources.resources_serializers import (
     ResourcesRolesSerializers,
-    ResourcesSerializers,
 )
 from rest_framework import status
 from ....models import Resources, User
@@ -11,6 +10,12 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.conf import settings
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
+
+CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
 class SecurityResourcesCreate(CreateAPIView):
@@ -23,7 +28,7 @@ class SecurityResourcesCreate(CreateAPIView):
             resources.is_valid(raise_exception=True)
             resources.create(request.data)
             return Response("Resources Create", status.HTTP_200_OK)
-        except BaseException as e:
+        except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
@@ -41,6 +46,7 @@ class SecurityRolesUser(APIView):
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class PermissionsView(APIView):
     def get(self, request, *args, **kwargs):
         excluded_apps = {
@@ -58,7 +64,7 @@ class PermissionsView(APIView):
             "votoanuncio",
             "mensajes",
             "answeruser",
-            "inscripcion"
+            "inscripcion",
         }
 
         content_types = ContentType.objects.exclude(
@@ -134,8 +140,7 @@ class RolePermissionView(APIView):
                         )
                     elif name == "detalles":
                         instance_permission = Permission.objects.filter(
-                            Q(content_type__app_label=name)
-                            | Q(content_type__model="anuncio")
+                            Q(content_type__model="anuncio")
                             | Q(content_type__model="mensajes")
                         )
                     else:
@@ -164,6 +169,7 @@ class CheckPermissions(APIView):
         return Response({"valid": check_resulst}, status=status.HTTP_200_OK)
 
 
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class ResourcesView(APIView):
     def get(self, request, *args, **kwargs):
         resources = Resources.objects.all().order_by("id_padre", "id")
