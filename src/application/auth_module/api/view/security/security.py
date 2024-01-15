@@ -133,6 +133,9 @@ class RolePermissionView(APIView):
                 name = list(i.keys())[0]
                 permissions = i[name]
 
+                if permissions == []:
+                    continue
+
                 if permissions[0] == "gestionar":
                     if name == "roles":
                         instance_permission = Permission.objects.filter(
