@@ -27,7 +27,7 @@ class PersonsSimpleSerializersView(Serializer):
     name = CharField(read_only=True)
     document_type = DocumentSerializersView(read_only=True)
     surname = CharField(read_only=True)
-    identification = IntegerField(read_only=True)
+    identification = CharField(read_only=True)
     address = CharField(read_only=True)
     nationality = CharField(read_only=True)
     date_of_birth = DateField(read_only=True)
