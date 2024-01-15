@@ -43,7 +43,7 @@ class PersonViewSet(ViewSet):
         return Response(data=payload, status=status)
 
     def put(self, request, *args, **kwargs):
-        instance_id = kwargs.get("id", "")
+        instance_id = request.user.id
         payload, status = self.controller.put(int(instance_id), request.data)
         return Response(data=payload, status=status)
 
