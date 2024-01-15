@@ -27,7 +27,7 @@ router.register(
         ),
         Route(
             http_verb=HTTP_VERB_PUT,
-            path="update/(?P<id>[0-9]+)/$",
+            path="update/profile/$",
             controller=BaseController,
             method="put",
             name="person_put",
