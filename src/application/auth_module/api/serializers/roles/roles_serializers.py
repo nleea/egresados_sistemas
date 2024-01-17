@@ -8,9 +8,27 @@ class UserSerilizers(serializers.Serializer):
         fields = "__all__"
 
 
+class ContentypeSerializer(serializers.Serializer):
+    app_label = serializers.CharField(read_only=True)
+    model = serializers.CharField(read_only=True)
+
+
+class PermissionSerializers(serializers.Serializer):
+    name = serializers.CharField(read_only=True)
+
+
+class RolesSerializersCreate(serializers.Serializer):
+    name = serializers.CharField()
+
+    def create(self, validated_data):
+        name = validated_data.get("name")
+        return Group.objects.create(name=name)
+
+
 class RolesSerializers(serializers.Serializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     name = serializers.CharField(read_only=True)
+    # permissions = PermissionSerializers(many=True)
 
     class Meta:
         fields = "__all__"

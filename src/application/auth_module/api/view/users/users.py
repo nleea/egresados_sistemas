@@ -11,7 +11,7 @@ from ....models import User
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 from typing import Optional
-from src.factory.base_interactor import BaseViewSetFactory
+from src.factory.auth_interactor import AuthViewSetFactory
 
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
@@ -23,12 +23,12 @@ CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class UserViewSet(ViewSet):
-    viewset_factory: BaseViewSetFactory = None
+    viewset_factory: AuthViewSetFactory = None
     http_method_names: Optional[list[str]] = []
     model = None
 
     def get_serializer_class(self):
-        if self.action in ["get"]:
+        if self.action in ["get", "get_all"]:
             return UserSerializers
         return CreateUserSerializers
 
@@ -37,15 +37,7 @@ class UserViewSet(ViewSet):
         return self.viewset_factory.create(self.model, self.get_serializer_class())
 
     def get(self, request, *args, **kwargs):
-        all_user = request.GET.get("all", None)
-
-        if request.user.is_staff and all_user:
-            payload, status = self.controller.get_filter_related(prefetch=["groups"])
-            return Response(data=payload, status=status)
-
-        payload, status = self.controller.get_object(
-            request.user.id, prefetch=["groups"]
-        )
+        payload, status = self.controller.get_all(False)
         return Response(data=payload, status=status)
 
     def post(self, request, *args, **kwargs):
@@ -67,6 +59,10 @@ class UserViewSet(ViewSet):
             return Response(data=payload, status=status)
 
         payload, status = self.controller.delete(int(instance_id), request.data)
+        return Response(data=payload, status=status)
+
+    def get_all(self, request, *args, **kwargs):
+        payload, status = self.controller.get_all()
         return Response(data=payload, status=status)
 
 

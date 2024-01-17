@@ -26,8 +26,8 @@ class UserSerializersSimple(serializers.Serializer):
 
 class UserSerializers(serializers.Serializer):
     username = serializers.CharField(read_only=True)
-    first_name = serializers.CharField(read_only=True)
-    last_name = serializers.CharField(read_only=True)
+    name = serializers.CharField(read_only=True)
+    surname = serializers.CharField(read_only=True)
     email = serializers.CharField(read_only=True)
     groups = RolesSerializers(read_only=True, many=True)
 

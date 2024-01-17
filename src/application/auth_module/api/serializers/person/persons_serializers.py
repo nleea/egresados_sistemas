@@ -1,3 +1,4 @@
+from numpy import require
 from ....models import Persons
 from rest_framework.serializers import (
     ModelSerializer,
@@ -10,6 +11,7 @@ from rest_framework.serializers import (
 from ..document.document_serializers import DocumentSerializersView
 from ..gender.gender_Serializers import GenderSerializersView
 from ..user.users_serializers import UserSerializersSimple
+from rest_framework.validators import UniqueValidator
 
 
 class PersonsSerializers(ModelSerializer):
@@ -84,3 +86,18 @@ class PersonsSimpleSerializers(Serializer):
 
         instance.save()
         return instance
+
+
+queryset = Persons.objects.all()
+
+
+class PersonsSerializer(Serializer):
+    name = CharField(write_only=True, validators=[UniqueValidator(queryset=queryset)])
+    surname = CharField(write_only=True, required=False)
+    identification = CharField(
+        write_only=True, required=False, validators=[UniqueValidator(queryset=queryset)]
+    )
+    address = CharField(write_only=True, required=False)
+    nationality = CharField(write_only=True, required=False)
+    date_of_birth = DateField(write_only=True, required=False)
+    phone = CharField(write_only=True, required=False)
