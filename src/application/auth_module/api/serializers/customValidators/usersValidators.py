@@ -14,8 +14,8 @@ class UserValidatorBefore:
     def __call__(self, attrs):
         message = {}
 
-        if 'password' in attrs and len(attrs[self.password]) < 8 and attrs[self.password].isalnum():
-            message[self.password] = 'The password must be alphanumeric and more than 8 digits'
+        # if 'password' in attrs and len(attrs[self.password]) < 8 and attrs[self.password].isalnum():
+        #     message[self.password] = 'The password must be alphanumeric and more than 8 digits'
         if 'email' in attrs and User.objects.filter(email=attrs[self.email]).exists():
             message[self.email] = 'Email already exist'
 

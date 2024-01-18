@@ -72,9 +72,9 @@ class AuthModuleController(BaseController):
         except Exception as e:
             return str(e), status.HTTP_400_BAD_REQUEST
 
-    def get_all(self, internal=True):
+    def get_users(self, internal=True):
         queryset = (
-            Persons.objects.select_related("user")
+            Persons.objects.select_related("user", "document_type", "gender_type")
             .prefetch_related(Prefetch("user__roles", Group.objects.all()))
             .filter(user__is_staff=internal)
         )
@@ -86,6 +86,12 @@ class AuthModuleController(BaseController):
                 {
                     "name": i.name,
                     "surname": i.surname,
+                    "identification": i.identification,
+                    "address": i.address,
+                    "nationality": i.nationality,
+                    "phone": i.phone,
+                    "gender": i.gender_type.name,
+                    "document": i.document_type.name,
                     "email": i.user.email,
                     "group": [x.name for x in i.user.groups.all()],
                 }
