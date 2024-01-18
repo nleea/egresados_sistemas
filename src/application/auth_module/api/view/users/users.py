@@ -61,8 +61,8 @@ class UserViewSet(ViewSet):
         payload, status = self.controller.delete(int(instance_id), request.data)
         return Response(data=payload, status=status)
 
-    def get_all(self, request, *args, **kwargs):
-        payload, status = self.controller.get_all()
+    def get_users(self, request, *args, **kwargs):
+        payload, status = self.controller.get_users()
         return Response(data=payload, status=status)
 
 

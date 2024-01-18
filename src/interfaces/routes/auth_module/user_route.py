@@ -37,7 +37,7 @@ router.register(
             http_verb=HTTP_VERB_GET,
             path="internal/$",
             controller=AuthModuleController,
-            method="get_all",
+            method="get_users",
             name=f"{name_base}_all",
         ),
     ]
