@@ -37,7 +37,7 @@ class UserViewSet(ViewSet):
         return self.viewset_factory.create(self.model, self.get_serializer_class())
 
     def get(self, request, *args, **kwargs):
-        payload, status = self.controller.get_all(False)
+        payload, status = self.controller.get_users(False)
         return Response(data=payload, status=status)
 
     def post(self, request, *args, **kwargs):
