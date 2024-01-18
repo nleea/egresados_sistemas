@@ -53,7 +53,7 @@ class BaseRepository(ABC):
         if filter_param and related:
             return self.model.objects.filter(filtro).select_related(*related)
         elif filter_param and prefetch:
-            return self.model.objects.filter(filter_param).select_related(*prefetch)
+            return self.model.objects.filter(filtro).select_related(*prefetch)
 
         elif filter_param:
             return self.model.objects.filter(filtro)

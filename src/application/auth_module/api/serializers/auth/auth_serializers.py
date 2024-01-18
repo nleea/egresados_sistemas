@@ -4,7 +4,10 @@ from django.contrib.auth.models import Group
 from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
 from src.application.auth_module.models import User, Persons
-from ...serializers.person.persons_serializers import PersonsSimpleSerializersView
+from ...serializers.person.persons_serializers import (
+    PersonsSimpleSerializersView,
+    PersonsSerializer,
+)
 from django.db import transaction
 
 User = get_user_model()
@@ -16,6 +19,7 @@ class RegisterSerializers(serializers.Serializer):
     )
     email = serializers.EmailField()
     password = serializers.CharField()
+    persona = PersonsSerializer(write_only=True)
 
     class Meta:
         fields = "__all__"
@@ -26,7 +30,7 @@ class RegisterSerializers(serializers.Serializer):
             with transaction.atomic():
                 persona = validated_data.pop("persona", None)
                 rol = validated_data.pop("rol", None)
-                user = User.objects.create(**validated_data)
+                user = User.objects.create(**validated_data, is_staff=True)
                 document_type = persona.pop("document_type", None)
                 gender_type = persona.pop("gender_type", None)
 
@@ -46,7 +50,7 @@ class RegisterSerializers(serializers.Serializer):
             return user
         except Exception as e:
             transaction.rollback()
-            raise e
+            return e
 
 
 class LoginSerializers(serializers.Serializer):

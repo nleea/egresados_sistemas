@@ -67,7 +67,7 @@ class User(AbstractUser, BaseModel):
 
 class Persons(BaseModel):
     name = models.CharField(max_length=150, unique=True, blank=True, null=True)
-    surname = models.CharField(max_length=150, unique=True, blank=True, null=True)
+    surname = models.CharField(max_length=150, unique=False, blank=True, null=True)
     identification = models.CharField(max_length=40, unique=True, blank=True, null=True)
     address = models.CharField(max_length=50, blank=True, null=True)
     nationality = models.CharField(max_length=100, blank=True, null=True)

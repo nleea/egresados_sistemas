@@ -117,49 +117,59 @@ class PermissionsView(APIView):
 
         return Response(permissions_data, status=status.HTTP_200_OK)
 
-
-class RolePermissionView(APIView):
-    def post(self, request, *args, **kwargs):
+    def insert_update_roles(self, data):
         try:
-            data_permissions = request.data.get("permissions", [])
-            role = request.data.get("role", None)
+            data_permissions = data.get("permissions", [])
+            role_name = data.get("role", None)
 
-            if role is None:
+            if role_name is None:
                 return Response("Fields Required", status=status.HTTP_400_BAD_REQUEST)
 
-            role, _ = Group.objects.get_or_create(name=role)
+            role, _ = Group.objects.get_or_create(name=role_name)
+            instance_permissions = []
 
-            for i in data_permissions:
-                name = list(i.keys())[0]
-                permissions = i[name]
+            for permission_data in data_permissions:
+                name = list(permission_data.keys())[0]
+                permissions = permission_data[name]
 
                 if permissions == []:
                     continue
 
-                if permissions[0] == "gestionar":
-                    if name == "roles":
-                        instance_permission = Permission.objects.filter(
-                            content_type__app_label="auth"
-                        )
-                    elif name == "detalles":
-                        instance_permission = Permission.objects.filter(
+                if permissions[0] == "gestionar" and name == "roles":
+                    instance_permissions.extend(
+                        Permission.objects.filter(content_type__app_label="auth")
+                    )
+                elif permissions[0] == "gestionar" and name == "detalles":
+                    instance_permissions.extend(
+                        Permission.objects.filter(
                             Q(content_type__model="anuncio")
                             | Q(content_type__model="mensajes")
                         )
-                    else:
-                        instance_permission = Permission.objects.filter(
-                            content_type__model=name
-                        )
+                    )
+                elif permissions[0] == "gestionar":
+                    instance_permissions.extend(
+                        Permission.objects.filter(content_type__model=name)
+                    )
                 else:
-                    instance_permission = Permission.objects.filter(
-                        content_type__model=name, name__in=permissions
+                    instance_permissions.extend(
+                        Permission.objects.filter(
+                            content_type__model=name, name__in=permissions
+                        )
                     )
 
-                role.permissions.add(*[x for x in instance_permission])
+            role.permissions.set(instance_permissions)
 
-            return Response("Ok", status=status.HTTP_200_OK)
+            return "Ok", status.HTTP_200_OK
         except Exception as e:
-            return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
+            return e.args, status.HTTP_400_BAD_REQUEST
+
+    def post(self, request, *args, **kwargs):
+        response, status = self.insert_update_roles(request.data)
+        return Response(response, status)
+
+    def put(self, request, *args, **kwargs):
+        response, status = self.insert_update_roles(request.data)
+        return Response(response, status)
 
 
 class CheckPermissions(APIView):

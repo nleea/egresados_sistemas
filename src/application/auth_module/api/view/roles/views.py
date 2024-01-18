@@ -1,10 +1,11 @@
 from rest_framework.response import Response
-from src.application.auth_module.api.serializers.roles.roles_serializers import RolesSerializers
+from src.application.auth_module.api.serializers.roles.roles_serializers import (
+    RolesSerializers,
+    RolesSerializersCreate,
+)
 from rest_framework.viewsets import ViewSet
 from typing import Optional
-from src.factory.base_interactor import BaseViewSetFactory
-
-
+from src.factory.auth_interactor import AuthViewSetFactory
 from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
@@ -13,13 +14,15 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class RoleViewSet(ViewSet):
-    viewset_factory: BaseViewSetFactory = None
+    viewset_factory: AuthViewSetFactory = None
     http_method_names: Optional[list[str]] = []
     model = None
 
     def get_serializer_class(self):
+        if self.action in ["post"]:
+            return RolesSerializersCreate
         return RolesSerializers
 
     @property
@@ -51,3 +54,11 @@ class RoleViewSet(ViewSet):
         payload, status = self.controller.delete(int(instance_id), request.data)
         return Response(data=payload, status=status)
 
+    def get_roles(self, request, *args, **kwargs):
+        pk = kwargs.get("id", None)
+
+        if pk == None:
+            return Response("Group is required", status=400)
+
+        payload, status = self.controller.get_roles(pk)
+        return Response(payload, status=status)
