@@ -90,10 +90,12 @@ class AuthModuleController(BaseController):
                     "address": i.address,
                     "nationality": i.nationality,
                     "phone": i.phone,
-                    "gender": i.gender_type.name,
-                    "document": i.document_type.name,
-                    "email": i.user.email,
-                    "group": [x.name for x in i.user.groups.all()],
+                    "gender": i.gender_type.name if i.gender_type else None,
+                    "document": i.document_type.name if i.document_type else None,
+                    "email": i.user.email if i.user else None,
+                    "group": [x.name for x in i.user.groups.all()]
+                    if i.user and i.user.groups
+                    else [],
                 }
             )
 
