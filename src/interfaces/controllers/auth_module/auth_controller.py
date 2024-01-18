@@ -75,27 +75,28 @@ class AuthModuleController(BaseController):
     def get_users(self, internal=True):
         queryset = (
             Persons.objects.select_related("user", "document_type", "gender_type")
-            .prefetch_related(Prefetch("user__roles", Group.objects.all()))
+            .prefetch_related(Prefetch("user__groups", Group.objects.all()))
             .filter(user__is_staff=internal)
         )
 
         list_user = []
 
         for i in queryset:
+            user_groups = i.user.groups.values("name","id") if i.user else []
             list_user.append(
                 {
-                    "name": i.name,
-                    "surname": i.surname,
-                    "identification": i.identification,
-                    "address": i.address,
-                    "nationality": i.nationality,
-                    "phone": i.phone,
-                    "gender": i.gender_type.name if i.gender_type else None,
-                    "document": i.document_type.name if i.document_type else None,
                     "email": i.user.email if i.user else None,
-                    "group": [x.name for x in i.user.groups.all()]
-                    if i.user and i.user.groups
-                    else [],
+                    "persona": {
+                        "name": i.name,
+                        "surname": i.surname,
+                        "identification": i.identification,
+                        "address": i.address,
+                        "nationality": i.nationality,
+                        "phone": i.phone,
+                        "gender": i.gender_type.pk if i.gender_type else None,
+                        "document": i.document_type.pk if i.document_type else None,
+                    },
+                    "groups": list(user_groups),
                 }
             )
 
