@@ -1,4 +1,3 @@
-from numpy import require
 from ....models import Persons
 from rest_framework.serializers import (
     ModelSerializer,

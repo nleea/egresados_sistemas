@@ -5,6 +5,9 @@ from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
 from src.application.auth_module.models import Persons, Document_types, Genders
+from src.application.auth_module.api.serializers.person.persons_serializers import (
+    PersonsSimpleSerializers,
+)
 
 User = get_user_model()
 
@@ -36,14 +39,15 @@ class UserSerializers(serializers.Serializer):
         fields = "__all__"
 
 
-class CreateUserSerializers(serializers.ModelSerializer):
+class CreateUserSerializers(serializers.Serializer):
     username = serializers.SlugField(
         max_length=100, validators=[UniqueValidator(queryset=User.objects.all())]
     )
+    email = serializers.CharField()
+    persona = PersonsSimpleSerializers()
 
     class Meta:
         model = User
-        fields = ("username", "password", "email")
         validators = [UserValidatorBefore()]
 
     def create(self, validated_data):
