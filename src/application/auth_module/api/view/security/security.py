@@ -212,3 +212,8 @@ class ResourcesView(APIView):
         arbol_list = [x for x in arbol.values()]
 
         return Response(arbol_list, status=status.HTTP_200_OK)
+
+
+class ResourcesRolesView(APIView):
+    def post(self, request, *args, **kwargs):
+        pass
