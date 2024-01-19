@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import Group
+from django.utils import timezone
+
 from .managers.users.managers import UserManagers
 from src.application.default.models import BaseModel
 
@@ -71,7 +73,7 @@ class Persons(BaseModel):
     identification = models.CharField(max_length=40, unique=True, blank=True, null=True)
     address = models.CharField(max_length=50, blank=True, null=True)
     nationality = models.CharField(max_length=100, blank=True, null=True)
-    date_of_birth = models.CharField(max_length=30, blank=True, null=True)
+    date_of_birth = models.DateField(blank=False, null=False, default=timezone.now().date())
     phone = models.CharField(max_length=11, blank=True, null=True)
     status = models.BooleanField(default=True)
     document_type = models.ForeignKey(
