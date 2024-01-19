@@ -5,11 +5,21 @@ from django.contrib.auth import get_user_model
 from rest_framework.validators import UniqueValidator
 from ..customValidators.usersValidators import UserValidatorBefore
 from src.application.auth_module.models import Persons, Document_types, Genders
-from src.application.auth_module.api.serializers.person.persons_serializers import (
-    PersonsSimpleSerializers,
-)
+
 
 User = get_user_model()
+
+
+class PersonsSimpleSerializers(serializers.Serializer):
+    name = serializers.CharField(write_only=True)
+    document_type = serializers.IntegerField(write_only=True)
+    surname = serializers.CharField(write_only=True)
+    identification = serializers.IntegerField(write_only=True)
+    address = serializers.CharField(write_only=True)
+    nationality = serializers.CharField(write_only=True)
+    date_of_birth = serializers.DateField(write_only=True)
+    gender_type = serializers.CharField(write_only=True)
+    phone = serializers.CharField(write_only=True)
 
 
 class UserSerializersSimple(serializers.Serializer):
