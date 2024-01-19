@@ -104,7 +104,7 @@ class AuthModuleController(BaseController):
                         }
                         if i.document_type
                         else None,
-                        "date_of_birth": i.date_of_birth,
+                        "date_of_birth": i.date_of_birth if i.date_of_birth else "",
                     },
                     "groups": list(user_groups),
                 }
