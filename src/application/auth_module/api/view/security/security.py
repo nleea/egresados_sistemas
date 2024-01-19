@@ -1,10 +1,11 @@
+from shutil import ExecError
 from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from ...serializers.resources.resources_serializers import (
     ResourcesRolesSerializers,
 )
 from rest_framework import status
-from ....models import Resources, User
+from ....models import Resources, User, Resources_roles
 from rest_framework.response import Response
 from django.contrib.auth.models import Group
 from django.contrib.auth.models import Permission
@@ -216,4 +217,18 @@ class ResourcesView(APIView):
 
 class ResourcesRolesView(APIView):
     def post(self, request, *args, **kwargs):
-        pass
+        try:
+            rol = request.data.get("rol", None)
+            resources = request.data.get("resources")
+
+            if not rol:
+                return Response("Rol es requerido", status=status.HTTP_400_BAD_REQUEST)
+
+            roles_resource = [
+                Resources_roles(rolesId__id=rol, resourcesId__id=x) for x in resources
+            ]
+
+            Resources_roles.objects.bulk_create(roles_resource)
+            return Response("Ok", status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(e.args, status=status.HTTP_400_BAD_REQUEST)
