@@ -43,8 +43,6 @@ class CreateUserSerializers(serializers.Serializer):
     username = serializers.SlugField(
         max_length=100, validators=[UniqueValidator(queryset=User.objects.all())]
     )
-    name = serializers.CharField()
-    surname = serializers.CharField()
     email = serializers.CharField()
     persona = PersonsSimpleSerializers()
 
