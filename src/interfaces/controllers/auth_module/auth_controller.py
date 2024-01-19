@@ -76,15 +76,16 @@ class AuthModuleController(BaseController):
         queryset = (
             Persons.objects.select_related("user", "document_type", "gender_type")
             .prefetch_related(Prefetch("user__groups", Group.objects.all()))
-            .filter(user__is_staff=internal)
+            .filter(user__is_staff=internal).order_by("user__id")
         )
 
         list_user = []
 
         for i in queryset:
-            user_groups = i.user.groups.values("name","id") if i.user else []
+            user_groups = i.user.groups.values("name", "id") if i.user else []
             list_user.append(
                 {
+                    "id": i.user.pk,
                     "email": i.user.email if i.user else None,
                     "persona": {
                         "name": i.name,
@@ -93,8 +94,15 @@ class AuthModuleController(BaseController):
                         "address": i.address,
                         "nationality": i.nationality,
                         "phone": i.phone,
-                        "gender": i.gender_type.pk if i.gender_type else None,
-                        "document": i.document_type.pk if i.document_type else None,
+                        "gender": {"name": i.gender_type.name, "id": i.gender_type.pk}
+                        if i.gender_type
+                        else None,
+                        "document": {
+                            "id": i.document_type.pk,
+                            "name": i.document_type.name,
+                        }
+                        if i.document_type
+                        else None,
                     },
                     "groups": list(user_groups),
                 }
