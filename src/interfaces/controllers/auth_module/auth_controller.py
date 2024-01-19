@@ -76,7 +76,8 @@ class AuthModuleController(BaseController):
         queryset = (
             Persons.objects.select_related("user", "document_type", "gender_type")
             .prefetch_related(Prefetch("user__groups", Group.objects.all()))
-            .filter(user__is_staff=internal).order_by("user__id")
+            .filter(user__is_staff=internal)
+            .order_by("user__id")
         )
 
         list_user = []
@@ -103,6 +104,7 @@ class AuthModuleController(BaseController):
                         }
                         if i.document_type
                         else None,
+                        "date_of_birth": i.date_of_birth,
                     },
                     "groups": list(user_groups),
                 }
