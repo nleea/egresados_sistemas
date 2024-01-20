@@ -1,4 +1,3 @@
-from shutil import ExecError
 from rest_framework.generics import CreateAPIView
 from rest_framework.views import APIView
 from ...serializers.resources.resources_serializers import (
@@ -177,7 +176,6 @@ class CheckPermissions(APIView):
     def post(self, request, *args, **kwargs):
         user = request.user
         permissions = request.data["permissions"]
-
         check_resulst = user.has_perms(permissions)
 
         return Response({"valid": check_resulst}, status=status.HTTP_200_OK)

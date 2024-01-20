@@ -1,8 +1,9 @@
 from src.interfaces.controllers.base_controller import BaseController
-from rest_framework import status
 from django.contrib.auth.models import Group, Permission
 from django.db.models import Prefetch
 from src.application.auth_module.models import Persons
+from django.contrib.contenttypes.models import ContentType
+from django.db.models import Q
 
 
 class AuthModuleController(BaseController):
@@ -13,64 +14,96 @@ class AuthModuleController(BaseController):
         return super().post(data, extra)
 
     def get_roles(self, group):
-        try:
-            model_gestionar = [
-                "eventosarea",
-                "subareaeventos",
-                "tipoevento",
-                "asistencia",
-                "tipomomento",
-                "tipopqrs",
-                "tipopqrs",
-                "asignacion",
-                "votoanuncio",
-                "tiposcapacitaciones",
-                "subcategoria",
-                "redessociales",
-                "genders",
-                "faculties",
-                "document_types",
-                "programs",
-                "headquarters",
-                "user",
-                "categoria",
-                "question",
-                "answer",
-            ]
+        excluded_apps = {
+            "admin",
+            "auth",
+            "contenttypes",
+            "sessions",
+            "authtoken",
+            "token_blacklist",
+            "resources_roles",
+            "persons",
+            "resources",
+            "respuesta",
+            "redessociales",
+            "votoanuncio",
+            "mensajes",
+            "answeruser",
+            "inscripcion",
+        }
 
-            group = Group.objects.prefetch_related(
-                Prefetch(
-                    "permissions",
-                    Permission.objects.all().select_related("content_type"),
-                ),
-            ).get(pk=group)
+        content_types = ContentType.objects.exclude(
+            Q(model__in=excluded_apps) | Q(app_label__in=excluded_apps)
+        ).values("app_label", "model")
+        permissions_data = {}
 
-            group_permissions = group.permissions.all()
+        model_gestionar = [
+            "eventosarea",
+            "subareaeventos",
+            "tipoevento",
+            "asistencia",
+            "tipomomento",
+            "tipopqrs",
+            "tipopqrs",
+            "asignacion",
+            "votoanuncio",
+            "tiposcapacitaciones",
+            "subcategoria",
+            "redessociales",
+            "genders",
+            "faculties",
+            "document_types",
+            "programs",
+            "headquarters",
+            "user",
+            "categoria",
+            "question",
+            "answer",
+        ]
+        group = Group.objects.prefetch_related(
+            Prefetch(
+                "permissions",
+                Permission.objects.all().select_related("content_type"),
+            ),
+        ).get(pk=group)
 
-            result_data = {"name": group.name, "permissions": {}}
+        group_permissions_query = group.permissions.all()
+        group_permissions_model = [
+            x.content_type.model for x in group_permissions_query
+        ]
+        group_permissions_label = [
+            x.content_type.app_label for x in group_permissions_query
+        ]
 
-            for permission in group_permissions:
-                app_label = permission.content_type.app_label
-                model = permission.content_type.model
-                codename = permission.name
+        for content_type in content_types:
+            app_label = content_type["app_label"]
+            model = content_type["model"]
 
-                if app_label not in result_data["permissions"]:
-                    result_data["permissions"][app_label] = {}
+            if model not in permissions_data:
+                permissions_data.setdefault(app_label, {})[model] = []
 
-                if model not in result_data["permissions"][app_label]:
-                    if model in model_gestionar:
-                        result_data["permissions"][app_label][model] = ["gestionar"]
-                    else:
-                        result_data["permissions"][app_label][model] = [codename]
-                else:
-                    if model not in model_gestionar:
-                        result_data["permissions"][app_label][model].append(codename)
+            if model in permissions_data[app_label] and model in model_gestionar:
+                if model in group_permissions_model:
+                    permissions_data.setdefault(app_label, {})[model] = ["gestionar"]
+            else:
+                if model in group_permissions_model:
+                    permissions_data.setdefault(app_label, {})[model] = [
+                        permission.name
+                        for permission in group_permissions_query.filter(
+                            content_type__model=model
+                        )
+                    ]
 
-            return result_data, status.HTTP_200_OK
-        except Group.DoesNotExist:
-            return "Group not found", status.HTTP_404_NOT_FOUND
-        except Exception as e:
-            return str(e), status.HTTP_400_BAD_REQUEST
+        permissions_data.setdefault("admin", {})["roles"] = []
+        permissions_data.setdefault("classified_advertisements", {})["detalles"] = []
+
+        if "mensajes" in group_permissions_model:
+            permissions_data["classified_advertisements"]["detalles"] = ["gestionar"]
+
+        if "auth" in group_permissions_label:
+            permissions_data["admin"]["roles"] = ["gestionar"]
+
+        return permissions_data, 200
 
     def get_users(self, internal=True):
         queryset = (
