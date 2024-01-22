@@ -67,7 +67,7 @@ def send_confirm_mail(self, target_mail, evento):
         subject = "Correo electrónico con código QR"
         from_email = EMAIL_HOST_USER
         evento_id = evento.get("id")
-        url = f"http://44.203.185.252/eventos/inscripciones/confirmar/asistencia/?evento={evento_id}"
+        url = ""
         evento_data = {**evento, "url": url}
         htmly = render_to_string("confirm_mensaje.html", context=evento_data)
         text_content = strip_tags(htmly)

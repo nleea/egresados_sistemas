@@ -1,5 +1,3 @@
-# coding: utf-8
-
 from collections.abc import Iterable
 from dataclasses import dataclass
 from typing import Callable, Union
