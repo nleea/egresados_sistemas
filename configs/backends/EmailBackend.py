@@ -10,8 +10,11 @@ class EmailBackend(ModelBackend):
     @sensitive_variables("username", "password")
     def authenticate(self, request, username, password, **kwargs):
         try:
+            username_kwarg = kwargs.get("username", "")
             user = UserModel.objects.get(
-                Q(username__iexact=username) | Q(email__iexact=username)
+                Q(username__iexact=username)
+                | Q(email__iexact=username 
+                | Q(email__iexact=username_kwarg))  # type: ignore
             )
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
