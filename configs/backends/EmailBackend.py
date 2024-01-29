@@ -13,8 +13,8 @@ class EmailBackend(ModelBackend):
             username_kwarg = kwargs.get("username", "")
             user = UserModel.objects.get(
                 Q(username__iexact=username)
-                | Q(email__iexact=username 
-                | Q(email__iexact=username_kwarg))  # type: ignore
+                | Q(email__iexact=username)
+                | Q(email__iexact=username_kwarg)
             )
         except UserModel.DoesNotExist:
             UserModel().set_password(password)
