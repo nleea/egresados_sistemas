@@ -54,4 +54,15 @@ class Router(SimpleRouter):
             name="{basename}-related",
             detail=True,
         ),
+        Route(
+            url=router_base.get_url(f"{name_base}_delete"),
+            mapping=router_base.map(f"{name_base}_delete"),
+            initkwargs={
+                "viewset_factory": AuthViewSetFactory,
+                "http_method_names": ["delete"],
+                "model": model,
+            },
+            name="{basename}-delete",
+            detail=True,
+        ),
     ]
