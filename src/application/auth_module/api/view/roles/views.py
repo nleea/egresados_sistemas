@@ -46,12 +46,12 @@ class RoleViewSet(ViewSet):
         instance_id = kwargs.get("id", "")
 
         if "ids" in request.data:
-            payload, status = self.controller.delete(
+            payload, status = self.controller.delete_roles(
                 None, request.data.get("ids", None)
             )
             return Response(data=payload, status=status)
 
-        payload, status = self.controller.delete(int(instance_id), request.data)
+        payload, status = self.controller.delete_roles(int(instance_id), request.data)
         return Response(data=payload, status=status)
 
     def get_roles(self, request, *args, **kwargs):

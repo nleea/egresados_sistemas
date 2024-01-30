@@ -40,5 +40,12 @@ router.register(
             method="get_roles",
             name=f"{name_base}_related",
         ),
+        Route(
+            http_verb=HTTP_VERB_DELETE,
+            path=r"delete/?(?P<id>[0-9]+)?/$",
+            controller=AuthModuleController,
+            method="delete",
+            name=f"{name_base}_delete",
+        ),
     ]
 )

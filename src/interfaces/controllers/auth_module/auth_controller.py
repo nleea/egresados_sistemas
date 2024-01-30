@@ -144,3 +144,17 @@ class AuthModuleController(BaseController):
             )
 
         return list_user, 200
+
+    def delete_roles(self, id, ids=None):
+        try:
+            if ids:
+                Group.objects.filter(pk__in=ids).delete()
+                return "Ok", 200
+
+            group = self.repo.get_instance(id)
+            group.delete()
+
+            return "Ok", 200
+
+        except Exception as e:
+            return e.args, 400
