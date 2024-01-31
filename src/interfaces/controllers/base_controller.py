@@ -1,10 +1,6 @@
 from rest_framework import status
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.core.cache import cache
-from django.contrib.auth.models import Group
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
@@ -66,7 +62,10 @@ class BaseController:
             return "Ok", status.HTTP_200_OK
         return serializers.errors, status.HTTP_400_BAD_REQUEST
 
-
+    def filter_in(self, **kwargs):
+        resp = self.repo.filter_in(**kwargs)
+        serializer = self.serializer(resp, many=True)
+        return serializer.data, status.HTTP_200_OK
 
     def delete(self, id, ids=None):
         if ids:

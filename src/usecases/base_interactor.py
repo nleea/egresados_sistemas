@@ -20,6 +20,10 @@ class BaseInteractor:
             return reps.order_by(*order)
         return reps
 
+    def filter_in(self, **kwargs):
+        reps = self.repo.filter_in(**kwargs)
+        return reps
+
     def get_instance(self, data, prefetch=None, related=None):
         return self.repo.get_instance(data, prefetch, related)
 

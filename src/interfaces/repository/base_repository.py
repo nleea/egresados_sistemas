@@ -96,6 +96,10 @@ class BaseRepository(ABC):
 
         return model
 
+    def filter_in(self, **kwargs):
+        field = kwargs.get("field", [])
+        return self.model.filter(id__in=field)
+
     def post(self, data):
         return None
 
