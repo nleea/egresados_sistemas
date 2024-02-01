@@ -68,9 +68,9 @@ class AuthModuleController(BaseController):
         ).get(pk=group)
 
         group_permissions_query = group.permissions.all()
-        group_permissions_model = [
-            x.content_type.model for x in group_permissions_query
-        ]
+        group_permissions_model = set(
+            [x.content_type.model for x in group_permissions_query]
+        )
         group_permissions_label = [
             x.content_type.app_label for x in group_permissions_query
         ]
@@ -79,15 +79,18 @@ class AuthModuleController(BaseController):
             app_label = content_type["app_label"]
             model = content_type["model"]
 
-            if model not in permissions_data:
-                permissions_data.setdefault(app_label, {})[model] = []
+            if app_label not in permissions_data:
+                permissions_data[app_label] = {}
 
-            if model in permissions_data[app_label] and model in model_gestionar:
-                if model in group_permissions_model:
-                    permissions_data.setdefault(app_label, {})[model] = ["gestionar"]
-            else:
-                if model in group_permissions_model:
-                    permissions_data.setdefault(app_label, {})[model] = [
+            permissions_data[app_label][model] = []
+            if (
+                model in permissions_data[app_label]
+                and model in group_permissions_model
+            ):
+                if model in model_gestionar:
+                    permissions_data[app_label][model] = ["gestionar"]
+                else:
+                    permissions_data[app_label][model] = [
                         permission.name
                         for permission in group_permissions_query.filter(
                             content_type__model=model
