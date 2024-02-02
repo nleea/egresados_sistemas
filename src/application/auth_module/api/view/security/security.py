@@ -119,7 +119,7 @@ class PermissionsView(APIView):
 
     def insert_update_roles(self, data):
         try:
-            data_permissions = data.get("permissions", [])
+            data_permissions = data.get("permissions", {})
             role_name = data.get("role", None)
 
             if role_name is None:
@@ -128,9 +128,12 @@ class PermissionsView(APIView):
             role, _ = Group.objects.get_or_create(name=role_name)
             instance_permissions = []
 
-            for permission_data in data_permissions:
-                name = list(permission_data.keys())[0]
-                permissions = permission_data[name]
+            for permission_data in data_permissions.keys():
+                # name = list(permission_data.keys())[0]
+                # permissions = permission_data[name]
+
+                name = permission_data
+                permissions = data_permissions[name]
 
                 if permissions == []:
                     continue
