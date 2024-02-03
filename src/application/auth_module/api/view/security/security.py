@@ -117,7 +117,7 @@ class PermissionsView(APIView):
 
         return Response(permissions_data, status=status.HTTP_200_OK)
 
-    def insert_update_roles(self, data):
+    def insert_update_roles(self, data, role):
         try:
             data_permissions = data.get("permissions", {})
             role_name = data.get("role", None)
@@ -125,13 +125,9 @@ class PermissionsView(APIView):
             if role_name is None:
                 return Response("Fields Required", status=status.HTTP_400_BAD_REQUEST)
 
-            role, _ = Group.objects.get_or_create(name=role_name)
             instance_permissions = []
 
             for permission_data in data_permissions.keys():
-                # name = list(permission_data.keys())[0]
-                # permissions = permission_data[name]
-
                 name = permission_data
                 permissions = data_permissions[name]
 
@@ -167,11 +163,22 @@ class PermissionsView(APIView):
             return e.args, status.HTTP_400_BAD_REQUEST
 
     def post(self, request, *args, **kwargs):
-        response, status = self.insert_update_roles(request.data)
+        role_name = request.data.get("role", "")
+        role, _ = Group.objects.get_or_create(name=role_name)
+        response, status = self.insert_update_roles(request.data, role)
         return Response(response, status)
 
     def put(self, request, *args, **kwargs):
-        response, status = self.insert_update_roles(request.data)
+        role_name = request.data.get("role", "")
+        role = request.data.get("id", "")
+
+        role = Group.objects.get(pk=role)
+        response, status = self.insert_update_roles(request.data, role)
+
+        if role_name != role.name:
+            role.name = role_name
+            role.save()
+
         return Response(response, status)
 
 
