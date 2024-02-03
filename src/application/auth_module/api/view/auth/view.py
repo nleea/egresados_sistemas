@@ -40,6 +40,7 @@ class AuthLogin(APIView):
             Resources.objects.defer("createdAt", "updateAt")
             .distinct()
             .filter(roles__in=serializers.validated_data.groups.all())
+            .order_by("pk")
         )  # type:ignore
 
         menu = ResourcesSerializers(resources, many=True)
