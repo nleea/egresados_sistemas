@@ -1,9 +1,11 @@
+from unittest import result
 from src.interfaces.controllers.base_controller import BaseController
 from django.contrib.auth.models import Group, Permission
 from django.db.models import Prefetch
-from src.application.auth_module.models import Persons
+from src.application.auth_module.models import Persons, Resources, Resources_roles
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
+from configs.helpers.menu_resources import menuResources
 
 
 class AuthModuleController(BaseController):
@@ -131,15 +133,19 @@ class AuthModuleController(BaseController):
                         "address": i.address,
                         "nationality": i.nationality,
                         "phone": i.phone,
-                        "gender": {"name": i.gender_type.name, "id": i.gender_type.pk}
-                        if i.gender_type
-                        else None,
-                        "document": {
-                            "id": i.document_type.pk,
-                            "name": i.document_type.name,
-                        }
-                        if i.document_type
-                        else None,
+                        "gender": (
+                            {"name": i.gender_type.name, "id": i.gender_type.pk}
+                            if i.gender_type
+                            else None
+                        ),
+                        "document": (
+                            {
+                                "id": i.document_type.pk,
+                                "name": i.document_type.name,
+                            }
+                            if i.document_type
+                            else None
+                        ),
                         "date_of_birth": i.date_of_birth if i.date_of_birth else "",
                     },
                     "groups": list(user_groups),
@@ -161,3 +167,31 @@ class AuthModuleController(BaseController):
 
         except Exception as e:
             return e.args, 400
+
+    def create_many(self, resources):
+        try:
+
+            resources_new = []
+
+            id_last_resources = 0
+            last = Resources.objects.last()
+
+            if last:
+                id_last_resources = last.pk + 1
+
+            menuResources(
+                resources,
+                resources_new,
+                Resources,
+                id_last_resources,
+            )
+
+            resources_new = Resources.objects.bulk_create(resources_new)
+            return "Ok", 200
+        except Exception as e:
+            return e.args, 404
+
+    def resources_role(self, rol):
+        resources = Resources.objects.filter(roles=rol)
+        serializer = self.serializer(resources, many=True)
+        return serializer.data, 200

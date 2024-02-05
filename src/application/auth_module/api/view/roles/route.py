@@ -64,5 +64,5 @@ class Router(SimpleRouter):
             },
             name="{basename}-delete",
             detail=True,
-        ),
+        )
     ]

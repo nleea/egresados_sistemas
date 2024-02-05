@@ -26,7 +26,7 @@ class SecurityResourcesCreate(CreateAPIView):
         try:
             resources = ResourcesRolesSerializers(data=request.data)
             resources.is_valid(raise_exception=True)
-            resources.create(request.data)
+            resources.save()
             return Response("Resources Create", status.HTTP_200_OK)
         except Exception as e:
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
