@@ -62,3 +62,4 @@ class RoleViewSet(ViewSet):
 
         payload, status = self.controller.get_roles(pk)
         return Response(payload, status=status)
+

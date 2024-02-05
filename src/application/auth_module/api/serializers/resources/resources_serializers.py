@@ -1,13 +1,17 @@
 from ....models import Resources, Resources_roles
-from rest_framework.serializers import Serializer, IntegerField, BooleanField, CharField
-from configs.helpers.menu_resources import menuResources
+from rest_framework.serializers import (
+    Serializer,
+    IntegerField,
+    BooleanField,
+    CharField,
+    ListField,
+)
 
 
 class ResourcesSerializers(Serializer):
     id = IntegerField(read_only=True)
     path = CharField(read_only=True)
     id_padre = IntegerField(read_only=True)
-    path = CharField(read_only=True)
     icono = CharField(read_only=True)
     link = CharField(read_only=True)
     titulo = CharField(read_only=True)
@@ -16,48 +20,56 @@ class ResourcesSerializers(Serializer):
         fields = "__All__"
 
 
-class ResourcesRolesSerializers(Serializer):
-    merge = BooleanField(required=False)
-    rolesId = IntegerField()
-    resources = ResourcesSerializers(many=True)
+class ResourcesCreateSerializers(Serializer):
+    path = CharField()
+    id_padre = IntegerField()
+    link = CharField()
+    titulo = CharField()
+    icono = CharField(required=False)
 
     def create(self, validated_data):
         try:
-            merge = validated_data.get("merge", False)
-            new_resources = []
-            resources_new = []
-            list_resources_roles = []
+            path = validated_data.get("path", None)
+            id_padre = validated_data.get("id_padre", 0)
+            link = validated_data.get("path", None)
+            titulo = validated_data.get("link", None)
+            icono = validated_data.get("icono", "icon")
 
-            id_last_resources = 0
-            last = Resources.objects.last()
-
-            resources = validated_data.get("resources", [{"path": "", "items": []}])[0]
-            if merge:
-                id_padre = Resources.objects.get(path=resources["path"]).pk
-                new_resources = [
-                    {**x, "id_padre": id_padre} for x in resources["items"]
-                ]
-
-            if last:
-                id_last_resources = last.id + 1  # type: ignore
-
-            menuResources(
-                new_resources if merge else resources,
-                resources_new,
-                Resources,
-                id_last_resources,
+            instance = Resources.objects.create(
+                pk=Resources.objects.last().pk + 1,
+                path=path,
+                id_padre=id_padre,
+                link=link,
+                titulo=titulo,
+                method="GET",
+                icono=icono,
             )
+            return instance
+        except Exception as e:
+            raise e
 
-            resources_new = Resources.objects.bulk_create(resources)
+    class Meta:
+        fields = "__all__"
 
+
+class ResourcesRolesSerializers(Serializer):
+    merge = BooleanField(required=False)
+    rolesId = IntegerField()
+    resources = ListField(child=IntegerField())
+
+    def create(self, validated_data):
+        try:
+            
+            print(validated_data)
+            
             list_resources_roles = [
                 Resources_roles(
-                    rolesId_id=validated_data["rolesId"], resourcesId=resource
+                    rolesId_id=validated_data["rolesId"], resourcesId_id=resource
                 )
-                for resource in resources_new
+                for resource in validated_data.get("resources", [])
             ]
 
-            Resources_roles.objects.bulk_create(list_resources_roles)
-            return None
+            instane = Resources_roles.objects.bulk_create(list_resources_roles)[0]
+            return instane
         except Exception as e:
             raise e
