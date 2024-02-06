@@ -156,11 +156,11 @@ class AdvertisementSerializers(BaseSerializers):
             logo=validated_data.pop("logo", None),
         )
 
-        tipo_capacitacion = validated_data.pop("tipo_capacitacion", None)
+        tipo_capacitacion = validated_data.pop("tipo_capacitacion", "")
 
         if tipo_capacitacion != None:
             capacitaciones = TiposCapacitaciones.objects.filter(
-                pk__in=list(map(int, tipo_capacitacion[0].split(",")))
+                pk__in=list(map(int, tipo_capacitacion.split(",")))
             )
             for capacitacion in capacitaciones:
                 anuncio.tipo_capacitacion.add(capacitacion)
