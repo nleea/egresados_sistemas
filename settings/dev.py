@@ -20,7 +20,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    #"configs.middlewares.view_responses.CustomResponseMiddleware",
+    "configs.middlewares.view_responses.CustomResponseMiddleware",
 ]
 
 DEBUG_TOOLBAR_PANELS = [
