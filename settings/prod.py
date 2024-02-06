@@ -39,3 +39,16 @@ DATABASES = {
         "PORT": DB_DEVELOP_PORT,
     },
 }
+
+CACHE_TTL = 60 * 15
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "rediss://red-cm7ipd6d3nmc73cgme7g:1WhZOV9Gjrn6USBLovn4hb3ZMprfNAv8@oregon-redis.render.com:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+        "KEY_PREFIX": "cache",
+    }
+}
