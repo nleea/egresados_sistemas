@@ -23,7 +23,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class AdvertisementViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []
@@ -169,6 +169,9 @@ class AdvertisementViewSet(ViewSet):
         return Response(data=payload, status=status)
 
     def query(self, request, *args, **kwargs):
+
+        print("Entro")
+
         if "categoryId" in request.data:
             payload, status = self.controller.query(
                 sub_category=request.data.get("categoryId"),
