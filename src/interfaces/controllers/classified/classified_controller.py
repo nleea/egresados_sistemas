@@ -1,3 +1,7 @@
+from src.application.classified_advertisements.models.models import SubCategoria
+from src.application.classified_advertisements.api.serializers.subCategory.subCategory_serializers import (
+    SubCategorySerializersView,
+)
 from src.interfaces.controllers.base_controller import BaseController
 from rest_framework import status
 
@@ -16,12 +20,12 @@ class ClassifiedController(BaseController):
         return self.repo.complex_filters(**kwargs)
 
     def query(self, sub_category, user_id, excludes=[]):
-        resp, status = self.anuncio_subCategory(sub_category, user_id)
-
-        if status == 200:
-            serializer = self.serializer(resp, many=True, excludes=excludes)
-            return serializer.data, status
-        return resp, status
+        try:
+            resp = SubCategoria.objects.filter(categoriaId=sub_category)
+            serializer = SubCategorySerializersView(resp, many=True)
+            return serializer.data, 200
+        except Exception as e:
+            return e.args, 400
 
     def state_changes(self, id, data):
         instance = self.repo.get_instance(id)

@@ -82,6 +82,7 @@ class AdvertisementSerializersView(BaseSerializers):
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
+        print("serilizador", instance)
         results["formas_pago"] = [x for x in instance.formas_pago.split(",")]
         results["metodos_entrega"] = [x for x in instance.metodos_entrega.split(",")]
         results["categoria"] = {
