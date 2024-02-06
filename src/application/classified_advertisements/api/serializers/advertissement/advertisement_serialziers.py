@@ -170,7 +170,6 @@ class AdvertisementSerializers(BaseSerializers):
                     anuncio.tipo_capacitacion.add(capacitacion)
 
         redes = json.loads(validated_data.pop("redes", None)[0])
-        # redes = validated_data.pop("redes", None)
         for red in redes:
             anuncio.redes.add(
                 RedesSociales.objects.create(
