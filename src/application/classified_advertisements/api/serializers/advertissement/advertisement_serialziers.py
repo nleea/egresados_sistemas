@@ -124,8 +124,8 @@ class AdvertisementSerializers(BaseSerializers):
     descripcion = serializers.CharField()
     telefono_emprendimiento = serializers.CharField()
     correo_emprendimiento = serializers.EmailField()
-    corregimiento = serializers.CharField()
-    municipio = serializers.CharField()
+    corregimiento = serializers.CharField(required=False)
+    municipio = serializers.CharField(required=False)
     direccion = serializers.CharField()
     subCategoria = serializers.IntegerField()
     metodos_entrega = serializers.ListField()
@@ -147,8 +147,8 @@ class AdvertisementSerializers(BaseSerializers):
             descripcion=validated_data["descripcion"],
             telefono_emprendimiento=validated_data["telefono_emprendimiento"],
             correo_emprendimiento=validated_data["correo_emprendimiento"],
-            corregimiento=validated_data["corregimiento"],
-            municipio=validated_data["municipio"],
+            corregimiento=validated_data.get("corregimiento", ""),
+            municipio=validated_data.get("municipio", ""),
             direccion=validated_data["direccion"],
             userCreate=validated_data["userCreate"],
             subCategoria_id=validated_data["subCategoria"],
