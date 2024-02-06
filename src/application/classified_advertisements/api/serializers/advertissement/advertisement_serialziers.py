@@ -1,3 +1,4 @@
+import json
 from rest_framework import serializers
 from ....models.models import (
     Anuncio,
@@ -150,25 +151,26 @@ class AdvertisementSerializers(BaseSerializers):
             municipio=validated_data.get("municipio", ""),
             direccion=validated_data["direccion"],
             userCreate=validated_data["userCreate"],
-            subCategoria_id=validated_data["subCategoria"],
+            subCategoria_id=int(validated_data["subCategoria"]),
             metodos_entrega=metodos_entrega,
             formas_pago=formas_pago,
             logo=validated_data.pop("logo", None),
         )
 
         tipo_capacitacion = validated_data.pop("tipo_capacitacion", None)
+        print(list(map(int, tipo_capacitacion[0].split(","))))
 
         if tipo_capacitacion != None:
             if len(tipo_capacitacion):
                 capacitaciones = TiposCapacitaciones.objects.filter(
-                    # pk__in=list(map(int, tipo_capacitacion[0].split(",")))
-                    pk__in=tipo_capacitacion
+                    pk__in=list(map(int, tipo_capacitacion[0].split(",")))
+                    # pk__in=tipo_capacitacion
                 )
                 for capacitacion in capacitaciones:
                     anuncio.tipo_capacitacion.add(capacitacion)
 
-        redes = validated_data.pop("redes", [])
-
+        redes = json.loads(validated_data.pop("redes", None)[0])
+        # redes = validated_data.pop("redes", None)
         for red in redes:
             anuncio.redes.add(
                 RedesSociales.objects.create(
