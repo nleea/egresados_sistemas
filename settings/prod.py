@@ -26,6 +26,7 @@ DB_DEVELOP_USER = env("DB_DEVELOP_USER")
 DB_DEVELOP_PASSWORD = env("DB_DEVELOP_PASSWORD")
 DB_DEVELOP_HOST = env("DB_DEVELOP_HOST")
 DB_DEVELOP_PORT = env("DB_DEVELOP_PORT")
+REDIS = env("REDIS")
 
 
 DATABASES = {
@@ -44,7 +45,7 @@ CACHE_TTL = 60 * 15
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "rediss://red-cm7ipd6d3nmc73cgme7g:1WhZOV9Gjrn6USBLovn4hb3ZMprfNAv8@oregon-redis.render.com:6379",
+        "LOCATION": REDIS,
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         },
