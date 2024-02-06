@@ -62,8 +62,8 @@ class Anuncio(BaseModel):
     descripcion = models.CharField(max_length=600, null=False)
     telefono_emprendimiento = models.CharField(max_length=11, null=False)
     correo_emprendimiento = models.EmailField(null=False)
-    corregimiento = models.CharField(max_length=50, null=False)
-    municipio = models.CharField(max_length=50, null=False)
+    corregimiento = models.CharField(max_length=50, null=True, blank=True)
+    municipio = models.CharField(max_length=50, null=True, blank=True)
     direccion = models.CharField(max_length=50, null=False)
     subCategoria = models.ForeignKey(
         SubCategoria, on_delete=models.CASCADE, db_index=True
