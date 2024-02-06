@@ -43,6 +43,7 @@ class AdvertisementViewSet(ViewSet):
         return self.viewset_factory.create(self.model, self.get_serializer_class())
 
     def post(self, request, *args, **kwargs):
+        
         payload, status = self.controller.post(
             request.data, extra={"userCreate": request.user}
         )
