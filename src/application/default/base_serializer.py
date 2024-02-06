@@ -1,5 +1,5 @@
 from rest_framework import serializers
-
+from typing import Any
 
 class BaseSerializers(serializers.Serializer):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
@@ -17,7 +17,7 @@ class BaseSerializers(serializers.Serializer):
 
         super().__init__(instance, data, **kwargs)
 
-        if meta != True or meta is None:
+        if meta != True:
             self.fields.pop("createdAt")
             self.fields.pop("updateAt")
             self.fields.pop("userCreate")

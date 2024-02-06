@@ -82,7 +82,6 @@ class AdvertisementSerializersView(BaseSerializers):
 
     def to_representation(self, instance):
         results = super().to_representation(instance)
-        print("serilizador", instance)
         results["formas_pago"] = [x for x in instance.formas_pago.split(",")]
         results["metodos_entrega"] = [x for x in instance.metodos_entrega.split(",")]
         results["categoria"] = {
@@ -160,16 +159,13 @@ class AdvertisementSerializers(BaseSerializers):
         tipo_capacitacion = validated_data.pop("tipo_capacitacion", None)
 
         if tipo_capacitacion != None:
-            if len(tipo_capacitacion):
-                capacitaciones = TiposCapacitaciones.objects.filter(
-                    # pk__in=list(map(int, tipo_capacitacion[0].split(",")))
-                    pk__in=tipo_capacitacion
-                )
-                for capacitacion in capacitaciones:
-                    anuncio.tipo_capacitacion.add(capacitacion)
+            capacitaciones = TiposCapacitaciones.objects.filter(
+                pk__in=list(map(int, tipo_capacitacion[0].split(",")))
+            )
+            for capacitacion in capacitaciones:
+                anuncio.tipo_capacitacion.add(capacitacion)
 
-        # redes = json.loads(validated_data.pop("redes", None)[0])
-        redes = validated_data.pop("redes", None)
+        redes = validated_data.pop("redes", [])
 
         for red in redes:
             anuncio.redes.add(
