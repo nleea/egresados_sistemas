@@ -61,7 +61,7 @@ class QuestionsViewSet(ViewSet):
             filter_param=[{"visible": True}],
             related=["depende_respuesta", "depende_respuesta__pregunta", "momento"],
             prefetch=["answer_set"],
-            order=["-id"],
+            order=["id"],
         )
 
         return Response(data=payload, status=status)
