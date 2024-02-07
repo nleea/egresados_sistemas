@@ -200,13 +200,13 @@ class ResourcesView(APIView):
         padres = {}
 
         items = [
-            {"id_padre": x.id_padre, "pk": x.pk, "titulo": x.titulo, "path": x.path}
+            {"id_padre": x.id_padre, "id": x.pk, "titulo": x.titulo, "path": x.path}
             for x in resources
         ]
 
         for item in items:
             if item["id_padre"] == 0:
-                arbol[item["pk"]] = item
+                arbol[item["id"]] = item
             else:
                 padre_id = item["id_padre"]
                 if padre_id not in padres:
@@ -214,7 +214,7 @@ class ResourcesView(APIView):
                 padres[padre_id].append(item)
 
         for item in items:
-            item_id = item["pk"]
+            item_id = item["id"]
             if item_id in padres:
                 item["children"] = padres[item_id]
 
