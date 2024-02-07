@@ -70,7 +70,6 @@ class QuestionSerializers(BaseSerializers):
         )
         instance.userUpdate = validated_data.get("userUpdate", instance.userUpdate)
         instance.visible = validated_data.get("visible", instance.visible)
-        instance.save()
         return instance
 
 
