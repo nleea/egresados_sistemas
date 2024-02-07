@@ -31,8 +31,8 @@ class ResourcesCreateSerializers(Serializer):
         try:
             path = validated_data.get("path", None)
             id_padre = validated_data.get("id_padre", 0)
-            link = validated_data.get("path", None)
-            titulo = validated_data.get("link", None)
+            link = validated_data.get("link", None)
+            titulo = validated_data.get("titulo", None)
             icono = validated_data.get("icono", "icon")
 
             instance = Resources.objects.create(
@@ -59,8 +59,6 @@ class ResourcesRolesSerializers(Serializer):
 
     def create(self, validated_data):
         try:
-            
-            print(validated_data)
             
             list_resources_roles = [
                 Resources_roles(
