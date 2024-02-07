@@ -182,7 +182,6 @@ SIMPLE_JWT = {
 }
 
 
-
 # CELERY_BROKER_URL = "redis://127.0.0.1:6379"
 # CELERY_ACCEPT_CONTENT = ["application/json"]
 # CELERY_RESULT_SERIALIZER = "json"
@@ -265,4 +264,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-# STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
