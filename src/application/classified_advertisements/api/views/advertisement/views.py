@@ -19,6 +19,7 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from src.application.classified_advertisements.api.views.Base.BaseView import DecoratorPaginateView
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
@@ -124,6 +125,7 @@ class AdvertisementViewSet(ViewSet):
 
         return Response(i, status=s)
 
+    @DecoratorPaginateView
     def get(self, request, *args, **kwargs):
         sub_category = request.GET.get("subCategoryId", None)
 

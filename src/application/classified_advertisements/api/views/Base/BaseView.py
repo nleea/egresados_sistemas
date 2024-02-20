@@ -39,6 +39,6 @@ class DecoratorPaginateView(ViewPagination, object):
         paginate_data = self.get_paginated_response(resulst).data
 
         if paginate_data is None:
-            return Response("error", status.HTTP_400_BAD_REQUEST)
+            return Response("e", status.HTTP_400_BAD_REQUEST)
 
         return Response(paginate_data, status.HTTP_200_OK)
