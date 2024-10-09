@@ -1,3 +1,4 @@
+from tkinter import E
 from rest_framework.views import APIView
 from ...serializers.auth.auth_serializers import LoginSerializers, RegisterSerializers
 from ...serializers.resources.resources_serializers import ResourcesSerializers
@@ -20,45 +21,47 @@ class AuthLogin(APIView):
         }
 
     def post(self, request, *args, **kwargs):
-        data = {}
-        if "email" in request.data:
-            data["username"] = request.data["email"]
-            data["password"] = request.data["password"]
-        else:
-            data = request.data
+        try:
+            data = {}
+            if "email" in request.data:
+                data["username"] = request.data["email"]
+                data["password"] = request.data["password"]
+            else:
+                data = request.data
 
-        serializers = LoginSerializers(
-            data=request.data, context={"request": self.request}
-        )
-        if not serializers.is_valid():
-            return Response(serializers.errors, status.HTTP_400_BAD_REQUEST)
+            serializers = LoginSerializers(
+                data=data, context={"request": self.request}
+            )
+    
+            if not serializers.is_valid():
+                return Response(serializers.errors, status.HTTP_400_BAD_REQUEST)
 
-        login(request, serializers.validated_data)  # type: ignore
-        token = self.get_tokens_for_user(serializers.validated_data)
+            login(request, serializers.validated_data)  # type: ignore
+            token = self.get_tokens_for_user(serializers.validated_data)
 
-        resources = (
-            Resources.objects.defer("createdAt", "updateAt")
-            .distinct()
-            .filter(roles__in=serializers.validated_data.groups.all())
-            .order_by("pk")
-        )  # type:ignore
+            resources = (
+                Resources.objects.defer("createdAt", "updateAt")
+                .distinct()
+                .filter(roles__in=serializers.validated_data.groups.all())
+                .order_by("pk")
+            )  # type:ignore
+            menu = ResourcesSerializers(resources, many=True)
 
-        menu = ResourcesSerializers(resources, many=True)
-
-        persons = serializers.validated_data.persons_set.first()  # type: ignore
-        request.session["refresh-token"] = token["refresh"]
-        return Response(
-            {
-                "token": token,
-                "user": {
-                    "name": serializers.validated_data.username,  # type: ignore
-                    "id": serializers.validated_data.id,
-                    "full_name": f"{persons.name} {persons.surname}",
-                },  # type: ignore
-                "menu": menu.data,
-            },
-            status.HTTP_200_OK,
-        )
+            persons = serializers.validated_data.persons_set.first()  # type: ignore
+            request.session["refresh-token"] = token["refresh"]
+            response_data = {
+                    "token": token,
+                    "user": {
+                        "name": serializers.validated_data.username,  # type: ignore
+                        "id": serializers.validated_data.id,
+                        "full_name": f"{persons.name} {persons.surname}",
+                    },  # type: ignore
+                    "menu": menu.data,
+                }
+            return Response(response_data,status.HTTP_200_OK)
+        except Exception as e:
+           print(e)
+           return Response(e, status.HTTP_400_BAD_REQUEST) 
 
 
 class AuthRegister(APIView):

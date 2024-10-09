@@ -13,7 +13,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name='dispatch')
+#@method_decorator(cache_page(CACHE_TTL), name='dispatch')
 class GenderViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []

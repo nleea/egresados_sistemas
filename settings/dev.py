@@ -55,7 +55,7 @@ REDIS = env("REDIS")
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.db.backends.mysql",
         "NAME": DB_DEVELOP_NAME,
         "USER": DB_DEVELOP_USER,
         "PASSWORD": DB_DEVELOP_PASSWORD,
@@ -64,15 +64,15 @@ DATABASES = {
     },
 }
 
-CACHE_TTL = 60 * 15
+# CACHE_TTL = 60 * 15
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS,
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
-        "KEY_PREFIX": "cache",
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": REDIS,
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         },
+#         "KEY_PREFIX": "cache",
+#     }
+# }

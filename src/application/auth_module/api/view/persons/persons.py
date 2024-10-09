@@ -15,7 +15,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class PersonViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []
@@ -36,7 +36,6 @@ class PersonViewSet(ViewSet):
         payload, status = self.controller.get_object(
             request.user.id, prefetch=["document_type", "gender_type"]
         )
-
         return Response(data=payload, status=status)
 
     def post(self, request, *args, **kwargs):
