@@ -46,7 +46,7 @@ class SecurityRolesUser(APIView):
             return Response(e.args, status.HTTP_400_BAD_REQUEST)
 
 
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+#@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class PermissionsView(APIView):
     def get(self, request, *args, **kwargs):
         excluded_apps = {
@@ -191,7 +191,7 @@ class CheckPermissions(APIView):
         return Response({"valid": check_resulst}, status=status.HTTP_200_OK)
 
 
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+#@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class ResourcesView(APIView):
     def get(self, request, *args, **kwargs):
         resources = Resources.objects.all().order_by("id_padre", "id")

@@ -10,6 +10,11 @@ from django.db.transaction import atomic, rollback
 User = get_user_model()
 
 
+class UserSerializerCreate(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
+
 class PersonsSimpleSerializers(serializers.Serializer):
     name = serializers.CharField(write_only=True)
     document_type = serializers.IntegerField(write_only=True)

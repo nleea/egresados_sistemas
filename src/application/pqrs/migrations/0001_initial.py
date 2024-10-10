@@ -18,6 +18,123 @@ class Migration(migrations.Migration):
     ]
 
     def insert_init_data(apps, schema_editor):
+        
+        TipoPqrs = apps.get_model("pqrs", "TipoPqrs")
+        TipoPqrs.objects.bulk_create(
+            [
+                TipoPqrs(tipo="PETICIONES"), 
+                TipoPqrs(tipo="QUEJAS"), 
+                TipoPqrs(tipo="RECLAMOS"), 
+                TipoPqrs(tipo="SUGERENCIAS"), 
+            ]
+        )
+        
+        Headquarters = apps.get_model("auth_module", "Headquarters")
+        Faculties = apps.get_model("auth_module", "Faculties")
+        Programs = apps.get_model("auth_module", "Programs")
+        
+        Headquarters.objects.bulk_create(
+            [
+                Headquarters(name="SEDE RIOHACHA"), 
+                Headquarters(name="SEDE MAICAO"),
+                Headquarters(name="SEDE FONSECA"),
+            ]
+        )
+             
+        Faculties.objects.bulk_create(
+            [
+                Faculties(name="FACULTAD DE INGENIERIA", headquarter_id=1), 
+                Faculties(name="FACULTAD DE LA SALUD", headquarter_id=2), 
+                Faculties(name="FACULTAD DE CIENCIAS BASICAS", headquarter_id=3), 
+            ]
+        )
+             
+        Programs.objects.bulk_create(
+            [
+                Programs(name="PROGRAMA DE INGENIERIA DE SISTEMAS", faculty_id=1), 
+                Programs(name="PROGRAMA DE INGENIERIA CIVIL", faculty_id=1), 
+                Programs(name="PROGRAMA DE INGENIERIA ELECTRICA", faculty_id=1), 
+                Programs(name="PROGRAMA DE INGENIERIA INDUSTRIAL", faculty_id=1), 
+                Programs(name="PROGRAMA DE NUTRICION", faculty_id=2), 
+                Programs(name="PROGRAMA DE ENFERMERIA", faculty_id=2), 
+                Programs(name="PROGRAMA DE BIOLOGIA", faculty_id=3), 
+                Programs(name="PROGRAMA DE AGROECOLOGIA", faculty_id=3), 
+            ]
+        )
+             
+
+        EventosArea = apps.get_model("eventos", "EventosArea")
+        SubAreaEventos = apps.get_model("eventos", "SubAreaEventos")
+        TipoEvento = apps.get_model("eventos", "TipoEvento")
+        
+        EventosArea.objects.bulk_create(
+            [
+                EventosArea(name="BOLSA DE EMPLEO"), 
+                EventosArea(name="APOYO AL GRADUADO"),
+                EventosArea(name="INVESTIGACIONES"), 
+                EventosArea(name="RECURSOS HUMANOS"),
+            ]
+        )
+        SubAreaEventos.objects.bulk_create(
+            [
+                SubAreaEventos(name="FERIA DE EMPLEO", area_id=1), 
+                SubAreaEventos(name="CARNETIZACIÓN", area_id=2),
+                SubAreaEventos(name="GESTION DE PROYECTOS", area_id=3), 
+                SubAreaEventos(name="SOLUCION DE CONFLICTOS", area_id=4),
+            ]
+        )
+        TipoEvento.objects.bulk_create(
+            [
+                TipoEvento(name="TALLERES"), 
+                TipoEvento(name="CONFERENCIAS"),
+                TipoEvento(name="FOROS"), 
+                TipoEvento(name="ESPACIO RADIAL"),
+            ]
+        )
+        
+        TipoMomento = apps.get_model("encuestas", "TipoMomento")
+        TipoMomento.objects.bulk_create(
+            [
+                TipoMomento(tipo="PRIMER AÑO"), 
+                TipoMomento(tipo="SEGUNDO AÑO"),
+                TipoMomento(tipo="TERCER AÑO"), 
+                TipoMomento(tipo="CUARTO AÑO"),
+            ]
+        )
+        
+        Categoria = apps.get_model("classified_advertisements", "Categoria")
+        SubCategoria = apps.get_model("classified_advertisements", "SubCategoria")
+        TiposCapacitaciones = apps.get_model("classified_advertisements", "TiposCapacitaciones")
+        
+        TiposCapacitaciones.objects.bulk_create(
+            [
+                TiposCapacitaciones(name="MARKETING DIGITAL"), 
+                TiposCapacitaciones(name="GESTION FINANCIERA"),
+                TiposCapacitaciones(name="GESTION DE TIEMPO Y PRODUCTIVIDAD"), 
+                TiposCapacitaciones(name="DESARROLLO DE LIDERAZGO"),
+            ]
+        )
+        Categoria.objects.bulk_create(
+            [
+                Categoria(name="SALUD Y BIENESTAR"), 
+                Categoria(name="COMERCIO Y VENTAS"),
+                Categoria(name="TECNOLOGIA Y DESARROLLO"), 
+                Categoria(name="ARTE Y DISEÑO"),
+            ]
+        )
+        SubCategoria.objects.bulk_create(
+            [
+                SubCategoria(name="Fitness y entrenamiento personal", categoriaId_id=1), 
+                SubCategoria(name="Nutrición", categoriaId_id=1), 
+                SubCategoria(name="Tiendas en línea", categoriaId_id=2),
+                SubCategoria(name="Franquicias", categoriaId_id=2),
+                SubCategoria(name="Comercio electrónico", categoriaId_id=3), 
+                SubCategoria(name="Diseño de interiores", categoriaId_id=4),
+                SubCategoria(name="AProducción audiovisual", categoriaId_id=4),
+            ]
+        )
+        
+        
         User = apps.get_model("auth_module", "User")
         Person = apps.get_model("auth_module", "Persons")
         User.objects.bulk_create(
@@ -33,11 +150,16 @@ class Migration(migrations.Migration):
                     email="egresado@gmail.com",
                     password=make_password("12345678"),
                 ),
+                User(
+                    username="usuarioanonimo@uniguajira.edu.co",
+                    email="usuarioanonimo@uniguajira.edu.co",
+                    password=make_password("2023082386"),
+                ),
             ]
         )
 
         Group.objects.bulk_create(
-            [Group(name="Admin"), Group(name="Egresado"), Group(name="General")]
+            [Group(name="Admin"), Group(name="Egresado"), Group(name="General"), Group(name="Invitado Anonimo")]
         )
 
         User_roles = apps.get_model("auth_module", "user_groups")
@@ -45,11 +167,11 @@ class Migration(migrations.Migration):
         User_genders = apps.get_model("auth_module", "genders")
 
         User_documents.objects.bulk_create(
-            [User_documents(name="CC"), User_documents(name="DC")]
+            [User_documents(name="CEDULA DE CIUDADANIA"), User_documents(name="DOCUMENTO DE IDENTIDAD"), User_documents(name="PASAPORTE")]
         )
 
         User_genders.objects.bulk_create(
-            [User_genders(name="MASCULINO"), User_genders(name="FEMENINO")]
+            [User_genders(name="MASCULINO"), User_genders(name="FEMENINO"), User_genders(name="OTRO")]
         )
 
         Person.objects.bulk_create(
@@ -74,6 +196,16 @@ class Migration(migrations.Migration):
                     user_id=2,
                     phone="000000000",
                 ),
+                Person(
+                    name="Invitado",
+                    surname="Anonimo",
+                    identification="111111111",
+                    address="Cll 24# 21-89",
+                    document_type_id=1,
+                    gender_type_id=1,
+                    user_id=3,
+                    phone="3020102331",
+                ),
             ]
         )
 
@@ -87,6 +219,10 @@ class Migration(migrations.Migration):
                         User_roles(user_id=u.id, group_id=r.id),
                     )
                 elif u.username == "admin" and r.name == "Admin":
+                    list_user_roles.append(
+                        User_roles(user_id=u.id, group_id=r.id),
+                    )
+                elif u.username == "usuarioanonimo@uniguajira.edu.co" and r.name == "Invitado Anonimo":
                     list_user_roles.append(
                         User_roles(user_id=u.id, group_id=r.id),
                     )
@@ -113,7 +249,7 @@ class Migration(migrations.Migration):
                     list_resources_roles.append(
                         Resources_roles(rolesId_id=rl.id, resourcesId=r)
                     )
-            if rl.name == "Admin":
+            if rl.name == "Admin" or rl.name == "Invitado Anonimo":
                 for r in resources:
                     list_resources_roles.append(
                         Resources_roles(rolesId_id=rl.id, resourcesId=r)

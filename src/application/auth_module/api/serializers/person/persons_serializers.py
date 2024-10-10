@@ -13,6 +13,7 @@ from ..user.users_serializers import UserSerializersSimple
 from rest_framework.validators import UniqueValidator
 
 
+
 class PersonsSerializers(ModelSerializer):
     document_type = DocumentSerializersView(read_only=True)
     gender_type = GenderSerializersView(read_only=True)

@@ -1,3 +1,4 @@
+from src.application.auth_module.models import Persons, User
 from ..modules import Response
 from ...serializers.person.persons_serializers import (
     PersonsSerializers,
@@ -15,7 +16,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
+# #@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class PersonViewSet(ViewSet):
     viewset_factory: BaseViewSetFactory = None
     http_method_names: Optional[list[str]] = []
@@ -44,8 +45,16 @@ class PersonViewSet(ViewSet):
 
     def put(self, request, *args, **kwargs):
         instance_id = request.user.id
-        payload, status = self.controller.put(int(instance_id), request.data)
-        return Response(data=payload, status=status)
+        # payload, status = self.controller.put(int(instance_id), request.data)
+        user = User.objects.get(id=instance_id)
+        person = Persons.objects.get(user=user)
+        serializer = PersonsSerializers(person, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        else:
+            return Response(serializer.errors, status=400)
+        
+        return Response(data={"message": "Actualizado"}, status=200)
 
     def delete(self, request, *args, **kwargs):
         instance_id = kwargs.get("id", "")

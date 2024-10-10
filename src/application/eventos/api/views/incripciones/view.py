@@ -18,7 +18,7 @@ from django.utils import timezone
 CACHE_TTL = getattr(settings, "CACHE_TTL", DEFAULT_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+#@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class InscripcionView(APIView):
     def get(self, request, *args, **kwargs):
         param = request.GET.get("evento", None)
@@ -47,7 +47,7 @@ class InscripcionView(APIView):
         return Response("Evento Not found", 404)
 
 
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+#@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class InscripcionEventosView(APIView):
     def get_eventos_date(self, order, start_date, end_date):
         results = (
