@@ -112,21 +112,22 @@ class EventosViewSet(ViewSet):
         return Response(data=payload, status=status)
 
     def get(self, request, *args, **kwargs):
-        status_evento = request.GET.get("status", None)
-        order_evento = request.GET.get("order", "-id")
-        start_evento = request.GET.get("startdate", None)
-        end_evento = request.GET.get("enddate", None)
+        # status_evento = request.GET.get("status", None)
+        # order_evento = request.GET.get("order", "-id")
+        # start_evento = request.GET.get("startdate", None)
+        # end_evento = request.GET.get("enddate", None)
 
-        rol = request.user.groups.filter(name="Admin").exists()
+        # rol = request.user.groups.filter(name="Admin").exists()
         
 
-        payload, status = self.controller.get_eventos(
-            rol,
-            request.user,
-            status=status_evento,
-            order=order_evento,
-            start=start_evento,
-            end=end_evento,
-        )
-
-        return Response(data=payload, status=status)
+        # payload, status = self.controller.get_eventos(
+        #     rol,
+        #     request.user,
+        #     status=status_evento,
+        #     order=order_evento,
+        #     start=start_evento,
+        #     end=end_evento,
+        # )
+        eventos = Eventos.objects.all()
+        serializer = EventosAsistenciaSerializersView(eventos, many=True)
+        return Response(data=serializer.data, status=200)

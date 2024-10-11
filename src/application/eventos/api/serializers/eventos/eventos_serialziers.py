@@ -58,6 +58,11 @@ class EventosSerializersView(BaseSerializers):
         fields = "__all__"
 
 
+class EventosSerializersView(serializers.ModelSerializer):
+    class Meta:
+        model = Eventos
+        fields = "__all__"
+        
 class EventosSerializers(BaseSerializers):
     id = serializers.PrimaryKeyRelatedField(read_only=True)
     area = serializers.IntegerField()
